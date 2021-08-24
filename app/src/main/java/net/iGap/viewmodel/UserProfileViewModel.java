@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -19,7 +17,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -57,6 +54,7 @@ import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
 import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
 import net.iGap.proto.ProtoFileDownload;
@@ -123,10 +121,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final ObservableField<String> bio = new ObservableField<>("");
     private final ObservableField<String> email = new ObservableField<>("");
     private final ObservableField<String> birthDate = new ObservableField<>("");
-    private final ObservableInt gender = new ObservableInt(-1);
+    private final ObservableField<Integer> gender = new ObservableField<>(-1);
+    private final MutableLiveData<Boolean> nameErrorEnable = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> bioErrorEnable = new MutableLiveData<>(false);
+    private final ObservableInt nameErrorMessage = new ObservableInt(R.string.empty_error_message);
+    private final ObservableInt bioErrorMessage = new ObservableInt(R.string.empty_error_message);
     private final MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> genderErrorEnable = new MutableLiveData<>(false);
     private final ObservableInt usernameErrorMessage = new ObservableInt(R.string.empty_error_message);
-    private final MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>(false);
     private final ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
     private final ObservableInt showLoading = new ObservableInt(View.GONE);
     private final ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
@@ -138,8 +141,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
     public ObservableField<String> referralMaskObservableField = new ObservableField<>("###-###-####");
-
-    //ui
     private final SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
@@ -161,16 +162,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private final SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
-    public SingleLiveEvent<Integer> showEditError = new SingleLiveEvent<>();
     public MutableLiveData<String> changeUserProfileWallpaperPath = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private final SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
-    private final MutableLiveData<Boolean> cancelIconClick = new MutableLiveData<>();
     private final MutableLiveData<Boolean> closeKeyboard = new MutableLiveData<>();
-    private final ObservableInt checkProfileShow = new ObservableInt(View.GONE);
+    private final MutableLiveData<Boolean> cancelIconClick = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> checkClick = new MutableLiveData<>(false);
     private final ObservableInt cancelProfileShow = new ObservableInt(View.GONE);
-    private int phoneMax = 10;
+    private final ObservableInt checkProfileShow = new ObservableInt(View.GONE);
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
@@ -187,10 +187,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private int retryRequestTime = -1;
     private int getIvanScoreTime = 0;
     private boolean hasError;
-    private boolean nameError;
-    private boolean userNameError;
-    private boolean emailError;
-    private boolean genderError;
+    private boolean genderChanged;
+    private final MutableLiveData<Integer> toastId = new MutableLiveData<>(R.string.empty_error_message);
 
     public UserProfileViewModel(AvatarHandler avatarHandler) {
         this.avatarHandler = avatarHandler;
@@ -212,18 +210,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-        //set credit amount
-
         getUserCredit();
         isDarkMode.set(G.themeColor == Theme.DARK);
-
-        //set user info text gravity
         if (!G.isAppRtl) {
             textsGravity.set(Gravity.LEFT);
         } else {
             textsGravity.set(Gravity.RIGHT);
         }
-
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
             long mAvatarId = 0;
             if (messageOne != null && !messageOne.equals("")) {
@@ -232,9 +225,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             long finalMAvatarId = mAvatarId;
             deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
         };
-
         G.onUserAvatarResponse = this;
-
         getIVandScore();
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
@@ -275,24 +266,345 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
+    private void submitData() {
+        if (!currentName.equals(name.get()) || !currentUserName.equals(userName.get()) || !currentBio.equals(bio.get()) || !currentUserEmail.equals(email.get()) || genderChanged) {
+            showLoading.set(View.VISIBLE);
+            checkClick.setValue(true);
+            if (!currentName.equals(name.get()))
+                sendRequestSetName();
+            if (!currentUserName.equals(userName.get()))
+                sendRequestSetUsername();
+            if (!currentBio.equals(bio.get()))
+                sendRequestSetBio();
+            if (!currentUserEmail.equals(email.get()))
+                sendRequestSetEmail();
+            if (currentGender != gender.get())
+                sendRequestSetGender();
+            if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+                referralTextChangeListener(referralNumberObservableField.get());
+                if (!hasError) {
+                    setRequestSetReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
+                }
+            }
+            showEditIcon();
+        } else {
+            checkClick.setValue(false);
+            showEditIcon();
+        }
+    }
+
+    private void sendRequestSetName() {
+        new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
+                G.runOnUiThread(() -> {
+                    currentName = nickName;
+                    showLoading.set(View.GONE);
+                    RealmRoom.updateChatTitle(userId, nickName);
+                    AccountManager.getInstance().updateCurrentNickName(nickName);
+                    nameErrorEnable.setValue(false);
+                    nameErrorMessage.set(R.string.empty_error_message);
+                    toastId.setValue(R.string.seted_name);
+                });
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    nameErrorEnable.setValue(true);
+                    nameErrorMessage.set(R.string.name_error);
+                    toastId.setValue(R.string.name_error);
+                });
+            }
+
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    nameErrorEnable.setValue(true);
+                    nameErrorMessage.set(R.string.time_out_error);
+                    toastId.setValue(R.string.name_error);
+                });
+            }
+        });
+    }
+
+    private void sendRequestSetUsername() {
+        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
+            @Override
+            public void onUserProfileUpdateUsername(final String username) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    currentUserName = username;
+                    usernameErrorEnable.setValue(false);
+                    usernameErrorMessage.set(R.string.empty_error_message);
+                    toastId.setValue(R.string.user_name_added);
+                });
+            }
+
+            @Override
+            public void Error(final int majorCode, int minorCode, final int time) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    usernameErrorEnable.setValue(true);
+                    toastId.setValue(R.string.user_name_error);
+                    usernameErrorMessage.set(R.string.user_name_error);
+                    if (majorCode == 175) {
+                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time);
+                    }
+                });
+            }
+
+            @Override
+            public void timeOut() {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    usernameErrorEnable.setValue(true);
+                    toastId.setValue(R.string.user_name_error);
+                    usernameErrorMessage.set(R.string.time_out_error);
+                });
+            }
+        });
+    }
+
+    private void sendRequestSetBio() {
+        new RequestUserProfileSetBio().setBio(bio.get(), new OnUserProfileSetBioResponse() {
+            @Override
+            public void onUserProfileBioResponse(String bio) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    currentBio = bio;
+                    bioErrorEnable.setValue(false);
+                    bioErrorMessage.set(R.string.empty_error_message);
+                    toastId.setValue(R.string.bio_added);
+                });
+            }
+
+            @Override
+            public void error(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    bioErrorEnable.setValue(true);
+                    bioErrorMessage.set(R.string.error);
+                    toastId.setValue(R.string.bio_error);
+                });
+            }
+
+            @Override
+            public void timeOut() {
+                G.handler.post(() -> {
+                    showLoading.set(View.GONE);
+                    bioErrorEnable.setValue(true);
+                    bioErrorMessage.set(R.string.time_out_error);
+                    toastId.setValue(R.string.bio_error);
+                });
+            }
+        });
+
+    }
+
+    private void sendRequestSetEmail() {
+        new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
+            @Override
+            public void onUserProfileEmailResponse(final String emailText, ProtoResponse.Response response) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    currentUserEmail = emailText;
+                    emailErrorEnable.setValue(false);
+                    emailErrorMessage.set(R.string.empty_error_message);
+                    toastId.setValue(R.string.email_added);
+                });
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    emailErrorEnable.setValue(true);
+                    emailErrorMessage.set(R.string.invalid_email);
+                    toastId.setValue(R.string.error_email);
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    emailErrorEnable.setValue(true);
+                    emailErrorMessage.set(R.string.time_out_error);
+                    toastId.setValue(R.string.error_email);
+                });
+            }
+        });
+    }
+
+    public void setRequestSetReferral(String phoneNumber) {
+        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(phoneNumber, new OnUserProfileSetRepresentative() {
+            @Override
+            public void onSetRepresentative(String phone) {
+                G.handler.post(() -> {
+                    if (!hasError) {
+                        referralEnableLiveData.postValue(false);
+                        referralNumberObservableField.set("");
+                        showEditIcon();
+                        isEditProfile = false;
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    showReferralErrorLiveData.set(true);
+                    hasError = true;
+                    switch (majorCode) {
+                        case 10177:
+                            if (minorCode == 2) {
+                                referralError.set(R.string.referral_error_yourself);
+                            } else {
+                                referralError.set(R.string.phone_number_is_not_valid);
+                            }
+                            break;
+                        case 10178:
+                            if (minorCode == 2)
+                                referralError.set(R.string.already_registered);
+                            else
+                                referralError.set(R.string.server_error);
+                            break;
+                    }
+                    referralNumberObservableField.set("");
+                });
+
+            }
+        });
+    }
+
+    private void sendRequestSetGender() {
+        new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
+            @Override
+            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    currentGender = (gender == ProtoGlobal.Gender.MALE) ? R.id.male : R.id.female;
+                    toastId.setValue(R.string.seted_gender);
+                    genderErrorEnable.setValue(false);
+                });
+            }
+
+            @Override
+            public void Error(int majorCode, int minorCode) {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    toastId.setValue(R.string.gender_error);
+                    genderErrorEnable.setValue(true);
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    toastId.setValue(R.string.gender_error);
+                    genderErrorEnable.setValue(true);
+                });
+            }
+        });
+    }
+
+    public void nameTextChangeListener(String newName) {
+        if (newName.equals(currentName)) {
+            nameErrorEnable.setValue(false);
+            nameErrorMessage.set(R.string.empty_error_message);
+        }
+    }
+
+    public void usernameTextChangeListener(String newUsername) {
+        if (!newUsername.equals(currentUserName)) {
+            if (HelperString.regexCheckUsername(newUsername)) {
+                new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
+                    @Override
+                    public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                        G.handler.post(() -> {
+                            if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
+                                usernameErrorEnable.setValue(false);
+                                usernameErrorMessage.set(R.string.empty_error_message);
+
+                            } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
+                                usernameErrorMessage.set(R.string.INVALID);
+                                usernameErrorEnable.setValue(true);
+                            } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
+                                usernameErrorMessage.set(R.string.TAKEN);
+                                usernameErrorEnable.setValue(true);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
+                        G.runOnUiThread(() -> {
+                            usernameErrorEnable.setValue(true);
+                            usernameErrorMessage.set(R.string.error);
+                        });
+                    }
+                });
+            } else {
+                usernameErrorEnable.setValue(true);
+                usernameErrorMessage.set(R.string.INVALID);
+            }
+        } else {
+            usernameErrorEnable.setValue(false);
+            usernameErrorMessage.set(R.string.empty_error_message);
+        }
+    }
+
+    public void bioTextChangeListener(String newBio) {
+        if (newBio.equals(currentBio)) {
+            bioErrorEnable.setValue(false);
+            bioErrorMessage.set(R.string.empty_error_message);
+        }
+    }
+
+    public void emailTextChangeListener(String newEmail) {
+        if (newEmail.equals(currentUserEmail)) {
+            emailErrorEnable.setValue(false);
+            emailErrorMessage.set(R.string.empty_error_message);
+        }
+    }
+
+    public void referralTextChangeListener(String phoneNumber) {
+        referralError.set(R.string.empty_error_message);
+        if (phoneNumber.startsWith("0")) {
+            referralError.set(R.string.Toast_First_0);
+            phoneNumber = "";
+            hasError = true;
+            showLoading.set(View.GONE);
+        }
+        referralNumberObservableField.set(phoneNumber);
+    }
+
+    public void genderCheckedListener(int checkedId) {
+        if (currentGender != checkedId) {
+            gender.set(checkedId);
+            genderChanged = true;
+        } else {
+            genderChanged = false;
+            gender.set(currentGender);
+        }
+
+    }
+
     public void onEditProfileClick() {
         String tmp = referralNumberObservableField.get();
         if (referralNumberObservableField == null || tmp.isEmpty()) {
             getReferral();
         }
-        checkProfileShow.set(View.VISIBLE);
-        cancelProfileShow.set(View.VISIBLE);
         editProfileIcon.set(View.GONE);
+        cancelProfileShow.set(View.VISIBLE);
+        checkProfileShow.set(View.VISIBLE);
         isEditProfile = true;
         setCurrentFragment.setValue(isEditProfile);
         showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
-    }
-
-    private void showEditIcon() {
-        checkProfileShow.set(View.GONE);
-        cancelProfileShow.set(View.GONE);
-        editProfileIcon.set(View.VISIBLE);
-        checkEditModeForOnBackPressed();
     }
 
     public void onCheckClick() {
@@ -303,12 +615,54 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCancelClick() {
-        closeKeyboard.setValue(true);
-        hasError = false;
         showEditIcon();
-        isEditProfile = false;
-        setCurrentFragment.setValue(isEditProfile);
+        closeKeyboard.setValue(true);
         cancelIconClick.setValue(true);
+        hasError = false;
+        isEditProfile = false;
+        checkClick.setValue(false);
+        setCurrentFragment.setValue(isEditProfile);
+        hideErrorEnable();
+    }
+
+    public void hideErrorEnable() {
+        usernameErrorEnable.setValue(false);
+        usernameErrorMessage.set(R.string.empty_error_message);
+        emailErrorEnable.setValue(false);
+        emailErrorMessage.set(R.string.empty_error_message);
+        bioErrorEnable.setValue(false);
+        bioErrorMessage.set(R.string.empty_error_message);
+        nameErrorEnable.setValue(false);
+        nameErrorMessage.set(R.string.empty_error_message);
+    }
+
+    private void showEditIcon() {
+        showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
+        checkProfileShow.set(View.GONE);
+        cancelProfileShow.set(View.GONE);
+        editProfileIcon.set(View.VISIBLE);
+        checkEditModeForOnBackPressed();
+    }
+
+    public boolean checkEditModeForOnBackPressed() {
+        if (isEditProfile) {
+            checkClick.setValue(false);
+            popBackStack.setValue(true);
+            showAddAvatarButton.set(View.GONE);
+            cancelProfileShow.set(View.GONE);
+            checkProfileShow.set(View.GONE);
+            name.set(currentName);
+            userName.set(currentUserName);
+            bio.set(currentBio);
+            email.set(currentUserEmail);
+            gender.set(currentGender);
+            hideErrorEnable();
+            editProfileIcon.set(View.VISIBLE);
+            isEditProfile = false;
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void onAccountsClicked() {
@@ -340,11 +694,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     @Override
                     public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
-                            showError.postValue(R.string.connection_error);
-                            G.handler.post(() -> showLoading.set(View.GONE));
+                            G.runOnUiThread(() -> {
+                                showError.postValue(R.string.connection_error);
+                                showLoading.set(View.GONE);
+                            });
                         } else {
-                            showError.postValue(R.string.error);
-                            G.handler.post(() -> showLoading.set(View.GONE));
+                            G.runOnUiThread(() -> {
+                                showError.postValue(R.string.error);
+                                showLoading.set(View.GONE);
+                            });
                         }
                     }
                 });
@@ -451,88 +809,31 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showDialogChooseImage.setValue(true);
     }
 
-    public void usernameTextChangeListener(String newUsername) {
-        if (!newUsername.equals(currentUserName)) {
-            if (HelperString.regexCheckUsername(newUsername)) {
-                new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
-                    @Override
-                    public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
-                        G.handler.post(() -> {
-                            if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
-                                usernameErrorEnable.setValue(true);
-                                usernameErrorMessage.set(R.string.empty_error_message);
-                            } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
-                                usernameErrorMessage.set(R.string.INVALID);
-                                usernameErrorEnable.setValue(true);
-                            } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
-                                usernameErrorMessage.set(R.string.TAKEN);
-                                usernameErrorEnable.setValue(true);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void Error(int majorCode, int minorCode) {
-                        usernameErrorEnable.setValue(true);
-                        usernameErrorMessage.set(R.string.error);
-                    }
-                });
-            } else {
-                usernameErrorEnable.setValue(true);
-                usernameErrorMessage.set(R.string.INVALID);
-            }
-        } else {
-            usernameErrorEnable.setValue(false);
-        }
-    }
-
-    public void emailTextChangeListener(String newEmail) {
-        if (!newEmail.equals(currentUserEmail)) {
-            emailErrorMessage.set(R.string.empty_error_message);
-            emailErrorEnable.setValue(false);
-        }
-    }
-
-    public void referralTextChangeListener(String phoneNumber) {
-        referralError.set(R.string.empty_error_message);
-        if (phoneNumber.startsWith("0")) {
-            referralError.set(R.string.Toast_First_0);
-            phoneNumber = "";
-            hasError = true;
-            showLoading.set(View.GONE);
-        }
-        referralNumberObservableField.set(phoneNumber);
-    }
-
-    public void genderCheckedListener(int checkedId) {
-        if (currentGender != checkedId) {
-            gender.set(checkedId);
-        } else {
-            gender.set(currentGender);
-        }
-    }
-
     public void onChangeLogClick() {
         showLoading.set(View.VISIBLE);
         new RequestInfoUpdate().infoUpdate(BuildConfig.VERSION_CODE, new RequestInfoUpdate.updateInfoCallback() {
             @Override
             public void onSuccess(int lastVersion, String Body) {
-                showLoading.set(View.GONE);
-                if (lastVersion <= BuildConfig.VERSION_CODE) {
-                    showDialogBeLastVersion.postValue(true);
-                } else {
-                    showDialogUpdate.postValue(HtmlCompat.fromHtml(Body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
-                }
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    if (lastVersion <= BuildConfig.VERSION_CODE) {
+                        showDialogBeLastVersion.postValue(true);
+                    } else {
+                        showDialogUpdate.postValue(HtmlCompat.fromHtml(Body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                    }
+                });
             }
 
             @Override
             public void onError(int major, int minor) {
-                showLoading.set(View.GONE);
-                if (major == 5 && minor == 1) {
-                    showError.setValue(R.string.connection_error);
-                } else {
-                    showError.setValue(R.string.error);
-                }
+                G.runOnUiThread(() -> {
+                    showLoading.set(View.GONE);
+                    if (major == 5 && minor == 1) {
+                        showError.setValue(R.string.connection_error);
+                    } else {
+                        showError.setValue(R.string.error);
+                    }
+                });
             }
         });
     }
@@ -589,179 +890,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         super.onCleared();
     }
 
-    private void submitData() {
-        if (!currentName.equals(name.get()) || !currentUserName.equals(userName.get()) || !currentBio.equals(bio.get()) || !currentUserEmail.equals(email.get()) || currentGender != gender.get()) {
-            showLoading.set(View.VISIBLE);
-            if (!currentName.equals(name.get()))
-                sendRequestSetName();
-            if (!currentUserName.equals(userName.get()))
-                sendRequestSetUsername();
-            if (!currentBio.equals(bio.get()))
-                sendRequestSetBio();
-            if (!currentUserEmail.equals(email.get()))
-                sendRequestSetEmail();
-            if (currentGender != gender.get())
-                sendRequestSetGender();
-            if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-                referralTextChangeListener(referralNumberObservableField.get());
-                if (!hasError) {
-                    setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
-                }
-            }
-        } else {
-            showEditIcon();
-        }
-    }
-
-    public void checkResponse() {
-        if (!hasError && !nameError && !userNameError && !emailError && !genderError) {
-            showLoading.set(View.GONE);
-            isEditProfile = false;
-            setCurrentFragment.setValue(isEditProfile);
-            showEditIcon();
-        } else if (hasError || nameError || userNameError || emailError || genderError) {
-            if (nameError)
-                showEditError.postValue(R.string.name_error);
-            if (userNameError)
-                showEditError.postValue(R.string.user_name_error);
-            if (emailError)
-                showEditError.postValue(R.string.email_error);
-            if (genderError)
-                showEditError.postValue(R.string.gender_error);
-            isEditProfile = true;
-            setCurrentFragment.setValue(isEditProfile);
-            checkProfileShow.set(View.VISIBLE);
-            cancelProfileShow.set(View.VISIBLE);
-            editProfileIcon.set(View.GONE);
-            showLoading.set(View.GONE);
-            popBackStack.setValue(true);
-        }
-    }
-
-    private void sendRequestSetName() {
-        new RequestUserProfileSetNickname().userProfileNickName(name.get(), new OnUserProfileSetNickNameResponse() {
-            @Override
-            public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                G.handler.post(() -> {
-                    nameError = false;
-                    checkResponse();
-                    RealmRoom.updateChatTitle(userId, nickName);
-                    AccountManager.getInstance().updateCurrentNickName(nickName);
-                    currentName = nickName;
-                });
-            }
-
-            @Override
-            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                checkResponse();
-                nameError = true;
-                currentName = name.get();
-            }
-
-            @Override
-            public void onUserProfileNickNameTimeOut() {
-                nameError = true;
-                checkResponse();
-            }
-        });
-    }
-
-    private void sendRequestSetUsername() {
-        new RequestUserProfileUpdateUsername().userProfileUpdateUsername(userName.get(), new OnUserProfileUpdateUsername() {
-            @Override
-            public void onUserProfileUpdateUsername(final String username) {
-                checkResponse();
-                userNameError = false;
-                currentUserName = username;
-            }
-
-            @Override
-            public void Error(final int majorCode, int minorCode, final int time) {
-                G.handler.post(() -> {
-                    currentUserName = userName.get();
-                    checkResponse();
-                    userNameError = true;
-                    if (majorCode == 175) {
-                        dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time);
-                    }
-
-                });
-            }
-
-            @Override
-            public void timeOut() {
-                checkResponse();
-                userNameError = true;
-            }
-        });
-    }
-
-    private void sendRequestSetEmail() {
-        new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
-            @Override
-            public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
-                checkResponse();
-                emailError = false;
-                currentUserEmail = email;
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-                checkResponse();
-                emailError = true;
-                currentUserEmail = email.get();
-                if (majorCode == 114 && minorCode == 1) {
-                    emailErrorEnable.setValue(true);
-                } else if (majorCode == 115) {
-                    emailErrorEnable.setValue(true);
-                }
-            }
-
-            @Override
-            public void onTimeOut() {
-                checkResponse();
-                emailError = true;
-            }
-        });
-    }
-
-    private void sendRequestSetBio() {
-        new RequestUserProfileSetBio().setBio(bio.get());
-        currentBio = bio.get();
-    }
-
-    private void sendRequestSetGender() {
-        new RequestUserProfileSetGender().setUserProfileGender(gender.get() == R.id.male ? ProtoGlobal.Gender.MALE : ProtoGlobal.Gender.FEMALE, new OnUserProfileSetGenderResponse() {
-            @Override
-            public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
-                checkResponse();
-                genderError = false;
-                currentGender = (gender == ProtoGlobal.Gender.MALE) ? R.id.male : R.id.female;
-            }
-
-            @Override
-            public void Error(int majorCode, int minorCode) {
-                checkResponse();
-                genderError = true;
-                currentGender = (gender.get() == R.id.male ? ProtoGlobal.Gender.MALE.getNumber() : ProtoGlobal.Gender.FEMALE.getNumber());
-            }
-
-            @Override
-            public void onTimeOut() {
-                checkResponse();
-                genderError = true;
-            }
-        });
-    }
-
     private void dialogWaitTime(int title, long time) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-            }
-        }).show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive((dialog1, which) -> dialog1.dismiss()).show();
 
         View v = dialog.getCustomView();
 
@@ -807,20 +938,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         });
-    }
-
-    public boolean checkEditModeForOnBackPressed() {
-        if (isEditProfile) {
-            popBackStack.setValue(true);
-            showAddAvatarButton.set(View.GONE);
-            cancelProfileShow.set(View.GONE);
-            checkProfileShow.set(View.GONE);
-            editProfileIcon.set(View.VISIBLE);
-            isEditProfile = false;
-            return false;
-        } else {
-            return true;
-        }
     }
 
     private void getProfileWallpaperFromServer() {
@@ -986,44 +1103,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void setReferral(String phoneNumber) {
-        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(phoneNumber, new OnUserProfileSetRepresentative() {
-            @Override
-            public void onSetRepresentative(String phone) {
-                referralEnableLiveData.postValue(false);
-                referralNumberObservableField.set("");
-                G.handler.post(() -> {
-                    if (!hasError) {
-                        showEditIcon();
-                        isEditProfile = false;
-                    }
-                });
-            }
-
-            @Override
-            public void onErrorSetRepresentative(int majorCode, int minorCode) {
-                showReferralErrorLiveData.set(true);
-                hasError = true;
-                switch (majorCode) {
-                    case 10177:
-                        if (minorCode == 2) {
-                            referralError.set(R.string.referral_error_yourself);
-                        } else {
-                            referralError.set(R.string.phone_number_is_not_valid);
-                        }
-                        break;
-                    case 10178:
-                        if (minorCode == 2)
-                            referralError.set(R.string.already_registered);
-                        else
-                            referralError.set(R.string.server_error);
-                        break;
-                }
-                referralNumberObservableField.set("");
-            }
-        });
-    }
-
     private void countryReader() {
         structCountryArrayList = new ArrayList<>();
         CountryReader countryReade = new CountryReader();
@@ -1051,7 +1130,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getReferral() {
-        Log.wtf(this.getClass().getName(), "getReferral");
         showDialogSelectCountry.postValue(false);
         showReferralErrorLiveData.set(false);
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
@@ -1078,8 +1156,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         });
     }
 
+    public MutableLiveData<Boolean> getNameErrorEnable() {
+        return nameErrorEnable;
+    }
+
+    public MutableLiveData<Boolean> getBioErrorEnable() {
+        return bioErrorEnable;
+    }
+
     public void setCountry(StructCountry country) {
-        phoneMax = country.getPhonePattern().replace(" ", "").length();
         new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
             @Override
             public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
@@ -1120,6 +1205,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
             // backthread
         }
+    }
+
+    public ObservableInt getNameErrorMessage() {
+        return nameErrorMessage;
+    }
+
+    public ObservableInt getBioErrorMessage() {
+        return bioErrorMessage;
     }
 
     public class ChangeImageModel {
@@ -1194,16 +1287,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return cancelProfileShow;
     }
 
-    public MutableLiveData<Boolean> getCancelIconClick() {
-        return cancelIconClick;
-    }
-
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
         return realmUserInfo != null && realmUserInfo.isValid();
     }
 
     public ObservableField<String> getAppVersion() {
         return appVersion;
+    }
+
+    public MutableLiveData<Boolean> getCancelIconClick() {
+        return cancelIconClick;
     }
 
     public ObservableField<String> getUserPhoneNumber() {
@@ -1262,7 +1355,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return birthDate;
     }
 
-    public ObservableInt getGender() {
+    public ObservableField<Integer> getGender() {
         return gender;
     }
 
@@ -1278,8 +1371,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return emailErrorEnable;
     }
 
+    public MutableLiveData<Boolean> getGenderErrorEnable() {
+        return genderErrorEnable;
+    }
+
     public MutableLiveData<Boolean> getReferralEnableLiveData() {
         return referralEnableLiveData;
+    }
+
+    public MutableLiveData<Integer> getToastId() {
+        return toastId;
     }
 
     public ObservableInt getEmailErrorMessage() {
@@ -1288,6 +1389,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public MutableLiveData<Boolean> getShowDialogSelectCountry() {
         return showDialogSelectCountry;
+    }
+
+    public MutableLiveData<Boolean> getCheckClick() {
+        return checkClick;
     }
 
     public ObservableInt getShowLoading() {
