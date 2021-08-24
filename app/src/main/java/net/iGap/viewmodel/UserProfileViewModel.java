@@ -324,7 +324,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     showLoading.set(View.GONE);
                     nameErrorEnable.setValue(true);
                     nameErrorMessage.set(R.string.time_out_error);
-                    toastId.setValue(R.string.name_error);
+                    toastId.setValue(R.string.time_out_error);
                 });
             }
         });
