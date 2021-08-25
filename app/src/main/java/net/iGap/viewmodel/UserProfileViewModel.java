@@ -652,11 +652,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             showAddAvatarButton.set(View.GONE);
             cancelProfileShow.set(View.GONE);
             checkProfileShow.set(View.GONE);
-            name.set(currentName);
-            userName.set(currentUserName);
-            bio.set(currentBio);
-            email.set(currentUserEmail);
-            gender.set(currentGender);
             hideErrorEnable();
             editProfileIcon.set(View.VISIBLE);
             isEditProfile = false;
