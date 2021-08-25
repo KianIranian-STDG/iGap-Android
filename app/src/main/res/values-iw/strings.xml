@@ -1912,6 +1912,12 @@
     <string name="user_name_error">Kullanıcı adı onaylanmadı</string>
     <string name="email_error">E-posta onaylanmadı</string>
     <string name="gender_error">Cinsiyet onaylanmadı</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio ulanmadı</string>
+    <string name="bio_error">Bio doğrulanmadı</string>
+    <string name="email_added">اعتبارلی ایمیل آدرسی</string>
+    <string name="seted_gender">Cinsiyet lanmadı</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
 </resources>

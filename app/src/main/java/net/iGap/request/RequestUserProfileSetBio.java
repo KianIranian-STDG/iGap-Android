@@ -10,17 +10,18 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
 import net.iGap.proto.ProtoUserProfileBio;
 
 public class RequestUserProfileSetBio {
 
-    public void setBio(String bio) {
+    public void setBio(String bio, OnUserProfileSetBioResponse callback) {
         //RealmRegisteredInfo.updateBio(bio); // just in response update this value
 
         ProtoUserProfileBio.UserProfileSetBio.Builder builder = ProtoUserProfileBio.UserProfileSetBio.newBuilder();
         builder.setBio(bio);
 
-        RequestWrapper requestWrapper = new RequestWrapper(147, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(147, builder,callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

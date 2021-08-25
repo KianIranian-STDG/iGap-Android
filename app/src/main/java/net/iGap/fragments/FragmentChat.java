@@ -3632,7 +3632,7 @@ public class FragmentChat extends BaseFragment
                 if (edtChat.getTag() != null && edtChat.getTag() instanceof MessageObject) {
                     final MessageObject messageInfo = (MessageObject) edtChat.getTag();
                     final String message = getWrittenMessage();
-                    if (!message.equals(messageInfo.message) && edtChat.getText().length() > 0) {
+                    if (!message.equals(messageInfo.message) && edtChat.getText().toString().trim().length() > 0) {
 
                         if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                             Toast.makeText(getContext(), getResources().getString(R.string.please_check_your_connenction), Toast.LENGTH_SHORT).show();
