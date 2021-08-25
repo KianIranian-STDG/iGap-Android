@@ -149,7 +149,7 @@
             android:id="@+id/ll_replay_story"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="?attr/rootBackgroundColor"
             android:orientation="horizontal"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/layout_attach_story"
