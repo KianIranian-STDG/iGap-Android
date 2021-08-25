@@ -57,8 +57,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.realm.Realm;
-
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
@@ -194,12 +192,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     if (response != null) {
                         IG_RPC.Res_chat_get_room res = (IG_RPC.Res_chat_get_room) response;
                         ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(res.room.getTypeValue(), res.room.getId(), stories.get(counter), edtChat.getText().toString());
-                        Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } else {
-                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), edtChat.getText().toString());
+                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), replyText);
                 Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
             }
 
