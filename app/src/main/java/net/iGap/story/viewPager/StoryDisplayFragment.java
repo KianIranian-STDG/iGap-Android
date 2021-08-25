@@ -355,7 +355,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             resumeCurrentStory();
         }
         if (isMyStory) {
-            storyViewsCount.setText(stories.get(counter).getViewCount() + "");
+            if (G.selectedLanguage.equals("en")) {
+                storyViewsCount.setText(stories.get(counter).getViewCount() + "");
+            } else {
+                storyViewsCount.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stories.get(counter).getViewCount())));
+            }
         }
 
         AbstractObject req = null;

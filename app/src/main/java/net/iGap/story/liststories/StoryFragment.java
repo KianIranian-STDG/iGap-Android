@@ -310,7 +310,9 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             userIdList = new ArrayList<>();
         }
         for (int i = 0; i < stories.size(); i++) {
-            userIdList.add(stories.get(i).getUserId());
+            if (stories.get(i).getUserId()!=AccountManager.getInstance().getCurrentUser().getId()){
+                userIdList.add(stories.get(i).getUserId());
+            }
 
         }
         if (displayNameList.size() > 0) {
