@@ -29,7 +29,7 @@ public class RealmStoryProto extends RealmObject {
         }
 
         realmStory.setCaption(story.getCaption());
-        realmStory.setCreatedAt(story.getCreatedAt());
+        realmStory.setCreatedAt(story.getCreatedAt() * 1000);
         realmStory.setFile(RealmAttachment.build(realm,story.getFileDetails(), AttachmentFor.MESSAGE_ATTACHMENT, ProtoGlobal.RoomMessageType.STORY));
         realmStory.setSeen(story.getSeen());
         realmStory.setFileToken(story.getFileToken());
