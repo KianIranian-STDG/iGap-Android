@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,11 +22,13 @@ import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,8 +47,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -66,6 +74,7 @@ import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
 import net.iGap.libs.photoEdit.SaveSettings;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -73,8 +82,10 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.EventEditText;
+import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
 
@@ -153,6 +164,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private boolean lastSizeChangeValue2;
     private ProgressBar progressBar;
     private int counter = 0;
+    private RecyclerView previewRecycler;
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -289,10 +301,18 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         rootView.addView(cancelCropLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
 
+        LinearLayout bottomRecyclerViewContainer = new LinearLayout(context);
+        bottomRecyclerViewContainer.setOrientation(LinearLayout.VERTICAL);
+        bottomRecyclerViewContainer.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
+
+        previewRecycler = new RecyclerView(context);
+        previewRecycler.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+        bottomRecyclerViewContainer.addView(previewRecycler, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
         bottomLayoutPanel.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
-
+        bottomRecyclerViewContainer.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
         layoutCaption = new LinearLayout(context);
         layoutCaption.setOrientation(LinearLayout.HORIZONTAL);
@@ -348,7 +368,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         sendTextView.setVisibility(View.GONE);
 
-        rootView.addView(bottomLayoutPanel, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+        rootView.addView(bottomRecyclerViewContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;
     }
@@ -1298,6 +1318,15 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     private void setUpViewPager() {
+        PreviewAdapter previewAdapter = new PreviewAdapter();
+        previewAdapter.setPhotosItem(itemGalleryList);
+        previewAdapter.setListener(new StoryItemListener() {
+            @Override
+            public void onItemClick(int position) {
+                viewPager.setCurrentItem(position);
+            }
+        });
+        previewRecycler.setAdapter(previewAdapter);
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
 //        viewPager.setOffscreenPageLimit(itemGalleryList.size());
@@ -1517,5 +1546,65 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         AndroidUtils.hideKeyboard(captionEditText);
     }
 
+    public interface StoryItemListener {
+        void onItemClick(int position);
+    }
+
+    public class PreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private List<StructBottomSheet> photosItem = new ArrayList<>();
+        private StoryItemListener listener;
+
+        public void setPhotosItem(List<StructBottomSheet> photosItem) {
+            this.photosItem = photosItem;
+            notifyDataSetChanged();
+        }
+
+        public void setListener(StoryItemListener listener) {
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new PreviewAdapter.ViewHolderPicture(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_story_items, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            PreviewAdapter.ViewHolderPicture viewHolderGallery = (PreviewAdapter.ViewHolderPicture) holder;
+            Glide.with(viewHolderGallery.image.getContext())
+                    .load(Uri.parse("file://" + photosItem.get(position).getPath()))
+                    .into(viewHolderGallery.image);
+            viewHolderGallery.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(position);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return photosItem.size();
+        }
+
+        class ViewHolderPicture extends RecyclerView.ViewHolder {
+
+            TextView caption;
+            ImageView image;
+            CheckBox check;
+
+            ViewHolderPicture(@NonNull View itemView) {
+                super(itemView);
+                image = itemView.findViewById(R.id.image);
+                caption = itemView.findViewById(R.id.caption);
+                check = itemView.findViewById(R.id.check);
+            }
+
+        }
+
+
+    }
 
 }
