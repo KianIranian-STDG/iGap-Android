@@ -41,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
@@ -161,6 +162,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private ProgressBar progressBar;
     private int counter = 0;
     private RecyclerView previewRecycler;
+    private PreviewAdapter previewAdapter;
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -297,9 +299,14 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         rootView.addView(cancelCropLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
 
+        LinearLayout bottomRootView = new LinearLayout(context);
+        bottomRootView.setOrientation(LinearLayout.VERTICAL);
+
+
         LinearLayout bottomRecyclerViewContainer = new LinearLayout(context);
         bottomRecyclerViewContainer.setOrientation(LinearLayout.VERTICAL);
-        bottomRecyclerViewContainer.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
+        bottomRecyclerViewContainer.setBackground(context.getResources().getDrawable(R.drawable.background_transparent));
+        bottomRootView.addView(bottomRecyclerViewContainer, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 7));
 
         previewRecycler = new RecyclerView(context);
         previewRecycler.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
@@ -308,7 +315,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
         bottomLayoutPanel.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
-        bottomRecyclerViewContainer.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+        bottomRootView.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
         layoutCaption = new LinearLayout(context);
         layoutCaption.setOrientation(LinearLayout.HORIZONTAL);
@@ -364,7 +371,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         sendTextView.setVisibility(View.GONE);
 
-        rootView.addView(bottomRecyclerViewContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+        rootView.addView(bottomRootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;
     }
@@ -1244,8 +1251,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         }
         itemGalleryList.addAll(0, FragmentEditImage.itemGalleryList);
         Collections.reverse(itemGalleryList);
+        itemGalleryList.get(0).setSelected(true);
         setUpViewPager();
-
+        previewAdapter = new PreviewAdapter();
+        previewAdapter.setPhotosItem(itemGalleryList);
+        previewAdapter.setListener(new StoryItemListener() {
+            @Override
+            public void onItemClick(int position) {
+                viewPager.setCurrentItem(position);
+            }
+        });
+        previewRecycler.setAdapter(previewAdapter);
     }
 
     public void openPhotoForEdit(String path, String message, boolean isSelected) {
@@ -1314,15 +1330,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     private void setUpViewPager() {
-        PreviewAdapter previewAdapter = new PreviewAdapter();
-        previewAdapter.setPhotosItem(itemGalleryList);
-        previewAdapter.setListener(new StoryItemListener() {
-            @Override
-            public void onItemClick(int position) {
-                viewPager.setCurrentItem(position);
-            }
-        });
-        previewRecycler.setAdapter(previewAdapter);
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
 //        viewPager.setOffscreenPageLimit(itemGalleryList.size());
@@ -1350,6 +1357,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     captionEditText.setText("");
                 }
                 iconOkTextView.setVisibility(View.GONE);
+                previewAdapter.getItemWithPosition(position).setSelected(true);
+                previewAdapter.setRowIndex(position);
+                previewAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -1547,13 +1558,21 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     public class PreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+        private int rowIndex = 0;
         private List<StructBottomSheet> photosItem = new ArrayList<>();
         private StoryItemListener listener;
 
         public void setPhotosItem(List<StructBottomSheet> photosItem) {
             this.photosItem = photosItem;
             notifyDataSetChanged();
+        }
+
+        public StructBottomSheet getItemWithPosition(int position) {
+           return photosItem.get(position);
+        }
+
+        public void setRowIndex(int rowIndex) {
+            this.rowIndex = rowIndex;
         }
 
         public void setListener(StoryItemListener listener) {
@@ -1572,12 +1591,22 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             Glide.with(viewHolderGallery.image.getContext())
                     .load(Uri.parse("file://" + photosItem.get(position).getPath()))
                     .into(viewHolderGallery.image);
+
+            if (photosItem.get(position).isSelected() && position == rowIndex) {
+                viewHolderGallery.rootView.setBackground(context.getResources().getDrawable(R.drawable.red));
+            } else {
+                viewHolderGallery.rootView.setBackground(context.getResources().getDrawable(R.drawable.background_border_transparent));
+            }
             viewHolderGallery.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onItemClick(position);
+                    rowIndex = position;
+                    photosItem.get(position).setSelected(true);
+                    notifyDataSetChanged();
                 }
             });
+
         }
 
         @Override
@@ -1590,9 +1619,11 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             TextView caption;
             ImageView image;
             CheckBox check;
+            ConstraintLayout rootView;
 
             ViewHolderPicture(@NonNull View itemView) {
                 super(itemView);
+                rootView = itemView.findViewById(R.id.row_story_item_root_view);
                 image = itemView.findViewById(R.id.image);
                 caption = itemView.findViewById(R.id.caption);
                 check = itemView.findViewById(R.id.check);
