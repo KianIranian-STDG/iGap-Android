@@ -300,7 +300,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private void loadStories() {
 
         DbManager.getInstance().doRealmTransaction(realmDB -> {
-            realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+//            realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+//            realmDB.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
             stories = realmDB.copyFromRealm(realmDB.where(RealmStory.class).findAll());
             otherUserRealmStory = realmDB.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
         });
@@ -310,7 +311,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             userIdList = new ArrayList<>();
         }
         for (int i = 0; i < stories.size(); i++) {
-            if (stories.get(i).getUserId()!=AccountManager.getInstance().getCurrentUser().getId()){
+            if (stories.get(i).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
                 userIdList.add(stories.get(i).getUserId());
             }
 
@@ -320,7 +321,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         }
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
         if (stories != null && stories.size() > 0) {
-            Log.e("fdajhfjshf", "loadStories ");
+            Log.e("fdajhfjshf", "loadStories " + stories.size());
             progressBar.setVisibility(View.GONE);
             adapter = new ListAdapter();
             recyclerListView.setAdapter(adapter);

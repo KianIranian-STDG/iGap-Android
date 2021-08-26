@@ -978,8 +978,6 @@ public class MessageDataStorage extends BaseController {
             FileLog.i(TAG, "deleteUserStoryId " + storyId);
             try {
                 database.beginTransaction();
-                long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
-                database.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
                 RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", storyId).findFirst();
 
                 if (realmStoryProto != null) {
@@ -1009,8 +1007,6 @@ public class MessageDataStorage extends BaseController {
             FileLog.i(TAG, "deleteUserStoryId " + uploadId);
             try {
                 database.beginTransaction();
-                long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
-                database.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
                 RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("id", uploadId).findFirst();
 
                 if (realmStoryProto != null) {

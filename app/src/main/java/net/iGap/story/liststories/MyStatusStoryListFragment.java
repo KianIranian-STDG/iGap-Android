@@ -192,7 +192,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     private void loadStories() {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
             storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt","index"},new Sort[]{Sort.DESCENDING,Sort.DESCENDING});
         });
         if (storyProto != null && storyProto.size() == 0) {

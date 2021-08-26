@@ -191,7 +191,7 @@ public class UserLoginResponse extends MessageHandler {
                         if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j),j));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j));
                                 }
                                 RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
                                 storyObjects = new ArrayList<>();
@@ -212,13 +212,14 @@ public class UserLoginResponse extends MessageHandler {
                                         if (realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().isSentAll()) {
                                             realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().deleteFromRealm();
                                         }
+                                        realm.where(RealmStoryProto.class).equalTo("userId", realmStories.get(i).getUserId()).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
                                     }
                                     isExist = false;
                                 }
                             }
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j),j));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j));
                                 }
 
                                 RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
