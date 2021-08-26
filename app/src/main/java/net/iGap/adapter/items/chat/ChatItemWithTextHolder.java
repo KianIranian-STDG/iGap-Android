@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.chat;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.LayoutCreator;
 
 public class ChatItemWithTextHolder extends NewChatItemHolder {
     AppCompatTextView messageView;
@@ -21,12 +23,12 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
     protected void setLayoutMessageContainer(LinearLayout.LayoutParams layout_param) {
         initViews();
         layoutMessageContainer.setLayoutParams(layout_param);
-        getContentBloke().addView(layoutMessageContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getContentBloke().addView(layoutMessageContainer);
     }
 
     protected void setLayoutMessageContainer() {
         initViews();
-        getContentBloke().addView(layoutMessageContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getContentBloke().addView(layoutMessageContainer, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.END));
     }
 
     public void addButtonLayout(LinearLayout view) {
@@ -40,7 +42,7 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
     private void initViews() {
         messageView = ViewMaker.makeTextViewMessage();
         layoutMessageContainer = ViewMaker.getTextView();
-        layoutMessageContainer.addView(messageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutMessageContainer.addView(messageView);
 
         BtnContainer = new LinearLayout(getContext());
         BtnContainer.setOrientation(LinearLayout.VERTICAL);
