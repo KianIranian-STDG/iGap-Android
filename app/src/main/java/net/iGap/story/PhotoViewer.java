@@ -1078,17 +1078,19 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
             if (!viewHolders.containsKey(position)) {
                 viewHolders.put(position, zoomLayout);
-                Palette.from(BitmapFactory.decodeFile(itemGalleryList.get(position).getPath())).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(@Nullable Palette palette) {
-                        GradientDrawable gd = new GradientDrawable(
-                                GradientDrawable.Orientation.TOP_BOTTOM,
-                                new int[]{
-                                        palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+                if (BitmapFactory.decodeFile(itemGalleryList.get(position).getPath()) != null) {
+                    Palette.from(BitmapFactory.decodeFile(itemGalleryList.get(position).getPath())).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(@Nullable Palette palette) {
+                            GradientDrawable gd = new GradientDrawable(
+                                    GradientDrawable.Orientation.TOP_BOTTOM,
+                                    new int[]{
+                                            palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
 
-                        viewHolders.get(position).findViewById(R.id.textstickerView).setBackground(gd);
-                    }
-                });
+                            viewHolders.get(position).findViewById(R.id.textstickerView).setBackground(gd);
+                        }
+                    });
+                }
                 container.addView(zoomLayout, 0);
                 List<View> views = new ArrayList<>();
                 addedViews.put(position, views);
@@ -1568,7 +1570,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         }
 
         public StructBottomSheet getItemWithPosition(int position) {
-           return photosItem.get(position);
+            return photosItem.get(position);
         }
 
         public void setRowIndex(int rowIndex) {

@@ -9,8 +9,8 @@
 
     <net.iGap.module.RadiusImageView
         android:id="@+id/image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/background_multi_select_light"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
