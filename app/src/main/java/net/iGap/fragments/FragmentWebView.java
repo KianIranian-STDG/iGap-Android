@@ -338,7 +338,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             if (url.toLowerCase().equals("igap://close")) {
                 isWebViewVisible = false;
                 forceCloseFragment = true;
@@ -350,7 +349,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 if (view.getTitle().length() > 27) {
                     webViewToolbar.setTitle(view.getTitle().substring(0, 27) + "...");
@@ -395,6 +393,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
             customView = view;
             FragmentWebView.this.callback = callback;
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             frameLayout.addView(view);
             pullToRefresh.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
@@ -406,6 +405,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
             if (customView == null)
                 return;
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             customView.setVisibility(View.GONE);
             frameLayout.removeView(customView);
             customView = null;
