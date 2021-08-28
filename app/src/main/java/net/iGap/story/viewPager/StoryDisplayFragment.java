@@ -57,7 +57,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
+public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener, StoriesProgressView.StoryProgressListener {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
     private static final String EXTRA_IS_MY_STORY = "EXTRA_IS_MY_STORY";
@@ -232,8 +232,16 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onResume();
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
-        updateStory();
+//        updateStory();
         onResumeCalled = true;
+        if (counter != 0) {
+            counter = restorePosition();
+            storiesProgressView.startStories(counter);
+        } else {
+            Log.e("mmd", "onResume: "  );
+            setUpUi();
+            storiesProgressView.startStories();
+        }
     }
 
     @Override
@@ -343,14 +351,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
         Glide.with(tumNailImage.getContext()).load(path).into(tumNailImage);
 
-        if (counter != 0) {
-            counter = restorePosition();
+        if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
         } else {
-            setUpUi();
-            storiesProgressView.startStories();
+            Log.e("mmd", "loadImage resumeCurrentStory: "  );
+            resumeCurrentStory();
         }
-
         if (isMyStory) {
             if (G.selectedLanguage.equals("en")) {
                 storyViewsCount.setText(stories.get(counter).getViewCount() + "");
@@ -465,6 +471,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storiesProgressView.setStoriesCount(stories.size(), position = getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : counter);
         storiesProgressView.setAllStoryDuration(StoryProgress.DEFAULT_PROGRESS_DURATION);
         storiesProgressView.setStoriesListener(this);
+        storiesProgressView.setProgressListener(this);
     }
 
     public void showStoryOverlay() {
@@ -590,10 +597,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         }
         ++counter;
         savePosition(counter);
-        Log.e("faslkfhsfhsakjd", "onNext:");
-        pauseCurrentStory();
-        loadingProgressbar.setVisibility(View.VISIBLE);
-        updateStory();
+        Log.e("mmd", "onNext:");
     }
 
     @Override
@@ -602,8 +606,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             return;
         --counter;
         savePosition(counter);
-        pauseCurrentStory();
-        updateStory();
     }
 
     @Override
@@ -617,6 +619,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             showStoryOverlay();
             storiesProgressView.resume();
         }
+    }
+
+    @Override
+    public void progressStarted(int current) {
+        Log.e("mmd", "progressStarted: "  );
+        pauseCurrentStory();
+        loadingProgressbar.setVisibility(View.VISIBLE);
+        updateStory();
     }
 
     public interface PageViewOperator {

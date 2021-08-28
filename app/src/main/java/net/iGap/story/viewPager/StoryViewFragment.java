@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,7 +152,8 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             @Override
             void onPageScrollCanceled() {
                 StoryDisplayFragment fragment = (StoryDisplayFragment) pagerAdapter.findFragmentByPosition(viewPager, currentPage);
-                fragment.resumeCurrentStory();
+//                Log.e("mmd", "onPageScrollCanceled resumeCurrentStory: "  );
+//                fragment.resumeCurrentStory();
             }
 
             @Override

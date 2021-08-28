@@ -50,6 +50,10 @@ public class StoryProgress extends FrameLayout {
         finishProgress(false);
     }
 
+    public void setStarted(boolean isStarted) {
+        this.isStarted = isStarted;
+    }
+
     public void setMinWithoutCallback() {
         if (maxProgressView != null) {
             maxProgressView.setBackgroundResource(R.color.gray);
@@ -108,9 +112,9 @@ public class StoryProgress extends FrameLayout {
                 if (isStarted) {
                     return;
                 }
-                isStarted = true;
                 frontProgressView.setVisibility(VISIBLE);
-                if (callback != null) callback.onStartProgress();
+                if (callback != null) callback.onStartProgress(isStarted);
+                isStarted = true;
             }
 
             @Override
@@ -148,7 +152,7 @@ public class StoryProgress extends FrameLayout {
     }
 
     public interface Callback {
-        void onStartProgress();
+        void onStartProgress(boolean isStarted);
 
         void onFinishProgress();
     }

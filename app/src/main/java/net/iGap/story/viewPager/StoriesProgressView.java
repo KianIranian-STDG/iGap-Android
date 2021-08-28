@@ -24,6 +24,7 @@ public class StoriesProgressView extends LinearLayout {
     private StoriesListener storiesListener;
     private int position = -1;
     private List<StoryProgress> progressBars = new ArrayList<>();
+    private StoryProgressListener progressListener;
 
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -48,6 +49,10 @@ public class StoriesProgressView extends LinearLayout {
         storiesListener = listener;
     }
 
+    public void setProgressListener(StoryProgressListener progressListener) {
+        this.progressListener = progressListener;
+    }
+
     private void bindViews() {
         progressBars.clear();
         removeAllViews();
@@ -69,7 +74,7 @@ public class StoriesProgressView extends LinearLayout {
 
     private View createSpace() {
         View view = new View(getContext());
-        view.setLayoutParams(LayoutCreator.createRelative(5,4));
+        view.setLayoutParams(LayoutCreator.createRelative(5, 4));
         return view;
     }
 
@@ -77,12 +82,14 @@ public class StoriesProgressView extends LinearLayout {
 
         return new StoryProgress.Callback() {
             @Override
-            public void onStartProgress() {
+            public void onStartProgress(boolean isStarted) {
                 current = index;
+                progressListener.progressStarted(current);
             }
 
             @Override
             public void onFinishProgress() {
+                progressBars.get(current).setStarted(false);
                 if (isReverseStart) {
                     if (storiesListener != null) storiesListener.onPrev();
                     if (0 <= current - 1) {
@@ -168,6 +175,7 @@ public class StoriesProgressView extends LinearLayout {
 
     public void pause() {
         if (current < 0) return;
+        progressBars.get(current).setStarted(false);
         progressBars.get(current).pauseProgress();
     }
 
@@ -185,5 +193,9 @@ public class StoriesProgressView extends LinearLayout {
         void onPrev();
 
         void onComplete();
+    }
+
+    public interface StoryProgressListener {
+        void progressStarted(int current);
     }
 }
