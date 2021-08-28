@@ -924,7 +924,7 @@ public class MessageDataStorage extends BaseController {
                 }
                 List<StoryObject> storyObjects = new ArrayList<>();
                 for (int i = 0; i < stories.size(); i++) {
-                    storyObjects.add(StoryObject.create(stories.get(i), i));
+                    storyObjects.add(StoryObject.create(stories.get(i), i,null));
                 }
 
                 realmStory.setUserId(stories.get(0).getUserId());

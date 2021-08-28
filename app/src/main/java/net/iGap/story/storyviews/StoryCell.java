@@ -89,6 +89,7 @@ public class StoryCell extends FrameLayout {
     private long uploadId;
     private String fileToken;
     private int sendStatus;
+    private int storyIndex;
     private static boolean isCreatedView = false;
 
     public String getFileToken() {
@@ -129,6 +130,14 @@ public class StoryCell extends FrameLayout {
 
     public void setSendStatus(int sendStatus) {
         this.sendStatus = sendStatus;
+    }
+
+    public int getStoryIndex() {
+        return storyIndex;
+    }
+
+    public void setStoryIndex(int storyIndex) {
+        this.storyIndex = storyIndex;
     }
 
     public void setData(RealmStoryProto realmStoryProto, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {

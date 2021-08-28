@@ -503,12 +503,15 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     if (position == addStoryRow) {
                         DbManager.getInstance().doRealmTransaction(realm -> {
                             RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+                            List<Long> userId = new ArrayList<>();
+                            userId.add(AccountManager.getInstance().getCurrentUser().getId());
+                            List<List<String>> userDisplayNames = getMessageDataStorage().getDisplayNameWithUserId(userId);
                             if (realmStory != null) {
                                 if (realmStory.isSentAll()) {
                                     G.runOnUiThread(() -> {
                                         floatActionLayout.setVisibility(View.VISIBLE);
                                     });
-                                    storyCell.setData(realmStory, displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, otherUserRealmStory.size() > 0, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
+                                    storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, otherUserRealmStory.size() > 0, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                     storyCell.deleteIconVisibility(true);
                                     storyCell.addIconVisibility(false);
@@ -536,7 +539,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     if (isHaveFailedUpload) {
                                         G.runOnUiThread(() -> {
                                             floatActionLayout.setVisibility(View.VISIBLE);
-                                            storyCell.setData(realmStory, displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
+                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                             storyCell.deleteIconVisibility(true);
                                             storyCell.addIconVisibility(true);
@@ -545,7 +548,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     } else {
                                         G.runOnUiThread(() -> {
                                             floatActionLayout.setVisibility(View.GONE);
-                                            storyCell.setData(realmStory, displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
+                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                             storyCell.deleteIconVisibility(true);
                                             storyCell.addIconVisibility(false);
@@ -573,7 +576,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter).get(0), displayNameList.get(recentStoryCounter).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "",displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1):"#4aca69", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {

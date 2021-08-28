@@ -156,7 +156,7 @@ public class UserLoginResponse extends MessageHandler {
                     .findFirst().getPushNotificationToken();
         });
 
-        if (!FCMToken.isEmpty()) {
+        if (FCMToken != null && !FCMToken.isEmpty()) {
             RealmUserInfo.sendPushNotificationToServer();
         }
 
@@ -191,9 +191,9 @@ public class UserLoginResponse extends MessageHandler {
                         if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j, res.stories.get(i).getOriginatorName()));
                                 }
-                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
                                 storyObjects = new ArrayList<>();
                             }
                         } else if (res.stories.size() != 0 && res.stories.size() < realm.where(RealmStory.class).findAll().size()) {
@@ -203,7 +203,7 @@ public class UserLoginResponse extends MessageHandler {
                             if (realmStories != null && realmStories.size() > 0) {
                                 for (int i = 0; i < realmStories.size(); i++) {
                                     for (int j = 0; j < res.stories.size(); j++) {
-                                        if (realmStories.get(i).getUserId() == res.stories.get(j).getUserId()) {
+                                        if (realmStories.get(i).getUserId() == res.stories.get(j).getOriginatorId()) {
                                             isExist = true;
                                         }
                                     }
@@ -219,10 +219,10 @@ public class UserLoginResponse extends MessageHandler {
                             }
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j, res.stories.get(i).getOriginatorName()));
                                 }
 
-                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
                                 storyObjects = new ArrayList<>();
                             }
 
