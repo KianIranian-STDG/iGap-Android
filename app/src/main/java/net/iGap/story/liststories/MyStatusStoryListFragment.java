@@ -104,7 +104,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         FrameLayout rootView = new FrameLayout(getContext());
         if (G.themeColor == Theme.DARK) {
             rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-        }else {
+        } else {
             rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         }
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
@@ -192,12 +192,12 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     private void loadStories() {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt","index"},new Sort[]{Sort.DESCENDING,Sort.DESCENDING});
+            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
         });
         if (storyProto != null && storyProto.size() == 0) {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findAll().deleteAllFromRealm();
-                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt","index"},new Sort[]{Sort.DESCENDING,Sort.DESCENDING});
+                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
             });
         }
         List<Long> userIdList = new ArrayList<>();
@@ -306,7 +306,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     @Override
     public void onStoryClick(StoryCell storyCell) {
-        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true, true, storyCell.getStoryId())).setReplace(false).load();
+        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true, true, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex())).setReplace(false).load();
     }
 
 
@@ -405,6 +405,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                             storyCell.setUploadId(storyProto.get(position).getId());
                             storyCell.setFileToken(storyProto.get(position).getFileToken());
                             storyCell.setSendStatus(storyProto.get(position).getStatus());
+                            storyCell.setStoryIndex(storyProto.get(position).getIndex());
                         }
 
                         storyCell.addIconVisibility(false);

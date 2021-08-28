@@ -57,12 +57,14 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         this.isSingle = isSingle;
         this.storyId = storyId;
     }
+
     public StoryViewFragment(long userId, boolean muStory, boolean isSingle, String filePath) {
         this.userId = userId;
         this.myStory = muStory;
         this.isSingle = isSingle;
         this.storyId = storyId;
     }
+
     public StoryViewFragment() {
 
     }
@@ -115,13 +117,18 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 if (realmStoryProto.getUserId() == userId) {
                     currentPage = i;
                 }
-                if (isSingle    ) {
-                    if (realmStoryProto.getStoryId() == storyId) {
+                if (isSingle) {
+                    if (realmStoryProto.getStoryId() != 0 && realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
                                 realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
+                    } else if (realmStoryProto.getIndex() == storyId) {
+                        Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                        stories.add(story);
+                        storyUser.setStories(stories);
                     }
                 } else {
                     Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),

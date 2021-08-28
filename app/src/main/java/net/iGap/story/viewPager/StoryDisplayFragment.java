@@ -234,13 +234,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
         updateStory();
         onResumeCalled = true;
-        if (counter != 0) {
-            counter = restorePosition();
-            storiesProgressView.startStories(counter);
-        } else {
-            setUpUi();
-            storiesProgressView.startStories();
-        }
     }
 
     @Override
@@ -331,6 +324,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
                         });
                     }
+                }else {
+                    Glide.with(storyDisplayImage.getContext()).load("").into(storyDisplayImage);
+                    avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+                    Glide.with(tumNailImage.getContext()).load("").into(tumNailImage);
                 }
             }
         }
@@ -346,11 +343,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
         Glide.with(tumNailImage.getContext()).load(path).into(tumNailImage);
 
-        if (counter == 0 && downloadCounter == 0) {
+        if (counter != 0) {
+            counter = restorePosition();
             storiesProgressView.startStories(counter);
         } else {
-            resumeCurrentStory();
+            setUpUi();
+            storiesProgressView.startStories();
         }
+
         if (isMyStory) {
             if (G.selectedLanguage.equals("en")) {
                 storyViewsCount.setText(stories.get(counter).getViewCount() + "");
