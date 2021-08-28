@@ -44,8 +44,10 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.File;
@@ -54,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class CameraStoryFragment extends BaseFragment {
+public class CameraStoryFragment extends BaseFragment implements EventManager.EventDelegate {
     public static final int request_code_TAKE_PICTURE = 10;
     private Camera mCamera;
     private LinearLayout rootView;
@@ -205,6 +207,12 @@ public class CameraStoryFragment extends BaseFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
+    }
+
+    @Override
     public void onResume() {
 
         super.onResume();
@@ -246,6 +254,13 @@ public class CameraStoryFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_VOLUME_DOWN_KEY) {
+            G.runOnUiThread(() -> takePicture.performClick());
+        }
+    }
+
     public interface OnGalleryIconClicked {
         void onGalleryIconClicked();
     }
@@ -253,7 +268,7 @@ public class CameraStoryFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
         galleryIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

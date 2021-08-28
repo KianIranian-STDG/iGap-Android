@@ -78,6 +78,8 @@ public class EventManager {
     public static final int STORY_SENDING = eventId++;
     public static final int STORY_UPLOADED_FAILED = eventId++;
 
+    public static final int ON_VOLUME_DOWN_KEY = eventId++;
+
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> addAfterBroadcast = new SparseArray<>();
