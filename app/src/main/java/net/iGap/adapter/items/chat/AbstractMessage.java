@@ -976,7 +976,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
                     } else {// TODO: 12/29/20 MESSAGE_REFACTOR
-                        if (messageObject.username.length() > 0) {
+                        if (messageObject.username != null && messageObject.username.length() > 0) {
                             //TODO: fixed this and do not use G.currentActivity
                             HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, messageObject.username, HelperUrl.ChatEntry.profile, (messageObject.forwardedMessage.id * (-1)));
                         }
