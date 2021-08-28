@@ -30,6 +30,7 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserInfo;
 import net.iGap.story.StoryObject;
 import net.iGap.story.viewPager.Story;
 import net.iGap.structs.AttachmentObject;
@@ -379,6 +380,8 @@ public class MessageDataStorage extends BaseController {
                         initializeInfo.add(realmRegisteredInfo.getDisplayName());
                         initializeInfo.add(realmRegisteredInfo.getColor());
                         result.add(initializeInfo);
+                    } else {
+                        new RequestUserInfo().userInfo(userId.get(i));
                     }
 
                 }
@@ -924,7 +927,7 @@ public class MessageDataStorage extends BaseController {
                 }
                 List<StoryObject> storyObjects = new ArrayList<>();
                 for (int i = 0; i < stories.size(); i++) {
-                    storyObjects.add(StoryObject.create(stories.get(i), i,null));
+                    storyObjects.add(StoryObject.create(stories.get(i), i, null));
                 }
 
                 realmStory.setUserId(stories.get(0).getUserId());

@@ -300,8 +300,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private void loadStories() {
 
         DbManager.getInstance().doRealmTransaction(realmDB -> {
-//            realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-//            realmDB.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
             stories = realmDB.copyFromRealm(realmDB.where(RealmStory.class).findAll());
             otherUserRealmStory = realmDB.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
         });
