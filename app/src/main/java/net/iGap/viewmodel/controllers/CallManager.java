@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -686,7 +685,7 @@ public class CallManager {
             else
                 lastPhoneState = state;
 
-            if(CallManager.instance.isCallActive) {
+            if (CallManager.getInstance().isCallActive) {
 
                 if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     CallManager.getInstance().holdCall(true);
