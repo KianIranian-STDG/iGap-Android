@@ -2269,4 +2269,5 @@ Want to get it?</string>
     <string name="name_error">Name not verified</string>
     <string name="email_error">Wrong Email Address</string>
     <string name="email_added">added Email Address</string>
+    <string name="AccessBan">Access is closed to view members</string>
 </resources>

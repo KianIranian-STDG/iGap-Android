@@ -1853,4 +1853,6 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+    <string name="AccessBan">L\'accès est fermé pour voir les membres</string>
+
 </resources>

@@ -2234,4 +2234,6 @@
     <string name="bio_error">بیو تایید نشد</string>
     <string name="email_added">ایمیل تایید شد</string>
     <string name="seted_gender">جنسیت تایید شد</string>
+    <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است </string>
+
 </resources>

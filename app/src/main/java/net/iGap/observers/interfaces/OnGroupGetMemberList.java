@@ -15,5 +15,10 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import java.util.List;
 
 public interface OnGroupGetMemberList {
+
     void onGroupGetMemberList(List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members);
+
+    void onError(int majorCode, int minorCode);
+
+    void onTimeOut();
 }

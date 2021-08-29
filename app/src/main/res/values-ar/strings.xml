@@ -2643,4 +2643,5 @@
     <string name="seted_gender">Gender confirmed</string>
     <string name="seted_name">Name confirmed</string>
     <string name="email_added">added Email Address</string>
+    <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
 </resources>
