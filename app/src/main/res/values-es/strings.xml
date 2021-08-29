@@ -104,7 +104,7 @@
     <string name="send_gif">Enviar Gif</string>
     <string name="kuknos_changePIN_failTitle">Fallar</string>
     <string name="reference_code">Número de referencia</string>
-    <string name="mobile_bank_detail_cell_penaltyAmount">Importe de penalización:% 1 $ s% 2 $ s</string>
+<!--    <string name="mobile_bank_detail_cell_penaltyAmount">Importe de penalización:% 1 $ s% 2 $ s</string>-->
     <string name="st_FakeAccount">Cuenta falsa</string>
     <string name="kuknos_setting_copySFailWriteFile">Algo salió mal. Por favor, inténtelo de nuevo más tarde.</string>
     <string name="voice_message">Mensaje de voz</string>
@@ -588,13 +588,13 @@
     <string name="get_gifts">Obtener regalo</string>
     <string name="call_error_internalServer">Ocurrió un error interno del servidor.</string>
     <string name="month">Mes</string>
-    <string name="kuknos_RecoverySK_lengthTitle">Teclas de recuperación \ 'Longitud:</string>
+<!--    <string name="kuknos_RecoverySK_lengthTitle">Teclas de recuperación \ 'Longitud:</string>-->
     <string name="add_car">Agregar coche</string>
     <string name="share_file">Archivos compartidos</string>
     <string name="pay_id">ID de pago</string>
     <string name="E_324_1">Error en carga útil: ID de habitación no válida</string>
     <string name="E_324_2">Error en carga útil: ID de miembro no válido</string>
-    <string name="mobile_bank_load_detail_MUAmount">Cantidad no pagada no pagada:% 1$s % 2$s</string>
+<!--    <string name="mobile_bank_load_detail_MUAmount">Cantidad no pagada no pagada:% 1$s % 2$s</string>-->
     <string name="kuknos_accountInfo_title">Informacion de cuenta</string>
     <string name="two_step_verification">Verificación de dos pasos</string>
     <string name="back">Atrás</string>
@@ -808,7 +808,7 @@
     <string name="bank_card">tarjeta bancaria</string>
     <string name="customization">Personalización</string>
     <string name="kuknos_rial_percentage_of_commission">Porcentaje de comisión</string>
-    <string name="bank_etebari_tosee">Instituto de Crédito Tosse \ 'E</string>
+<!--    <string name="bank_etebari_tosee">Instituto de Crédito Tosse \ 'E</string>-->
     <string name="mic">Micrófono</string>
     <string name="scan">Escanear</string>
     <string name="file_message">Mensaje de archivo</string>
@@ -910,7 +910,7 @@
     <string name="set_pass_code_description">Cuando configura un código de acceso, aparecerá un icono de bloqueo en la parte superior de la página principal de chats. Tócalo para bloquear o desbloquear la aplicación.</string>
     <string name="Room_Deleted_log">habitación borrada</string>
     <string name="receiver_code">Código mercante</string>
-    <string name="elecBill_add_billID">ID de factura \ 's *</string>
+<!--    <string name="elecBill_add_billID">ID de factura \ 's *</string>-->
     <string name="E_212_1">Mala carga útil: ID de habitación no válida</string>
     <string name="kuknos_SignupInfo_errorTermAndCondition">Si desea continuar, acepte términos y condiciones.</string>
     <string name="delete_card_confirm">¿Estás seguro de que quieres eliminar esta tarjeta?</string>
@@ -1046,7 +1046,7 @@
     <string name="posted">Al corriente</string>
     <string name="elecBill_cell_addNewBill">Añadir nueva factura</string>
     <string name="of_from_total">de% s</string>
-    <string name="mobile_bank_load_detail_paidAmount">Monto pagado:% 1 $ s% 2 $ s</string>
+<!--    <string name="mobile_bank_load_detail_paidAmount">Monto pagado:% 1 $ s% 2 $ s</string>-->
     <string name="planDB">Igap local database.realm</string>
     <string name="refund_amount">Cantidad devuelta</string>
     <string name="there_is_no_connection_to_server">Servidor no encontrado</string>
@@ -1091,7 +1091,7 @@
     <string name="no_body">Nadie</string>
     <string name="replay_item_dialog">Respuesta</string>
     <string name="E_379">No puede invitar a este usuario a grupos debido a la privacidad protegida para la solicitud</string>
-    <string name="elecBill_add_name">Nombre de Bill \ 's *</string>
+<!--    <string name="elecBill_add_name">Nombre de Bill \ 's *</string>-->
     <string name="MISSED_SCREEN_SHARE">Compartir pantalla perdida</string>
     <string name="beeptunes_purchase_song">Compra canción</string>
     <string name="iGap_has_crashed_desc">Se produjo un error inesperado forzando la aplicación para detener. Somos conscientes de este error. Asegúrese de que estamos solucionando este problema, todo lo que tiene que hacer es solo hacer clic en ""Restablecer"".</string>
@@ -1279,7 +1279,7 @@
     <string name="enter_code">Ingrese su código</string>
     <string name="ghamari">Calendario lunar</string>
     <string name="do_you_want_to_delete_this_group">¿Estás seguro de que quieres eliminar este grupo?</string>
-    <string name="elecBill_pay_billAddBillList">Añadir a la lista de mi Bill \ 's</string>
+<!--    <string name="elecBill_pay_billAddBillList">Añadir a la lista de mi Bill \ 's</string>-->
     <string name="CURRENT_DUE">Corriente vencida</string>
     <string name="kuknos_rial_Redemption_fee">Cuota de redención PMN</string>
     <string name="kuknos_AddAsset_AddBTN">Añadir nuevos activos</string>
@@ -1535,7 +1535,7 @@
     <string name="app_theme">Color tema IGAP</string>
     <string name="flash_light">Linterna</string>
     <string name="please_enter_correct_phone_number">Por favor ingrese el número de teléfono correcto</string>
-    <string name="mobile_bank_load_detail_unpaidAmount">Importe no pagado:% 1 $ s% 2 $ s</string>
+<!--    <string name="mobile_bank_load_detail_unpaidAmount">Importe no pagado:% 1 $ s% 2 $ s</string>-->
     <string name="share_audio_file">Audios compartidos</string>
     <string name="text_line_2_introduce_page7">Deja un nuevo mundo que me rodea. A su alrededor, encuentra a tus amigos, centros de entretenimiento, arte, negocios y otros y disfrutan de tus momentos ...</string>
     <string name="rabi_sani">Rabi thani</string>
@@ -1652,7 +1652,7 @@
     <string name="unknown_message">¡Este mensaje no es compatible!</string>
     <string name="four_number">4</string>
     <string name="Toast_First_0">No necesito 0 al principio</string>
-    <string name="server_do_not_response">Servidor DON \ 'T Respuesta</string>
+    <string name="server_do_not_response">El servidor no responde</string>
     <string name="topUp_message">Comprar el mensaje de carga</string>
     <string name="enter_verify_email_code">Por favor ingrese verificar el código de correo electrónico</string>
     <string name="payable_price">Precio de pago</string>
@@ -1898,7 +1898,7 @@
     <string name="USER_JOINED">unido IGAP</string>
     <string name="desc">Descripción</string>
     <string name="time_out_error">error de tiempo de espera</string>
-    <string name="video_duration">% s (% s)</string>
+<!--    <string name="video_duration">% s (% s)</string>-->
     <string name="transfer_to_dialog">Transferencia a:% s</string>
     <string name="privacy">Intimidad</string>
     <string name="st_in_chat_sound">Sonidos en chat</string>
@@ -1980,7 +1980,7 @@
     <string name="call_error_offer">La oferta no es posible.</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">La longitud del nombre es demasiado corta.</string>
     <string name="card_bank">Tarjeta bancaria</string>
-    <string name="invitation_message">\ Hey Únete a IGAP: http://d.igap.net/invite i \ 'm esperándote! \ \ N Número referido es:</string>
+<!--    <string name="invitation_message">\ Hey Únete a IGAP: http://d.igap.net/invite i \ 'm esperándote! \ \ N Número referido es:</string>-->
     <string name="kuknos_SignupInfo_errorUsernameRegularExp">El carácter de nombre de usuario debe ser A a Z y números. Debe tener al menos 5 caracteres</string>
     <string name="Select_directory">Seleccione un directorio</string>
     <string name="place">Sitio</string>
@@ -2007,7 +2007,7 @@
     <string name="khordad">22 mayo - 21 junio Khordad</string>
     <string name="wallet_error_server">Error al comunicarse con el servidor</string>
     <string name="stop_message_bot">¿Está seguro de detener este robot?</string>
-    <string name="kuknos_RecoverySK_languageTitle">Teclas de recuperación \ 'Idioma:</string>
+<!--    <string name="kuknos_RecoverySK_languageTitle">Teclas de recuperación \ 'Idioma:</string>-->
     <string name="subscribers_title">Suscriptores</string>
     <string name="kuknos_buy_again_tab_Rial_equivalent">Equivalente a Riales \ n PAGO% 1$S</string>
     <string name="channel_name_notification">Notificación iGap</string>
