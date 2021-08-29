@@ -45,6 +45,10 @@ public class StoriesProgressView extends LinearLayout {
         bindViews();
     }
 
+    public StoryProgress getCurrentProgressBar() {
+        return progressBars.get(current);
+    }
+
     public void setStoriesListener(StoriesListener listener) {
         storiesListener = listener;
     }
@@ -175,7 +179,6 @@ public class StoriesProgressView extends LinearLayout {
 
     public void pause() {
         if (current < 0) return;
-        progressBars.get(current).setStarted(false);
         progressBars.get(current).pauseProgress();
     }
 

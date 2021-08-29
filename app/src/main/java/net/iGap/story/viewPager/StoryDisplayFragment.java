@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -232,13 +231,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onResume();
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
-//        updateStory();
         onResumeCalled = true;
         if (counter != 0) {
             counter = restorePosition();
             storiesProgressView.startStories(counter);
         } else {
-            Log.e("mmd", "onResume: "  );
             setUpUi();
             storiesProgressView.startStories();
         }
@@ -248,6 +245,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onPause() {
         super.onPause();
         storiesProgressView.abandon();
+        storiesProgressView.getCurrentProgressBar().setStarted(false);
         closeKeyboard(rootView);
     }
 
@@ -344,8 +342,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
 
     private void loadImage(String path) {
-        Log.e("faslkfhsfhsakjd", "loadImage: " + downloadCounter);
-
         loadingProgressbar.setVisibility(View.GONE);
         Glide.with(storyDisplayImage.getContext()).load(path).into(storyDisplayImage);
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
@@ -354,7 +350,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
         } else {
-            Log.e("mmd", "loadImage resumeCurrentStory: "  );
             resumeCurrentStory();
         }
         if (isMyStory) {
@@ -412,13 +407,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onClick(View view) {
-                Log.e("mmd", "is clickable: " + clickable);
                 if (!clickable) {
                     if (view == next) {
                         if (counter == stories.size() - 1) {
                             pageViewOperator.nextPageView(false);
                         } else {
-                            Log.e("mmd", "on click");
                             storiesProgressView.skip();
                         }
                     }
@@ -445,8 +438,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             return false;
                         case MotionEvent.ACTION_UP:
                             showStoryOverlay();
-                            resumeCurrentStory();
-                            Log.e("mmd", "resume Action Up");
+                            updateStory();
                             return limit < System.currentTimeMillis() - pressTime;
                     }
                 } else {
@@ -535,7 +527,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private void keyboardStateChanged(boolean closeKeyboard) {
         if (!closeKeyboard) {
             closeKeyboard(rootView);
-            resumeCurrentStory();
+            updateStory();
             clickable = false;
         } else {
             pauseCurrentStory();
@@ -597,7 +589,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         }
         ++counter;
         savePosition(counter);
-        Log.e("mmd", "onNext:");
     }
 
     @Override
@@ -623,7 +614,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void progressStarted(int current) {
-        Log.e("mmd", "progressStarted: "  );
         pauseCurrentStory();
         loadingProgressbar.setVisibility(View.VISIBLE);
         updateStory();
