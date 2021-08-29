@@ -10,7 +10,9 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoChannelGetMemberList;
+import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmMember;
 
 public class ChannelGetMemberListResponse extends MessageHandler {
@@ -37,12 +39,17 @@ public class ChannelGetMemberListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onChannelGetMemberList.onTimeOut();
+
     }
 
     @Override
     public void error() {
         super.error();
-    }
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        if (G.onChannelGetMemberList != null) {
+            G.onChannelGetMemberList.onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+        } }
 }
 
 

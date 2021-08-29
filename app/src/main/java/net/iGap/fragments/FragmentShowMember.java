@@ -37,6 +37,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.cells.TextCell;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
@@ -84,7 +85,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -236,69 +236,50 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void getMemberList() {
         mMemberCount = listMembers.size();
-        infoUpdateListenerCount = new OnComplete() {
-            @Override
-            public void complete(boolean result, final String messageOne, String MessageTow) {
+        infoUpdateListenerCount = (result, messageOne, MessageTow) -> {
 
-                if (MessageTow.contains("OK")) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            DbManager.getInstance().doRealmTask(realm -> {
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        final RealmList<RealmMember> newMemberList = new RealmList<>();
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomID).findFirst();
-                                        if (realmRoom != null) {
-                                            if (realmRoom.getType() == GROUP) {
-                                                for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
-                                                    if (Long.parseLong(messageOne) == member.getUserId()) {
-                                                        mCurrentUpdateCount++;
-                                                        newMemberList.add(RealmMember.put(realm, member));
-                                                        newMemberList.addAll(0, realmRoom.getGroupRoom().getMembers());
-                                                        realmRoom.getGroupRoom().setMembers(newMemberList);
-                                                        newMemberList.clear();
-                                                        break;
-                                                    }
-                                                }
-                                            } else {
-                                                for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : listMembersChannal) {
-                                                    if (Long.parseLong(messageOne) == member.getUserId()) {
-                                                        mCurrentUpdateCount++;
-                                                        newMemberList.add(RealmMember.put(realm, member));
-                                                        newMemberList.addAll(0, realmRoom.getChannelRoom().getMembers());
-                                                        realmRoom.getChannelRoom().setMembers(newMemberList);
-                                                        newMemberList.clear();
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-
+            if (MessageTow.contains("OK")) {
+                new Handler(Looper.getMainLooper()).post(() -> DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm12 -> {
+                        final RealmList<RealmMember> newMemberList = new RealmList<>();
+                        RealmRoom realmRoom = realm12.where(RealmRoom.class).equalTo("id", mRoomID).findFirst();
+                        if (realmRoom != null) {
+                            if (realmRoom.getType() == GROUP) {
+                                for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
+                                    if (Long.parseLong(messageOne) == member.getUserId()) {
+                                        mCurrentUpdateCount++;
+                                        newMemberList.add(RealmMember.put(realm12, member));
+                                        newMemberList.addAll(0, realmRoom.getGroupRoom().getMembers());
+                                        realmRoom.getGroupRoom().setMembers(newMemberList);
+                                        newMemberList.clear();
+                                        break;
                                     }
-                                }, new Realm.Transaction.OnSuccess() {
-                                    @Override
-                                    public void onSuccess() {
-                                        fillItem();
-
+                                }
+                            } else {
+                                for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : listMembersChannal) {
+                                    if (Long.parseLong(messageOne) == member.getUserId()) {
+                                        mCurrentUpdateCount++;
+                                        newMemberList.add(RealmMember.put(realm12, member));
+                                        newMemberList.addAll(0, realmRoom.getChannelRoom().getMembers());
+                                        realmRoom.getChannelRoom().setMembers(newMemberList);
+                                        newMemberList.clear();
+                                        break;
                                     }
-                                });
-                            });
+                                }
+                            }
                         }
-                    });
-                } else {
-                    mCurrentUpdateCount++;
-                }
+
+                    }, () -> fillItem());
+                }));
+            } else {
+                mCurrentUpdateCount++;
             }
         };
 
         G.onGroupGetMemberList = new OnGroupGetMemberList() {
             @Override
             public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
-
                 mMemberCount = members.size();
-
                 if (mMemberCount > 0) {
                     listMembers.clear();
                     for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
@@ -306,13 +287,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                         new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (progressBar != null) {
-                                progressBar.setVisibility(View.GONE);
-                            }
+                    G.handler.post(() -> {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                     isOne = true;
@@ -322,14 +299,30 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     }
                 }
             }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(() -> {
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(getString(R.string.AccessBan), false);
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(() -> {
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(getString(R.string.time_out), false);
+                });
+            }
         };
 
         G.onChannelGetMemberList = new OnChannelGetMemberList() {
             @Override
             public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
-
                 mMemberCount = members.size();
-
                 if (mMemberCount > 0) {
                     listMembersChannal.clear();
                     for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
@@ -337,13 +330,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                         new RequestUserInfo().userInfoWithCallBack(infoUpdateListenerCount, member.getUserId(), "" + member.getUserId());
                     }
                 } else {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if (progressBar != null) {
-                                progressBar.setVisibility(View.GONE);
-                            }
+                    G.handler.post(() -> {
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                     isOne = true;
@@ -352,50 +341,40 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                         isFirstFill = false;
                     }
                 }
-
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                G.handler.post(() -> {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                        HelperError.showSnackMessage(getString(R.string.AccessBan), false);
 
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
                     }
                 });
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
+                G.handler.post(() -> {
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+                    HelperError.showSnackMessage(getString(R.string.time_out), false);
                 });
             }
         };
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                mCurrentUpdateCount = 0;
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(realm1 -> RealmMember.deleteAllMembers(realm1, mRoomID, selectedRole), () -> {
-                        if (roomType == GROUP) {
-                            new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
-                        } else {
-                            new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
-                        }
-                    });
-                });
 
-            }
+        G.handler.post(() -> {
+            mCurrentUpdateCount = 0;
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransactionAsync(realm1 -> RealmMember.deleteAllMembers(realm1, mRoomID, selectedRole), () -> {
+                    if (roomType == GROUP) {
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
+                    } else {
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
+                    }
+                });
+            });
         });
     }
 
@@ -409,13 +388,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     isFirstFill = false;
                 }
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (progressBar != null) {
-                            progressBar.setVisibility(View.GONE);
-                        }
+                G.handler.post(() -> {
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
             } catch (NullPointerException e) {

@@ -1932,4 +1932,6 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+    <string name="AccessBan">The group has been deleted</string>
+
 </resources>

@@ -1916,4 +1916,5 @@
     <string name="bio_error">Bio doğrulanmadı</string>
     <string name="email_added">اعتبارلی ایمیل آدرسی</string>
     <string name="seted_gender">Cinsiyet lanmadı</string>
+    <string name="AccessBan">Üyeleri görüntülemek için erişim kapatıldı</string>
 </resources>

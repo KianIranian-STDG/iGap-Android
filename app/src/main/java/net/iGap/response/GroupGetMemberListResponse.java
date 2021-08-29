@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmMember;
 
@@ -37,11 +39,16 @@ public class GroupGetMemberListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.onGroupGetMemberList.onTimeOut();
     }
 
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        if (G.onGroupGetMemberList != null) {
+            G.onGroupGetMemberList.onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+        }
     }
 }
 
