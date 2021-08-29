@@ -61,6 +61,7 @@
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
         <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
         <item name="iGapSpinnerShape">@drawable/kuknos_spinner_dark_style</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_dark</item>
     </style>
 
     <style name="BaseTheme.baseLightTheme">
@@ -599,7 +600,7 @@
 
         <item name="md_dark_theme">false</item>
 
-        <item name="md_background_color">@color/white</item>
+       <!-- <item name="md_background_color">@color/white</item>-->
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>

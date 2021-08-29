@@ -29,7 +29,7 @@
             style="@style/baseFontIcon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            android:text="@string/check_icon"
+            android:text="@string/icon_sent"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/themeColor"
             app:layout_constraintEnd_toEndOf="@id/themeColor"

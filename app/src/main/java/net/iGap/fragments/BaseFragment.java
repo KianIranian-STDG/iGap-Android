@@ -70,7 +70,7 @@ public class BaseFragment extends SwipeBackFragment {
 
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
-//        hideKeyboard();
+        hideKeyboard();
     }
 
     @Override

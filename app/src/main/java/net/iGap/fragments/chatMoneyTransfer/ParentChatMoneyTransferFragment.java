@@ -181,7 +181,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     public void loadStickerPackagePage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
- /*       if (!(fragment instanceof GiftStickerPackageListFragment)) {
+/*        if (!(fragment instanceof GiftStickerPackageListFragment)) {
             fragment = GiftStickerPackageListFragment.getInstance(true);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }*/

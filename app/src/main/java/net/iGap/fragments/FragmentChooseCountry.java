@@ -70,7 +70,7 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getContext().getResources().getString(R.string.Select_Country))
                 .setSearchBoxShown(true)

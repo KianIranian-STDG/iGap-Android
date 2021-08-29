@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.chat;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.LayoutCreator;
 
 public class ChatItemWithTextHolder extends NewChatItemHolder {
     AppCompatTextView messageView;
@@ -26,7 +28,7 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
 
     protected void setLayoutMessageContainer() {
         initViews();
-        getContentBloke().addView(layoutMessageContainer);
+        getContentBloke().addView(layoutMessageContainer, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.END));
     }
 
     public void addButtonLayout(LinearLayout view) {

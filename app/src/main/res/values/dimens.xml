@@ -3,12 +3,8 @@
 
     <!--Toolbar helper -->
 
-    <dimen name="toolbar_radius">10dp</dimen>
     <dimen name="toolbar_height">@dimen/dp60</dimen>
     <dimen name="margin_for_below_layouts_of_toolbar">@dimen/dp48</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_search">@dimen/dp52</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_music_player">@dimen/dp105</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_call_layout">@dimen/dp88</dimen>
     <dimen name="toolbar_height_root_with_search">@dimen/dp80</dimen>
     <dimen name="toolbar_icon_size">@dimen/dp40</dimen>
     <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
@@ -25,9 +21,6 @@
 
     <dimen name="messageContainerPadding">6dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">10dp</dimen>
-
-    <dimen name="design_fab_size_mini">24pt</dimen>
-    <dimen name="design_fab_size_normal">30pt</dimen>
 
     <dimen name="messageBox_cornerRadius">7dp</dimen>
 
@@ -75,21 +68,11 @@
     <dimen name="dp110">110dp</dimen>
     <dimen name="dp95">95dp</dimen>
 
-    <dimen name="md_action_corner_radius" tools:override="true">6dp</dimen>
-    <dimen name="md_bg_corner_radius" tools:override="true">6dp</dimen>
-    <dimen name="md_content_textsize" tools:override="true">16dp</dimen>
-    <dimen name="md_button_textsize" tools:override="true">13dp</dimen>
-    <dimen name="md_listitem_textsize" tools:override="true">16dp</dimen>
-    <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
-    <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
     <dimen name="ivand_profile_icon_padding">5dp</dimen>
     <dimen name="fup_items_icon_padding">@dimen/dp4</dimen>
 
 
     <dimen name="coupon_qr_size">140dp</dimen>
-    <dimen name="multi_select_icon_size">@dimen/largeTextSize</dimen>
-    <dimen name="multi_select_icon_margin">@dimen/dp4</dimen>
-    <dimen name="multi_select_icon_height">@dimen/dp40</dimen>
 
     <dimen name="discovery_radius">@dimen/dp12</dimen>
     <dimen name="discovery_margin">@dimen/dp4</dimen>
@@ -106,6 +89,7 @@
     <dimen name="largeTextSize">@dimen/dp16</dimen>
     <dimen name="xlargeTextSize">@dimen/dp20</dimen>
     <dimen name="standardIconSize">@dimen/dp24</dimen>
+    <dimen name="largeIconSize">@dimen/dp32</dimen>
 
     <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
     <dimen name="toolbar_txt_name_max_width">@dimen/dp140</dimen>

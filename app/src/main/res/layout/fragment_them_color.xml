@@ -57,7 +57,7 @@
                             android:layout_width="@dimen/dp52"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="@string/md_back_arrow"
+                            android:text="@string/icon_back"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
                             android:textColor="@color/whit_background" />
                     </net.iGap.libs.rippleeffect.RippleView>
@@ -118,7 +118,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -128,7 +128,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
-                        android:text="@string/md_settings_cogwheel_button"
+                        android:text="@string/icon_settings"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView
@@ -173,7 +173,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -221,7 +221,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -231,7 +231,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
-                        android:text="@string/md_settings_cogwheel_button"
+                        android:text="@string/icon_settings"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView
@@ -277,7 +277,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -325,7 +325,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -373,7 +373,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -421,7 +421,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -469,7 +469,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -517,7 +517,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -566,7 +566,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -614,7 +614,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -662,7 +662,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -711,7 +711,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -759,7 +759,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -807,7 +807,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -855,7 +855,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -903,7 +903,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -951,7 +951,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -999,7 +999,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1047,7 +1047,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1094,7 +1094,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1142,7 +1142,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1189,7 +1189,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1237,7 +1237,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1285,7 +1285,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1333,7 +1333,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
@@ -1381,7 +1381,7 @@
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_check_symbol"
+                        android:text="@string/icon_check_ok"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:visibility="gone" />
                     <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->

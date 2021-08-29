@@ -163,8 +163,8 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.setting_icon , R.string.group_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_settings_lines, R.string.icon_contacts)
                 .setListener(this)
                 .setDefaultTitle(getString(R.string.wallet));
 

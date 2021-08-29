@@ -80,8 +80,9 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
     public MutableLiveData<Long> goToCustomNotificationPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showMoreMenu = new MutableLiveData<>();
-    public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
+    public MutableLiveData<String> showDialogEditLink = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
+    public MutableLiveData<String> showDialogCopyLink = new MutableLiveData<>();
 
     private RealmRoom realmRoom;
     private boolean isNotJoin;
@@ -274,7 +275,11 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
 
     public void onInviteLinkClick() {
         isPopup = false;
-        showDialogCopyLink.setValue(inviteLink.get());
+        if (role == GroupChatRole.OWNER) {
+            showDialogEditLink.setValue(inviteLink.get());
+        } else {
+            showDialogCopyLink.setValue(inviteLink.get());
+        }
     }
 
     public void onShowMemberClick() {

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -142,7 +142,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             category.setText(temp.getCategory());
             title.setText(temp.getNews().get(0).getContents().getTitle());
             lead.setText(temp.getNews().get(0).getContents().getLead());
-            Picasso.get().load(temp.getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(temp.getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(temp));
@@ -214,7 +215,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             category.setText(mData.getmNews().get(position * 2).getCategory());
             title.setText(mData.getmNews().get(position * 2).getNews().get(0).getContents().getTitle());
-            Picasso.get().load(mData.getmNews().get(position * 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(mData.getmNews().get(position * 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position * 2)));
@@ -224,7 +226,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             category1.setText(mData.getmNews().get(position * 2 + 1).getCategory());
             title1.setText(mData.getmNews().get(position * 2 + 1).getNews().get(0).getContents().getTitle());
-            Picasso.get().load(mData.getmNews().get(position * 2 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(mData.getmNews().get(position * 2 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position * 2 + 1)));
@@ -317,7 +320,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 > mData.getmNews().size())
                 return;
             category.setText(mData.getmNews().get(position * 3).getCategory());
-            Picasso.get().load(mData.getmNews().get(position * 3).getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(mData.getmNews().get(position * 3).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position * 3)));
@@ -326,7 +330,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 + 1 > mData.getmNews().size())
                 return;
             category1.setText(mData.getmNews().get(position * 3 + 1).getCategory());
-            Picasso.get().load(mData.getmNews().get(position * 3 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(mData.getmNews().get(position * 3 + 1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position * 3 + 1)));
@@ -335,7 +340,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position * 3 + 2 > mData.getmNews().size())
                 return;
             category2.setText(mData.getmNews().get(position * 3 + 2).getCategory());
-            Picasso.get().load(mData.getmNews().get(position * 3 + 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
+            Glide.with(G.context)
+                    .load(mData.getmNews().get(position * 3 + 2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image2);
             container2.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position * 3 + 2)));

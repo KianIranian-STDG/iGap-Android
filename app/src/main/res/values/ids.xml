@@ -17,6 +17,7 @@
     <item name="messageSenderName" type="id" />
 
     <item name="mainContainer" type="id" />
+    <item name="avatarContainer" type="id" />
     <item name="mainFragmentView" type="id"/>
     <item name="csliwt_layout_container_message" type="id" />
     <item name="thumbnail" type="id" />
@@ -76,6 +77,7 @@
     <item name="ll_chatItem_contentBloke" type="id" />
     <item name="tv_chatItem_time" type="id" />
     <item name="tv_chatItem_signature" type="id" />
+    <item name="tv_chatItem_empty" type="id" />
 
     <!--music item-->
     <item name="iv_musicItem_cover" type="id" />

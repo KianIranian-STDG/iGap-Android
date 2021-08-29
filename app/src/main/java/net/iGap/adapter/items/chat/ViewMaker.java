@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -25,16 +24,21 @@ import androidx.core.view.ViewCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
+import net.iGap.module.customView.CheckBox;
 
 import static android.view.Gravity.CENTER;
+import static android.view.Gravity.END;
 import static android.view.Gravity.LEFT;
+import static android.view.Gravity.RIGHT;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.G.context;
+import static net.iGap.G.isAppRtl;
 import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp8;
 import static net.iGap.R.dimen.messageContainerPadding;
@@ -370,25 +374,19 @@ public class ViewMaker {
         context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rippleView, true);
         linearLayout_205.setBackgroundResource(rippleView.resourceId);
 
+        FrameLayout avatarContainer = new FrameLayout(context);
+        avatarContainer.setId(R.id.avatarContainer);
+        linearLayout_205.addView(avatarContainer, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER, 10, 0, 10, 0));
+
         CheckBox checkBox = new CheckBox(context);
         checkBox.setId(R.id.fcsl_check_box);
-        checkBox.setVisibility(View.GONE);
+        checkBox.setVisibility(View.VISIBLE);
         checkBox.setClickable(false);
-        checkBox.setButtonDrawable(R.drawable.check_box_background);
-        LinearLayout.LayoutParams lp_checkBox = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp_checkBox.setMargins(i_Dp(R.dimen.dp10), 0, i_Dp(R.dimen.dp4), 0);
-        lp_checkBox.gravity = Gravity.CENTER;
-        checkBox.setLayoutParams(lp_checkBox);
-        linearLayout_205.addView(checkBox);
 
         CircleImageView fcsl_imv_picture = new CircleImageView(context);
         fcsl_imv_picture.setId(R.id.fcsl_imv_picture);
-        LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
-        layout_856.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
-        layout_856.gravity = Gravity.CENTER;
-
-        fcsl_imv_picture.setLayoutParams(layout_856);
-        linearLayout_205.addView(fcsl_imv_picture);
+        avatarContainer.addView(fcsl_imv_picture, LayoutCreator.createFrame(48, 48, CENTER));
+        avatarContainer.addView(checkBox, LayoutCreator.createFrame(20, 20,Gravity.BOTTOM | END));
 
         LinearLayout linearLayout_71 = new LinearLayout(context);
         linearLayout_71.setOrientation(VERTICAL);
@@ -453,7 +451,7 @@ public class ViewMaker {
 
         MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(context);
         fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
-        fcsl_txt_icon.setText(R.string.md_call_made);
+        fcsl_txt_icon.setText(R.string.icon_single_contact);
         fcsl_txt_icon.setTextColor(ContextCompat.getColor(context, R.color.green));
         setTextSize(fcsl_txt_icon, R.dimen.dp18);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

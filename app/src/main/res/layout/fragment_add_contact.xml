@@ -96,15 +96,34 @@
         android:layout_marginEnd="56dp"
         android:layout_marginRight="56dp"
         android:hint="9xxxxxxxxx"
-        android:maxLength="18"
+        android:maxLength="12"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textSize="@dimen/dp15"
+        android:textSize="@dimen/dp14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/ac_txt_codeCountry"
         app:layout_constraintTop_toBottomOf="@id/ac_edt_lastName"
-        app:mask="###-###-####" />
+        app:mask="###-###-####"
+        android:gravity="left|center_vertical"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="phone"
+        android:textAlignment="gravity"
+        android:maxLines="1"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/phoneNumberError"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@id/ac_edt_phoneNumber"
+        app:layout_constraintEnd_toEndOf="@id/ac_edt_phoneNumber"
+        app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber"
+        android:textColor="@color/red"
+        android:textDirection="locale"
+        android:textAlignment="center"
+        android:textSize="@dimen/smallTextSize"/>
 
     <ProgressBar
         android:id="@+id/loader"

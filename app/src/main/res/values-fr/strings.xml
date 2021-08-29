@@ -29,7 +29,6 @@
     <string name="kuknos_receipt_Return_to_digital_token_bag">"Retour au sac de jetons numériques"</string>
     <string name="kuknos_receipt_Refund_address">"Adresse de remboursement"</string>
     <string name="kunos_receipt_type_refund">"Type de remboursement"</string>
-    <string name="kuknos_setting_dialog">Confirmation dechange de jetons</string>
     <string name="kuknos_rial_max_buy">"Maximum autorisé"</string>
     <string name="kuknos_rial_min_buy">"Minimum autorisé"</string>
     <string name="kuknos_rial_percentage_of_commission">"Pourcentage de commission"</string>
@@ -39,10 +38,7 @@
     <string name="kuknos_rial_Redemption_fee">"Frais de rachat PMN"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Nombre total de contrats"</string>
     <string name="kuknos_rial_Deposit_amount">"Montant du dépôt (rials)"</string>
-    <string name="kuknos_rial_Deposit_amount2">"Montant du dépôt"</string>
     <string name="kuknos_edit_info_birthday">"Date de naissance"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"Rachat de jetons"</string>
-    <string name="kuknos_rial_Redemption_feee">"Frais de rachat"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"Complétez vos informations \n en allant dans la  \n section des paramètres"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Modifier et modifier les informations de compte"</string>
     <string name="kuknos_rial_price_of_day">"Prix ​du jour"</string>
@@ -59,7 +55,6 @@
     <string name="phone_number">Numéro de téléphone</string>
     <string name="ra_enter_reagent_code">Veuillez enter le numéro de téléphone de votre représentant?</string>
     <string name="ra_confirm">Confirmer</string>
-    <string name="reagent_error_message">Numéro de représentant n\'est pas valable</string>
     <string name="Toast_Location_Not_Found">votre localisation n\'est pas reconnue</string>
     <string name="Toast_First_0">Le début du numéro n\'a pas besoin d\'être 0</string>
     <string name="Toast_Minimum_Characters">Le nombre de caractères est inférieur à la limite  </string>
@@ -99,7 +94,6 @@
     <string name="mute_notification">Notification sans son</string>
     <string name="pin_to_top">Épingler </string>
     <string name="Unpin_to_top">Désépingler</string>
-    <string name="unmute_notification">Notification avec son</string>
     <string name="clear_history">Effacer les archives</string>
     <string name="left_group">Quitter le group</string>
     <string name="delete_group">Suppression du group</string>
@@ -131,8 +125,6 @@
     <string name="device_dosenot_support">Cet appareil n\'a pas d\'application pour cette action</string>
     <string name="do_you_want_to_turn_on_gps">Le GPS est désactivé , vous voulez l\'activer?</string>
     <string name="select_picture_en">choix d\'image</string>
-    <string name="cannot_load_data_en">Impossible de charger les données</string>
-    <string name="do_you_want_exit">vous voulez quitter?</string>
     <string name="slide_to_cancel_en">Glisser pour annuler</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
     <string name="st_username">Nom d\'utilisateur</string>
@@ -232,7 +224,6 @@
     <string name="delete_item_dialog">supprimer </string>
     <string name="saveToDownload_item_dialog">enregistrer au fichier des téléchargements</string>
     <string name="edit_item_dialog">modifier</string>
-    <string name="Search">rechercher</string>
     <string name="Delete_and_leave_Group">quitter et supprimer le group</string>
     <string name="New_Chanel"> un nouveau canal</string>
     <string name="of">de</string>
@@ -451,7 +442,8 @@
     <string name="device">appareil</string>
     <string name="country">pays</string>
     <string name="create_time">créé à</string>
-    <string name="ip">ID</string>
+    <string name="last_connectivity">Dernière connectivité:</string>
+    <string name="ip">IP:</string>
     <string name="current_session">session en cours</string>
     <string name="Active_session">session active</string>
     <string name="terminate_all">annuler toutes les sessions actives</string>
@@ -629,7 +621,6 @@
     <string name="no_body">personne</string>
     <string name="my_contacts">mes contacts</string>
     <string name="empty_message">veuillez entrer les cinq caractères d\'ID</string>
-    <string name="empty_message3">veuillez entrer au moins cinq caractères pour lancer la recherche</string>
     <string name="there_is_no_any_result">aucun résultat  trouvé</string>
     <string name="there_is_no_connection_to_server">la connexion au serveur n\'a pas été faite</string>
     <string name="empty_room">vous n\'avez pas de message</string>
@@ -748,26 +739,18 @@
     <string name="ringing">sonner</string>
     <string name="connecting_call">en cours de connexion</string>
     <string name="connected">connecté</string>
-    <string name="disconnected">déconnecté</string>
     <string name="faild">échoué</string>
     <string name="reject">refuser appel</string>
     <string name="busy">occupé</string>
     <string name="invalid_email_token">le code de confirmation d\'E-mail est invalide</string>
     <string name="invalid_question_token">votre réponse est invalide</string>
     <string name="not_answerd_call">appel manqué</string>
-    <string name="not_answered_voice_call">appel d\'audio manqué</string>
-    <string name="not_answered_video_call">appel d\'audio manqué</string>
     <string name="recorded_by">enregistré par</string>
     <string name="Login_with_QrCode">se connecter par QR</string>
     <string name="Input_device_specification">appareil bien connecté</string>
     <string name="QrCode_Scan">scanner le QR</string>
     <string name="Call_Quality">qualité d\'appel</string>
     <string name="desc_self_destroy">Si vous choisissez l\'une des périodes suivantes et que vous n\'utilisez jamais votre compte iGap pendant une certaine période, votre compte sera détruit et supprimé spontanément</string>
-    <string name="crop_image_menu_rotate_right">Tourner</string>
-    <string name="crop_image_menu_crop">couper</string>
-    <string name="crop_image_menu_flip">retour une image</string>
-    <string name="crop_image_menu_flip_horizontally">Retourner horizontalement</string>
-    <string name="crop_image_menu_flip_vertically">Retourner verticalement</string>
     <string name="title_who_can_see_my_avatar">ma photo de profil est visible pour</string>
     <string name="title_who_can_invite_you_to_channel_s">recevoir lien d\'invitation au canal par</string>
     <string name="title_who_can_invite_you_to_group_s">recevoir lien d\'invitation au group par</string>
@@ -1272,7 +1255,6 @@
     <string name="remaining_balance">Solde restant</string>
     <string name="refound">Document corrigeant le montant du dépôt dans le portefeuille</string>
     <string name="Favorite_Sticker">Mes autocollants</string>
-    <string name="item_selected">sélectionné</string>
     <string name="terms_and_condition">En appuyant sur le bouton de démarrage, vous acceptez %s</string>
     <string name="terms_and_condition_clickable">les règlements</string>
     <string name="new_channel_hint">vous pouvez  rédiger des explications facultatives pour votre canal</string>
@@ -1308,7 +1290,6 @@
     <string name="cloud">stokage en nuage</string>
     <string name="score">point</string>
     <string name="Credit">crédit</string>
-    <string name="make_as_read">lu</string>
     <string name="read_all">tous sont lus</string>
     <string name="financial_report">reportage fiancier</string>
     <string name="fag">questions fréquentes</string>
@@ -1342,7 +1323,7 @@
     <string name="nine_number">9</string>
     <string name="star_number">*</string>
     <string name="zero_number">.</string>
-    <string name="administrators_title">les dirigeants</string>
+    <string name="admins_title">les dirigeants</string>
     <string name="moderators_title">les surveillants</string>
     <string name="view_contact">afficher le contact</string>
     <string name="new_group_call">nouveau appel collectif</string>
@@ -1374,7 +1355,6 @@
     <string name="tablet_empty_chat_description">Commencer \ bienvenue sur iGap. Vous pouvez à tous les moments définir votre photo de profil et / ou changer votre nom dans les réglages</string>
     <string name="make_call">faire appel</string>
     <string name="create_chat">faire discussion</string>
-    <string name="delete_all">éliminer tous</string>
     <string name="maximum_poll">vous avez voté au nombre des fois autorisées</string>
     <string name="before_try">vous avez déjà voté</string>
     <string name="poll_ok">votre vote a été bien pris</string>
@@ -1509,7 +1489,6 @@
     <string name="kuknos_wHistory_dialogTitle"> erreur </string>
     <string name="kuknos_wHistory_error"> connexion au serveur n\'a pas été faite. Veuillez essayer de nouveau après quelques minutes </string>
     <string name="kuknos_setting_title"> régalage </string>
-    <string name="kuknos_setting_viewRecoveryP"> afficher chaine des mots de récupération </string>
     <string name="kuknos_setting_logout"> déconnecter de portefeuille </string>
     <string name="kuknos_changePIN_successTitle"> réussite </string>
     <string name="kuknos_changePIN_failTitle"> erreur </string>
@@ -1610,12 +1589,6 @@
     <string name="igasht_success_payment"> paiement a été fait avec réussi </string>
     <string name="noDetail_textView"> sans explication </string>
     <string name="igasht_empty_history_message"> aucun billet n\'a été acheté </string>
-    <string name="Restaurant_textView"> restaurant </string>
-    <string name="parking_textView"> parking </string>
-    <string name="wifi_textView"> Wifi </string>
-    <string name="coffeeShop_textView"> café </string>
-    <string name="wheelchair_textView"> chaise roulante </string>
-    <string name="prayerRoom_textView"> salle de prière </string>
     <string name="iland">iLand</string>
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
@@ -1840,7 +1813,6 @@
     <string name="suggested_packages">Forfaits suggérés</string>
     <string name="all_packages">همه بسته ها</string>
     <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
-    <string name="credit_sim">سیمکارت اعتباری</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="payment_userScore">Ton score</string>
     <string name="Increase_score">Augmentez votre score \n dès maintenant!</string>
@@ -1858,7 +1830,6 @@
     <string name="refund_button">rembourser</string>
     <string name="submit">soumettre</string>
     <string name="history_asset_type">type d\'actif</string>
-    <string name="history_hash">hacher</string>
     <string name="history_amount">montante</string>
     <string name="histroy_fee">frais</string>
     <string name="history_count">compter</string>
@@ -1867,5 +1838,19 @@
     <string name="share_file_link">Partager le lien public</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">Nombre de tentatives excessif</string>
-
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
+    <string name="name_error">Nom non vérifié</string>
+    <string name="user_name_error">Nom d\'utilisateur non confirmé</string>
+    <string name="email_error">Courriel non confirmé</string>
+    <string name="gender_error">Sexe non confirmé</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">Gender confirmed</string>
 </resources>

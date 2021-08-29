@@ -91,20 +91,22 @@ public class AttachmentObject {
         return null;
     }
 
-    public boolean isFileExistsOnLocal() {
-        return filePath != null && new File(filePath).exists() && new File(filePath).canRead();
+    public boolean isFileExistsOnLocal(MessageObject messageObject) {
+        String finalPath = filePath != null ? filePath : messageObject.getCacheFile(false);
+        filePath = finalPath;
+        return finalPath != null && new File(finalPath).exists() && new File(finalPath).canRead();
     }
 
-    public boolean isFileExistsOnLocalAndIsImage() {
+    public boolean isFileExistsOnLocalAndIsImage(MessageObject messageObject) {
         assert filePath != null;
-        return isFileExistsOnLocal() && HelperMimeType.isFileImage(filePath.toLowerCase());
+        return (isFileExistsOnLocal(messageObject) || messageObject.isFileExistWithCacheId(false)) && HelperMimeType.isFileImage(filePath != null ? filePath.toLowerCase() : messageObject.getCacheFile(false).toLowerCase());
     }
 
     public boolean isAnimatedSticker() {
         return name != null && HelperMimeType.isFileJson(name);
     }
 
-    public boolean isThumbnailExistsOnLocal() {
-        return thumbnailPath != null && new File(thumbnailPath).exists() && new File(thumbnailPath).canRead();
+    public boolean isThumbnailExistsOnLocal(MessageObject messageObject) {
+        return thumbnailPath != null && new File(thumbnailPath).exists() && new File(thumbnailPath).canRead() || messageObject.isFileExistWithCacheId(true);
     }
 }

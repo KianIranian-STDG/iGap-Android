@@ -1174,45 +1174,43 @@ public class RealmRoom extends RealmObject {
         });
     }
 
-    public static long hasPinedMessage(long roomId) {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            long result = 0;
-            RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-            if (room != null) {
-                if (room.getPinMessageId() > 0) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
-                            equalTo("messageId", room.getPinMessageId()).findFirst();
-                    if (roomMessage == null) {
-                        new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
-                            @Override
-                            public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (G.onPinedMessage != null) {
-                                            G.onPinedMessage.onPinMessage();
-                                        }
+    public static long hasPinedMessage(Realm realm, long roomId) {
+        long result = 0;
+        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            if (room.getPinMessageId() > 0) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
+                        equalTo("messageId", room.getPinMessageId()).findFirst();
+                if (roomMessage == null) {
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
+                        @Override
+                        public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (G.onPinedMessage != null) {
+                                        G.onPinedMessage.onPinMessage();
                                     }
-                                }, 200);
-                            }
-
-                            @Override
-                            public void onError(int majorCode, int minorCode) {
-
-                            }
-                        });
-                    } else {
-                        RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
-                                equalTo("messageId", room.getPinMessageId()).notEqualTo("messageId", room.getPinMessageIdDeleted()).
-                                equalTo("deleted", false).equalTo("showMessage", true).findFirst();
-                        if (roomMessage1 != null) {
-                            result = roomMessage1.getMessageId();
+                                }
+                            }, 200);
                         }
+
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+
+                        }
+                    });
+                } else {
+                    RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
+                            equalTo("messageId", room.getPinMessageId()).notEqualTo("messageId", room.getPinMessageIdDeleted()).
+                            equalTo("deleted", false).equalTo("showMessage", true).findFirst();
+                    if (roomMessage1 != null) {
+                        result = roomMessage1.getMessageId();
                     }
                 }
             }
-            return result;
-        });
+        }
+        return result;
 
     }
 

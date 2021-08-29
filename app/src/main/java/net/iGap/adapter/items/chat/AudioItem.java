@@ -84,7 +84,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.songArtist.setVisibility(View.INVISIBLE);
                 holder.playBtn.setVisibility(View.VISIBLE);
                 holder.songSize.setVisibility(View.INVISIBLE);
-
             } else {
                 holder.seekBar.setEnabled(false);
                 holder.playBtn.setEnabled(false);
@@ -110,9 +109,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             if (holder.seekBar.getTag().equals(holder.mMessageID) && holder.mMessageID.equals(MusicPlayer.messageId)) {
                 if (messageOne.equals("play")) {
-                    holder.playBtn.setText(R.string.md_play_arrow);
+                    holder.playBtn.setText(R.string.icon_play);
                 } else if (messageOne.equals("pause")) {
-                    holder.playBtn.setText(R.string.md_pause_button);
+                    holder.playBtn.setText(R.string.icon_pause);
                 } else if (messageOne.equals("updateTime")) {
 
                     if (result) {
@@ -221,11 +220,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         if (messageObject.forwardedMessage != null) {
             if (messageObject.forwardedMessage.attachment != null) {
-                if (!messageObject.forwardedMessage.attachment.isFileExistsOnLocal()) {
+                if (!messageObject.forwardedMessage.attachment.isFileExistsOnLocal(messageObject.forwardedMessage)) {
                     holder.songSize.setText(AndroidUtils.humanReadableByteCount(messageObject.forwardedMessage.attachment.size, true));
                 }
                 holder.songFileName.setText(messageObject.forwardedMessage.attachment.name);
-                if (messageObject.forwardedMessage.attachment.isFileExistsOnLocal()) {
+                if (messageObject.forwardedMessage.attachment.isFileExistsOnLocal(messageObject.forwardedMessage)) {
                     String artistName = AndroidUtils.getAudioArtistName(messageObject.forwardedMessage.attachment.filePath);
                     if (!TextUtils.isEmpty(artistName)) {
                         holder.songArtist.setText(artistName);
@@ -237,7 +236,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         } else {
             if (attachment != null) {
-                if (!attachment.isFileExistsOnLocal()) {
+                if (!attachment.isFileExistsOnLocal(messageObject)) {
                     holder.songSize.setText(AndroidUtils.humanReadableByteCount(attachment.size, true));
                 }
                 holder.songFileName.setText(attachment.name);
@@ -267,14 +266,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.playBtn.setText(R.string.md_pause_button);
+                    holder.playBtn.setText(R.string.icon_pause);
                 } else {
-                    holder.playBtn.setText(R.string.md_play_arrow);
+                    holder.playBtn.setText(R.string.icon_play);
                 }
             }
         } else {
             holder.seekBar.setProgress(0);
-            holder.playBtn.setText(R.string.md_play_arrow);
+            holder.playBtn.setText(R.string.icon_play);
         }
 
         if (HelperCalander.isPersianUnicode) {
@@ -394,11 +393,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn = new MaterialDesignTextView(view.getContext());
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
-            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icon_old));
+            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icons));
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
-            playBtn.setText(R.string.md_play_arrow);
-            setTextSize(playBtn, R.dimen.largeTextSize);
+            playBtn.setText(R.string.icon_play);
+            setTextSize(playBtn, R.dimen.largeIconSize);
             playBtn.setBackgroundResource(R.drawable.background_audioitem_cover);
 
             seekBar = new SeekBar(view.getContext());

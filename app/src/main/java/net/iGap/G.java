@@ -32,7 +32,6 @@ import androidx.multidex.MultiDex;
 import com.caspian.otpsdk.context.ApplicationContext;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
@@ -41,7 +40,6 @@ import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -70,6 +68,9 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
 import ir.radsense.raadcore.web.WebBase;
 import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.TapsellPlusInitListener;
+import ir.tapsell.plus.model.AdNetworkError;
+import ir.tapsell.plus.model.AdNetworks;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
@@ -328,9 +329,9 @@ public class G extends ApplicationContext {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             baseContext = baseContext.createConfigurationContext(configuration);
-        } else {
-            res.updateConfiguration(configuration, res.getDisplayMetrics());
         }
+
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
 
         G.context = baseContext;
 
@@ -389,9 +390,7 @@ public class G extends ApplicationContext {
 
         LooperThreadHelper.getInstance();
 
-        HelperTracker.getInstance().initMetrix(this);
-
-        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
+        updateResources(context);
 
         handler = new Handler();
 
@@ -433,7 +432,19 @@ public class G extends ApplicationContext {
             FileLog.i("---------------------------------------------------");
         }
 
-        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY);
+        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY,
+                new TapsellPlusInitListener() {
+                    @Override
+                    public void onInitializeSuccess(AdNetworks adNetworks) {
+                        Log.d("onInitializeSuccess", adNetworks.name());
+                    }
+
+                    @Override
+                    public void onInitializeFailed(AdNetworks adNetworks,
+                                                   AdNetworkError adNetworkError) {
+                        Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " +	adNetworkError.getErrorMessage());
+                    }
+                });
     }
 
     @Override

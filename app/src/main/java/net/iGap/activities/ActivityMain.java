@@ -42,7 +42,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -74,6 +73,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
+import net.iGap.fragments.SearchFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
@@ -531,10 +531,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             isOpenChatBeforeSheare = false;
 
             int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
-            if (activeAccountCount == 0){
-               finish();
-            }
-            else {
+            if (activeAccountCount == 0) {
+                finish();
+            } else {
                 checkIntent(getIntent());
             }
 
@@ -676,44 +675,47 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
-
-        referrerClient.startConnection(new InstallReferrerStateListener() {
-            @Override
-            public void onInstallReferrerSetupFinished(int responseCode) {
-                switch (responseCode) {
-                    case InstallReferrerClient.InstallReferrerResponse.OK:
-                        ReferrerDetails response = null;
-                        try {
-                            response = referrerClient.getInstallReferrer();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        final String referrerUrl = response.getInstallReferrer();
-
-
-                        // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
-                        trackInstallReferrer(referrerUrl);
+        try {
+            referrerClient.startConnection(new InstallReferrerStateListener() {
+                @Override
+                public void onInstallReferrerSetupFinished(int responseCode) {
+                    switch (responseCode) {
+                        case InstallReferrerClient.InstallReferrerResponse.OK:
+                            ReferrerDetails response = null;
+                            try {
+                                response = referrerClient.getInstallReferrer();
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                            final String referrerUrl = response.getInstallReferrer();
 
 
-                        // End the connection
-                        referrerClient.endConnection();
+                            // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
+                            trackInstallReferrer(referrerUrl);
 
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
-                        // API not available on the current Play Store app.
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
-                        // Connection couldn't be established.
-                        break;
+
+                            // End the connection
+                            referrerClient.endConnection();
+
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                            // API not available on the current Play Store app.
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                            // Connection couldn't be established.
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onInstallReferrerServiceDisconnected() {
-
-            }
-        });
+                @Override
+                public void onInstallReferrerServiceDisconnected() {
+                }
+            });
+        } catch (Exception ex) {
+            //This is always due to permission exception. Log it and move on.
+            ex.printStackTrace();
+        }
     }
 
     // Tracker for Classic GA (call this if you are using Classic GA only)
@@ -953,15 +955,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
                 }
                 break;
-            case kuknosRequestCodeQrCode:
+/*            case kuknosRequestCodeQrCode:
                 IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (kuknosWID.getContents() != null) {
-       /*             KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
                     if (myFragment != null && myFragment.isVisible()) {
                         myFragment.setWalletIDQrCode(kuknosWID.getContents());
-                    }*/
+                    }
                 }
-                break;
+                break;*/
             case WALLET_REQUEST_CODE:
                 /*try {
                     getUserCredit();
@@ -1439,11 +1441,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         boolean handled = false;
                         try {
                             // because some of our fragments are NOT extended from BaseFragment
-//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
+                            if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
+                                SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
+                                if (searchFragment != null && searchFragment.isVisible()) {
+                                    searchFragment.onSearchCollapsed();
+                                }
+                            }
                             Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
-//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
                             handled = ((BaseFragment) frag).onBackPressed();
-//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1541,7 +1546,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (isLock) {
                 iconLock.setText(getResources().getString(R.string.md_igap_lock));
             } else {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+                iconLock.setText(getResources().getString(R.string.icon_lock));
             }
         } else {
             iconLock.setVisibility(View.GONE);

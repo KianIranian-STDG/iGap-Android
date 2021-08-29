@@ -86,7 +86,7 @@ public class FragmentWalletAgrement extends BaseFragment {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.wallet_agrement))
                 .setListener(new ToolbarListener() {

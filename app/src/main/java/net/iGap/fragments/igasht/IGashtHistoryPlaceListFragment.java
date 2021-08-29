@@ -48,7 +48,7 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView<IGashtHistory
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.order_history))
                 .setListener(new ToolbarListener() {

@@ -60,8 +60,8 @@ public class FragmentUserScore extends BaseFragment {
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.history_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_time)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.score))
                 .setListener(new ToolbarListener() {
@@ -160,11 +160,11 @@ public class FragmentUserScore extends BaseFragment {
 
             private void bindView(ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore iVandScore) {
                 if (iVandScore.getScore() >= 0) {
-                    addIcon.setText(R.string.add_icon_font);
+                    addIcon.setText(R.string.icon_add_whit_circle);
                     addIcon.setTextColor(getContext().getResources().getColor(R.color.green));
                     count.setTextColor(getContext().getResources().getColor(R.color.green));
                 } else {
-                    addIcon.setText(R.string.delete_icon_font);
+                    addIcon.setText(R.string.icon_delete_minus);
                     addIcon.setTextColor(getContext().getResources().getColor(R.color.red));
                     count.setTextColor(getContext().getResources().getColor(R.color.red));
                 }

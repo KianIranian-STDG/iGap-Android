@@ -17,10 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -62,6 +58,7 @@ import net.iGap.helper.HelperWallet;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -178,22 +175,22 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
 //                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
-            case PARSLAND:
-              //  new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
-                break;
+/*            case PARSLAND:
+                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+                break;*/
             case FUN_SERVICE:
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
-            case BLOCKCHAIN:
-//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-             //   new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
-//                } else {
-//                    HelperError.showSnackMessage("", true);
-//                }
+/*            case BLOCKCHAIN:
+               if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+             new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+               } else {
+                   HelperError.showSnackMessage("", true);
+               }
                 break;
             case VIRTUAL_GIFT_CARD:
-           //     new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
-                break;
+                new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
+                break;*/
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();
                 if (!discoveryField.value.equals(""))
@@ -469,17 +466,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
     void loadImage(ImageView imageView, String url) {
         if (url.endsWith(".gif")) {
-            Glide.with(imageView.getContext())
-                    .asGif()
-                    .load(url)
-                    .apply(new RequestOptions().fitCenter().format(DecodeFormat.PREFER_ARGB_8888).override(Target.SIZE_ORIGINAL))
-                    .into(imageView);
+            ImageLoadingServiceInjector.inject().loadImage(imageView, url, false, true);
         } else {
-            Glide.with(imageView.getContext()).load(url)
-                    .apply(new RequestOptions()
-                            .fitCenter()
-                            .format(DecodeFormat.PREFER_ARGB_8888)
-                            .override(Target.SIZE_ORIGINAL)).into(imageView);
+            ImageLoadingServiceInjector.inject().loadImage(imageView, url);
         }
     }
 

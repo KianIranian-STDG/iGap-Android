@@ -21,6 +21,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
+import org.parceler.Parcel;
 
 import java.io.File;
 import java.io.IOException;
@@ -200,7 +201,7 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
+                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth),0,null);
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
 
                             }

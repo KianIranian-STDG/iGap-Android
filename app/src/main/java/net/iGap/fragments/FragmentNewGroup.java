@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +65,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.customView.CheckBox;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
@@ -348,8 +348,8 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setListener(this);
 
         LinearLayout toollbarLayout = view.findViewById(R.id.ng_layout_toolbar);

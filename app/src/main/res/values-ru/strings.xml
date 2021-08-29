@@ -28,7 +28,6 @@
     <string name="kunos_receipt_hash">"Хеш"</string>
     <string name="kunos_receipt_date_apply">"Дата подачи заявки"</string>
     <string name="kuknos_receipt_Return_to_digital_token_bag">"Вернуться в сумку с цифровыми жетонами"</string>
-    <string name="kuknos_setting_dialog">Подтверждение выкупа токена</string>
     <string name="kuknos_rial_max_buy">"Максимально допустимый"</string>
     <string name="kuknos_rial_min_buy">"Минимально допустимый"</string>
     <string name="kuknos_rial_price_of_day">"Цена дня"</string>
@@ -39,12 +38,9 @@
     <string name="kuknos_rial_Redemption_fee">"Комиссия за выкуп PMN"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Общее количество контрактов"</string>
     <string name="kuknos_rial_Deposit_amount">"Сумма депозита (риалы)"</string>
-    <string name="kuknos_rial_Deposit_amount2">"Сумма депозита"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"Дополните информацию,\n перейдя в \n раздел настроек"</string>
     <string name="kuknos_edit_info_birthday">"Дата рождения"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Редактировать и изменять информацию об учетной записи"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"Выкупить токены"</string>
-    <string name="kuknos_rial_Redemption_feee">"Комиссия за выкуп"</string>
     <string name="rg_confirm_text_register">Пожалуйста, подтвердите название и код своей страны, а затем введите номер своего мобильного телефона без первого нуля.</string>
     <string name="rg_Start">давайте пойдем</string>
     <string name="rg_Select_Country">Выберите свою страну</string>
@@ -58,7 +54,6 @@
     <string name="phone_number">Номер телефона</string>
     <string name="ra_enter_reagent_code">Пожалуйста, введите ваш номер идентификатора (необязательно)</string>
     <string name="ra_confirm">Подтверждение</string>
-    <string name="reagent_error_message">Введенный номер неверен</string>
     <string name="Toast_Location_Not_Found">Ваше местоположение не было найдено</string>
     <string name="Toast_First_0">Номер не обязательно должен начинаться с 0</string>
     <string name="Toast_Minimum_Characters">Количество символов меньше, чем предел</string>
@@ -98,7 +93,6 @@
     <string name="mute_notification">Беззвучное уведомление</string>
     <string name="pin_to_top">Пин на верху</string>
     <string name="Unpin_to_top">Убрать пин</string>
-    <string name="unmute_notification">Голосовое уведомление</string>
     <string name="clear_history">Очистить историю</string>
     <string name="left_group">Покинуть группу</string>
     <string name="delete_group">Удалить Группу</string>
@@ -129,8 +123,6 @@
     <string name="device_dosenot_camera_en">Это устройство без камеры.</string>
     <string name="do_you_want_to_turn_on_gps">Ваша система глобального позиционирования (GPS) выключена, вы хотите ее включить?</string>
     <string name="select_picture_en">Выбор изображения</string>
-    <string name="cannot_load_data_en">Невозможно загрузить данные</string>
-    <string name="do_you_want_exit">Вы хотите выйти?</string>
     <string name="slide_to_cancel_en">Потяните для отмены</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
     <string name="st_username">Имя пользователя</string>
@@ -230,7 +222,6 @@
     <string name="delete_item_dialog">Удаление</string>
     <string name="saveToDownload_item_dialog">Сохранить в папке «Загрузки»</string>
     <string name="edit_item_dialog">редактирование</string>
-    <string name="Search">Поиск</string>
     <string name="Delete_and_leave_Group">Удалить и покинуть группу</string>
     <string name="New_Chanel">Новый канал</string>
     <string name="of">От</string>
@@ -449,7 +440,8 @@
     <string name="device">Устройство</string>
     <string name="country">Страна:</string>
     <string name="create_time">Создано в:</string>
-    <string name="ip">ID</string>
+    <string name="last_connectivity">Последнее подключение:</string>
+    <string name="ip">IP:</string>
     <string name="current_session">Текущая встреча</string>
     <string name="Active_session">активная встреча</string>
     <string name="terminate_all">Отменить все активные сеансы</string>
@@ -627,7 +619,6 @@
     <string name="no_body">Никто</string>
     <string name="my_contacts">Мои контакты</string>
     <string name="empty_message">Пожалуйста, введите первые 5 символов вашего имени пользователя</string>
-    <string name="empty_message3">Введите не менее 5 символов для поиска</string>
     <string name="there_is_no_any_result">Результатов не найдено</string>
     <string name="there_is_no_connection_to_server">Нет подключения к серверу</string>
     <string name="empty_room">У вас еще нет сообщения</string>
@@ -746,26 +737,18 @@
     <string name="ringing">Звонит</string>
     <string name="connecting_call">Подключение</string>
     <string name="connected">Подключение произошло</string>
-    <string name="disconnected">Отключилось</string>
     <string name="faild">Неудачно</string>
     <string name="reject">Сброс</string>
     <string name="busy">Занято</string>
     <string name="invalid_email_token">Код подтверждения адреса электронной почты неверен</string>
     <string name="invalid_question_token">Ваш ответ неверен</string>
     <string name="not_answerd_call">Пропущенный голосовой звонок</string>
-    <string name="not_answered_voice_call">Пропущенный голосовой звонок</string>
-    <string name="not_answered_video_call">Пропущенный голосовой звонок</string>
     <string name="recorded_by">Записано при поддержке</string>
     <string name="Login_with_QrCode">Войти с помощью QR</string>
     <string name="Input_device_specification">Успешный вход в систему устройства</string>
     <string name="QrCode_Scan">Сканер штрих-кода</string>
     <string name="Call_Quality">Качество звонка</string>
     <string name="desc_self_destroy">Если вы не используете свою учетную запись в течение какого-либо установленного периода времени, ваша учетная запись будет автоудалена после этого времени.</string>
-    <string name="crop_image_menu_rotate_right">Поворот</string>
-    <string name="crop_image_menu_crop">Обрезать </string>
-    <string name="crop_image_menu_flip">Вернуть фотографию</string>
-    <string name="crop_image_menu_flip_horizontally">Горизонтальный возврат фотографии</string>
-    <string name="crop_image_menu_flip_vertically">Вертикальный возвратфотографии</string>
     <string name="title_who_can_see_my_avatar">Посмотреть мои фотографии в профиле</string>
     <string name="title_who_can_invite_you_to_channel_s">Получить ссылку для приглашения на канал от</string>
     <string name="title_who_can_invite_you_to_group_s">Получить ссылку на приглашение группы от</string>
@@ -1269,7 +1252,6 @@
     <string name="remaining_balance">Остаточный  баланс</string>
     <string name="refound">Документ, исправляющий сумму депозита на кошелек</string>
     <string name="Favorite_Sticker">Мои наклейки</string>
-    <string name="item_selected">Выбранный элемент</string>
     <string name="terms_and_condition">Нажав кнопку пуска, вы принимаете %s</string>
     <string name="terms_and_condition_clickable">Условия использования</string>
     <string name="new_channel_hint">Вы можете предоставить дополнительные описания для вашего канала.</string>
@@ -1305,7 +1287,6 @@
     <string name="cloud">облако</string>
     <string name="score">Баллы</string>
     <string name="Credit">кредит</string>
-    <string name="make_as_read">Прочитано</string>
     <string name="read_all">Все прочитано</string>
     <string name="financial_report">Финансовый отчет</string>
     <string name="fag">Часто задаваемые вопросы</string>
@@ -1339,7 +1320,7 @@
     <string name="nine_number">9</string>
     <string name="star_number">*</string>
     <string name="zero_number">0</string>
-    <string name="administrators_title">Админы</string>
+    <string name="admins_title">Админы</string>
     <string name="moderators_title">Модераторы</string>
     <string name="view_contact">Посмотреть контакт</string>
     <string name="new_group_call">Новый групповой контакт</string>
@@ -1371,7 +1352,6 @@
     <string name="tablet_empty_chat_description">Начало работы, Добро пожаловать в  iGap! Вы всегда можете настроить фотографию своего профиля или изменить свое имя в разделе настроек.</string>
     <string name="make_call">Сделать звонок</string>
     <string name="create_chat">Создать диалог</string>
-    <string name="delete_all">Удалить все</string>
     <string name="maximum_poll">Вы зарегистрировали свой голос.</string>
     <string name="before_try">Вы уже зарегистрировали свой голос.</string>
     <string name="poll_ok">Ваш голос был успешно зарегистрирован</string>
@@ -1638,7 +1618,6 @@
     <string name="Select_the_type_of_charge">Выберите тип заряда</string>
     <string name="order_by">Сортировать по</string>
     <string name="suggested_packages">Предлагаемые пакеты</string>
-    <string name="credit_sim">предоплаченная SIM-карта</string>
     <string name="all_packages">Все пакеты</string>
     <string name="sim_type_not_choosed">Тип SIM-карты не указан</string>
     <string name="no_history_found">​​История не найдена</string>
@@ -1659,7 +1638,6 @@
     <string name="refund_button">возврат денег</string>
     <string name="submit">Отправить</string>
     <string name="history_asset_type">тип актива</string>
-    <string name="history_hash">хэш</string>
     <string name="history_amount">количество</string>
     <string name="histroy_fee">плата</string>
     <string name="history_count">считать</string>
@@ -1668,5 +1646,20 @@
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
 
+    <string name="name_error">Имя не подтверждено</string>
+    <string name="user_name_error">Имя пользователя не подтверждено</string>
+    <string name="email_error">Электронная почта не подтверждена</string>
+    <string name="gender_error">Пол не подтвержден</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">Gender confirmed</string>
 </resources>

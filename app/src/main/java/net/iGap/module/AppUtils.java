@@ -166,14 +166,10 @@ public final class AppUtils {
 
                     break;
                 default:
-                    if (message.attachment != null) {
-                        if (message.attachment.isFileExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
-                        } else if (message.attachment.isThumbnailExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.thumbnailPath), view);
-                        } else {
-                            view.setVisibility(View.GONE);
-                        }
+                    if (message.attachment.isFileExistsOnLocal(message)) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
+                    } else if (message.attachment.isThumbnailExistsOnLocal(message)) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.thumbnailPath), view);
                     } else {
                         view.setVisibility(View.GONE);
                     }
@@ -333,24 +329,24 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setText(R.string.icon_delivery);
                 iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
-                iconTextView.setText(R.string.error_icon);
+                iconTextView.setText(R.string.icon_error);
                 iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
             case LISTENED:
-                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setText(R.string.icon_delivery);
                 iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
-                iconTextView.setText(R.string.history_icon);
+                iconTextView.setText(R.string.icon_time);
                 iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
-                iconTextView.setText(R.string.check_icon);
+                iconTextView.setText(R.string.icon_sent);
                 iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
@@ -377,24 +373,24 @@ public final class AppUtils {
 
         switch (status) {
             case DELIVERED:
-                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setText(R.string.icon_delivery);
                 iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
-                iconTextView.setText(R.string.error_icon);
+                iconTextView.setText(R.string.icon_error);
                 iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case LISTENED:
             case SEEN:
-                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setText(R.string.icon_delivery);
                 iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
-                iconTextView.setText(R.string.history_icon);
+                iconTextView.setText(R.string.icon_time);
                 iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
-                iconTextView.setText(R.string.check_icon);
+                iconTextView.setText(R.string.icon_sent);
                 iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:

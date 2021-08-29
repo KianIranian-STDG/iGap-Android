@@ -16,8 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.WalletActivity;
@@ -150,16 +151,16 @@ public class OrderView extends LinearLayout {
 
             if (order.orderType == Order.ORDER_TYPE_CASH_OUT) {
 //                title.setText(order.isPaid ? R.string.settled : R.string.settled_pending);
-                if (order.state==0){
+                if (order.state == 0) {
                     title.setText(R.string.settled_pending);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_pending, 0);
-                }else if (order.state==1){
+                } else if (order.state == 1) {
                     title.setText(R.string.settled);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
-                }else if (order.state==5){
+                } else if (order.state == 5) {
                     title.setText(R.string.refound);
-                    title.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_payment_in, 0);
-                }else {
+                    title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
+                } else {
                     title.setText(order.isPaid ? R.string.settled : R.string.settled_pending);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
                 }
@@ -222,7 +223,7 @@ public class OrderView extends LinearLayout {
             }
 
         }
-        if (order.state==5) {
+        if (order.state == 5) {
             title.setText(R.string.refound);
             title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
         }
@@ -235,15 +236,14 @@ public class OrderView extends LinearLayout {
         price.setText(RaadCommonUtils.formatPrice(order.amount, true, "\n"));
 
         if (imgRes > 0) {
-            Picasso.get().load(imgRes)
-                    .fit()
-                    .centerCrop()
-                    .into(image);
+            Glide.with(G.context).load(imgRes).fitCenter().centerCrop().into(image);
         } else {
-            Picasso.get().load(RaadCommonUtils.getImageUrl(img))
+
+            Glide.with(G.context)
+                    .load(RaadCommonUtils.getImageUrl(img))
                     .error(R.drawable.ic_person_outline2_white_24dp)
                     .placeholder(R.drawable.ic_person_outline2_white_24dp)
-                    .fit()
+                    .fitCenter()
                     .centerCrop()
                     .into(image);
         }

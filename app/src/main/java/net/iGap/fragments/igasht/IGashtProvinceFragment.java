@@ -48,8 +48,8 @@ public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewMod
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.history_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_time)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

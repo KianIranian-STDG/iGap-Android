@@ -89,12 +89,10 @@ public class RealmUserInfo extends RealmObject {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setPushNotificationToken(pushToken);
-                } else {
+                if (realmUserInfo == null) {
                     realmUserInfo = realm.createObject(RealmUserInfo.class);
-                    realmUserInfo.setPushNotificationToken(pushToken);
                 }
+                realmUserInfo.setPushNotificationToken(pushToken);
             });
         }).start();
 
@@ -288,14 +286,14 @@ public class RealmUserInfo extends RealmObject {
 
     // Kuknos seed key save and get process
 
-/*
-    public RealmKuknos getKuknosM() {
-        return kuknosM;
-    }
 
-    public void setKuknosM(RealmKuknos kuknosM) {
-        this.kuknosM = kuknosM;
-    }*/
+//    public RealmKuknos getKuknosM() {
+//        return kuknosM;
+//    }
+//
+//    public void setKuknosM(RealmKuknos kuknosM) {
+//        this.kuknosM = kuknosM;
+//    }
 
     /*public static void updateKuknos(RealmKuknos kuknosM) {
         DbManager.getInstance().doRealmTransaction(realm -> {
@@ -306,8 +304,8 @@ public class RealmUserInfo extends RealmObject {
         });
     }*/
 
-    public void createKuknos() {
-/*        if (kuknosM == null) {
+/*    public void createKuknos() {
+        if (kuknosM == null) {
             new Thread(() -> {
                 DbManager.getInstance().doRealmTransaction(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -316,11 +314,11 @@ public class RealmUserInfo extends RealmObject {
                     }
                 });
             }).start();
-        }*/
-    }
-
+        }
+    }*/
+/*
     public void deleteKuknos() {
-/*        if (kuknosM != null) {
+        if (kuknosM != null) {
             new Thread(() -> {
                 DbManager.getInstance().doRealmTransaction(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -329,8 +327,8 @@ public class RealmUserInfo extends RealmObject {
                     }
                 });
             }).start();
-        }*/
-    }
+        }
+    }*/
 
     public boolean isWalletRegister() {
         return isWalletRegister;

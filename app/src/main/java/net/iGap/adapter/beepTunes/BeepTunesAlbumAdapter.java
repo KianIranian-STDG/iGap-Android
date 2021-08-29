@@ -9,9 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
-import net.iGap.helper.ImageLoadingService;
 import net.iGap.module.api.beepTunes.Album;
 
 import java.util.ArrayList;
@@ -39,7 +41,11 @@ public class BeepTunesAlbumAdapter extends RecyclerView.Adapter<BeepTunesAlbumAd
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
-        ImageLoadingService.load(albums.get(i).getImage(), itemViewHolder.itemIv);
+        Glide.with(G.context)
+                .load(albums.get(i).getImage())
+                .fitCenter().centerInside()
+                .error(R.drawable.ic_error)
+                .into(itemViewHolder.itemIv);
         itemViewHolder.bindItem(albums.get(i));
     }
 

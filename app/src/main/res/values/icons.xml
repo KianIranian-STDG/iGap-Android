@@ -1,243 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="md_check_symbol">\uf12c</string>
-    <string name="md_emoticon_with_happy_face">\ue936</string><!-- iGap_emoticon  -->
-    <string name="md_black_keyboard_with_white_keys">\ue952</string> <!-- igap_keyboard  -->
-    <string name="md_send_button">\ue984</string>  <!-- igap_send  -->
-    <string name="md_attachment_clip">@string/attach_icon</string>  <!-- igap_attachment  -->
-    <string name="md_bot">\uf757</string>
-    <string name="md_voice_message_microphone_button">@string/mic_on_icon</string> <!-- igap_microphone  -->
-    <!-- igap_volume-off  -->
-    <!-- igap_share-variant  -->
-    <string name="md_show_more_button">\uf1d9</string>  <!-- igap_dots-vertical  -->
-    <string name="md_close_button">@string/close_icon</string>  <!-- igap_close  -->
-    <!-- igap_forward  -->
-    <!-- igap_forward  -->
-    <!-- igap_chevron-right  -->
-    <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
-    <!-- igap_information-outline  -->
-    <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
-    <!-- igap_chevron-right  -->
-    <string name="md_crop_button">\ue91f</string>  <!-- igap_crop  -->
-    <!-- igap_account-plus  -->
-    <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
-    <string name="md_user_account_box">@string/group_icon</string>  <!-- igap_account  -->
-    <!-- igap_apps  -->
-    <!-- igap_apps  -->
-    <!-- igap_map-marker-radius -->
-    <!-- igap_message-processing -->
-    <!--igap_satellite-variant-->
 
+    <string name="icon_get_score_failed">@string/icon_favourite</string> <!--changed this icon with doubt!-->
+    <string name="logo_igap_fa">\ueaa6</string>
+    <string name="logo_igap_en">\ueaa5</string>
+    <string name="icon_check_ok">\uea8d</string>
+    <string name="icon_emoji_smile">\ueaef</string>
+    <string name="icon_keyboard">\ueaf7</string>
+    <string name="icon_send">\uea72</string>
+    <string name="icon_send_arrow_up">\uea71</string>
+    <string name="icon_sent">\uea6e</string>
+    <string name="icon_back">\ueb4d</string>
+    <string name="icon_attach">\ueb4f</string>
+    <string name="icon_robot">\uea76</string>
+    <string name="icon_microphone">\ueaac</string>
+    <string name="icon_microphone_black">\ueaad</string> <!--voice icon-->
+    <string name="icon_other_vertical_dots">\uea8b</string>
+    <string name="icon_other_horizontal_dots">\uea9d</string>
+    <string name="icon_close">\ueb22</string>
+    <string name="icon_withdrawing_money_from_card">\ue903</string>
+    <string name="icon_incoming_money_to_card">\ue902</string>
+    <string name="icon_refresh">\uea7b</string> <!-- igap_cached  -->
+    <string name="icon_crop_picture">\ueb16</string>
+    <string name="icon_add">\ueb53</string>  <!-- igap_plus | icon add whit out circle  -->
+    <string name="icon_add_contact">\ueb56</string>
+    <string name="icon_settings">\ueaf5</string>  <!-- gear icon  -->
+    <string name="icon_settings_lines">\uea6d</string>
+    <string name="icon_play">\uea83</string>
+    <string name="icon_pause">\uea88</string>
+    <string name="icon_chevron_up">\ue901</string>
+    <string name="icon_chevron_Down">\ueb0c</string>
+    <string name="icon_log_out">\ueaa4</string>
+    <string name="icon_camera">\ueb35</string>
+    <string name="icon_image">\ueac3</string>
+    <string name="icon_gallery">\uead3</string>
+    <string name="icon_single_contact">\ueb12</string>
+    <string name="icon_contacts">\ueb13</string>
+    <string name="icon_add_whit_circle">\ueb52</string> <!-- icon add whit circle -->
+    <string name="icon_music">\uea9b</string>
+    <string name="icon_document">\ueb0d</string>
+    <string name="icon_location">\ueab7</string> <!-- igap_gps  -->
+    <string name="icon_lock">\ueab6</string>
+    <string name="icon_unlock">\uea4e</string>
+    <string name="icon_finger_print">\uead9</string>
+    <string name="icon_edit_picture">\ueb03</string>
+    <string name="icon_edit">\ueb02</string>
+    <string name="icon_dial">\ueb1f</string>
+    <string name="icon_voice_call">\ueb36</string>
+    <string name="icon_video_call">\uea54</string>
+    <string name="icon_upload">\uea50</string>
+    <string name="icon_download">\ueb04</string>
+    <string name="icon_cloud_space">\ueb10</string>
+    <string name="icon_charge_wallet">\ueae0</string>
+    <string name="icon_favourite">\ueae5</string>
+    <string name="icon_QR_code">\uea7d</string>
+    <string name="icon_dark_mode">\ueb18</string>
+    <string name="icon_FAQ">\ueae8</string>
+    <string name="icon_search">\uea74</string>
+    <string name="icon_new_conversation">\uea95</string>
+    <string name="icon_time">\uea4c</string> <!-- for history icon used too -->
+    <string name="icon_missed_call">\ueaae</string>
+    <string name="icon_incoming_call">\ueac2</string>
+    <string name="icon_call_message">\ueb37</string>
+    <string name="icon_new_channel">\uea97</string>
+    <string name="icon_secret_chat">\uea73</string>
+    <string name="icon_delete">\ueb1c</string>
+    <string name="icon_delete_minus">\ueb1d</string>  <!-- icon delete: minus whit circle  -->
+    <string name="icon_clearing">\ue905</string>
+    <string name="icon_clear_history">\ue904</string>
+    <string name="icon_share">\uea6c</string>
+    <string name="icon_blue_badge">\ueb3e</string>
+    <string name="icon_flag">\uead8</string>
+    <string name="icon_copy">\ueb15</string>
+    <string name="icon_forward">\uead6</string>
+    <string name="icon_forward_2">\uead5</string>
+    <string name="icon_reply">\uea79</string>
+    <string name="icon_speaker">\uea5d</string>
+    <string name="icon_mute">\uea99</string>
+    <string name="icon_retry">@string/icon_refresh</string>
+    <string name="icon_fast_forward">\ueae6</string> <!--player next icon-->
+    <string name="icon_fast_backward">\ueae7</string> <!--player previous icon-->
+    <string name="icon_shuffle_player">\uea60</string> <!--player shuffle icon-->
+    <string name="icon_sort">\uea5f</string>
+    <string name="icon_catch_money">\ueae2</string> <!--coin icon-->
+    <string name="icon_folder">\ueb19</string>
+    <string name="icon_single_file">\ueae4</string>
+    <string name="icon_heart">\ueabb</string>
+    <string name="icon_dislike">\ueb0f</string>
+    <string name="icon_delivery">\ueb1e</string>
+    <string name="icon_send_money">\ueadb</string>
+    <string name="icon_eye">\uea58</string> <!--view icon-->
+    <string name="icon_channel">\ueb2e</string>
+    <string name="icon_card_to_card">\ueb32</string>
+    <string name="icon_beeptunes_play">\ueb4a</string>
+    <string name="icon_beeptunes_sync">\ueb45</string>
+    <string name="icon_beeptunes_like">@string/icon_heart</string>
+    <string name="icon_error">\ueaed</string>
+    <string name="icon_valid">\ueb28</string>
+    <string name="icon_charge_mobile">\ueae1</string>
+    <string name="icon_internet">\ueadf</string>
+    <string name="icon_mark_all_read">\ueb5a</string>
+    <string name="icon_mark_as_read">\ueb5b</string>
+    <string name="icon_pin_to_top">\ueb5c</string>
+    <string name="icon_unpin">\ue900</string>
+    <string name="icon_convert_chat_to_group">\ue906</string>
+    <string name="icon_export_chat">\ue907</string>
+    <string name="icon_danger">\ueb17</string>
+    <string name="icon_delete_all">\ue908</string>
+    <string name="icon_update">\ue909</string>
+    <string name="icon_device">\ue90a</string>
+    <string name="icon_pin_to_top2">\ue90b</string>
 
-    <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
-    <!-- igap_account-multiple  -->
-    <!-- igap_account-multiple  -->
-    <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
-    <!-- igap_help-circle  -->
-    <!-- igap_menu  -->
-    <!-- igap_magnify  -->
-    <!-- igap_delete  -->
-    <!-- igap_arrow-right  -->
-    <!-- igap_content-copy  -->
-    <!-- igap_reply  -->
-    <!-- igap_play-circle  -->
-    <!-- igap_pause-circle  -->
-    <!-- igap_skip-next  -->
-    <!-- igap_skip-previous  -->
-    <string name="md_play_arrow">\uf40a</string>  <!-- igap_play  -->
-    <string name="md_pause_button">\uf3e4</string> <!-- igap_pause  -->
-    <!-- igap_shuffle  -->
-    <string name="md_synchronization_arrows">\uf4e6</string> <!-- igap_sync  -->
-    <string name="md_expand_arrow">\uf143</string>  <!-- igap_chevron-up  -->
-    <string name="md_downwards_arrow">@string/down_arrow_icon</string>  <!-- igap_chevron-down  -->
-    <!-- igap_checkbox-marked  -->
-    <!-- igap_star  -->
-    <string name="md_muted">\uf581</string>  <!-- igap_volume-off  -->
-    <!--  igap_volume-high  -->
-    <!-- igap_volume-low  -->
-    <!-- igap_history  -->
-    <string name="md_exit_app">\uf206</string>  <!-- igap_exit-to-app  -->
-    <string name="md_delete_acc">\ue924</string>  <!-- igap_minus-circle-outline  -->
-    <!-- igap_arrow-left  -->
-    <!-- igap_channel  -->
-    <!-- igap_trending-neutral  -->
-    <string name="md_camera_alt">\ue913</string>  <!-- igap_camera  -->
-    <string name="md_colorize">\uf20b</string> <!-- igap_eyedropper  -->
-    <!-- igap_rss  -->
-    <string name="md_brush">\ue936</string>  <!-- igap_brush  -->
-    <string name="md_pic_library">\uf254</string> <!--  igap_folder-multiple-image  -->
-    <!--  igap_thumb-down  -->
-    <!-- igap_thumb-up  -->
-    <!-- igap_eye  -->
-    <!--  igap_map-marker  -->
-    <!-- igap_cloud-circle  -->
-    <string name="md_save">\uf193</string> <!--  igap_content-save  -->
-    <!-- igap_video  -->
-    <!-- igap_library-music  -->
-    <!-- igap_folder  -->
-    <!-- igap_pencil  -->
-    <!-- igap_open-in-new  -->
-    <!--  igap_call-received  -->
-    <!-- igap_verified  -->
-    <!-- igap_block-helper  -->
-
-    <!-- igap_login-variant  -->
-    <string name="md_clean_up">\uf06a</string>  <!-- igap_autorenew  -->
-    <!-- igap_phone  -->
-    <!-- igap_folder-image  -->
-    <!-- igap_file-video  -->
-    <!-- igap_apps  -->
-    <!-- igap_microphone-settings  -->
-    <!-- igap_filmstrip  -->
-    <!-- igap_link  -->
-    <string name="md_call_made">\uf3fb</string> <!-- igap_call-made  -->
-    <!-- igap_phone-incoming  -->
-    <!-- igap_call-missed  -->
-    <!-- igap_phone-outgoing  -->
-    <!-- igap_phone-hangup  -->
-    <!-- igap_crop-portrait  -->
-    <!-- igap_surround_sound  -->
-    <!-- igap_surround_sound  -->
-
-    <!-- igap_headphones-box  -->
-
-    <!-- igap_microphone  -->
-    <!-- igap_microphone-off  -->
-    <!-- igap_message-text  -->
-
-    <string name="add_icon_2">\ue904</string>
-
-    <string name="icon_music">\ue963</string>  <!-- igap_music  -->
-    <!-- igap_file  -->
-    <!--  igap_file-outline  -->
-    <!-- igap_folder-open  -->
-    <!--  igap_image-filter  -->
-    <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
-    <!-- igap_qrCode  -->
-    <!-- igap_eraser  -->
-    <!-- igap_eraser  -->
-    <!-- igap_eraser  -->
-    <string name="md_igap_file">\ue92a</string> <!-- igap_eraser  -->
-    <!-- igap_eraser  -->
-    <string name="md_igap_folder_image">\ue94c</string> <!-- igap_eraser  -->
-    <!-- igap_map  -->
-    <!-- igap_map  -->
-    <string name="md_igap_crosshairs_gps">\uf1a4</string> <!-- igap_gps  -->
-    <!-- igap_eye_off  -->
-    <!-- igap_eye_off  -->
-    <!-- igap_eye_off  -->
-    <!-- igap_eye_off  -->
-    <string name="md_igap_lock">@string/lock_icon</string>
-    <string name="md_igap_lock_open_outline">@string/lock_icon</string>
-    <string name="md_igap_fingerprint">\uf237</string>
-    <string name="md_igap_tune">\ue934</string>
-    <string name="md_igap_paint">\ue935</string>
-    <string name="md_format_list_bulleted">\ue926</string>
-    <string name="md_dialpad">\ue912</string>
-    <!-- igap_magnify  -->
-    <!-- igap_magnify  -->
-
-    <string name="md_igap_arrow_up_thick">\ue99f</string>
-    <string name="md_igap_arrow_down_thick">\ue933</string>
-    <string name="md_igap_minus">\ue924</string>
-
-
-    <string name="md_get_score_failed">\uf159</string>
-
-    <!--
-    chat cell icon
-    -->
-
-    <!--New Font Icon-->
-    <string name="cloud_icon">\ue91a</string>
-    <string name="add_icon_without_circle_font">\ue903</string>
-    <string name="add_icon_font">\ue904</string>
-    <string name="delete_icon_font">\ue924</string>
-    <string name="wallet_icon">\ue941</string>
-    <string name="score_star_icon">\ue93d</string>
-    <string name="invite_icon">\ue900</string>
-    <string name="scan_qr_code_icon">\ue97b</string>
-    <string name="location_pin_icon">\ue957</string>
-    <string name="dark_mode_icon">\ue920</string>
-    <string name="faq_icon">\ue93a</string>
-    <string name="setting_icon">\ue989</string>
-    <string name="search_icon">\ue982</string>
-    <string name="back_icon">\ue908</string>
-    <string name="check_icon">\ue988</string>
-    <string name="edit_icon">\ue968</string>
-    <string name="history_icon">\ue99c</string>
-    <string name="more_icon">\ue971</string>
-    <string name="voice_call_icon">\ue912</string>
-    <string name="video_call_icon">\ue9a1</string>
-    <string name="voice_call_made_icon">@string/voice_call_icon</string>
-    <string name="voice_call_missed_icon">\ue962</string>
-    <string name="voice_call_received_icon">\ue951</string>
-    <string name="group_icon">\ue91c</string>
-    <string name="channel_icon">\ue966</string>
-    <string name="secret_chat_icon">€</string>
-    <string name="dial_number_icon">\ue926</string>
-    <string name="delete_icon">\ue923</string>
-    <string name="share_icon">\ue98a</string>
-    <string name="close_icon">\ue919</string>
-    <string name="camera2_icon">\ue950</string>
-    <string name="mute_icon">\ue964</string>
-    <string name="verify_icon">\ue910</string>
-    <string name="flag_icon">\ue949</string>
-    <string name="copy_icon">\ue91e</string>
-    <string name="forward_icon">\ue94a</string>
-    <string name="reply_icon">\ue97f</string>
-    <string name="message_icon">\ue911</string>
-    <string name="mic_on_icon">\ue960</string>
-    <string name="unmute_icon">\ue998</string>
-    <string name="play_icon">\ue977</string>
-    <string name="pause_icon">\ue973</string>
-    <string name="igap_fa_icon">\ue95a</string>
-    <string name="igap_en_icon">\ue95c</string>
-    <string name="attach_icon">\ue907</string>
-    <string name="music_icon">\ue963</string>
-    <string name="retry_icon">\ue97d</string>
-    <string name="player_next_icon">\ue93c</string>
-    <string name="player_previous_icon">\ue93b</string>
-    <string name="player_shuffle_icon">\ue995</string>
-    <string name="sort_icon">\ue996</string>
-    <string name="voice_icon">\ue961</string>
-    <string name="down_arrow_icon">\ue92b</string>
-    <string name="unlock_icon">\ue99d</string>
-    <string name="lock_icon">\ue958</string>
-    <string name="coin_icon">\ue93f</string>
-    <string name="folder_icon">\ue921</string>
-    <string name="photo_icon">\ue94c</string>
-    <string name="file_icon">\ue93e</string>
-    <string name="arrow_up_icon">\ue985</string>
-    <string name="go_icon">\ue94b</string>
-    <string name="heart_icon">\ue954</string>
-    <string name="error_icon2">\ue938</string>
-    <string name="dislike_icon">\ue929</string>
-    <string name="delivery_icon">\ue925</string>
-    <string name="financial_send_money_icon">\ue946</string>
-    <string name="eye_icon">\ue9a4</string>
-    <string name="channel_main_icon">\ue916</string>
-    <string name="icon_card_to_card">\ue915</string>
-
-    <string name="icon_beeptunes_play">\ue90a</string>
-    <string name="icon_beeptunes_sync">\ue90d</string>
-    <string name="icon_beeptunes_like">\ue954</string>
-    <string name="horizontal_more_icon">\ue9b8</string>
-
-    <string name="error_icon">\ue938</string>
-    <string name="valid_icon">\ue9a9</string>
-    <string name="download_ic">\ue933</string>
-    <string name="upload_ic">\ue99f</string>
-
-    <string name="bank_withdraw_ic">\ue9ad</string>
-    <string name="bank_income_ic">\ue9ac</string>
-
-    <string name="ic_charge">\ue940</string>
-    <string name="ic_internet">\ue942</string>
-
-    <string name="ic_mark_all_read">\ueb5a</string>
-    <string name="ic_mark_as_read">\ueb5b</string>
-    <string name="ic_clear_history">\ueb58</string>
-    <string name="ic_pin_to_top_2">\ueb5c</string>
-    <string name="ic_unpin">\ue900</string>
 </resources>

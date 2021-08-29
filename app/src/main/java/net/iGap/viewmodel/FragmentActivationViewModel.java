@@ -1,6 +1,5 @@
 package net.iGap.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -53,8 +52,8 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public FragmentActivationViewModel() {
         repository = RegisterRepository.getInstance();
-        timerValue.set("60");
-        counterTimer();
+        timerValue.set(String.format(Locale.getDefault(), "%02d", repository.getResendDelayTime()));
+        counterTimer(repository.getResendDelayTime());
 
         String phoneNumber = repository.getPhoneNumber();
         String countryCode = repository.getCountryCode();
@@ -86,12 +85,10 @@ public class FragmentActivationViewModel extends ViewModel {
         cancelTimer();
     }
 
-    private void counterTimer() {
-        countDownTimer = new CountDownTimer(60 * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
+    private void counterTimer(long resendCodeDelay) {
+        countDownTimer = new CountDownTimer(resendCodeDelay * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
                 timerValue.set(String.format(Locale.getDefault(), "%02d", seconds));
                 currentTimePosition.setValue(seconds * 6);
             }
@@ -135,6 +132,7 @@ public class FragmentActivationViewModel extends ViewModel {
     private void userVerification(String verificationCode) {
         isActive.set(false);
         repository.userVerify(verificationCode, new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
+
             @Override
             public void onSuccess() {
 
@@ -175,11 +173,12 @@ public class FragmentActivationViewModel extends ViewModel {
 
     private void requestRegister() {
         repository.registration(new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
+
             @Override
             public void onSuccess() {
                 G.handler.post(() -> {
                     cancelTimer();
-                    counterTimer();
+                    counterTimer(repository.getResendDelayTime());
                 });
             }
 
@@ -229,7 +228,7 @@ public class FragmentActivationViewModel extends ViewModel {
         showEnteredCodeErrorServer.postValue(message);
         clearActivationCode.postValue(true);
         if (isNeedTimer) {
-            counterTimer();
+            counterTimer(repository.getResendDelayTime());
         }
     }
 

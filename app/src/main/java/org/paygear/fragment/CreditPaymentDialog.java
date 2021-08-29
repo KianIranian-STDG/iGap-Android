@@ -15,9 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDialogCreditPaymentBinding;
 import net.iGap.module.Theme;
@@ -247,14 +248,16 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
 
         creditPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
-                    .fit()
+            Glide.with(G.context)
+                    .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+                    .fitCenter()
                     .into(creditPaymentBinding.image);
             creditPaymentBinding.subtitle.setText(mAccount.getName());
 
         } else {
-            Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
-                    .fit()
+            Glide.with(G.context)
+                    .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+                    .fitCenter()
                     .into(creditPaymentBinding.image);
             creditPaymentBinding.subtitle.setText(mOrder.receiver.getName());
 

@@ -69,7 +69,7 @@ public class RegisterRepository {
     private boolean forgetTwoStepVerification = false;
     private ProtoUserRegister.UserRegisterResponse.Method method;
     private String countryCode;
-
+    private long resendDelayTime;
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToSyncContactPageForNewUser = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> loginExistUser = new SingleLiveEvent<>();
@@ -106,6 +106,17 @@ public class RegisterRepository {
 
     public SingleLiveEvent<Long> getGoToSyncContactPageForNewUser() {
         return goToSyncContactPageForNewUser;
+    }
+
+    public long getResendDelayTime() {
+        if (resendDelayTime <= 0) {
+            resendDelayTime = 60;
+        }
+        return resendDelayTime;
+    }
+
+    public void setResendDelayTime(long resendDelayTime) {
+        this.resendDelayTime = resendDelayTime;
     }
 
     public int getCallingCode() {
@@ -274,7 +285,7 @@ public class RegisterRepository {
         builder.setAppId(BuildConfig.APP_ID);
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
-            public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {
+            public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported, long resendCodeDelay) {
                 /*isCallMethodSupported = callMethodSupported;*/
                 //because is new ui verification code number is 5 and number not not use it more
                 /*digitCount = verifyCodeDigitCount;*/
@@ -284,14 +295,17 @@ public class RegisterRepository {
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
                 method = methodValue;
+                resendDelayTime = resendCodeDelay;
                 callback.onSuccess();
             }
 
             @Override
-            public void onRegisterError(final int majorCode, int minorCode, int getWait) {
+            public void onRegisterError(int majorCode, int minorCode, int getWait) {
                 G.handler.post(() -> callback.onError(new ErrorWithWaitTime(majorCode, minorCode, getWait)));
+
             }
         });
+
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -405,7 +419,7 @@ public class RegisterRepository {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == userId) {
-                    AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                    AccountManager.getInstance().updateCurrentNickName(user.getDisplayName());
                     AccountManager.getInstance().updatePhoneNumber(String.valueOf(user.getPhone()));
                     DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);

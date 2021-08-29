@@ -314,8 +314,10 @@ public class RealmMember extends RealmObject {
             if (filter == null || filter.length() == 0) {
                 searchMember = query.findAll();
             } else {
-                RealmResults<RealmRegisteredInfo> findMember = realm.where(RealmRegisteredInfo.class).contains("displayName", filter, Case.INSENSITIVE).findAll();
-                for (int i = 0; i < findMember.size(); i++) {
+                RealmResults<RealmRegisteredInfo> findMember;
+                RealmQuery<RealmRegisteredInfo> where = realm.where(RealmRegisteredInfo.class).beginGroup();
+                where = where.contains("displayName", filter, Case.INSENSITIVE).or().contains("username", filter, Case.INSENSITIVE);
+                findMember = where.endGroup().findAll();                for (int i = 0; i < findMember.size(); i++) {
                     if (i != 0 && i != (findMember.size() - 1)) {
                         query = query.or();
                     }

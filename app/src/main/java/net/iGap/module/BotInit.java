@@ -321,7 +321,7 @@ public class BotInit implements MakeButtons.OnClickListener {
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);
-            btnShowBot.setText(R.string.md_bot);
+            btnShowBot.setText(R.string.icon_robot);
 
             if (changeKeyboard) {
                 try {
@@ -336,7 +336,7 @@ public class BotInit implements MakeButtons.OnClickListener {
 
         } else {
             layoutBot.setVisibility(View.VISIBLE);
-            btnShowBot.setText(R.string.md_black_keyboard_with_white_keys);
+            btnShowBot.setText(R.string.icon_keyboard);
 
             if (changeKeyboard) {
                 try {

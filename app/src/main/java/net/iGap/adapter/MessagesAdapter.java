@@ -67,7 +67,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
             if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet ||
                     item instanceof LogWalletCardToCard || item instanceof CardToCardItem ||
-                   /* item instanceof GiftStickerItem ||*/ item instanceof LogWalletTopup ||
+                   /* item instanceof GiftStickerItem || */item instanceof LogWalletTopup ||
                     item instanceof LogWalletBill) {
                 if (item.isSelected()) v.performLongClick();
             } else {
@@ -236,8 +236,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message state
      */
-    public void updateMessageState(long messageId, String voteUp, String voteDown, String
-            viewsLabel) {
+    public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
             if (messageInfo.messageObject != null) {
@@ -245,10 +244,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
                  * so i need to (replyMessageId * (-1)) again for use this messageId
                  */
-                if (
-                        (messageInfo.messageObject.forwardedMessage == null && messageInfo.messageObject.id == messageId)
-                                || (messageInfo.messageObject.forwardedMessage != null && (messageInfo.messageObject.forwardedMessage.id * (-1)) == messageId)
-                ) {
+                if (messageInfo.messageObject.id == messageId) {
                     int pos = items.indexOf(messageInfo);
                     if (messageInfo.messageObject.channelExtraObject != null) {
                         messageInfo.messageObject.channelExtraObject.thumbsUp = voteUp;

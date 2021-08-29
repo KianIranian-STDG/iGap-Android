@@ -57,7 +57,7 @@ public class RetrofitFactory {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
         }
-       // builder.addInterceptor(new MobileBankRetrofitInterceptor());
+        //   builder.addInterceptor(new MobileBankRetrofitInterceptor());
 
         if (BuildConfig.DEBUG) {
             httpClient = builder.build();
@@ -87,6 +87,7 @@ public class RetrofitFactory {
                 .build()
                 .create(FavoriteChannelApi.class);
     }
+
 /*
     public KuknosApi getKuknosRetrofit() {
         return new Retrofit.Builder()
@@ -95,7 +96,8 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(KuknosApi.class);
-    }*/
+    }
+*/
 
     public PaymentApi getPaymentRetrofit() {
         return new Retrofit.Builder()
@@ -170,6 +172,7 @@ public class RetrofitFactory {
                 .create(BillsApi.class);
     }
 
+
 /*    public MobileBankApi getMobileBankRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MOBILE_BANK)
@@ -187,15 +190,14 @@ public class RetrofitFactory {
                 .build()
                 .create(MobileBankApi.class);
     }
-
-    public MobileBankApi getMobileBankLoginRetrofit() {
+   public MobileBankApi getMobileBankLoginRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MOBILE_BANK)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
                 .build()
                 .create(MobileBankApi.class);
-    }*/
+    }
 
     public StickerApi getStickerRetrofit() {
         return new Retrofit.Builder()
@@ -206,7 +208,7 @@ public class RetrofitFactory {
                 .build()
                 .create(StickerApi.class);
     }
-/*
+
     public ShahkarApi getShahkarRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.SHAHKAR_URL)

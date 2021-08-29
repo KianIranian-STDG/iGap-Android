@@ -63,10 +63,10 @@
 
     <string name="Re_dialog_verify_number_part2">"في حال صحة رقم الهاتف قم بتأييده و إلّا قُم بتغييره بسهولة"</string>
 
-    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
-    <string name="verify_sms_message">Please enter verification code sent by sms</string>
-    <string name="verify_call_message">Please enter verification code sent by call</string>
-    <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
+    <string name="verify_socket_message">الرجاء إدخال رمز التحقق الذي أرسلته iGap </string>
+    <string name="verify_sms_message">الرجاء إدخال رمز التحقق الذي أرسلته sms </string>
+    <string name="verify_call_message">الرجاء إدخال رمز التحقق المرسل عن طريق الاتصال</string>
+    <string name="verify_sms_socket_message">الرجاء إدخال رمز التحقق المرسل عن طريق smsالرسائل القصيرة و iGap</string>
     <string name="verify_invalid_code_message">مع الأسف إنّ رمز التأكيد غير صالح، من فضلك أدخل رمز التأكيد الصالح .</string>
 
     <string name="phone_number">"رقم الهاتف "</string>
@@ -161,8 +161,6 @@
 
     <string name="Unpin_to_top">إلغاء البين </string>
 
-    <string name="unmute_notification">"الإشعار بالصوت"</string>
-
     <string name="clear_history">"مسح الذاكرة"</string>
 
     <string name="left_group">مغادرة المجموعة </string>
@@ -226,10 +224,6 @@
     <string name="do_you_want_to_turn_on_gps">"نظام تحديد الواقع العالمي (GPS) مغلق، هل تريد تشغليه؟"</string>
 
     <string name="select_picture_en">"إختيار الصورة "</string>
-
-    <string name="cannot_load_data_en">"لايمكن تحميل البيانات "</string>
-
-    <string name="do_you_want_exit">"هل تريد الخروج؟"</string>
 
     <string name="slide_to_cancel_en">"إسحب للإلغاء"</string>
 
@@ -444,8 +438,6 @@
     <string name="saveToDownload_item_dialog">"الحفظ في ملف التحميل"</string>
 
     <string name="edit_item_dialog">"التعديل"</string>
-
-    <string name="Search">"البحث "</string>
 
     <string name="Delete_and_leave_Group">"الحذف و مغادرة المجموعة "</string>
 
@@ -888,7 +880,9 @@
 
     <string name="create_time">تم الإنشاء في :</string>
 
-    <string name="ip">الرمز </string>
+    <string name="last_connectivity">آخر اتصال:</string>
+
+    <string name="ip">الرمز: </string>
 
     <string name="current_session">الجلسة الحالية </string>
 
@@ -1251,7 +1245,6 @@
 
     <string name="empty_message"> من فضلك إدخل 5 حروف بداية اسم المستخدم</string>
     ‬‬‬‬‬‬
-    <string name="empty_message3">أدخل 5 حروف على الحدّ الأدنى للقيام بالبحث</string>
     ‬‬‬‬‬‬
     <string name="there_is_no_any_result">لم يتمّ العثور على أية نتائج</string>
 
@@ -1486,8 +1479,6 @@
 
     <string name="connected">قد اتصل </string>
 
-    <string name="disconnected">قد انقطع </string>
-
     <string name="faild">الفشل </string>
 
     <string name="reject">الرفض </string>
@@ -1499,8 +1490,6 @@
     <string name="invalid_question_token">"ردّكم غير صحيح"</string>
 
     <string name="not_answerd_call">الاتصال الفائت</string>
-    <string name="not_answered_voice_call">الاتصال الصوتي الفائت</string>
-    <string name="not_answered_video_call">الاتصال فيديو الفائت</string>
 
     <string name="recorded_by">"المسجّل بواسطة " </string>
 
@@ -1513,16 +1502,6 @@
     <string name="Call_Quality">جودة الاتصال </string>
 
     <string name="desc_self_destroy">"في حال عدم استخدام الحساب بأي شكل من الأشكال طوال الفترات المحددة يتمّ التدمير التلقائي للحساب و يتمّ حذفه للأبد."</string>
-
-    <string name="crop_image_menu_rotate_right">التدوير</string>
-
-    <string name="crop_image_menu_crop">القطع </string>
-
-    <string name="crop_image_menu_flip">تدوير الصورة </string>
-
-    <string name="crop_image_menu_flip_horizontally">التدوير الأفقي للصورة</string>
-
-    <string name="crop_image_menu_flip_vertically">التدوير العمودي للصورة</string>
 
     <string name="title_who_can_see_my_avatar">رؤية أفتاراتي بواسطة</string>
 
@@ -2072,10 +2051,8 @@
     <string name="kuknos_rial_Deposit_sheba_number">"رقم شبعا الإيداع"</string>
     <string name="kuknos_rial_Maximum_redeemable_token">"الحد الأقصى من الرمز المميز القابل للاسترداد"</string>
     <string name="kuknos_rial_Redemption_fee">"رسوم الاسترداد PMN"</string>
-    <string name="kuknos_rial_Redemption_feee">"رسوم الاسترداد"</string>
     <string name="kuknos_edit_info_sending_info">"إرسال المعلومات ..."</string>
     <string name="kuknos_edit_info_empty_sheba_and_birthdate">"تاريخ الميلاد والشبا لم يتغير!"</string>
-    <string name="kuknos_rial_Deposit_amount2">"مبلغ الإيداع"</string>
     <string name="kuknos_receipt_bill">"إيصال الاسترداد"</string>
     <string name="kuknos_edit_info_empty_sheba">"لا يمكن أن يكون الحقل الليلي فارغًا"</string>
     <string name="kuknos_edit_info_empty_birthdate">"لا يمكن ترك حقل تاريخ الميلاد فارغًا"</string>
@@ -2085,10 +2062,8 @@
     <string name="kuknos_panel_Edit_and_change_account_information">"تحرير وتغيير معلومات الحساب"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"العدد الإجمالي للعقود"</string>
     <string name="kuknos_rial_Deposit_amount">"مبلغ الإيداع (ريال)"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"إعادة شراء الرموز"</string>
     <string name="kuknos_rial_Number_of_contracts">"عدد العقود"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"أكمل معلوماتك \n بالذهاب إلى \n قسم الإعدادات"</string>
-    <string name="kuknos_setting_dialog">تأكيد استرداد الرمز المميز</string>
     <string name="kuknos_panelStr_buyAgain">فداء</string>
     <string name="new_pass">كلمة مرور جديدة</string>
     <string name="confirm_pass">كرر كلمة المرور</string>
@@ -2212,7 +2187,6 @@
     <string name="charge_amount">مستوى الشحن(ریال)</string>
     <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
     <string name="charity_title">الاعمال الخيرية</string>
-    <string name="item_selected">العنصر المحدد</string>
     <string name="disk_and_network_usage">استخدام القرص والشبكة</string>
     <string name="cache">مخبأ</string>
     <string name="auto_play_media">تشغيل الوسائط تلقائيًا</string>
@@ -2233,7 +2207,6 @@
     <string name="cloud">غيم</string>
     <string name="score">أحرز هدفا</string>
     <string name="Credit">ائتمان</string>
-    <string name="make_as_read">اجعله مقروء</string>
     <string name="read_all">اقرأ كل شيء</string>
 
     <string name="wallet_message">رسالة المحفظة</string>
@@ -2269,7 +2242,7 @@
     <string name="nine_number">٩</string>
     <string name="star_number">*</string>
     <string name="zero_number">٠</string>
-    <string name="administrators_title">المسؤولين</string>
+    <string name="admins_title">المسؤولين</string>
     <string name="moderators_title">المشرفين</string>
     <string name="view_contact">عرض الاتصال</string>
     <string name="new_group_call">مكالمة جماعية جديدة</string>
@@ -2277,7 +2250,6 @@
     <string name="Select_Country">حدد الدولة</string>
     <string name="call">مكالمة</string>
     <string name="ra_enter_reagent_code">أدخل رمز الكاشف (اختياري)</string>
-    <string name="reagent_error_message">الرقم الذي تم إدخاله غير صحيح للرفض.</string>
     <string name="enter_wallet_password">أدخل كلمة مرور المحفظة</string>
     <string name="videos">أشرطة فيديو</string>
     <string name="audios">صوتيات</string>
@@ -2302,7 +2274,6 @@
     <string name="tablet_empty_chat_description">البدء مرحباً بك في آی کب. يمكنك تعيين صورة ملفك الشخصي و / أو تغيير اسمك في قسم الإعدادات.</string>
     <string name="make_call">مكالمة</string>
     <string name="create_chat">إنشاء الدردشة</string>
-    <string name="delete_all">حذف الكل</string>
 
     <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
     <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
@@ -2390,12 +2361,6 @@
     <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
     <string name="noDetail_textView">فاقد توضیحات</string>
     <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
-    <string name="Restaurant_textView">رستوران</string>
-    <string name="parking_textView">پارکینگ</string>
-    <string name="wifi_textView">وای فای</string>
-    <string name="coffeeShop_textView">کافی شاپ</string>
-    <string name="wheelchair_textView">ویلچر</string>
-    <string name="prayerRoom_textView">نمازخانه</string>
     <string name="edit_contact">تحرير الاتصال</string>
 
     <string name="error_ivand_limit_gift">لسوء الحظ ، فإن الهدايا مجموعة قد انتهت.</string>
@@ -2633,11 +2598,6 @@
     <string name="suggested_packages">الحزم المقترحة</string>
     <string name="all_packages">همه بسته ها</string>
     <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
-    <string name="credit_sim">سیمکارت اعتباری</string>
-    <string name="permanent_sim">سیمکارت دائمی</string>
-    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
-    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
-    <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
@@ -2659,7 +2619,6 @@
     <string name="refund_button">إعادة مال</string>
     <string name="submit">إرسال</string>
     <string name="history_asset_type">نوع الأصول</string>
-    <string name="history_hash">تجزئة</string>
     <string name="history_amount">مبلغ</string>
     <string name="histroy_fee">رسوم</string>
     <string name="history_count">العد</string>
@@ -2668,5 +2627,20 @@
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
-
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
+    <string name="name_error">لم يتم التحقق من الاسم</string>
+    <string name="user_name_error">اسم المستخدم غير مؤكد</string>
+    <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
+    <string name="gender_error">لم يتم تأكيد الجنس</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="update_lock_error">"درخواست خارج از تعداد"</string>
+    <string name="seted_gender">Gender confirmed</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="email_added">added Email Address</string>
 </resources>

@@ -7,6 +7,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -68,8 +70,10 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
 
         avatarHandler = new AvatarHandler();
         fragmentView = (ViewGroup) fragment.getFragmentView();
-        fragmentView.setClipToPadding(false);
-
+        if (fragmentView != null) {
+            fragmentView.setClipToPadding(false);
+        }
+        MusicPlayer.setMusicPlayer();
         mediaContainer = new FrameLayout(context);
         mediaContainer.setTag(MEDIA_TAG);
         mediaContainer.setOnClickListener(view -> listener.clickListener((Integer) mediaContainer.getTag()));
@@ -78,12 +82,12 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         playIconView.setTextColor(Color.WHITE);
         playIconView.setGravity(Gravity.CENTER_VERTICAL);
         playIconView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
-        playIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        playIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         playIconView.setTag(PLAY_TAG);
         playIconView.setOnClickListener(view -> {
             listener.clickListener((Integer) playIconView.getTag());
             if (MusicPlayer.isMusicPlyerEnable) {
-                playIconView.setText(MusicPlayer.mp.isPlaying() ? R.string.pause_icon : R.string.play_icon);
+                playIconView.setText(MusicPlayer.mp.isPlaying() ? R.string.icon_pause : R.string.icon_play);
                 MusicPlayer.playAndPause();
             }
         });
@@ -98,8 +102,8 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         mediaContainer.addView(musicTitle, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 45, 0, 0, 0));
 
         closeIconView = new IconView(context);
-        closeIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
-        closeIconView.setText(R.string.close_icon);
+        closeIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
+        closeIconView.setText(R.string.icon_close);
         closeIconView.setGravity(Gravity.CENTER_VERTICAL);
         closeIconView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
         closeIconView.setOnClickListener(view -> {
@@ -112,8 +116,8 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         callContainer.setTag(CALL_TAG);
 
         callIconView = new IconView(context);
-        callIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
-        callIconView.setText(R.string.voice_call_icon);
+        callIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
+        callIconView.setText(R.string.icon_voice_call);
         callIconView.setTextColor(Color.WHITE);
         callContainer.addView(callIconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, isRTL ? Gravity.RIGHT : Gravity.LEFT, isRTL ? 10 : 5, 0, isRTL ? 5 : 10, 0));
 
@@ -177,7 +181,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         if (!needShowCall) {
             if (needShowMedia) {
                 musicTitle.setText(MusicPlayer.musicName);
-                playIconView.setText(!MusicPlayer.mp.isPlaying() ? R.string.play_icon : R.string.pause_icon);
+                playIconView.setText(!MusicPlayer.mp.isPlaying() ? R.string.icon_play : R.string.icon_pause);
                 mediaContainer.setBackgroundColor(Theme.getInstance().getMediaStripColor(getContext()));
                 callContainer.setVisibility(GONE);
                 mediaContainer.setVisibility(VISIBLE);
@@ -186,20 +190,18 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
             } else {
                 setVisibilityWithAnimation(this, false);
             }
-        } else {
-
         }
     }
 
 
     private void didCallChange() {
-
         needShowCall = CallManager.getInstance().isCallAlive();
 
         if (needShowCall) {
             CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
             if (callerInfo != null) {
                 mediaContainer.setVisibility(GONE);
+                callContainer.setVisibility(VISIBLE);
                 callerName.setText(String.format("%s %s", callerInfo.name, callerInfo.lastName));
                 avatarHandler.getAvatar(new ParamWithInitBitmap(callerAvatar, callerInfo.userId).initBitmap(null).showMain());
 
@@ -256,7 +258,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
     private void setVisibilityWithAnimation(View view, boolean needShow) {
         int viewHeight;
         if (needShow)
-            viewHeight = view.getHeight();
+            viewHeight = 0;
         else
             viewHeight = -view.getHeight();
 
@@ -278,7 +280,5 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
                 view.setTranslationY(0);
             }
         });
-
-
     }
 }

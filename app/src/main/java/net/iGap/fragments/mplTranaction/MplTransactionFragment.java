@@ -141,7 +141,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle(getResources().getString(R.string.payment_history))
-                .setLeftIcon(R.string.back_icon);
+                .setLeftIcon(R.string.icon_back);
 
         toolBarContainer.addView(toolbar.getView());
     }

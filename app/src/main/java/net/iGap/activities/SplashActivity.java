@@ -8,16 +8,20 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.caspian.otpsdk.context.ApplicationContext;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
+
+import ir.metrix.Metrix;
 
 public class SplashActivity extends ActivityEnhanced {
 
@@ -33,11 +37,12 @@ public class SplashActivity extends ActivityEnhanced {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
-                    String token = realmUserInfo.getPushNotificationToken();
-                    if (token == null || token.length() < 2) {
+                    final String[] token = {realmUserInfo.getPushNotificationToken()};
+                    if (token[0] == null || token[0].length() < 2) {
                         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-                            String mToken = instanceIdResult.getToken();
-                            RealmUserInfo.setPushNotification(mToken);
+                            token[0] = instanceIdResult.getToken();
+                            RealmUserInfo.setPushNotification(token[0]);
+                            Metrix.setPushToken(token[0]);
                         });
                     }
                 }

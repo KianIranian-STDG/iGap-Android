@@ -11,11 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.R;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.GalleryItemListener;
 
 import java.util.ArrayList;
@@ -140,9 +139,8 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         });
 
         //load image
-        Glide.with(holder.image.getContext())
-                .load(Uri.parse("file://" + (isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover())))
-                .into(holder.image);
+        String imagePath = "file://" + (isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover());
+        ImageLoadingServiceInjector.inject().loadImage(holder.image, Uri.parse(imagePath).toString());
     }
 
     @Override

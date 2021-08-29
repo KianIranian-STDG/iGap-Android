@@ -191,7 +191,7 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             holder.name.setText(f.getName());
         } else if (!unreadableDir) {
             holder.name.setText(G.context.getResources().getString(R.string.Create_new_Folder_here));
-            holder.icon.setText(G.context.getString(R.string.folder_icon));
+            holder.icon.setText(G.context.getString(R.string.icon_folder));
         }
 
         if (unreadableDir) {
@@ -204,18 +204,18 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             }
         }
         if (position == 0 && f != null && !unreadableDir) {
-            holder.icon.setText(G.context.getString(R.string.arrow_up_icon));
+            holder.icon.setText(G.context.getString(R.string.icon_send_arrow_up));
         } else if (f != null) {
             if (f.isDirectory())
-                holder.icon.setText(G.context.getString(R.string.folder_icon));
+                holder.icon.setText(G.context.getString(R.string.icon_folder));
             else if (S.isImage(f))
-                holder.icon.setText(G.context.getString(R.string.photo_icon));
+                holder.icon.setText(G.context.getString(R.string.icon_gallery));
             else if (S.isVideo(f))
-                holder.icon.setText(G.context.getString(R.string.video_call_icon));
+                holder.icon.setText(G.context.getString(R.string.icon_video_call));
             else if (S.isAudio(f))
-                holder.icon.setText(G.context.getString(R.string.music_icon));
+                holder.icon.setText(G.context.getString(R.string.icon_music));
             else
-                holder.icon.setText(G.context.getString(R.string.file_icon));
+                holder.icon.setText(G.context.getString(R.string.icon_single_file));
         }
     }
 

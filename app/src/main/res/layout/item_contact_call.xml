@@ -6,35 +6,31 @@
     android:layout_height="@dimen/dp70"
     android:background="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/iv_itemContactChat_ll"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <CheckBox
-            android:id="@+id/iv_itemContactCall_checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:button="@drawable/check_box_background"
-            android:clickable="false" />
-
         <net.iGap.module.CircleImageView
             android:id="@+id/iv_itemContactCall_profileImage"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginLeft="@dimen/dp16"
+            android:layout_gravity="center"
             android:src="?attr/iGapAvatarBackground" />
 
-    </LinearLayout>
+        <net.iGap.module.customView.CheckBox
+            android:id="@+id/iv_itemContactCall_checkBox"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:button="@drawable/check_box_background"
+            android:layout_gravity="bottom"
+            android:clickable="false" />
+    </FrameLayout>
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_itemContactCall_voiceCall"
@@ -45,7 +41,7 @@
         android:layout_marginRight="@dimen/dp16"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
-        android:text="@string/voice_call_icon"
+        android:text="@string/icon_voice_call"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

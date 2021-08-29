@@ -6,124 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/frg_contact_ll_toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height_root_with_search"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <RelativeLayout
-        android:id="@+id/fc_layout_selected_mode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/dp10"
-        android:paddingLeft="@dimen/dp10"
-        android:paddingTop="@dimen/dp2"
-        android:paddingEnd="@dimen/dp4"
-        android:paddingRight="@dimen/dp4"
-        android:paddingBottom="@dimen/dp2"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frg_contact_ll_toolbar_layout">
-
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/fc_selected_mode_btn_cancel"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
-            android:gravity="center"
-            android:text="@string/close_icon"
-            android:textSize="@dimen/dp22" />
-
-        <TextView
-            android:id="@+id/fc_selected_mode_txt_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
-            android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/standardTextSize" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fc_selected_mode_btn_delete"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/dp4"
-            android:text="@string/delete_icon"
-            android:textSize="@dimen/dp22" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="@dimen/toolbar_icon_size"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/dp4"
-            android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
-            android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
-            android:text="@string/share_icon"
-            android:textSize="@dimen/dp22"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/inviteFriendsIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/contact_icon_size"
-        android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/invite_icon"
-        app:layout_constraintBottom_toBottomOf="@id/inviteFriendsTitle"
-        app:layout_constraintStart_toStartOf="@id/menu_layout_inviteFriend"
-        app:layout_constraintTop_toTopOf="@id/inviteFriendsTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/inviteFriendsTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp10"
-        android:layout_marginLeft="@dimen/dp10"
-        android:gravity="start|center_vertical"
-        android:padding="@dimen/dp10"
-        android:singleLine="true"
-        android:text="@string/Invite_Friends"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/standardTextSize"
-        app:layout_constraintEnd_toEndOf="@id/menu_layout_inviteFriend"
-        app:layout_constraintStart_toEndOf="@id/inviteFriendsIcon"
-        app:layout_constraintTop_toTopOf="@id/menu_layout_inviteFriend" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/menu_layout_inviteFriend"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:visibility="visible"
-        app:constraint_referenced_ids="inviteFriendsTitle,inviteFriendsIcon"
-        app:layout_constraintBottom_toBottomOf="@id/inviteFriendsTitle"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fc_layout_selected_mode"
-        app:layout_constraintWidth_percent=".9" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newChannelIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/channel_icon"
+        android:text="@string/icon_new_channel"
         app:layout_constraintBottom_toBottomOf="@id/newChannelTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_channel"
         app:layout_constraintTop_toTopOf="@id/newChannelTitle" />
@@ -155,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="@id/newChannelTitle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_inviteFriend"
+        app:layout_constraintTop_toBottomOf="@+id/frg_contact_ll_toolbar_layout"
         app:layout_constraintWidth_percent=".9" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -163,7 +59,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/group_icon"
+        android:text="@string/icon_contacts"
         app:layout_constraintBottom_toBottomOf="@id/newGroupTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_group"
         app:layout_constraintTop_toTopOf="@id/newGroupTitle" />
@@ -203,7 +99,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/secret_chat_icon"
+        android:text="@string/icon_secret_chat"
         app:layout_constraintBottom_toBottomOf="@id/secretChatTitle"
         app:layout_constraintEnd_toStartOf="@id/secretChatTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_btn_secret_chat"
@@ -243,7 +139,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/group_icon"
+        android:text="@string/icon_contacts"
         app:layout_constraintBottom_toBottomOf="@id/newGroupCallTitle"
         app:layout_constraintEnd_toStartOf="@id/newGroupCallTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_new_group_call"
@@ -279,51 +175,11 @@
         app:layout_constraintWidth_percent=".9" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/addContactIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/contact_icon_size"
-        android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/invite_icon"
-        app:layout_constraintBottom_toBottomOf="@id/addContactTitle"
-        app:layout_constraintEnd_toStartOf="@id/addContactTitle"
-        app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_contact"
-        app:layout_constraintTop_toTopOf="@id/addContactTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/addContactTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp10"
-        android:layout_marginLeft="@dimen/dp10"
-        android:gravity="start|center_vertical"
-        android:padding="@dimen/dp10"
-        android:singleLine="true"
-        android:text="@string/menu_add_contact"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/standardTextSize"
-        app:layout_constraintEnd_toEndOf="@id/menu_layout_add_new_contact"
-        app:layout_constraintStart_toEndOf="@id/addContactIcon"
-        app:layout_constraintTop_toTopOf="@id/menu_layout_add_new_contact" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/menu_layout_add_new_contact"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:visibility="gone"
-        app:constraint_referenced_ids="addContactTitle,addContactIcon"
-        app:layout_constraintBottom_toBottomOf="@id/addContactTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_new_group_call"
-        app:layout_constraintWidth_percent=".9" />
-
-    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialNumberIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/dial_number_icon"
+        android:text="@string/icon_dial"
         app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"
         app:layout_constraintEnd_toStartOf="@id/dialNumberTitle"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -356,7 +212,7 @@
         app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_contact"
+        app:layout_constraintTop_toBottomOf="@id/frg_contact_ll_toolbar_layout"
         app:layout_constraintWidth_percent=".9" />
 
     <View
@@ -364,12 +220,11 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/dp10"
-        android:layout_marginTop="@dimen/dp10"
         android:layout_marginRight="@dimen/dp10"
         android:background="?iGapDividerLine"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_dial_number" />
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_group" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

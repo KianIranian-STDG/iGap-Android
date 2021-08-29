@@ -44,6 +44,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnGroupAvatarDelete;
 import net.iGap.observers.interfaces.OnUserAvatarDelete;
 import net.iGap.proto.ProtoFileDownload;
@@ -397,7 +398,12 @@ public class FragmentShowAvatars extends BaseFragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
-                    HelperSaveFile.savePicToGallery(media, true);
+                    HelperSaveFile.savePicToGallery(media, true, new OnFileCopyComplete() {
+                        @Override
+                        public void complete(int successMessage) {
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             } else {
                 if (getContext() != null)

@@ -131,8 +131,8 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getContext().getResources().getString(R.string.tab_edit))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

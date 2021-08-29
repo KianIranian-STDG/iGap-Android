@@ -16,6 +16,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.StringListParcelConverter;
 import net.iGap.proto.ProtoGlobal;
 
+import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 
 import io.realm.Realm;

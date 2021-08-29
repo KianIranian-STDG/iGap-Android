@@ -150,7 +150,7 @@ public class AccountManager {
         }.getType())).apply();
     }
 
-    public void updateCurrentUserName(String name) {
+    public void updateCurrentNickName(String name) {
         userAccountList.get(selectedAccount).setName(name);
         setUserAccountListInSharedPreferences();
     }

@@ -241,7 +241,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/dp24"
-                    android:text="@string/eye_icon"
+                    android:text="@string/icon_eye"
                     android:textSize="@dimen/dp20"
                     android:gravity="center"
                     android:layout_marginLeft="@dimen/dp16"

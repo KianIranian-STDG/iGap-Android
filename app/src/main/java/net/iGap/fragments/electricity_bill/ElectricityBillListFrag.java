@@ -75,8 +75,8 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-//                .setRightIcons(R.string.more_icon)
+                .setLeftIcon(R.string.icon_back)
+//                .setRightIcons(R.string.icon_other_vertical_dots)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(new ToolbarListener() {
                     @Override

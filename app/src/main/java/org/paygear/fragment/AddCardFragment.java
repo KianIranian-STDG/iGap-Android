@@ -84,7 +84,7 @@ public class AddCardFragment extends Fragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.add_new_card))
                 .setListener(new ToolbarListener() {
                     @Override

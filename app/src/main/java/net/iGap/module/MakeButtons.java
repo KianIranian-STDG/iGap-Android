@@ -13,7 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -129,7 +129,7 @@ public class MakeButtons {
         AppCompatImageView img1 = new AppCompatImageView(mainLayout.getContext());
 
         if (!entity.getImageUrl().equals("")) {
-            Picasso.get().load(entity.getImageUrl()).resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32)).into(img1);
+            Glide.with(G.context).load(entity.getImageUrl()).override(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32)).into(img1);
 
             LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 

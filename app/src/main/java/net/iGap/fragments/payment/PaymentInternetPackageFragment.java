@@ -131,7 +131,7 @@ public class PaymentInternetPackageFragment extends BaseFragment {
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(getString(R.string.buy_internet_package_title))
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

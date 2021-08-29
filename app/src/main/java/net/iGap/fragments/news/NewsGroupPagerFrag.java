@@ -16,11 +16,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -69,7 +70,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -83,19 +84,19 @@ public class NewsGroupPagerFrag extends BaseFragment {
         binding.Toolbar.addView(mHelperToolbar.getView());
 
         if (!arg.getString("GroupPic").equals(""))
-            Picasso.get().load(arg.getString("GroupPic"))
+            Glide.with(G.context)
+                    .load(arg.getString("GroupPic"))
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(binding.groupImage);
 
         ViewPager viewPager = binding.secondaryLayout.viewPager;
         tabLayout = binding.secondaryLayout.pagerTabLayout;
-        //TabAdapter adapter = new TabAdapter(getFragmentManager());
+        TabAdapter adapter = new TabAdapter(getFragmentManager());
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         frag.setHandler(news -> {
-            Picasso.get().load(news.getImage())
-                    .into(binding.groupImage);
+            Glide.with(G.context).load(news.getImage()).into(binding.groupImage);
             binding.groupTitle.setText(news.getTitle());
             binding.headerNews.setOnClickListener(v -> {
                 FragmentManager fragmentManager = getChildFragmentManager();
@@ -111,17 +112,17 @@ public class NewsGroupPagerFrag extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             });
         });
-     //   adapter.addFragment(frag, getResources().getString(R.string.news_latest));
+        adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
         frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.MOST_HITS));
-      //  adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
+        adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
 
         NewsListFrag frag3 = new NewsListFrag();
         frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.CONTROVERSIAL_NEWS));
-      //  adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
+        adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
 
-      //  viewPager.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
         updateFontTabLayout();

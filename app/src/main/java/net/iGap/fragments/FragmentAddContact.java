@@ -15,7 +15,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -58,7 +61,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
 public class FragmentAddContact extends BaseFragment implements ToolbarListener, OnUserContactEdit {
@@ -83,6 +85,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     private String mContactName = "", mContactFamily = "";
     private ContactMode pageMode;
     private ProgressBar loader;
+    private TextView phoneNumberError;
 
     public static FragmentAddContact newInstance(String phone, ContactMode mode) {
         FragmentAddContact fragment = new FragmentAddContact();
@@ -122,6 +125,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
         parent = view.findViewById(R.id.ac_layoutParent);
         loader = view.findViewById(R.id.loader);
+        phoneNumberError = view.findViewById(R.id.phoneNumberError);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -234,12 +238,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -248,8 +250,18 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             }
         });
 
-        G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                phoneNumberError.setText(R.string.empty_error_message);
+                if (edtPhoneNumber.getText().toString().startsWith("0")) {
+                    phoneNumberError.setText(R.string.Toast_First_0);
+                    edtPhoneNumber.setText("");
+                }
+            }
+        });
 
+        G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         onCountryCallBack = (nameCountry, code, mask) -> G.handler.post(() -> {
             txtCodeCountry.setText(nameCountry);
@@ -258,7 +270,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                 edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
 
             } else {
-                edtPhoneNumber.setMask("##################");
+                edtPhoneNumber.setMask("###-###-####");
             }
         });
 
@@ -292,8 +304,8 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setDefaultTitle(toolbarTitle)
                 .setLogoShown(true)
                 .setListener(this);
@@ -328,14 +340,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
         String _phone = edtPhoneNumber.getText().toString();
         String codeCountry = txtCodeCountry.getText().toString();
-
-        String saveNumber;
-
-        if (edtPhoneNumber.getText().toString().startsWith("0")) {
-            saveNumber = codeCountry + _phone.substring(1);
-        } else {
-            saveNumber = codeCountry + _phone;
-        }
+        String saveNumber = codeCountry + _phone;
 
         List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
@@ -386,39 +391,13 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
     @Override
     public void onRightIconClickListener(View view) {
-        if (pageMode == ContactMode.ADD) {
-
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    addContactToServer();
-                    final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-                    if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                        try {
-                            HelperPermission.getContactPermision(G.fragmentActivity, null);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        addToContactList(view);
-                    }
-                }
-            }).negativeText(R.string.no).onNegative((dialog, which) -> {
-                addContactToServer();
-                dialog.dismiss();
-                G.fragmentActivity.onBackPressed();
-            }).show();
-
-        } else if (pageMode == ContactMode.EDIT) {
-            new MaterialDialog.Builder(G.fragmentActivity)
-                    .title(R.string.edit_contact)
-                    .content(R.string.are_you_sure_edit_contact)
-                    .positiveText(R.string.yes)
-                    .negativeText(R.string.no)
-                    .onNegative((dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .onPositive((dialog, which) -> {
+        edtPhoneNumber.clearFocus();
+        if (!TextUtils.isEmpty(edtPhoneNumber.getText())) {
+            if (pageMode == ContactMode.ADD) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        addContactToServer();
                         final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
                         if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
                             try {
@@ -429,10 +408,38 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                         } else {
                             addToContactList(view);
                         }
-                        editContactByApi();
-                        dialog.dismiss();
-                    })
-                    .show();
+                    }
+                }).negativeText(R.string.no).onNegative((dialog, which) -> {
+                    addContactToServer();
+                    dialog.dismiss();
+                    G.fragmentActivity.onBackPressed();
+                }).show();
+
+            } else if (pageMode == ContactMode.EDIT) {
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.edit_contact)
+                        .content(R.string.are_you_sure_edit_contact)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onNegative((dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .onPositive((dialog, which) -> {
+                            final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                            if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                                try {
+                                    HelperPermission.getContactPermision(G.fragmentActivity, null);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                addToContactList(view);
+                            }
+                            editContactByApi();
+                            dialog.dismiss();
+                        })
+                        .show();
+            }
         }
     }
 
@@ -457,9 +464,9 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             loader.setVisibility(View.GONE);
             //HelperError.showSnackMessage(getString(R.string.user_edited), false);
             if (onContactUpdate != null)
-                onContactUpdate.updateContact(firstName , lastName);
+                onContactUpdate.updateContact(firstName, lastName);
             popBackStackFragment();
-        },100);
+        }, 100);
     }
 
     @Override
@@ -485,7 +492,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
     @FunctionalInterface
     public interface OnContactUpdate {
-        void updateContact(String name , String family);
+        void updateContact(String name, String family);
     }
 
 }

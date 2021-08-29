@@ -51,7 +51,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:text="@string/back_icon" />
+                        android:text="@string/icon_back" />
 
                     <Space
                         android:id="@+id/toolbar_avatar_collapsed_target"
@@ -91,7 +91,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
-                        android:text="@string/more_icon" />
+                        android:text="@string/icon_other_vertical_dots" />
 
                     <TextView
                         android:id="@+id/toolbar_edit"
@@ -101,7 +101,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toStartOf="@id/toolbar_more"
                         android:layout_toLeftOf="@id/toolbar_more"
-                        android:text="@string/edit_icon"
+                        android:text="@string/icon_new_conversation"
                         android:visibility="gone" />
 
                 </RelativeLayout>

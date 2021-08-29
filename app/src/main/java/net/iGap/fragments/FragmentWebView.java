@@ -38,12 +38,12 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.WebAppInterface;
 import net.iGap.observers.interfaces.IOnBackPressed;
 import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,7 @@ import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FragmentWebView extends BaseFragment implements IOnBackPressed, ToolbarListener {
+public class FragmentWebView extends BaseFragment implements IOnBackPressed {
 
     private final static int FILE_REQUEST_CODE = 1;
     public boolean igRef;
@@ -67,7 +67,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
     private FrameLayout frameLayout;
     private View customView;
     private WebChromeClient.CustomViewCallback callback;
-    private HelperToolbar mHelperToolbar;
+    private Toolbar webViewToolbar;
     private ValueCallback<Uri> valueCallback;
     private ValueCallback<Uri[]> valueCallbacks;
     private String photoPath;
@@ -188,23 +188,21 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
     }
 
     private void setupToolbar(View view) {
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setLogoShown(true)
-                .setRoundBackground(false)
-                .setListener(this);
+        webViewToolbar = new Toolbar(getContext());
+        webViewToolbar.setBackIcon(new BackDrawable(false));
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
-        mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
+        layoutToolbar.addView(webViewToolbar);
+        webViewToolbar.setListener(i -> {
+            if (i == -1) {
+                onBackClicked();
+            }
+        });
 
     }
 
-    @Override
-    public void onLeftIconClickListener(View view) {
+    private void onBackClicked() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (webView == null) {
             popBackStackFragment();
             return;
@@ -343,7 +341,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
             if (url.toLowerCase().equals("igap://close")) {
                 isWebViewVisible = false;
                 forceCloseFragment = true;
-                onLeftIconClickListener(view);
+                onBackClicked();
             }
 
         }
@@ -353,9 +351,9 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
             super.onPageFinished(view, url);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 if (view.getTitle().length() > 27) {
-                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0, 27) + "...");
+                    webViewToolbar.setTitle(view.getTitle().substring(0, 27) + "...");
                 } else {
-                    mHelperToolbar.setDefaultTitle(view.getTitle());
+                    webViewToolbar.setTitle(view.getTitle());
                 }
             }
         }
@@ -364,7 +362,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.toLowerCase().equals("igap://close")) {
                 forceCloseFragment = true;
-                onLeftIconClickListener(view);
+                onBackClicked();
             } else if (url.toLowerCase().contains("igap://deep_link")) {
                 if (getActivity() != null && getActivity() instanceof ActivityMain) {
                     ActivityMain activityMain = (ActivityMain) getActivity();
@@ -395,6 +393,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
             customView = view;
             FragmentWebView.this.callback = callback;
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             frameLayout.addView(view);
             pullToRefresh.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
@@ -406,6 +405,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
             if (customView == null)
                 return;
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             customView.setVisibility(View.GONE);
             frameLayout.removeView(customView);
             customView = null;

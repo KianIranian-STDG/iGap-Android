@@ -4,9 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,13 +50,16 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.fragments.populaChannel.RatingDialog;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -72,6 +77,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -84,20 +90,23 @@ import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
+import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 import static net.iGap.G.isAppRtl;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -128,6 +137,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final int selectCounter = 8;
     private final int markAsReadTag = 9;
     private final int readAllTag = 10;
+    private final int walletTag = 11;
     private ArrayList<View> actionModeViews = new ArrayList<>();
     private ToolbarItem passCodeItem;
     private ToolbarItem pintItem;
@@ -147,6 +157,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private int firstVisibleItemPosition;
     private int firstVisibleItemPositionOffset;
+    private SharedPreferences sharedPreferences;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -158,7 +169,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         isNeedResume = true;
+
     }
 
 
@@ -266,7 +279,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         layout.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
 
@@ -331,10 +344,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public View createToolBar(Context context) {
         toolbar = new Toolbar(context);
-        toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+        toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         toolbar.setOnClickListener(view -> recyclerView.smoothScrollToPosition(0));
         ToolbarItems toolbarItems = toolbar.createToolbarItems();
-        searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
+        searchItem = toolbarItems.addItem(0, R.string.icon_search, Color.WHITE)
                 .setIsSearchBox(true)
                 .setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
 
@@ -369,8 +382,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
+        toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
         if (PassCode.getInstance().isPassCode()) {
-            passCodeItem = toolbar.addItem(passCodeTag, R.string.unlock_icon, Color.WHITE);
+            passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
 
         createActionMode();
@@ -383,16 +397,19 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                         disableMultiSelect();
                     }
                     break;
+                case walletTag:
+                    onScannerClickListener();
+                    break;
                 case passCodeTag:
                     if (passCodeItem == null) {
                         return;
                     }
                     if (ActivityMain.isLock) {
-                        passCodeItem.setIcon(R.string.unlock_icon);
+                        passCodeItem.setIcon(R.string.icon_unlock);
                         ActivityMain.isLock = false;
                         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
                     } else {
-                        passCodeItem.setIcon(R.string.lock_icon);
+                        passCodeItem.setIcon(R.string.icon_lock);
                         ActivityMain.isLock = true;
                         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
                     }
@@ -418,6 +435,13 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     readAllRoom();
                     break;
             }
+        });
+        searchItem.getSearchEditText().setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideKeyboard();
+                return true;
+            }
+            return false;
         });
 
         return toolbar;
@@ -503,14 +527,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         toolbarItems = toolbar.createActionToolbar(null);
         toolbarItems.setBackground(null);
 
-        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 52);
-        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.ic_clear_history, getResources().getString(R.string.clear_history));
-        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.ic_mark_as_read, getResources().getString(R.string.mark_as_unread));
-        readAllItem = moreItem.addSubItem(readAllTag, R.string.ic_mark_all_read, getResources().getString(R.string.read_all));
+        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.icon_other_vertical_dots, 52);
+        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.icon_clear_history, getResources().getString(R.string.clear_history));
+        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.icon_mark_as_read, getResources().getString(R.string.mark_as_unread));
+        readAllItem = moreItem.addSubItem(readAllTag, R.string.icon_mark_all_read, getResources().getString(R.string.read_all));
 
-        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.delete_icon, 52);
-        muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.mute_icon, 52);
-        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.ic_pin_to_top_2, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icon_new));
+        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_delete, 52);
+        muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.icon_mute, 52);
+        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.icon_pin_to_top, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icons));
 
         multiSelectCounter = new NumberTextView(toolbarItems.getContext());
         multiSelectCounter.setTextSize(18);
@@ -649,12 +673,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             } else {
                 hasUnPin = true;
             }
-            if(room.getType() == CHANNEL){
+            if (room.getType() == CHANNEL) {
                 hasChannel = true;
             }
         }
 
-        if(hasChannel){
+        if (hasChannel) {
             clearHistoryItem.setVisibility(View.GONE);
         } else {
             clearHistoryItem.setVisibility(View.VISIBLE);
@@ -664,20 +688,20 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             muteItem.setVisibility(View.GONE);
         } else if (hasMute) {
             muteItem.setVisibility(View.VISIBLE);
-            muteItem.setIcon(R.string.unmute_icon);
+            muteItem.setIcon(R.string.icon_speaker);
         } else if (hasUnMute) {
             muteItem.setVisibility(View.VISIBLE);
-            muteItem.setIcon(R.string.mute_icon);
+            muteItem.setIcon(R.string.icon_mute);
         }
 
         if (hasPinned && hasUnPin) {
             pintItem.setVisibility(View.GONE);
         } else if (hasPinned) {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.ic_unpin);
+            pintItem.setIcon(R.string.icon_unpin);
         } else {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.ic_pin_to_top_2);
+            pintItem.setIcon(R.string.icon_pin_to_top);
         }
     }
 
@@ -688,28 +712,29 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     private void deleteChat(RealmRoom item, boolean exit) {
-
-        if (item.getType() == CHAT) {
-            getRoomController().chatDeleteRoom(item.getId());
-        } else if (item.getType() == GROUP) {
-            if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-                getRoomController().groupDeleteRoom(item.getId());
-            } else {
-                getRoomController().groupLeft(item.getId());
-            }
-        } else if (item.getType() == CHANNEL) {
-
-            if (MusicPlayer.mainLayout != null) {
-                if (item.getId() == MusicPlayer.roomId) {
-                    MusicPlayer.closeLayoutMediaPlayer();
+        if (item.getType() != null) {
+            if (item.getType() == CHAT) {
+                getRoomController().chatDeleteRoom(item.getId());
+            } else if (item.getType() == GROUP) {
+                if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                    getRoomController().groupDeleteRoom(item.getId());
+                } else {
+                    getRoomController().groupLeft(item.getId());
                 }
-            }
+            } else if (item.getType() == CHANNEL) {
+
+                if (MusicPlayer.mainLayout != null) {
+                    if (item.getId() == MusicPlayer.roomId) {
+                        MusicPlayer.closeLayoutMediaPlayer();
+                    }
+                }
 
 
-            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                getMessageController().deleteChannel(item.getId());
-            } else {
-                getRoomController().channelLeft(item.getId());
+                if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                    getMessageController().deleteChannel(item.getId());
+                } else {
+                    getRoomController().channelLeft(item.getId());
+                }
             }
         }
         if (exit)
@@ -756,10 +781,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         IconView iconView = new IconView(context);
         iconView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         if (mute)
-            iconView.setIcon(R.string.unmute_icon);
+            iconView.setIcon(R.string.icon_speaker);
         else
-            iconView.setIcon(R.string.mute_icon);
-        iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
+            iconView.setIcon(R.string.icon_mute);
+        iconView.setIconColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
         TextView textView = new TextView(context);
@@ -769,14 +794,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             textView.setText(R.string.muted);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        textView.setTextColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(1000);
         iconView.setAnimation(fadeIn);
 
-        Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getView()), "", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
         layout.setBackgroundColor(Color.TRANSPARENT);
         layout.addView(frameLayout, 0);
@@ -866,6 +891,21 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
     }
 
+    @SuppressLint("ResourceType")
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0) {
+            long currentTimeStamp = new Date().getTime();
+            long loginTimeStamp = sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0);
+            long showDialogPeriodTimeMs = BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE * 60 * 60 * 1000;
+            if ((currentTimeStamp - loginTimeStamp >= showDialogPeriodTimeMs) &&
+                    !sharedPreferences.getBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, false)) {
+                RatingDialog.show(getActivity(), currentTimeStamp);
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -874,6 +914,38 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
+
+        if (toolbar.isInActionMode()) {
+            disableMultiSelect();
+        }
+    }
+
+    private void onScannerClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
+
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
     }
 
     private void onConnectionStateChange(final ConnectionState connectionState) {
@@ -888,9 +960,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         } else if (connectionState == ConnectionState.UPDATING) {
             toolbar.setTitle(getResources().getString(R.string.updating));
         } else if (connectionState == ConnectionState.IGAP) {
-            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+            toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         } else {
-            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+            toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         }
     }
 
@@ -929,14 +1001,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     public void checkPassCodeVisibility() {
         if (PassCode.getInstance().isPassCode()) {
             if (passCodeItem == null) {
-                passCodeItem = toolbar.addItem(passCodeTag, R.string.unlock_icon, Color.WHITE);
+                passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
             }
 
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
             if (ActivityMain.isLock) {
-                passCodeItem.setIcon(R.string.lock_icon);
+                passCodeItem.setIcon(R.string.icon_lock);
             } else {
-                passCodeItem.setIcon(R.string.unlock_icon);
+                passCodeItem.setIcon(R.string.icon_unlock);
             }
         } else if (passCodeItem != null) {
             passCodeItem.setVisibility(View.GONE);

@@ -115,8 +115,8 @@ public class CardFragment extends Fragment {
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.payment))
-                .setRightIcons(R.string.scan_qr_code_icon)
-                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.icon_QR_code)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

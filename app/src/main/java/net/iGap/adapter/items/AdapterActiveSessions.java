@@ -72,8 +72,8 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
         holder.deviceInfo.setText(String.format("%s , %s", item.getDeviceName(), item.getPlatform()));
         holder.country.setText(item.getCountry());
         holder.ip.setText(item.getIp());
-
-        holder.createTime.setText(HelperCalander.checkHijriAndReturnTime(item.getActiveTime()));
+        holder.createTime.setText(HelperCalander.checkHijriAndReturnTime(item.getCreateTime()));
+        holder.activeTime.setText(HelperCalander.checkHijriAndReturnTime(item.getActiveTime()));
     }
 
     @NotNull
@@ -90,6 +90,7 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
         private AppCompatTextView deviceInfo;
         private AppCompatTextView country;
         private AppCompatTextView ip;
+        private AppCompatTextView activeTime;
         private AppCompatTextView createTime;
         private TextView txtTerminate;
 
@@ -100,6 +101,7 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
             deviceInfo = view.findViewById(R.id.deviceInfo);
             country = view.findViewById(R.id.country);
             ip = view.findViewById(R.id.ip);
+            activeTime = view.findViewById(R.id.activeTime);
             createTime = view.findViewById(R.id.createTime);
             txtTerminate = view.findViewById(R.id.terminate);
         }

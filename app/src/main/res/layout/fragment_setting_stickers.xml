@@ -45,7 +45,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="4dp"
-        android:text="@string/retry_icon"
+        android:text="@string/icon_retry"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

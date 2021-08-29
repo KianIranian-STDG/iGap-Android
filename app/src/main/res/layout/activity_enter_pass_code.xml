@@ -59,7 +59,7 @@
             android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onCheckPasswordButtonClick(passwordEditText.getEditableText().toString())}"
-            android:text="@string/check_icon"
+            android:text="@string/icon_sent"
             android:visibility="@{viewModel.showCheckPasswordButton}"
             app:layout_constraintBottom_toTopOf="@id/passwordEditText"
             app:layout_constraintEnd_toEndOf="@id/passwordEditText" />

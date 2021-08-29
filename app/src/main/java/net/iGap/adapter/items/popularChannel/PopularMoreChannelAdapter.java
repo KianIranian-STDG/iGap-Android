@@ -10,9 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageLoadingService;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.List;
@@ -67,7 +68,12 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
         }
 
         public void bindChannel(Channel channel) {
-            ImageLoadingService.load(channel.getIcon(), channelAvatarIv);
+            Glide.with(G.context)
+                    .load(channel.getIcon())
+                    .fitCenter()
+                    .centerInside()
+                    .error(R.drawable.ic_error)
+                    .into(channelAvatarIv);
             if (G.isAppRtl) {
                 channelNameTv.setText(channel.getTitle());
             } else {

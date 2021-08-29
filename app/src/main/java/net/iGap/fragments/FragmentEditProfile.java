@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +29,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentEditProfileBinding;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 public class FragmentEditProfile extends BaseFragment {
@@ -56,7 +59,7 @@ public class FragmentEditProfile extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+                return (T) new UserProfileViewModel(avatarHandler);
             }
         }).get(UserProfileViewModel.class);
     }
@@ -82,26 +85,51 @@ public class FragmentEditProfile extends BaseFragment {
                 showCountryDialog();
             }
         });
+
         viewModel.getCancelIconClick().observe(getViewLifecycleOwner(), isClick -> {
             if (viewModel.getUserInfo() != null) {
                 String currentName = viewModel.getUserInfo().getUserInfo().getDisplayName() != null ? viewModel.getUserInfo().getUserInfo().getDisplayName() : "";
                 String currentUserName = viewModel.getUserInfo().getUserInfo().getUsername() != null ? viewModel.getUserInfo().getUserInfo().getUsername() : "";
                 String currentBio = viewModel.getUserInfo().getUserInfo().getBio() != null ? viewModel.getUserInfo().getUserInfo().getBio() : "";
+                String currentEmail = viewModel.getUserInfo().getEmail() != null ? viewModel.getUserInfo().getEmail() : "";
+                ProtoGlobal.Gender userGender = viewModel.getUserInfo().getGender();
+                if (userGender != null) {
+                    if (userGender == ProtoGlobal.Gender.MALE) {
+                        binding.genderValue.check(R.id.male);
+                    } else if (userGender == ProtoGlobal.Gender.FEMALE) {
+                        binding.genderValue.check(R.id.female);
+                    }
+                }
                 binding.nameEditText.setText(currentName);
                 binding.userNameEditText.setText(currentUserName);
                 binding.bioEditText.setText(currentBio);
+                binding.emailEditText.setText(currentEmail);
+            }
+        });
+
+
+        binding.nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.nameTextChangeListener(binding.nameEditText.getText().toString());
             }
         });
 
         binding.userNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -111,8 +139,35 @@ public class FragmentEditProfile extends BaseFragment {
             }
         });
 
-        binding.emailEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            viewModel.emailTextChangeListener(binding.emailEditText.getText().toString());
+        binding.bioEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.bioTextChangeListener(binding.bioEditText.getText().toString());
+
+            }
+        });
+        binding.emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.emailTextChangeListener(binding.emailEditText.getText().toString());
+            }
         });
 
         binding.countryCode.setOnFocusChangeListener((v, hasFocus) -> {
@@ -122,6 +177,7 @@ public class FragmentEditProfile extends BaseFragment {
         binding.referralEditText.setOnFocusChangeListener((v, hasFocus) -> {
             viewModel.referralTextChangeListener(binding.referralEditText.getText().toString());
         });
+
     }
 
     private void showCountryDialog() {

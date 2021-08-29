@@ -37,7 +37,7 @@
                     android:layout_width="@dimen/toolbar_icon_size"
                     android:layout_height="@dimen/toolbar_icon_size"
                     android:gravity="center"
-                    android:text="@string/back_icon" />
+                    android:text="@string/icon_back" />
 
             </net.iGap.libs.rippleeffect.RippleView>
 
@@ -68,7 +68,7 @@
                 android:layout_marginRight="@dimen/dp10"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="@string/delete_icon"
+                android:text="@string/icon_delete"
                 android:visibility="visible" />
 
 

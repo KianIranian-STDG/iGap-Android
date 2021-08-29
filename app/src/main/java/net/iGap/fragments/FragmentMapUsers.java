@@ -38,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
-import static net.iGap.G.context;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -82,7 +81,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))
                 .setListener(new ToolbarListener() {
@@ -213,7 +212,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     //        if (G.selectedLanguage.equals("en")) {
     //            holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
     //        } else {
-    //            holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+    //            holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.icon_back));
     //        }
     //
     //        holder.arrow.setTextColor(Color.parseColor(G.appBarColor));

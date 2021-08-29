@@ -105,7 +105,7 @@
                     android:layout_marginEnd="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
-                    android:text="@string/delete_icon"
+                    android:text="@string/icon_delete"
                     android:textSize="@dimen/dp26"
                     android:textColor="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +120,7 @@
                     android:layout_marginEnd="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
-                    android:text="@string/edit_icon"
+                    android:text="@string/icon_new_conversation"
                     android:textSize="@dimen/dp26"
                     app:layout_constraintEnd_toStartOf="@+id/billDelete"
                     app:layout_constraintTop_toTopOf="@+id/billDelete" />
