@@ -149,9 +149,14 @@ public class RoomController extends BaseController {
                 if (G.onGroupDelete != null) {
                     G.onGroupDelete.onGroupDelete(res.roomId);
                 }
-            } else {
-                IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Group Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
+            else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                if (err.major == 358 && err.minor == 2) {
+                    getMessageDataStorage().deleteRoomFromStorage(roomId);
+                }
+                FileLog.e("Group Delete Room -> Major" + err.major + "Minor" + err.minor);
+
             }
         });
     }

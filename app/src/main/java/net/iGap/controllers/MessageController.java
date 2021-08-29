@@ -215,6 +215,11 @@ public class MessageController extends BaseController implements EventManager.Ev
             if (error == null) {
                 IG_RPC.Res_Channel_Delete res = (IG_RPC.Res_Channel_Delete) response;
                 getMessageDataStorage().deleteRoomFromStorage(res.roomId);
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                if (err.major == 411 && err.minor == 2) {
+                    getMessageDataStorage().deleteRoomFromStorage(roomId);
+                }
             }
         });
     }
