@@ -4,33 +4,35 @@
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/iGapCardToCardBackground"
     android:orientation="vertical">
-
-    <!-- Pretty hint text, and maxLines -->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:layout_marginTop="@dimen/dp12">
+        android:layout_marginTop="@dimen/dp12"
+        android:padding="@dimen/dp8">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/rg_edtSearch_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:clickable="true"
             android:theme="@style/MySearch" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_titleToolbar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
             android:gravity="center_vertical"
-            android:maxLines="1"
-            android:padding="@dimen/dp8"
             android:singleLine="true"
             android:text="@string/rg_Select_Country"
             android:textColor="?attr/iGapPrimaryIconTextColor"
-            android:textSize="@dimen/dp20"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="bold" />
 
     </RelativeLayout>
@@ -51,8 +53,10 @@
         android:divider="?attr/iGapDividerLine"
         android:fadeScrollbars="false"
         android:layoutDirection="rtl"
+        android:padding="@dimen/dp8"
         android:scrollbarSize="@dimen/dp4"
-        android:scrollbarThumbVertical="?attr/colorPrimary" />
+        android:scrollbarThumbVertical="?attr/colorPrimary"
+        android:scrollbars="none" />
 
     <View
         android:layout_width="match_parent"
