@@ -104,7 +104,7 @@
     <string name="send_gif">Enviar Gif</string>
     <string name="kuknos_changePIN_failTitle">Fallar</string>
     <string name="reference_code">Número de referencia</string>
-<!--    <string name="mobile_bank_detail_cell_penaltyAmount">Importe de penalización:% 1 $ s% 2 $ s</string>-->
+    <string name="mobile_bank_detail_cell_penaltyAmount">Importe de penalización: %1$s %2$s</string>
     <string name="st_FakeAccount">Cuenta falsa</string>
     <string name="kuknos_setting_copySFailWriteFile">Algo salió mal. Por favor, inténtelo de nuevo más tarde.</string>
     <string name="voice_message">Mensaje de voz</string>
@@ -116,7 +116,7 @@
     <string name="st_auto_download_wifi">Descarga automática (Cuando está conectado a Wifi-Fi)</string>
     <string name="who_is_allowed_to_voice_call">¿Quién puede llamarme por voz?</string>
     <string name="E_118">ADVERTENCIA: Número de contactos ha excedido las restricciones del servidor.</string>
-    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">Obtener soporte \ n% 1 $ s físico</string>
+    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">Obtener soporte \ n %1$s físico</string>
     <string name="disk_and_network_usage">Uso de disco y red</string>
     <string name="E_110">Error de servidor interno</string>
     <string name="E_111">El usuario está bloqueado</string>
@@ -137,7 +137,7 @@
     <string name="app_notif_color">Color de notificación en iGap</string>
     <string name="enter_four_digit_code">Introduzca el código de seis dígitos</string>
     <string name="refund_done">El reembolso se realizó con éxito</string>
-    <string name="buy_internet_package_daily_filter_title">%. De Día</string>
+    <string name="buy_internet_package_daily_filter_title">%.0f De Día</string>
     <string name="array_Music">Audio</string>
     <string name="mobile_bank_hotCard_success">Su tarjeta ha sido cancelada con éxito.</string>
     <string name="block">Bloqueado</string>
@@ -172,7 +172,7 @@
     <string name="referral_error_yourself">No es posible registrar su número como una referencia.</string>
     <string name="can_not_open_file">Este archivo no se puede abrir</string>
     <string name="st_title_Background">Fondo de chat</string>
-    <string name="mobile_bank_detail_cell_payStatus">Estado de pago:% 1 $ s</string>
+    <string name="mobile_bank_detail_cell_payStatus">Estado de pago:%1$s</string>
     <string name="balance_low">Su balance de la billetera no es suficiente. Por favor, recarguela.</string>
     <string name="monday">Lunes</string>
     <string name="remaining_balance">Balance restante</string>
@@ -185,7 +185,7 @@
     <string name="charge_100"> 1,000,000 riales</string>
     <string name="please_complete_all_item">Por favor complete todos los artículos</string>
     <string name="shamsi">Calendario solar</string>
-    <string name="mobile_bank_balance_message">Su saldo es %1 $ s.</string>
+    <string name="mobile_bank_balance_message">Su saldo es %1$s.</string>
     <string name="from_Now">Desde ahora</string>
     <string name="enter_pass_code">Introduzca su código de acceso</string>
     <string name="disable">Desactivar</string>
@@ -237,13 +237,13 @@
     <string name="friday">Viernes</string>
     <string name="unmute">La voz activa</string>
     <string name="payment_discount_plans_title">Planes de descuento</string>
-    <string name="buy_internet_package_month_filter_title">% .0f mes</string>
+    <string name="buy_internet_package_month_filter_title">%.0f mes</string>
     <string name="mobile_bank_hotCard_fail">Bloquear de su tarjeta sin éxito. Por favor, póngase en contacto con su banco.</string>
     <string name="error_check_password">La contraseña está bloqueada por un tiempo debido a demasiados intentos.</string>
     <string name="automatic">Automático</string>
     <string name="kuknos_send_CreditError">No hay suficiente crédito.</string>
     <string name="bytes_sent">Bytes enviados</string>
-    <string name="kuknos_buyP_message">Kuknus es una plataforma de múltiples tokens que proporciona formar cualquier activo. En la plataforma Kuknos tenemos un activo llamado% 1 $ s.</string>
+    <string name="kuknos_buyP_message">Kuknus es una plataforma de múltiples tokens que proporciona formar cualquier activo. En la plataforma Kuknos tenemos un activo llamado %1 $ s.</string>
     <string name="kuknos_RestorePass_title">Ingrese su código PIN de 4 dígitos</string>
     <string name="mobile_bank_balance_expireDate">Fecha de vencimento: (Año / Mes)</string>
     <string name="kuknos_trade_success">La solicitud de comercio se registró en sistema con éxito.</string>
@@ -352,7 +352,7 @@
     <string name="Please_enter_your_hint">Por favor ingrese su señal de contraseña</string>
     <string name="value_added">Valor añadido</string>
     <string name="new_channel">Nuevo canal</string>
-    <string name="buy_internet_package_weekly_filter_title">% .0f semana</string>
+    <string name="buy_internet_package_weekly_filter_title">%.0f semana</string>
     <string name="bank_etebari_kosar">Instituto de Crédito de Kosar</string>
     <string name="yesterday">Ayer</string>
     <string name="toast_success_gift">Espere unos momentos para aplicar el crédito de regalo.</string>
@@ -400,7 +400,7 @@
     <string name="recovery_by_question_dialog">Pregunta de seguridad</string>
     <string name="gallery">Galería</string>
     <string name="two_number">2</string>
-    <string name="mobile_bank_load_detail_paidCount">Número de cuotas pagados: %1 $ s</string>
+    <string name="mobile_bank_load_detail_paidCount">Número de cuotas pagados: %1$s</string>
     <string name="kuknos_recieve_walletCopy">La dirección de mi billetera de Token es: \ n \ n</string>
     <string name="iran">Irán</string>
     <string name="password_Question_title_two">Pregunta de seguridad N.º 2 (requerido)</string>
@@ -520,7 +520,7 @@
     <string name="aban">23 oct. - 21 nov. Aban</string>
     <string name="startUpdate">Actualizar</string>
     <string name="profile">Perfil</string>
-    <string name="leave_confirm">¿Estás seguro de que quieres dejar% S?</string>
+    <string name="leave_confirm">¿Estás seguro de que quieres dejar %S?</string>
     <string name="new_messages_from">Nuevos mensajes de</string>
     <string name="Recovery_with_email">Recuperación por correo electrónico</string>
     <string name="e_904_7">El número marcado no está activo</string>
@@ -594,7 +594,7 @@
     <string name="pay_id">ID de pago</string>
     <string name="E_324_1">Error en carga útil: ID de habitación no válida</string>
     <string name="E_324_2">Error en carga útil: ID de miembro no válido</string>
-<!--    <string name="mobile_bank_load_detail_MUAmount">Cantidad no pagada no pagada:% 1$s % 2$s</string>-->
+    <string name="mobile_bank_load_detail_MUAmount">Cantidad no pagada no pagada: %1$s %2$s</string>
     <string name="kuknos_accountInfo_title">Informacion de cuenta</string>
     <string name="two_step_verification">Verificación de dos pasos</string>
     <string name="back">Atrás</string>
@@ -749,7 +749,7 @@
     <string name="national_code">Identificación nacional</string>
     <string name="Ringtone">Tono de llamada</string>
     <string name="wallet_balance">Balance de la cartera (Riales)</string>
-    <string name="buy_internet_package_year_filter_title">% .0f año</string>
+    <string name="buy_internet_package_year_filter_title">%.0f año</string>
     <string name="st_dialog_reset_all_notification_no">NO</string>
     <string name="clear_this_chat">¿Está seguro de borrar este historial de chat?</string>
     <string name="online">en línea</string>
@@ -1008,7 +1008,7 @@
     <string name="chat_setting">configuraciones de chat</string>
     <string name="share_link_item_dialog">Enlace compartir</string>
     <string name="kuknos_payment_assetPrice">Precios de los activos:</string>
-    <string name="payment_rrn_title">ID de transacción:% .0f</string>
+    <string name="payment_rrn_title">ID de transacción:%.0f</string>
     <string name="sending_location">Envío de ubicación ...</string>
     <string name="E_327_A">Mala carga útil: ID de habitación no válida</string>
     <string name="score">Puntaje</string>
@@ -1045,15 +1045,15 @@
     <string name="just_wait_en">Espere por favor</string>
     <string name="posted">Al corriente</string>
     <string name="elecBill_cell_addNewBill">Añadir nueva factura</string>
-    <string name="of_from_total">de% s</string>
-<!--    <string name="mobile_bank_load_detail_paidAmount">Monto pagado:% 1 $ s% 2 $ s</string>-->
+    <string name="of_from_total">de %s</string>
+    <string name="mobile_bank_load_detail_paidAmount">Monto pagado:%1$s %2$s</string>
     <string name="planDB">Igap local database.realm</string>
     <string name="refund_amount">Cantidad devuelta</string>
     <string name="there_is_no_connection_to_server">Servidor no encontrado</string>
     <string name="at_least_cpay_amout">Cantidad (mínimo 20,000 riales)</string>
     <string name="close">Cerrar</string>
     <string name="bank_mehr_iran">Banco Mehr Irán</string>
-    <string name="buy_internet_package_volume_filter_mb_title">% .2f MB</string>
+    <string name="buy_internet_package_volume_filter_mb_title">%.2f MB</string>
     <string name="array_File">Archivo</string>
     <string name="emoji_category_smileys">Emoticonos y personas</string>
     <string name="no_number_found">No se ha encontrado ningún número</string>
@@ -1067,7 +1067,7 @@
     <string name="mobile_bank_balance_title">Saldo de la tarjeta bancaria</string>
     <string name="rg_Start">Vamos</string>
     <string name="title_auto_download_roaming">Descarga automática \ N (usando el Itinerancia de datos)</string>
-    <string name="clear_selected_history">¿Estás seguro de que quieres borrar la historia del% s?</string>
+    <string name="clear_selected_history">¿Estás seguro de que quieres borrar la historia del %s ?</string>
     <string name="bank_ansar">Ánsar Bank</string>
     <string name="array_Only_when_screen_off">Solo cuando la pantalla está apagada</string>
     <string name="last_seen_at">Visto por última vez en</string>
@@ -1129,7 +1129,7 @@
     <string name="notificaion_and_sound">Notificaciones y sonidos.</string>
     <string name="bills">Facturas</string>
     <string name="kuknos_rial_Maximum_redeemable_token">Máxima token canjeable</string>
-    <string name="resend_all_messages">Reenviar mensajes% d</string>
+    <string name="resend_all_messages">Reenviar mensajes %d</string>
     <string name="farvardin">Farvardin</string>
     <string name="image_selected_for_send">Imagen seleccionada</string>
     <string name="igasht_empty_history_message">No hay boletos comprados todavía.</string>
@@ -1163,7 +1163,7 @@
     <string name="shopAccountType">Tienda</string>
     <string name="not_success_2">El pago no tuvo éxito</string>
     <string name="st_reset_all_notification">Restablecer todas las notificaciones</string>
-    <string name="pin_messages_content">¿Quiere % s este mensaje?</string>
+    <string name="pin_messages_content">¿Quiere %s este mensaje?</string>
     <string name="edit_admin_rights">Editar derechos de administrador</string>
     <string name="five_number">5</string>
     <string name="gifs">Gifs</string>
@@ -1243,7 +1243,7 @@
     <string name="am_video">Video</string>
     <string name="updating">Actualizando ...</string>
     <string name="date_time">fecha y hora</string>
-    <string name="kuknos_buyP_amount">Número de%1$s *:</string>
+    <string name="kuknos_buyP_amount">Número de %1$s *:</string>
     <string name="Kuknos_transaction_error8">Algo salió mal. Por favor, inténtelo de nuevo más tarde.</string>
     <string name="Kuknos_transaction_error7">Su crédito no es suficiente.</string>
     <string name="links">Enlaces</string>
@@ -1258,7 +1258,7 @@
     <string name="settings">Ajustes</string>
     <string name="kuknos_wHistory_amount">Cantidad</string>
     <string name="not_found_message">Falta este mensaje.</string>
-    <string name="remove_sticker_with_size">Eliminar la etiqueta de% s</string>
+    <string name="remove_sticker_with_size">Eliminar la etiqueta de %s</string>
     <string name="enter_wallet_password">Ingrese la contraseña de la billetera</string>
     <string name="E_118_5">ADVERTENCIA: Número de contactos Chunk ha excedido las restricciones del servidor.</string>
     <string name="kuknos_trade_sell">Venta</string>
@@ -1271,7 +1271,7 @@
     <string name="typing">mecanografía…</string>
     <string name="file_manager_logs">Simplemente visible en versiones alfa</string>
     <string name="save_to_music_folder">Guardar en carpeta de música con éxito</string>
-    <string name="mobile_bank_load_detail_bankCode">Código bancario:% 1 $ s</string>
+    <string name="mobile_bank_load_detail_bankCode">Código bancario:%1$s</string>
     <string name="wallet_amount">Importe</string>
     <string name="keep_media_6month">6 meses</string>
     <string name="title_limit_Create_Group">Restricción en número de habitaciones</string>
@@ -1363,7 +1363,7 @@
     <string name="settlement_time">Tiempo de liquidación</string>
     <string name="verify_socket_message">Por favor ingrese el código de verificación enviado por IGAP a</string>
     <string name="kuknos_edit_info_empty_sheba_and_birthdate">¡La fecha de nacimiento y IBAN no han cambiado!</string>
-    <string name="igasht_selected_location_title">Áreas recreativas de% s provincia.</string>
+    <string name="igasht_selected_location_title">Áreas recreativas de %s provincia.</string>
     <string name="elecBill_error_company">Debe elegir un proveedor de servicios.</string>
     <string name="custom_deposit">Depósito personalizado</string>
     <string name="history_asset_type">Tipo de activo</string>
@@ -1381,7 +1381,7 @@
     <string name="wifi_data_usage">Uso de datos Wi-Fi</string>
     <string name="Visible_Status_text_dialog_invisible">Deshabilitar cerca no solo resultará en ocultar su estado de otros, sino que también no podrá ver el estado de otros dentro de su rango determinado. ¿Sigues seguro de continuar?</string>
     <string name="next">Próximo</string>
-    <string name="distance">aproximadamente% d m</string>
+    <string name="distance">aproximadamente %d m</string>
     <string name="submit">Entregar</string>
     <string name="kuknos_recieve_walletID">Su dirección de billetera es:</string>
     <string name="description">Descripción</string>
@@ -1409,7 +1409,7 @@
     <string name="st_vibrate">Vibración</string>
     <string name="file_save_to_download_folder">El archivo está guardado en la carpeta</string>
     <string name="elecBill_search_billSerial">Número de cuerpo del medidor de potencia</string>
-    <string name="kuknos_buyP_title">Comprar%1$s</string>
+    <string name="kuknos_buyP_title">Comprar %1$s</string>
     <string name="kuknos_wHistory_desc">Descripción</string>
     <string name="news_emptyList">No hay nada que mostrar. \ n Baja la página para volver a cargarla.</string>
     <string name="verify_invalid_code_message">Desafortunadamente, el código de verificación no es válido, ingrese el correcto manualmente.</string>
@@ -1449,13 +1449,13 @@
     <string name="clear_data_usage">Uso de datos claros</string>
     <string name="multi_video_selected_for_send">seleccionado</string>
     <string name="bank_gardeshgari">Banco turístico</string>
-    <string name="igasht_location_found_count">% d artículos encontrados</string>
+    <string name="igasht_location_found_count">%d artículos encontrados</string>
     <string name="kuknos_buyP_desc">PD: \ n</string>
     <string name="are_you_sure_edit_contact">¿Está seguro de editar contacto?</string>
     <string name="ivnalid_data_provided">Los valores de entrada son incorrectos.</string>
     <string name="unknown_type">Tarjeta no soportada</string>
     <string name="mute_notification">Notificación muda</string>
-    <string name="money_request">Tarjeta a la solicitud de tarjeta a:% s</string>
+    <string name="money_request">Tarjeta a la solicitud de tarjeta a: %s</string>
     <string name="WALLET_TRANSFER_MONEY">Transferencia de dinero de la billetera</string>
     <string name="Toast_Enter_Code">por favor ingrese el codigo de verificacion</string>
     <string name="remove_admin">Eliminar el administrador</string>
@@ -1494,9 +1494,9 @@
     <string name="do_you_want_delete_this_channel">¿Está seguro de eliminar este canal?</string>
     <string name="channel_public_hint_revoke">Canal enlace público</string>
     <string name="elecBill_deleteBill_pos">Borrar</string>
-    <string name="kuknos_buyP_emptyAmount">El número de% 1 $ s no puede estar vacío.</string>
+    <string name="kuknos_buyP_emptyAmount">El número de %1$s no puede estar vacío.</string>
     <string name="tapsell_click">¡Haga clic!</string>
-    <string name="mobile_bank_load_detail_discount">Descuento:%1$s</string>
+    <string name="mobile_bank_load_detail_discount">Descuento: %1$s</string>
     <string name="txt_draft">Borrador:</string>
     <string name="check_update_title">Comprueba la actualización</string>
     <string name="can_not_save_image">No puede guardar la imagen</string>
@@ -1535,7 +1535,7 @@
     <string name="app_theme">Color tema IGAP</string>
     <string name="flash_light">Linterna</string>
     <string name="please_enter_correct_phone_number">Por favor ingrese el número de teléfono correcto</string>
-<!--    <string name="mobile_bank_load_detail_unpaidAmount">Importe no pagado:% 1 $ s% 2 $ s</string>-->
+    <string name="mobile_bank_load_detail_unpaidAmount">Importe no pagado:%1$s %2$s</string>
     <string name="share_audio_file">Audios compartidos</string>
     <string name="text_line_2_introduce_page7">Deja un nuevo mundo que me rodea. A su alrededor, encuentra a tus amigos, centros de entretenimiento, arte, negocios y otros y disfrutan de tus momentos ...</string>
     <string name="rabi_sani">Rabi thani</string>
@@ -1602,12 +1602,12 @@
     <string name="elecBill_error_openCompanySpinner">Abierto</string>
     <string name="ntg_Sound">Sonido</string>
     <string name="add_to_list_contact">Añadir a la lista de contactos</string>
-    <string name="terms_and_condition">Al presionar el botón de inicio, aceptará% s</string>
+    <string name="terms_and_condition">Al presionar el botón de inicio, aceptará %s</string>
     <string name="turn_on_gps_explain">El estado de ubicación y otras características del mapa están deshabilitadas. Para usar todas las capacidades, gire el interruptor primero.</string>
     <string name="mobile_bank_balance_error_no_price">Sin precio.</string>
     <string name="kuknos_accountInfo_desc">Aquí está toda la información relacionada con su cuenta en la plataforma Kuknos.</string>
     <string name="elecBill_deleteBill_neg">No, no borrar.</string>
-    <string name="mobile_bank_load_detail_MUCount">Cuenta impaga madurada:% 1 $ s</string>
+    <string name="mobile_bank_load_detail_MUCount">Cuenta impaga madurada:%1$s</string>
     <string name="bahman">Bahman</string>
     <string name="re_enter_pass_code">Vuelva a ingresar su código de acceso</string>
     <string name="array_From_Camera">Cámara</string>
@@ -1734,7 +1734,7 @@
     <string name="camera">Cámara</string>
     <string name="not_exist_activities">La lista de su historia está vacía.</string>
     <string name="elecBill_pay_billPay">Pagar</string>
-    <string name="Your_purchase_code">Su código de compra% s</string>
+    <string name="Your_purchase_code">Su código de compra %s</string>
     <string name="missed">Omitido</string>
     <string name="kuknos_setting_logout">Cerrar sesión</string>
     <string name="chi_popup_copy">Copiar</string>
@@ -1850,7 +1850,7 @@
     <string name="jamado_aval">Jumada awwal</string>
     <string name="source_card">Tarjeta fuente</string>
     <string name="audio">Audio</string>
-    <string name="add_sticker_with_size">Añadir% s etiqueta</string>
+    <string name="add_sticker_with_size">Añadir %s etiqueta</string>
     <string name="complete_correct">Las informaciones no son válidas.</string>
     <string name="email">Correo electrónico</string>
     <string name="data_unknown">Los datos QR son desconocidos</string>
@@ -1879,10 +1879,10 @@
     <string name="elecBill_error_listView">No hay datos para mostrar. Por favor, inténtelo de nuevo más tarde.</string>
     <string name="forward_message">Reenviar mensaje</string>
     <string name="ARREARS">ATRASOS</string>
-    <string name="kuknos_buyP_zeroAmount">El número de% 1 $ s no puede ser cero.</string>
+    <string name="kuknos_buyP_zeroAmount">El número de %1$s no puede ser cero.</string>
     <string name="hint_can_same_password">sugerencia no puede ser la misma que la contraseña</string>
     <string name="c_KB">Kb</string>
-    <string name="mobile_bank_load_detail_customerName">Nombre del cliente:% 1 $ s</string>
+    <string name="mobile_bank_load_detail_customerName">Nombre del cliente:%1$s</string>
     <string name="gift_sticker_inquiry_and_activated">Consulta y activado</string>
     <string name="kuknos_login_tel_str">Número de teléfono *</string>
     <string name="selected_color_can_not_set_on_yout_device">El color seleccionado no se puede configurar en su dispositivo</string>
@@ -1898,8 +1898,8 @@
     <string name="USER_JOINED">unido IGAP</string>
     <string name="desc">Descripción</string>
     <string name="time_out_error">error de tiempo de espera</string>
-<!--    <string name="video_duration">% s (% s)</string>-->
-    <string name="transfer_to_dialog">Transferencia a:% s</string>
+    <string name="video_duration">%s (%s)</string>
+    <string name="transfer_to_dialog">Transferencia a:%s</string>
     <string name="privacy">Intimidad</string>
     <string name="st_in_chat_sound">Sonidos en chat</string>
     <string name="kuknos_send_walletAddress_Hint1">I.E. GAVYHKFTRGE ...</string>
@@ -1950,7 +1950,7 @@
     <string name="Theme_Dark">Tema oscuro</string>
     <string name="kuknos_viewRecoveryEP_btn">Vista</string>
     <string name="kuknos_trade_btn">Entregar</string>
-    <string name="amount_rials">% s rials</string>
+    <string name="amount_rials">%s rials</string>
     <string name="unavalable">Indisponible</string>
     <string name="mark_as_unread">Marcar como leído</string>
     <string name="page_count">páginas</string>
@@ -2009,7 +2009,7 @@
     <string name="stop_message_bot">¿Está seguro de detener este robot?</string>
 <!--    <string name="kuknos_RecoverySK_languageTitle">Teclas de recuperación \ 'Idioma:</string>-->
     <string name="subscribers_title">Suscriptores</string>
-    <string name="kuknos_buy_again_tab_Rial_equivalent">Equivalente a Riales \ n PAGO% 1$S</string>
+    <string name="kuknos_buy_again_tab_Rial_equivalent">Equivalente a Riales \ n PAGO %1$S</string>
     <string name="channel_name_notification">Notificación iGap</string>
     <string name="buy_charge">Comprar de la carga de SIM</string>
     <string name="Forgot_Passwords">Recuperación de la contraseña de billetera de</string>
@@ -2052,11 +2052,11 @@
     <string name="c_TB">Tuberculosis</string>
     <string name="requested_amount_rial">Precio solicitado (Rial)</string>
     <string name="set_password">Configurar la clave</string>
-    <string name="paymentTax">Impuesto:% s rial</string>
+    <string name="paymentTax">Impuesto:%s rial</string>
     <string name="location_dialog_message">¿Quiere usar su ubicación?</string>
     <string name="capture_image">Capturar imagen</string>
     <string name="tuesday">Martes</string>
     <string name="Auto_lock_description">La aplicación se bloqueará después de cada vez que elija y necesite desbloquearlo al principio.</string>
     <string name="kuknos_recieve_copyToast">Dirección de la billetera copiada en la memoria.</string>
-    <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: % 1$s</string>
+    <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: %1$s</string>
 </resources>

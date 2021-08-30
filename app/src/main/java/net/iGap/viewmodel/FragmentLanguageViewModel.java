@@ -59,6 +59,7 @@ public class FragmentLanguageViewModel extends ViewModel {
                     break;
                 case "Español":
                     isSpanish.set(View.VISIBLE);
+                    break;
                 case "Russian":
                     isRussian.set(View.VISIBLE);
                     break;
