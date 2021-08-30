@@ -27,6 +27,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
     private static final int ARABIAN = 4;
     private static final int KURDISH = 5;
     private static final int AZERBAIJANI = 6;
+    private static final int SPANISH = 7;
     private static final int UNKNOWN = -1;
 
     private String specifications;
@@ -162,6 +163,8 @@ public class IgapRetrofitInterceptor implements Interceptor {
                 return FRENCH;
             case "ar":
                 return ARABIAN;
+            case "es":
+                return SPANISH;
             case "ur":
                 return KURDISH;
             case "iw":
