@@ -13,6 +13,7 @@ import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -30,9 +31,7 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestUserInfo;
 import net.iGap.story.StoryObject;
-import net.iGap.story.viewPager.Story;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.structs.RoomContactObject;
@@ -381,12 +380,20 @@ public class MessageDataStorage extends BaseController {
                         initializeInfo.add(realmRegisteredInfo.getColor());
                         result.add(initializeInfo);
                     } else {
-                        new RequestUserInfo().userInfo(userId.get(i));
+                        IG_RPC.User_info user_info = new IG_RPC.User_info();
+                        user_info.userId = userId.get(i);
+                        getRequestManager().sendRequest(user_info, (response, error) -> {
+                            if (response != null) {
+                                IG_RPC.Res_user_info res_user_info = (IG_RPC.Res_user_info) response;
+                                List<String> initializeInfo = new ArrayList<>();
+                                initializeInfo.add(res_user_info.user.getDisplayName());
+                                initializeInfo.add(res_user_info.user.getColor());
+                                result.add(initializeInfo);
+                            }
+                        });
                     }
 
                 }
-
-
                 countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -975,8 +982,6 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void deleteUserStoryWithStoryId(long storyId, long userId) {
-
-
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "deleteUserStoryId " + storyId);
             try {
@@ -994,7 +999,7 @@ public class MessageDataStorage extends BaseController {
 
                 database.commitTransaction();
 
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED, storyId, userId));
             } catch (Exception e) {
                 FileLog.e(e);
             }

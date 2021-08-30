@@ -312,7 +312,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             if (stories.get(i).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
                 userIdList.add(stories.get(i).getUserId());
             }
-
         }
         if (displayNameList.size() > 0) {
             displayNameList = new ArrayList<>();
@@ -320,18 +319,12 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
         if (stories != null && stories.size() > 0) {
             Log.e("fdajhfjshf", "loadStories " + stories.size());
-            progressBar.setVisibility(View.GONE);
-            adapter = new ListAdapter();
-            recyclerListView.setAdapter(adapter);
-            recyclerListView.setVisibility(View.VISIBLE);
-            adapter.addRow();
-        } else {
-            progressBar.setVisibility(View.GONE);
-            adapter = new ListAdapter();
-            recyclerListView.setAdapter(adapter);
-            recyclerListView.setVisibility(View.VISIBLE);
-            adapter.addRow();
         }
+        progressBar.setVisibility(View.GONE);
+        adapter = new ListAdapter();
+        recyclerListView.setAdapter(adapter);
+        recyclerListView.setVisibility(View.VISIBLE);
+        adapter.addRow();
     }
 
 
@@ -448,7 +441,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     }
 
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter {
+    private class ListAdapter extends RecyclerListView.ItemAdapter<RecyclerListView.ItemViewHolder> {
 
         public void addRow() {
             rowSize = 0;
@@ -473,12 +466,10 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public RecyclerListView.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View cellView;
             switch (viewType) {
                 case 0:
-                    cellView = new StoryCell(context);
-                    break;
                 case 1:
                     cellView = new StoryCell(context);
                     break;
@@ -492,7 +483,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerListView.ItemViewHolder holder, int position) {
             int viewType = holder.getItemViewType();
             switch (viewType) {
                 case 0:

@@ -2,8 +2,6 @@ package net.iGap.network;
 
 import android.util.Log;
 
-import com.google.protobuf.ProtocolStringList;
-
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAddMessageReaction;
@@ -43,6 +41,7 @@ import net.iGap.proto.ProtoStoryGetOwnStoryViews;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.proto.ProtoStoryRoomAddNew;
 import net.iGap.proto.ProtoStoryUserAddNew;
+import net.iGap.proto.ProtoUserInfo;
 import net.iGap.request.RequestPagination;
 
 import java.util.ArrayList;
@@ -2186,6 +2185,62 @@ public class IG_RPC {
         @Override
         public int getActionId() {
             return actionId;
+        }
+    }
+
+    public static class User_info extends AbstractObject {
+        public static final int actionId = 117;
+        public long userId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_user_info().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
+            builder.setUserId(userId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_user_info extends AbstractObject {
+        public static final int actionId = 30117;
+
+        public ProtoGlobal.RegisteredUser user;
+
+        public Res_user_info deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_user_info object = null;
+            try {
+                object = new Res_user_info();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoUserInfo.UserInfoResponse response = ProtoUserInfo.UserInfoResponse.parseFrom(message);
+
+            user = response.getUser();
+            resId = response.getResponse().getId();
         }
     }
 }
