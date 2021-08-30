@@ -26,8 +26,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 257
-        versionName "2.2.2"
+        versionCode 258
+        versionName "2.2.3.beta1"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -145,7 +145,7 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"jjv0zr\""
+            resValue "string", "TrackCode", "\"cerllu\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -155,7 +155,7 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"gx1gen\""
+            resValue "string", "TrackCode", "\"i5p86b\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -165,7 +165,7 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"2q7obt\""
+            resValue "string", "TrackCode", "\"iizkif\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -175,7 +175,7 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"eb2koy\""
+            resValue "string", "TrackCode", "\"tyxhrg\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -185,207 +185,7 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"fxrlzh\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups6 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"3wuljv\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups7 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"punr3n\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups8 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"td8wer\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups9 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"drqvhe\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups10 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"dpriwd\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups11 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"a5fthi\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups12 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"o5h2vv\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups13 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"fuoyov\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups14 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"rns4sf\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups15 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"jibvfm\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups16 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"32pwlr\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups17 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"yvkvs3\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups18 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"ipkii4\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups19 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"vctdsg\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups20 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"th96ow\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups21 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"a7nsnh\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups22 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"kum0i7\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups23 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"pqyyaj\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups24 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"37qkdh\""
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takups25 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"6xxjnl\""
+            resValue "string", "TrackCode", "\"zrb95b\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
