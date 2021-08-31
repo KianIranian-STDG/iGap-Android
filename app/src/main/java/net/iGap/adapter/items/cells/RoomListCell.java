@@ -328,7 +328,7 @@ public class RoomListCell extends FrameLayout {
                 int roomNameWidth = LayoutCreator.getTextWidth(roomNameTv);
                 int emojiCount = EmojiManager.getEmojiCount(roomNameTv.getText().toString());
                 if (emojiCount > 0) {
-                    roomNameWidth = roomNameWidth + emojiCount * 2;
+                    roomNameWidth = roomNameWidth + emojiCount * LayoutCreator.dp(1);
                 }
                 int roomTop = h2 - roomNameHeight;
                 int nameLeft = 0;
