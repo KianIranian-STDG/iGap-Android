@@ -336,7 +336,14 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             showPopup(-1);
 
         });
-
+        edtChat.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                changeEmojiButtonImageResource(R.string.icon_emoji_smile);
+                onEmojiClicked();
+            } else {
+                changeEmojiButtonImageResource(R.string.icon_keyboard);
+            }
+        });
         edtChat.requestFocus();
 
         edtChat.setOnClickListener(v -> {
