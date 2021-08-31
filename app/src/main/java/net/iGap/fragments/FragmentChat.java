@@ -746,7 +746,7 @@ public class FragmentChat extends BaseFragment
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
-        rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
+        rootView = (FrameLayout) inflater.inflate(R.layout.fragment_chat, container, false);
 
         chatContainer = rootView.findViewById(R.id.chatMainContainer);
         mediaContainer = new FragmentMediaContainer(getActivity(), this);
@@ -5695,6 +5695,9 @@ public class FragmentChat extends BaseFragment
         if (message.message != null && !message.message.isEmpty()) {
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
+        }
+        if(!(message.messageType == TEXT_VALUE)) {
+            edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
         // found is user trying to edit a message
