@@ -183,7 +183,7 @@ public class FragmentContactsProfile extends BaseFragment {
         //todo: fixed it and move to viewModel
         viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
             binding.enableNotification.setChecked(isChecked);
-            getRoomController().clientMuteRoom(viewModel.roomId,isChecked);
+            getRoomController().clientMuteRoom(viewModel.roomId, isChecked);
         });
 
         viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
@@ -195,9 +195,7 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
         viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
-            if (lastSeen != null) {
-                binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
-            }
+            binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
         });
 
         viewModel.goToChatPage.observe(getViewLifecycleOwner(), userRoomId -> {

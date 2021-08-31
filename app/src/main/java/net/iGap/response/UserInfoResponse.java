@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import androidx.annotation.NonNull;
-
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
@@ -27,8 +25,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
-
-import io.realm.Realm;
 
 public class UserInfoResponse extends MessageHandler {
 

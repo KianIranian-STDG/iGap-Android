@@ -38,8 +38,10 @@ import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.observers.interfaces.OnBlockStateChanged;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsUnblock;
+import net.iGap.request.RequestUserInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -128,20 +130,26 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         public void onBindViewHolder(final BlockListAdapter.ViewHolder viewHolder, int i) {
 
             final RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = getItem(i);
-            if (registeredInfo == null) {
+            if (registeredInfo == null)
                 return;
-            }
+
+            new RequestUserInfo().userInfo(registeredInfo.getId());
 
             viewHolder.root.setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
-
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
-            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), registeredInfo.getId(), registeredInfo.getLastSeen(), false));
+            if (registeredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                String status = LastSeenTimeUtil.computeTime(G.context, registeredInfo.getId(), registeredInfo.getLastSeen(), false);
+                viewHolder.subtitle.setText(status);
+            } else {
+                viewHolder.subtitle.setText(registeredInfo.getStatus());
+            }
+
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
-            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, registeredInfo.getId()).avatarType(AvatarHandler.AvatarType.USER));
 
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, registeredInfo.getId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         @Override

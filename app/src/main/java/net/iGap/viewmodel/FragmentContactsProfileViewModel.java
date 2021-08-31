@@ -52,7 +52,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public ObservableField<String> bio = new ObservableField<>();
     public ObservableInt verifyTextVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
-
     public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
     public ObservableInt sharedPhotoCount = new ObservableInt(0);
     public ObservableInt sharedVideoVisibility = new ObservableInt(View.GONE);
@@ -73,12 +72,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
     public MutableLiveData<Boolean> cloudVisibility = new MutableLiveData<>();
-
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
     public ObservableBoolean isShowReportView = new ObservableBoolean(false);
-
-    //ui event and observed
     public MutableLiveData<Boolean> showMenu = new MutableLiveData<>();
     public MutableLiveData<Boolean> showClearChatDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToCustomNotificationPage = new MutableLiveData<>();
@@ -96,7 +92,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
     public MutableLiveData<String> copyUserNameToClipBoard = new MutableLiveData<>();
     public MutableLiveData<Boolean> editContactListener = new MutableLiveData<>();
-
     public List<String> items;
     private RealmRoom mRoom;
     private RealmRegisteredInfo registeredInfo;
@@ -131,9 +126,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         this.enterFrom = enterFrom;
         this.avatarHandler = avatarHandler;
 
+        getUserInfo(); // client should send request for get user info because need to update user online timing
         mainStart();
         startInitCallbacks();
-        getUserInfo(); // client should send request for get user info because need to update user online timing
     }
 
     private void getUserInfo() {
@@ -275,14 +270,12 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     }
 
-    //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
+    /**
+     * type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
+     */
     public void onSharedMediaItemClick(int type) {
         goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
     }
-
-    //===============================================================================
-    //=====================================Starts====================================
-    //===============================================================================
 
     private void mainStart() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || roomId == 0) {
@@ -472,11 +465,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         G.onUserInfoResponse = this;
     }
 
-    //===============================================================================
-    //================================Event Listeners================================
-    //===============================================================================
-
-
     public void onImageClick() {
         if (userId == AccountManager.getInstance().getCurrentUser().getId())
             return; //dont work when profile was cloud
@@ -486,10 +474,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             goToShowAvatarPage.setValue(userId == AccountManager.getInstance().getCurrentUser().getId());
         }
     }
-
-    //===============================================================================
-    //===================================Callbacks===================================
-    //===============================================================================
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -556,10 +540,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             registeredInfo.removeAllChangeListeners();
         }
     }
-
-    //===============================================================================
-    //====================================Methods====================================
-    //===============================================================================
 
     private void setUserStatus(String userStatus, long time) {
         this.userStatus = userStatus;
