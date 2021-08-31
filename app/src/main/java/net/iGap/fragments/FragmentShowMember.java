@@ -768,27 +768,24 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 return;
             }
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() != null)
-                        switch (showMemberMode) {
-                            case NONE:
-                                if (mContact.peerId != userID) {
-                                    long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
-                                    if (roomId != 0) {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
-                                    } else {
-                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
-                                    }
+            holder.itemView.setOnClickListener(v -> {
+                if (getActivity() != null)
+                    switch (showMemberMode) {
+                        case NONE:
+                            if (mContact.peerId != userID) {
+                                long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
+                                if (roomId != 0) {
+                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                } else {
+                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
                                 }
-                                break;
-                            case SELECT_FOR_ADD_ADMIN:
-                                getActivity().onBackPressed();
-                                openChatEditRightsFragment(realmRoom, mContact, 0);
-                                break;
-                        }
-                }
+                            }
+                            break;
+                        case SELECT_FOR_ADD_ADMIN:
+                            getActivity().onBackPressed();
+                            openChatEditRightsFragment(realmRoom, mContact, 0);
+                            break;
+                    }
             });
 
             holder.itemView.setOnLongClickListener(v -> {
@@ -809,6 +806,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString())) {
                 holder.subtitle.setText(R.string.owner);
             } else {
+                new RequestUserInfo().userInfo(userId);
                 holder.subtitle.setText(setUserStatus(holder.subtitle.getContext(), mContact.status, mContact.peerId, mContact.lastSeen));
             }
 
