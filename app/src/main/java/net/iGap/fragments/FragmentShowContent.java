@@ -51,6 +51,7 @@ import net.iGap.libs.swipeback.VerticalSwipeBackLayout;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -154,6 +155,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 imgPlay.setActivated(isPlaying);
+                if (isPlaying) {
+                    if (MusicPlayer.isMusicPlyerEnable) {
+                        MusicPlayer.playAndPause();
+                    }
+                }
             }
         });
     }
