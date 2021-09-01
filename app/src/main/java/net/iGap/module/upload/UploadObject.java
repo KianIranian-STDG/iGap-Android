@@ -116,7 +116,6 @@ public class UploadObject {
         object.messageId = avatarId;
         object.messageType = roomType;
         object.caption = caption;
-        object.type = "story";
         return object;
     }
 

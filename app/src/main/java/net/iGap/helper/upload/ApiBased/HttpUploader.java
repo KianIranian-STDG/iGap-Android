@@ -1,7 +1,6 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
@@ -9,7 +8,6 @@ import androidx.collection.ArrayMap;
 import net.iGap.G;
 import net.iGap.controllers.MessageController;
 import net.iGap.helper.FileLog;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.upload.CompressTask;
@@ -21,10 +19,7 @@ import net.iGap.module.downloader.FileIOExecutor;
 import net.iGap.module.upload.IUpload;
 import net.iGap.module.upload.UploadHttpRequest;
 import net.iGap.module.upload.UploadObject;
-import net.iGap.network.AbstractObject;
-import net.iGap.network.IG_RPC;
 import net.iGap.network.NetworkUtility;
-import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryUserAddNew;
@@ -32,7 +27,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
-import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
 
@@ -251,7 +245,7 @@ public class HttpUploader implements IUpload {
                             DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
                             sendMessage(fileObject);
                         }
-                        if (fileObject.type.equals("story")) {
+                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setFileToken(fileObject.fileToken);
 
@@ -313,7 +307,7 @@ public class HttpUploader implements IUpload {
                             HelperSetAction.sendCancel(fileObject.messageId);
 
                         makeFailed(fileObject.messageId);
-                        if (fileObject.type.equals("story")) {
+                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
 
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(false);

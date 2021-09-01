@@ -434,7 +434,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     RealmStory.putOrUpdate(realm, false, storyObject.userId, storyInLocal);
                     storyInLocal.remove(0);
                     HttpUploader.isStoryUploading = true;
-                    Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, paths.get(i), null, itemGalleryList.get(objectsCounter).getText(), ProtoGlobal.RoomMessageType.IMAGE));
+                    Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, paths.get(i), null, itemGalleryList.get(objectsCounter).getText(), ProtoGlobal.RoomMessageType.STORY));
 
                     objectsCounter++;
                     if (objectsCounter == itemGalleryList.size()) {
