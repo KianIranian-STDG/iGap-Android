@@ -426,7 +426,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     public void channelAddMessageVote(MessageObject messageObject, int reaction) {
         final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
-        req.messageId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.id : messageObject.id;
+        req.messageId = messageObject.id;
         req.roomId = messageObject.roomId;
         req.reaction = ProtoGlobal.RoomMessageReaction.forNumber(reaction);
 
