@@ -77,6 +77,7 @@ public class EventManager {
     public static final int STORY_UPLOAD = eventId++;
     public static final int STORY_SENDING = eventId++;
     public static final int STORY_UPLOADED_FAILED = eventId++;
+    public static final int STORY_USER_INFO = eventId++;
 
     public static final int ON_VOLUME_DOWN_KEY = eventId++;
 

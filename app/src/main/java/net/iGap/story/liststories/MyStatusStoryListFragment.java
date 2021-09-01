@@ -83,6 +83,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
     }
 
     @Nullable
@@ -143,13 +144,14 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_SENDING, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_INFO, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
         AbstractObject req = null;
         IG_RPC.Story_Get_Own_Story_Views story_get_own_story_views = new IG_RPC.Story_Get_Own_Story_Views();
         story_get_own_story_views.offset = 0;
-        story_get_own_story_views.limit = storyProto.size();
+        story_get_own_story_views.limit = 50;
         req = story_get_own_story_views;
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
@@ -157,24 +159,24 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 DbManager.getInstance().doRealmTransaction(realm -> {
                     int counter = 0;
                     for (int i = 0; i < res.groupedViews.size(); i++) {
-                        for (int j = 0; j < res.groupedViews.get(i).getUserIdsList().size(); j++) {
-                            if (res.groupedViews.get(i).getUserIdsList().get(j) != AccountManager.getInstance().getCurrentUser().getId()) {
+                        for (int j = 0; j < res.groupedViews.get(i).getStoryViewsList().size(); j++) {
+                            if (res.groupedViews.get(i).getStoryViewsList().get(j).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
                                 counter++;
                             }
                         }
-                        realm.where(RealmStoryProto.class).equalTo("storyId", res.groupedViews.get(i).getStoryId()).findFirst().setViewCount(counter);
+                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", res.groupedViews.get(i).getStoryId()).findFirst();
+                        if (realmStoryProto != null) {
+                            realmStoryProto.setViewCount(counter);
+                            realmStoryProto.setRealmStoryViewInfos(realm, res.groupedViews.get(i));
+                        }
+
                         counter = 0;
                     }
 
 
                 });
 
-                G.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadStories();
-                    }
-                });
+                G.runOnUiThread(() -> loadStories());
 
             } else {
                 progressBar.setVisibility(View.GONE);
@@ -314,7 +316,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     public void receivedEvent(int id, int account, Object... args) {
         if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW ||
                 id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED ||
-                id == EventManager.STORY_UPLOADED_FAILED) {
+                id == EventManager.STORY_UPLOADED_FAILED || id == EventManager.STORY_USER_INFO) {
             G.runOnUiThread(() -> {
                 floatActionLayout.setVisibility(View.VISIBLE);
                 loadStories();

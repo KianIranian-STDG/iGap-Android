@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -102,6 +103,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private FrameLayout floatActionLayout;
     int objectsCounter = 0;
     boolean isHaveFailedUpload = false;
+    private int myStoryCount = 0;
 
 
     @Override
@@ -157,6 +159,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
         if (getActivity() != null) {
             getActivity().setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
@@ -227,6 +230,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_SENDING, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_INFO, this);
         mOffset = 0;
         userIdList = new ArrayList<>();
         displayNameList = new ArrayList<>();
@@ -293,14 +297,46 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 }
             }
         });
+        AbstractObject req = null;
+        IG_RPC.Story_Get_Own_Story_Views story_get_own_story_views = new IG_RPC.Story_Get_Own_Story_Views();
+        story_get_own_story_views.offset = 0;
+        story_get_own_story_views.limit = myStoryCount;
+        req = story_get_own_story_views;
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_RPC.Res_Story_Get_Own_Story_Views res = (IG_RPC.Res_Story_Get_Own_Story_Views) response;
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    int counter = 0;
+                    for (int i = 0; i < res.groupedViews.size(); i++) {
+                        for (int j = 0; j < res.groupedViews.get(i).getStoryViewsList().size(); j++) {
+                            if (res.groupedViews.get(i).getStoryViewsList().get(j).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                                counter++;
+                            }
+                        }
+                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", res.groupedViews.get(i).getStoryId()).findFirst();
+                        if (realmStoryProto != null) {
+                            realmStoryProto.setViewCount(counter);
+                            realmStoryProto.setRealmStoryViewInfos(realm, res.groupedViews.get(i));
+                        }
+                        counter = 0;
+                    }
 
+
+                });
+
+
+            } else {
+
+            }
+        });
     }
 
 
     private void loadStories() {
 
         DbManager.getInstance().doRealmTransaction(realmDB -> {
-            stories = realmDB.copyFromRealm(realmDB.where(RealmStory.class).findAll());
+            stories = realmDB.where(RealmStory.class).findAll();
+            myStoryCount = realmDB.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).size();
             otherUserRealmStory = realmDB.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
         });
 
@@ -352,13 +388,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN || id == EventManager.STORY_USER_ADD_NEW) {
-            G.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadStories();
-                }
-            });
+        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_INFO) {
+            G.runOnUiThread(() -> loadStories());
         } else if (id == EventManager.STORY_UPLOAD) {
             G.runOnUiThread(() -> {
                 floatActionLayout.setVisibility(View.GONE);
@@ -565,7 +596,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "",displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1):"#4aca69", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "", displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
