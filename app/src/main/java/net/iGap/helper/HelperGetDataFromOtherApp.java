@@ -85,7 +85,7 @@ public class HelperGetDataFromOtherApp {
         }
         extension = extension.toLowerCase();
 
-        if (extension.endsWith("jpg") || extension.endsWith("jpeg") || extension.endsWith("png") || extension.endsWith("bmp") || extension.endsWith(".tiff")) {
+        if (extension.endsWith("jpg") || extension.endsWith("jpeg") || extension.endsWith("png") || extension.endsWith("bmp") || extension.endsWith(".tiff") || extension.endsWith(".gif")) {
             fileType = FileType.image;
         } else if (extension.endsWith("mp3") || extension.endsWith("ogg") || extension.endsWith("wma") || extension.endsWith("m4a") || extension.endsWith("amr") || extension.endsWith("wav") || extension.endsWith(".mid") || extension.endsWith(".midi")) {
             fileType = FileType.audio;
