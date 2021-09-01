@@ -14,6 +14,8 @@ import net.iGap.G;
 import net.iGap.model.PassCode;
 import net.iGap.module.accountManager.AccountManager;
 
+import java.util.HashMap;
+
 import javax.activation.MimetypesFileTypeMap;
 
 import io.realm.DynamicRealm;
@@ -902,6 +904,11 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 50) {
             RealmObjectSchema realmAttachmentSchema = schema.get(RealmAttachment.class.getSimpleName());
 
+            RealmObjectSchema realmStoryViewInfo = schema.create(RealmStoryViewInfo.class.getSimpleName())
+                    .addField("id", long.class)
+                    .addField("userId", long.class)
+                    .addField("createdTime", long.class);
+
             RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
                     .addField("caption", String.class)
                     .addField("fileToken", String.class)
@@ -914,6 +921,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isSeen", boolean.class)
                     .addField("viewCount", int.class)
                     .addField("index", int.class)
+                    .addRealmObjectField("realmStoryViewInfos", realmStoryViewInfo)
                     .addField("status", int.class);
 
 

@@ -4,8 +4,12 @@ import android.graphics.Bitmap;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmStoryViewInfo;
 
 import java.io.Serializable;
+import java.util.HashMap;
+
+import io.realm.RealmList;
 
 public class Story implements Serializable {
 
@@ -18,8 +22,9 @@ public class Story implements Serializable {
     private RealmAttachment attachment;
     private ProtoGlobal.File file;
     private int viewCount;
+    private RealmList<RealmStoryViewInfo> userIdList;
 
-    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, RealmAttachment attachment, ProtoGlobal.File file, int viewCount) {
+    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, RealmAttachment attachment, ProtoGlobal.File file, int viewCount, RealmList<RealmStoryViewInfo> userIdList) {
         this.url = url;
         this.bitmap = bitmap;
         this.txt = txt;
@@ -29,6 +34,7 @@ public class Story implements Serializable {
         this.attachment = attachment;
         this.file = file;
         this.viewCount = viewCount;
+        this.userIdList = userIdList;
     }
 
     public Story() {
@@ -104,5 +110,13 @@ public class Story implements Serializable {
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public RealmList<RealmStoryViewInfo> getUserIdList() {
+        return userIdList;
+    }
+
+    public void setUserIdList(RealmList<RealmStoryViewInfo> userIdList) {
+        this.userIdList = userIdList;
     }
 }

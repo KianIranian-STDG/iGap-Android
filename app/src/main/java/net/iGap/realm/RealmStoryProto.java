@@ -2,8 +2,13 @@ package net.iGap.realm;
 
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryGetOwnStoryViews;
+
+import java.util.HashMap;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class RealmStoryProto extends RealmObject {
@@ -20,6 +25,7 @@ public class RealmStoryProto extends RealmObject {
     private int viewCount;
     private int status;
     private int index;
+    private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
         RealmStoryProto realmStory = realm.where(RealmStoryProto.class).equalTo("storyId", roomMessage.getStory().getStory().getId()).findFirst();
@@ -30,7 +36,7 @@ public class RealmStoryProto extends RealmObject {
 
         realmStory.setCaption(story.getCaption());
         realmStory.setCreatedAt(story.getCreatedAt() * 1000L);
-        realmStory.setFile(RealmAttachment.build(realm,story.getFileDetails(), AttachmentFor.MESSAGE_ATTACHMENT, ProtoGlobal.RoomMessageType.STORY));
+        realmStory.setFile(RealmAttachment.build(realm, story.getFileDetails(), AttachmentFor.MESSAGE_ATTACHMENT, ProtoGlobal.RoomMessageType.STORY));
         realmStory.setSeen(story.getSeen());
         realmStory.setFileToken(story.getFileToken());
         realmStory.setStoryId(story.getId());
@@ -132,5 +138,51 @@ public class RealmStoryProto extends RealmObject {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public RealmList<RealmStoryViewInfo> getRealmStoryViewInfos() {
+        return realmStoryViewInfos;
+    }
+
+    public void setRealmStoryViewInfos(Realm realm, ProtoStoryGetOwnStoryViews.GroupedViews groupedViews) {
+        boolean isExist = false;
+        for (int j = 0; j < groupedViews.getStoryViewsList().size(); j++) {
+            RealmStoryViewInfo realmStoryViewInfo;
+            realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", groupedViews.getStoryViewsList().get(j).getUserId()).findFirst();
+            if (realmStoryViewInfo == null) {
+                realmStoryViewInfo = realm.createObject(RealmStoryViewInfo.class);
+            } else {
+                isExist = true;
+            }
+            realmStoryViewInfo.setId(groupedViews.getStoryId());
+            realmStoryViewInfo.setUserId(groupedViews.getStoryViewsList().get(j).getUserId());
+            realmStoryViewInfo.setCreatedTime(groupedViews.getStoryViewsList().get(j).getViewedAt());
+            if (isExist) {
+                realmStoryViewInfos.remove(realmStoryViewInfo);
+            }
+            realmStoryViewInfos.add(realmStoryViewInfo);
+            isExist = false;
+        }
+
+
+    }
+
+    public void setRealmStoryViewInfos(Realm realm, RealmStoryViewInfo storyViewInfo) {
+        boolean isExist = false;
+        RealmStoryViewInfo realmStoryViewInfo;
+        realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", storyViewInfo.getUserId()).findFirst();
+        if (realmStoryViewInfo == null) {
+            realmStoryViewInfo = realm.createObject(RealmStoryViewInfo.class);
+        } else {
+            isExist = true;
+        }
+        realmStoryViewInfo.setId(storyViewInfo.getId());
+        realmStoryViewInfo.setUserId(storyViewInfo.getUserId());
+        realmStoryViewInfo.setCreatedTime(storyViewInfo.getCreatedTime());
+        if (isExist) {
+            realmStoryViewInfos.remove(realmStoryViewInfo);
+        }
+        realmStoryViewInfos.add(realmStoryViewInfo);
+        isExist = false;
     }
 }
