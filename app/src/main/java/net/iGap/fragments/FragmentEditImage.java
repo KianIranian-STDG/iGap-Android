@@ -109,6 +109,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     private SharedPreferences emojiSharedPreferences;
 
+    private Boolean isTheFirstFocus ;
+
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
     }
@@ -336,11 +338,19 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             showPopup(-1);
 
         });
+        isTheFirstFocus=true;
         edtChat.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                changeEmojiButtonImageResource(R.string.icon_emoji_smile);
-                onEmojiClicked();
+                if(!isTheFirstFocus){
+                    changeEmojiButtonImageResource(R.string.icon_emoji_smile);
+                    onEmojiClicked();
+                }else {
+                    changeEmojiButtonImageResource(R.string.icon_emoji_smile);
+
+                }
+
             } else {
+                isTheFirstFocus=false;
                 changeEmojiButtonImageResource(R.string.icon_keyboard);
             }
         });
