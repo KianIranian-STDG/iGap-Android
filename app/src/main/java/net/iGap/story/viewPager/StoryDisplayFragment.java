@@ -1,11 +1,14 @@
 package net.iGap.story.viewPager;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,26 +23,34 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
+import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.Status;
+import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
@@ -49,14 +60,21 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.ExpandableTextView;
+import net.iGap.story.ViewUserDialogFragment;
+import net.iGap.story.liststories.ImageLoadingView;
+import net.iGap.story.liststories.MyStatusStoryListFragment;
+import net.iGap.story.liststories.StoryFragment;
+import net.iGap.story.liststories.cells.HeaderCell;
+import net.iGap.story.storyviews.StoryCell;
 import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener, StoriesProgressView.StoryProgressListener {
+public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener, StoriesProgressView.StoryProgressListener, RecyclerListView.OnItemClickListener, ViewUserDialogFragment.ViewUserDialogState {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
     private static final String EXTRA_IS_MY_STORY = "EXTRA_IS_MY_STORY";
@@ -91,6 +109,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private ConstraintLayout storyOverlay;
     private ProgressBar loadingProgressbar;
     boolean isMyStory = false;
+    private LinearLayout mBottomSheetLayout;
+    private CoordinatorLayout mBottomSheetLayoutRootView;
+    private BottomSheetBehavior sheetBehavior;
+    private RecyclerView userViewsRecycler;
+    int rowSize = 0;
+    int userRow = 0;
 
     public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory) {
 
@@ -140,6 +164,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         loadingProgressbar = rootView.findViewById(R.id.display_story_progress_bar);
         storyViewsRootView = rootView.findViewById(R.id.story_display_seen_views_root_view);
         storyViewsCount = rootView.findViewById(R.id.story_display_views_count);
+        mBottomSheetLayoutRootView = rootView.findViewById(R.id.display_bottom_sheet_story);
+        mBottomSheetLayout = rootView.findViewById(R.id.story_bottom_sheet_layout);
+        sheetBehavior = BottomSheetBehavior.from(mBottomSheetLayout);
+        userViewsRecycler = rootView.findViewById(R.id.story_bottom_sheet_recycler);
+
 
         if (getArguments() != null) {
             position = getArguments().getInt(EXTRA_POSITION);
@@ -150,9 +179,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (isMyStory) {
             replayFrame.setVisibility(View.INVISIBLE);
             storyViewsRootView.setVisibility(View.VISIBLE);
+            if (stories.get(counter).getViewCount() > 0) {
+                mBottomSheetLayoutRootView.setVisibility(View.VISIBLE);
+            }
+
         } else {
             replayFrame.setVisibility(View.VISIBLE);
             storyViewsRootView.setVisibility(View.INVISIBLE);
+            mBottomSheetLayoutRootView.setVisibility(View.GONE);
         }
 
         return rootView;
@@ -199,6 +233,19 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
             }
 
+        });
+
+        storyViewsRootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isMyStory && stories.get(counter).getViewCount() > 0) {
+                    ViewUserDialogFragment blankFragment = new ViewUserDialogFragment(stories.get(counter).getViewCount(), stories.get(counter).getUserIdList());
+                    blankFragment.setViewUserDialogState(StoryDisplayFragment.this::onCancel);
+                    blankFragment.show(getParentFragmentManager(), blankFragment.getTag());
+                    pauseCurrentStory();
+                }
+
+            }
         });
     }
 
@@ -330,7 +377,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
                         });
                     }
-                }else {
+                } else {
                     Glide.with(storyDisplayImage.getContext()).load("").into(storyDisplayImage);
                     avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
                     Glide.with(tumNailImage.getContext()).load("").into(tumNailImage);
@@ -619,10 +666,69 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         updateStory();
     }
 
+    @Override
+    public void onClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
+
+    }
+
+    @Override
+    public void onCancel() {
+        resumeCurrentStory();
+    }
+
     public interface PageViewOperator {
         void backPageView();
 
         void nextPageView(boolean clickable);
     }
 
+
+    private class ListAdapter extends RecyclerListView.ItemAdapter {
+
+
+        public void addRow() {
+            rowSize = 0;
+
+            for (int i = 0; i < 5; i++) {
+                userRow = rowSize++;
+            }
+            notifyDataSetChanged();
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View cellView;
+            cellView = new StoryCell(context);
+            return new RecyclerListView.ItemViewHolder(cellView, StoryDisplayFragment.this);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            StoryCell storyCell = (StoryCell) holder.itemView;
+            storyCell.initView(context, true, StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
+            storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
+            storyCell.setText(getString(R.string.my_status), getString(R.string.tap_to_add_status_update));
+            storyCell.setImage(R.drawable.avatar, avatarHandler);
+            storyCell.addIconVisibility(true);
+            storyCell.deleteIconVisibility(false);
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return rowSize;
+        }
+
+
+        @Override
+        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+            return viewType != 2;
+        }
+    }
 }

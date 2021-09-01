@@ -15,12 +15,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.network.AbstractObject;
+import net.iGap.network.IG_RPC;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
@@ -46,6 +50,8 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private long userId;
     private boolean isSingle = false;
     private long storyId;
+    private int myStoryCount = 0;
+
 
     public StoryViewFragment(long userId, boolean muStory) {
         this.userId = userId;
@@ -94,7 +100,6 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 storyResults = realm.where(RealmStory.class).sort("id", Sort.DESCENDING).findAll();
             });
         }
-
         setUpPager();
     }
 
@@ -121,19 +126,19 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 if (isSingle) {
                     if (realmStoryProto.getStoryId() != 0 && realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     } else if (realmStoryProto.getIndex() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
                         stories.add(story);
                         storyUser.setStories(stories);
                     }
                 } else {
                     Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
                     stories.add(story);
                     storyUser.setStories(stories);
                 }

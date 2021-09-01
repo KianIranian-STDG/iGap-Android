@@ -90,6 +90,7 @@ public class StoryCell extends FrameLayout {
     private String fileToken;
     private int sendStatus;
     private int storyIndex;
+    private String userColorId = "#4aca69";
     private static boolean isCreatedView = false;
 
     public String getFileToken() {
@@ -169,10 +170,10 @@ public class StoryCell extends FrameLayout {
             bottomText.setVisibility(VISIBLE);
             middleText.setVisibility(GONE);
             deleteIcon.setVisibility(VISIBLE);
-            if (G.selectedLanguage.equals("en")) {
-                topText.setText(realmStoryProto.getViewCount() + " " + context.getString(R.string.story_views));
-            } else {
+            if (G.selectedLanguage.equals("fa")) {
                 topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmStoryProto.getViewCount())) + " " + context.getString(R.string.story_views));
+            } else {
+                topText.setText(realmStoryProto.getViewCount() + " " + context.getString(R.string.story_views));
             }
             bottomText.setText(HelperCalander.getTimeForMainRoom(realmStoryProto.getCreatedAt()));
         }
@@ -293,6 +294,7 @@ public class StoryCell extends FrameLayout {
     }
 
     public void initView(Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked, long createTime) {
+         removeAllViews();
         if (G.themeColor == Theme.DARK) {
             setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
         } else {
@@ -468,6 +470,14 @@ public class StoryCell extends FrameLayout {
         }
     }
 
+    public void setImage(AvatarHandler avatarHandler, long userId) {
+        switch (status) {
+            case CIRCLE_IMAGE:
+                avatarHandler.getAvatar(new ParamWithAvatarType(this.circleImage, userId).avatarType(AvatarHandler.AvatarType.USER));
+                break;
+        }
+    }
+
     public void addIconVisibility(boolean visible) {
         addIcon.setVisibility(visible ? VISIBLE : GONE);
         if (visible) {
@@ -552,6 +562,16 @@ public class StoryCell extends FrameLayout {
         if (circleImageLoading != null) {
             circleImageLoading.setStatus(status);
         }
+    }
+
+    public String getUserColorId() {
+        return userColorId;
+    }
+
+    public void setUserColorId(String userColorId, String name) {
+        this.userColorId = userColorId;
+        Log.e("dkfslkdj", ": "+name);
+      circleImage.setImageBitmap( HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), HelperImageBackColor.getFirstAlphabetName(name), userColorId));
     }
 
     public ImageLoadingView getCircleImageLoading() {
