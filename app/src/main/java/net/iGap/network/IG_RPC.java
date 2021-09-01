@@ -374,6 +374,7 @@ public class IG_RPC {
         public long storyId;
         public long storyOwnerUserId;
         public long userId;
+        public int viewAt;
 
         public static Res_Story_Add_View deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -398,6 +399,7 @@ public class IG_RPC {
             storyId = response.getStoryId();
             storyOwnerUserId = response.getStoryOwnerUserId();
             userId = response.getUserId();
+            viewAt = response.getViewedAt();
         }
     }
 

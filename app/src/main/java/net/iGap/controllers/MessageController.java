@@ -1,6 +1,7 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
@@ -22,6 +23,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.response.UserLoginResponse;
 import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 
@@ -164,10 +166,91 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     }
 
+    public void GetStories(int contactCount) {
+        AbstractObject req = null;
+        IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
+        get_stories.offset = 0;
+        get_stories.limit = contactCount;
+        req = get_stories;
+        RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
+
+
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    List<StoryObject> storyObjects = new ArrayList<>();
+                    if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
+                        for (int i = 0; i < res.stories.size(); i++) {
+                            for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
+                                storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j, res.stories.get(i).getOriginatorName()));
+                            }
+                            RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
+                            storyObjects = new ArrayList<>();
+                        }
+                    } else if (res.stories.size() != 0 && res.stories.size() < realm.where(RealmStory.class).findAll().size()) {
+
+                        boolean isExist = false;
+                        List<RealmStory> realmStories = realm.where(RealmStory.class).findAll();
+                        if (realmStories != null && realmStories.size() > 0) {
+                            for (int i = 0; i < realmStories.size(); i++) {
+                                for (int j = 0; j < res.stories.size(); j++) {
+                                    if (realmStories.get(i).getUserId() == res.stories.get(j).getOriginatorId()) {
+                                        isExist = true;
+                                    }
+                                }
+                                if (!isExist) {
+
+                                    if (realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().isSentAll()) {
+                                        realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().deleteFromRealm();
+                                    }
+                                    realm.where(RealmStoryProto.class).equalTo("userId", realmStories.get(i).getUserId()).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
+                                }
+                                isExist = false;
+                            }
+                        }
+                        for (int i = 0; i < res.stories.size(); i++) {
+                            for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
+                                storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j), j, res.stories.get(i).getOriginatorName()));
+                            }
+
+                            RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
+                            storyObjects = new ArrayList<>();
+                        }
+
+                    } else if (res.stories.size() == 0) {
+                        realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
+                        List<RealmStory> realmStories = realm.where(RealmStory.class).findAll();
+                        if (realmStories != null && realmStories.size() > 0) {
+                            for (int i = 0; i < realmStories.size(); i++) {
+                                if (realmStories.get(i).getRealmStoryProtos().size() == 0) {
+                                    realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findAll().deleteAllFromRealm();
+                                }
+                            }
+                        }
+
+                    }
+                });
+                Log.e("fdajhfjshf", "getRequestManager5: ");
+
+                G.refreshRealmUi();
+                UserLoginResponse.isFetched = true;
+
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED));
+
+
+                Log.e("fdajhfjshf", "getRequestManager: ");
+
+            } else {
+                Log.e("fdajhfjshf", "getRequestManager2: " + "/" + error);
+            }
+        });
+
+    }
+
     private void onUserStoryAddViewResponse(AbstractObject response, boolean update) {
         IG_RPC.Res_Story_Add_View story_add_view = (IG_RPC.Res_Story_Add_View) response;
         if (story_add_view.storyOwnerUserId == AccountManager.getInstance().getCurrentUser().getId()) {
-            getMessageDataStorage().userAddViewStory(story_add_view.storyId, story_add_view.storyOwnerUserId);
+            getMessageDataStorage().userAddViewStory(story_add_view.storyId, story_add_view.viewAt, story_add_view.userId, story_add_view.storyOwnerUserId);
         }
     }
 

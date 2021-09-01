@@ -19,6 +19,7 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
@@ -27,6 +28,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.ViewUserDialogFragment;
 
 import io.realm.Realm;
 
@@ -64,6 +66,11 @@ public class UserInfoResponse extends MessageHandler {
                 RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
             }
         }, RequestUserInfo.CLEAR_ARRAY_TIME);
+
+        if (ViewUserDialogFragment.isInShowViewUser) {
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO);
+            ViewUserDialogFragment.isInShowViewUser = false;
+        }
 
         if (identity != null) {
             if (identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
