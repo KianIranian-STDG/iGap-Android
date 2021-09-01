@@ -11,11 +11,15 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserContactsImport;
+import net.iGap.realm.RealmContacts;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
@@ -64,6 +68,10 @@ public class UserContactsImportResponse extends MessageHandler {
             G.serverHashContact = G.localHashContact;
             new RequestUserContactsGetList().userContactGetList();
         }
+
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            MessageController.getInstance(AccountManager.selectedAccount).GetStories(realm.where(RealmContacts.class).findAll().size());
+        });
     }
 
     @Override
