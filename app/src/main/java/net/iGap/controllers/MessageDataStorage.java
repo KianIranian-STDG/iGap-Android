@@ -16,6 +16,7 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryGetOwnStoryViews;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmChannelExtra;
@@ -30,8 +31,11 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmStoryViewInfo;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserInfo;
 import net.iGap.story.StoryObject;
+import net.iGap.story.ViewUserDialogFragment;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.structs.RoomContactObject;
@@ -380,17 +384,8 @@ public class MessageDataStorage extends BaseController {
                         initializeInfo.add(realmRegisteredInfo.getColor());
                         result.add(initializeInfo);
                     } else {
-                        IG_RPC.User_info user_info = new IG_RPC.User_info();
-                        user_info.userId = userId.get(i);
-                        getRequestManager().sendRequest(user_info, (response, error) -> {
-                            if (response != null) {
-                                IG_RPC.Res_user_info res_user_info = (IG_RPC.Res_user_info) response;
-                                List<String> initializeInfo = new ArrayList<>();
-                                initializeInfo.add(res_user_info.user.getDisplayName());
-                                initializeInfo.add(res_user_info.user.getColor());
-                                result.add(initializeInfo);
-                            }
-                        });
+                        ViewUserDialogFragment.isInShowViewUser = true;
+                        new RequestUserInfo().userInfo(userId.get(i));
                     }
 
                 }
@@ -1043,7 +1038,7 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-    public void userAddViewStory(long storyId, long storyOwnerUserId) {
+    public void userAddViewStory(long storyId, int viewdAt, long viewdUserId, long storyOwnerUserId) {
 
 
         storageQueue.postRunnable(() -> {
@@ -1052,11 +1047,32 @@ public class MessageDataStorage extends BaseController {
                 database.beginTransaction();
 
 
-                database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().setSeen(true);
+                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
 
-                int viewCount = database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().getViewCount();
+                if (realmStoryProto != null) {
+                    realmStoryProto.setSeen(true);
+                    realmStoryProto.setViewCount(realmStoryProto.getViewCount() + 1);
 
-                database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().setViewCount(viewCount + 1);
+
+                    boolean isExist = false;
+                    RealmStoryViewInfo realmStoryViewInfo;
+                    realmStoryViewInfo = database.where(RealmStoryViewInfo.class).equalTo("userId",viewdUserId).findFirst();
+                    if (realmStoryViewInfo == null) {
+                        realmStoryViewInfo = database.createObject(RealmStoryViewInfo.class);
+                    } else {
+                        isExist = true;
+                    }
+                    realmStoryViewInfo.setId(storyId);
+                    realmStoryViewInfo.setUserId(viewdUserId);
+                    realmStoryViewInfo.setCreatedTime(viewdAt);
+                    if (isExist) {
+                        realmStoryProto.getRealmStoryViewInfos().remove(realmStoryViewInfo);
+                    }
+                    realmStoryProto.getRealmStoryViewInfos().add(realmStoryViewInfo);
+                    isExist = false;
+                }
+
+
 
                 RealmStory realmStory = database.where(RealmStory.class).equalTo("id", storyOwnerUserId).findFirst();
                 if (realmStory != null) {
