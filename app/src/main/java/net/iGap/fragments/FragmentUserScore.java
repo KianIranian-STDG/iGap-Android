@@ -37,6 +37,7 @@ public class FragmentUserScore extends BaseFragment {
     private UserScoreViewModel viewModel;
     private FragmentUserScoreBinding binding;
     private static final int REQUEST_CODE_QR_IVAND_CODE = 543;
+    private static final String TO_HOW_TO_GET_POINTS_URL = "https://d.igap.net/score";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +118,10 @@ public class FragmentUserScore extends BaseFragment {
             if (errorMessageResource != null) {
                 HelperError.showSnackMessage(getString(errorMessageResource), false);
             }
+        });
+
+        viewModel.getHowToGetPoints().observe(getViewLifecycleOwner(), go -> {
+            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.baseRootUserScore, FragmentWebView.newInstance(TO_HOW_TO_GET_POINTS_URL)).commit();
         });
     }
 

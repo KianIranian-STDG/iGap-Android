@@ -1663,4 +1663,6 @@
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
     <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است</string>
+
+    <string name="how_to_get_points">Как заработать баллы</string>
 </resources>

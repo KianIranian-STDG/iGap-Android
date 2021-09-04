@@ -24,6 +24,7 @@ public class UserScoreViewModel extends ViewModel {
     private MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> ivandScore = new MutableLiveData<>();
     private MutableLiveData<Integer> userRankPointer = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToScannerPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToHowToGetPoints = new MutableLiveData<>();
     private MutableLiveData<String> userScore = new MutableLiveData<>();
     private MutableLiveData<String> userRank = new MutableLiveData<>();
     private MutableLiveData<String> totalRank = new MutableLiveData<>();
@@ -37,7 +38,7 @@ public class UserScoreViewModel extends ViewModel {
             return realm.where(RealmUserInfo.class).findFirst();
         });
 
-        if (userInfo != null){
+        if (userInfo != null) {
             userInfo.addChangeListener(realmModel -> {
                 userInfo = (RealmUserInfo) realmModel;
 
@@ -81,6 +82,11 @@ public class UserScoreViewModel extends ViewModel {
         return goToScannerPage;
     }
 
+    public MutableLiveData<Boolean> getHowToGetPoints() {
+        return goToHowToGetPoints;
+    }
+
+
     public MutableLiveData<List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore>> getIvandScore() {
         return ivandScore;
     }
@@ -99,6 +105,10 @@ public class UserScoreViewModel extends ViewModel {
 
     public void onScanBarcodeButtonClick() {
         goToScannerPage.setValue(true);
+    }
+
+    public void onHowToGetPointsButtonClick() {
+        goToHowToGetPoints.setValue(true);
     }
 
     public void onBotsAndChannelClick() {
