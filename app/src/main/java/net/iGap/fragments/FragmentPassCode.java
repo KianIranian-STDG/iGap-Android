@@ -1,7 +1,9 @@
 package net.iGap.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentPassCodeBinding;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentPassCodeViewModel;
@@ -33,6 +37,9 @@ public class FragmentPassCode extends BaseFragment {
     private FragmentPassCodeViewModel fragmentPassCodeViewModel;
     private FragmentPassCodeBinding fragmentPassCodeBinding;
     private boolean isPattern;
+    private Toolbar passCodeToolbar;
+    private final int rippleOkTag = 1;
+
 
 
     public FragmentPassCode() {
@@ -58,40 +65,33 @@ public class FragmentPassCode extends BaseFragment {
 
         initDataBinding();
 
-
-        final HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(G.context.getResources().getString(R.string.two_step_pass_code))
-                .setLeftIcon(R.string.icon_back)
-                .setRightIcons(R.string.icon_sent)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-
-                        AppUtils.closeKeyboard(view);
-
-                    }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        fragmentPassCodeViewModel.onClickRippleOk(view);
-                    }
-                });
-
-        fragmentPassCodeBinding.fpcLayoutToolbar.addView(toolbar.getView());
-        toolbar.getRightButton().setVisibility(View.GONE);
+        passCodeToolbar = new Toolbar(getContext());
+        passCodeToolbar.setBackIcon(new BackDrawable(false));
+        passCodeToolbar.setTitle(getString(R.string.two_step_pass_code));
+        ToolbarItem toolbarItem;
+        toolbarItem = passCodeToolbar.addItem(rippleOkTag, R.string.icon_sent, Color.WHITE);
+        passCodeToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    AppUtils.closeKeyboard(view);
+                    break;
+                case rippleOkTag:
+                    fragmentPassCodeViewModel.onClickRippleOk(view);
+                    break;
+            }
+        });
+        fragmentPassCodeBinding.fpcLayoutToolbar.addView(passCodeToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
+        toolbarItem.setVisibility(View.GONE);
 
         //observe to show tick (ok) button or not
         fragmentPassCodeViewModel.rippleOkVisibility.observe(this, visibility -> {
 
             if (visibility != null) {
                 if (visibility == View.VISIBLE) {
-                    toolbar.getRightButton().setVisibility(View.VISIBLE);
+                    toolbarItem.setVisibility(View.VISIBLE);
                 } else {
-                    toolbar.getRightButton().setVisibility(View.GONE);
+                    toolbarItem.setVisibility(View.GONE);
                 }
             }
         });
