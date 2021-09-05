@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,13 @@ import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.OnUserSessionTerminate;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructSessions;
+import net.iGap.observers.interfaces.OnUserSessionTerminate;
 import net.iGap.request.RequestUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionTerminate;
 
@@ -58,6 +60,8 @@ public class FragmentActiveSessions extends BaseFragment {
     private ProgressBar prgWaiting;
     private FastItemAdapter fastItemAdapter;
     private List<StructSessions> list = new ArrayList<>();
+    private Toolbar languageToolbar;
+
 
     public FragmentActiveSessions() {
         // Required empty public constructor
@@ -73,21 +77,20 @@ public class FragmentActiveSessions extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(getString(R.string.Active_Sessions))
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        removeFromBaseFragment(FragmentActiveSessions.this);
-                    }
-                });
+        languageToolbar = new Toolbar(getContext());
+        languageToolbar.setBackIcon(new BackDrawable(false));
+        languageToolbar.setTitle(getString(R.string.Active_Sessions));
+        languageToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    removeFromBaseFragment(FragmentActiveSessions.this);
+                    break;
+            }
+        });
+
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fas_layout_toolbar);
-        layoutToolbar.addView(toolbar.getView());
+        layoutToolbar.addView(languageToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         prgWaiting = view.findViewById(R.id.stas_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);
