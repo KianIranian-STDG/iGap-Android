@@ -157,7 +157,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 imgPlay.setActivated(isPlaying);
                 if (isPlaying) {
                     if (MusicPlayer.isMusicPlyerEnable) {
-                        MusicPlayer.playAndPause();
+                        if (MusicPlayer.mp.isPlaying()) {
+                            MusicPlayer.playAndPause();
+                        }
                     }
                 }
             }
