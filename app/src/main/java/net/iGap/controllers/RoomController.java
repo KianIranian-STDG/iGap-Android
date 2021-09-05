@@ -180,7 +180,7 @@ public class RoomController extends BaseController {
                     RealmMember.kickMember(res.roomId, res.memberId);
                 }
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Group Left -> Major: " + e.major + " Minor: " + e.minor);
                 if (e.major == 337) {
                     if (e.minor == 1 || e.minor == 4 || e.minor == 8) {
