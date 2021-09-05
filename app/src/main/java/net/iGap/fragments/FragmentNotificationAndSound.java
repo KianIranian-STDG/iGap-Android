@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,10 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
-import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class FragmentNotificationAndSound extends BaseFragment {
     private FragmentNotificationAndSoundBinding binding;
     private FragmentNotificationAndSoundViewModel viewModel;
+    private Toolbar notificationAndSoundToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,18 +74,18 @@ public class FragmentNotificationAndSound extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragmentNotificationAndSoundViewModel(viewModel);
-        binding.toolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(getString(R.string.notificaion_and_sound))
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                }).getView());
+
+        notificationAndSoundToolbar = new Toolbar(getContext());
+        notificationAndSoundToolbar.setBackIcon(new BackDrawable(false));
+        notificationAndSoundToolbar.setTitle(getString(R.string.notificaion_and_sound));
+        notificationAndSoundToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    break;
+            }
+        });
+        binding.toolbar.addView(notificationAndSoundToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         setupResetNotification();
         showLedDialog();
