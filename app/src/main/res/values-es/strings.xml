@@ -2059,4 +2059,7 @@
     <string name="Auto_lock_description">La aplicación se bloqueará después de cada vez que elija y necesite desbloquearlo al principio.</string>
     <string name="kuknos_recieve_copyToast">Dirección de la billetera copiada en la memoria.</string>
     <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: %1$s</string>
+
+    <string name="how_to_get_points">Cómo ganar puntos</string>
+
 </resources>

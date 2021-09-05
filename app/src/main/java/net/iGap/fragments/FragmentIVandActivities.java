@@ -1,14 +1,16 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,13 +19,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.IVandActivityAdapter;
+import net.iGap.databinding.FragmentIvandActivitiesBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserIVandGetActivities;
 
 import java.util.ArrayList;
 
-public class FragmentIVandActivities extends FragmentToolBarBack {
+public class FragmentIVandActivities extends BaseFragment {
+    private FragmentIvandActivitiesBinding binding;
+
     private RecyclerView recyclerView;
     private TextView retry;
     private TextView emptyActivitiesText;
@@ -31,6 +39,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     private IVandActivityAdapter iVandActivityAdapter;
     private boolean isLoading;
     private boolean existMoreItem;
+    private Toolbar ivAndActivitiesToolbar;
 
     public static FragmentIVandActivities newInstance() {
         FragmentIVandActivities fragmentIVandActivities = new FragmentIVandActivities();
@@ -42,9 +51,12 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     public FragmentIVandActivities() {
     }
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_ivand_activities, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_activities, container, false);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
@@ -53,7 +65,6 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
 
 
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
-        titleTextView.setText(getString(R.string.ivand_activities_title));
         retry = view.findViewById(R.id.retry);
         emptyActivitiesText = view.findViewById(R.id.emptyActivitiesText);
         isLoading = false;
@@ -112,6 +123,23 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                 }
             }
         });
+
+        ivAndActivitiesToolbar = new Toolbar(getContext());
+        ivAndActivitiesToolbar.setTitle(getString(R.string.ivand_activities_title));
+        ivAndActivitiesToolbar.setBackIcon(new BackDrawable(false));
+        ivAndActivitiesToolbar.setListener(i -> {
+                    switch (i) {
+                        case -1:
+                            if (getActivity() != null) {
+                                getActivity().onBackPressed();
+                            }
+                            break;
+
+                    }
+                }
+        );
+
+        binding.toolbar.addView(ivAndActivitiesToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
     }
 

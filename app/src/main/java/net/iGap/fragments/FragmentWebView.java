@@ -190,6 +190,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
     private void setupToolbar(View view) {
         webViewToolbar = new Toolbar(getContext());
         webViewToolbar.setBackIcon(new BackDrawable(false));
+        webViewToolbar.setTitle(getString(R.string.igap));
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
         layoutToolbar.addView(webViewToolbar);
