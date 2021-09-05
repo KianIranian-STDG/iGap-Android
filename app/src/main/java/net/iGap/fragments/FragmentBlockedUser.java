@@ -28,16 +28,17 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.observers.interfaces.OnBlockStateChanged;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -49,10 +50,10 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 
-public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged, ToolbarListener {
+public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged {
 
     private StickyRecyclerHeadersDecoration decoration;
-    private HelperToolbar mHelperToolbar;
+    private Toolbar blockedUserToolbar;
     private FastScroller fastScroller;
 
     @Override
@@ -65,22 +66,18 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(G.context.getResources().getString(R.string.Block_Users))
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                });
+        blockedUserToolbar = new Toolbar(getContext());
+        blockedUserToolbar.setBackIcon(new BackDrawable(false));
+        blockedUserToolbar.setTitle(getString(R.string.Block_Users));
+        blockedUserToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    break;
+            }});
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fbu_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+        layoutToolbar.addView(blockedUserToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         RecyclerView realmRecyclerView = view.findViewById(R.id.fbu_realm_recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
