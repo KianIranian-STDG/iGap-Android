@@ -32,6 +32,9 @@ public class MediaController {
     private static volatile MediaController Instance = null;
     private boolean videoConvertFirstWrite = true;
 
+    private boolean isCancel;
+
+
     public static MediaController getInstance() {
         MediaController localInstance = Instance;
         if (localInstance == null) {
@@ -43,6 +46,10 @@ public class MediaController {
             }
         }
         return localInstance;
+    }
+
+    public void setCancel(boolean cancel) {
+        isCancel = cancel;
     }
 
     @SuppressLint("NewApi")
@@ -256,7 +263,7 @@ public class MediaController {
 
     @TargetApi(16)
     public boolean convertVideo(final String path, String savePath, OnPercentCompress onPercentCompress) {
-
+        isCancel = false;
         String width;
         String height;
         String rotation;
@@ -505,7 +512,7 @@ public class MediaController {
                                 }
                             }
 
-                            while (!outputDone) {
+                            while (!outputDone && !isCancel) {
                                 if (!inputDone) {
                                     boolean eof = false;
                                     int index = extractor.getSampleTrackIndex();

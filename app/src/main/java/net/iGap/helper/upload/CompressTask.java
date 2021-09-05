@@ -22,6 +22,10 @@ public class CompressTask extends Thread implements MediaController.OnPercentCom
         this.progress = 0;
     }
 
+    public void setCancel() {
+        MediaController.getInstance().setCancel(true);
+    }
+
     @Override
     public void run() {
         super.run();
@@ -35,8 +39,8 @@ public class CompressTask extends Thread implements MediaController.OnPercentCom
         } catch (Exception e) {
             HelperLog.getInstance().setErrorLog(e);
         }
-
-        boolean finish = MediaController.getInstance().convertVideo(originalPath, newPath, this);
+        MediaController mediaController = new MediaController();
+        boolean finish = mediaController.convertVideo(originalPath, newPath, this);
         onCompress.onCompressFinish(id, finish);
     }
 
