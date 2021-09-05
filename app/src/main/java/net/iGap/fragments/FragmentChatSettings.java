@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,12 @@ import net.iGap.R;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,8 @@ public class FragmentChatSettings extends BaseFragment {
     private FragmentChatSettingViewModel viewModel;
     private FragmentChatSettingsBinding binding;
     private ThemeColorListAdapter adapter;
+    private Toolbar chatSettingsToolbar;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,18 +83,17 @@ public class FragmentChatSettings extends BaseFragment {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
-        binding.fcsLayoutToolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.chat_setting))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                }).getView());
+        chatSettingsToolbar = new Toolbar(getContext());
+        chatSettingsToolbar.setBackIcon(new BackDrawable(false));
+        chatSettingsToolbar.setTitle(getString(R.string.chat_setting));
+        chatSettingsToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    break;
+            }
+        });
+        binding.fcsLayoutToolbar.addView(chatSettingsToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         binding.themeColorList.setLayoutManager(new LinearLayoutManager(binding.themeColorList.getContext(), RecyclerView.HORIZONTAL, G.isAppRtl));
         binding.themeColorList.hasFixedSize();

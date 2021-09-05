@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.adapter.DataUsageAdapter;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.DataUsageListener;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.DataUsageStruct;
+import net.iGap.observers.interfaces.DataUsageListener;
 import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private long totalReceivedByte;
     private boolean type;
     private DataUsageAdapter adapter;
-    private HelperToolbar mHelperToolbar;
+    private Toolbar dataUsageToolbar;
 
     @Nullable
     @Override
@@ -43,23 +45,22 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
-
+        dataUsageToolbar = new Toolbar(getContext());
+        dataUsageToolbar.setBackIcon(new BackDrawable(false));
+        dataUsageToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
                     }
-                });
+                    break;
+            }
+        });
+
+
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fdu_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+        layoutToolbar.addView(dataUsageToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         type = getArguments().getBoolean("TYPE", false);
 
@@ -79,7 +80,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
             RealmResults<RealmDataUsage> wifiRealmDataUsages;
             RealmResults<RealmDataUsage> dataRealmDataUsages;
             if (type) {
-                mHelperToolbar.setDefaultTitle(getString(R.string.wifi_data_usage));
+                dataUsageToolbar.setTitle(getString(R.string.wifi_data_usage));
                 totalReceivedByte = 0;
                 totalSendByte = 0;
                 wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
@@ -93,7 +94,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
                 }
 
             } else {
-                mHelperToolbar.setDefaultTitle(getResources().getString(R.string.mobile_data_usage));
+                dataUsageToolbar.setTitle(getResources().getString(R.string.mobile_data_usage));
                 totalReceivedByte = 0;
                 totalSendByte = 0;
                 dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
