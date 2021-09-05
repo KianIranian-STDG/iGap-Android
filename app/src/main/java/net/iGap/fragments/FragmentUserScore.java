@@ -1,6 +1,8 @@
 package net.iGap.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +25,9 @@ import net.iGap.databinding.FragmentUserScoreBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.viewmodel.UserScoreViewModel;
 
@@ -38,6 +41,9 @@ public class FragmentUserScore extends BaseFragment {
     private FragmentUserScoreBinding binding;
     private static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     private static final String TO_HOW_TO_GET_POINTS_URL = "https://d.igap.net/score";
+    private Toolbar userScoreToolbar;
+    private final int historyTag = 1;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,32 +63,28 @@ public class FragmentUserScore extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        HelperToolbar t = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setRightIcons(R.string.icon_time)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.score))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
+        userScoreToolbar = new Toolbar(getContext());
+        userScoreToolbar.setTitle(getString(R.string.score));
+        userScoreToolbar.setBackIcon(new BackDrawable(false));
+        userScoreToolbar.addItem(historyTag, R.string.icon_time, Color.WHITE);
+        userScoreToolbar.setListener(i -> {
+                    switch (i) {
+                        case -1:
+                            if (getActivity() != null) {
+                                getActivity().onBackPressed();
+                            }
+                            break;
+                        case historyTag:
+                            if (getActivity() != null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
+                            }
+                            break;
                     }
+                }
+        );
 
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        // to go history
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentIVandActivities.newInstance()).setReplace(false).load();
-                        }
-                    }
-                });
 
-        binding.toolbar.addView(t.getView());
+        binding.toolbar.addView(userScoreToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         binding.rvScoreList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvScoreList.setAdapter(new IvandScoreAdapter());
