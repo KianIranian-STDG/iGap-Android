@@ -5286,7 +5286,7 @@ public class FragmentChat extends BaseFragment
         if (isFileExistInLocalStorage(messageObject)) {
             if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE || roomMessageType == GIF_TEXT_VALUE) {
                 items.add(R.string.save_to_gallery);
-            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == VOICE_VALUE) {
+            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == AUDIO_TEXT_VALUE || roomMessageType == VOICE_VALUE) {
                 items.add(R.string.save_to_Music);
             } else if (roomMessageType == FILE_VALUE) {
                 items.add(R.string.saveToDownload_item_dialog);
