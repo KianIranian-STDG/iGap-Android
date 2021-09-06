@@ -29,11 +29,15 @@ import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AppConfig;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
+import net.iGap.realm.RealmRoom;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 public class BottomNavigationFragment extends BaseFragment implements OnUnreadChange {
 
@@ -119,6 +123,17 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             openAccountsDialog();
             return false;
         });
+        RealmResults<RealmRoom> realmRooms = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).findAll();
+        });
+        int unreadCount = 0;
+        if (realmRooms !=null && realmRooms.size()> 0){
+            for (RealmRoom room : realmRooms) {
+                if (!room.getMute() && !room.isDeleted() && room.getUnreadCount() > 0)
+                    unreadCount += room.getUnreadCount();
+            }
+        }
+        onChange(unreadCount);
     }
 
     public void setCrawlerMap(String crawlerMap) {
