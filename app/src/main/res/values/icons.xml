@@ -26,6 +26,7 @@
     <string name="icon_add_contact">\ueb56</string>
     <string name="icon_settings">\ueaf5</string>  <!-- gear icon  -->
     <string name="icon_settings_lines">\uea6d</string>
+    <string name="icon_chat_setting">\ueb2c</string>
     <string name="icon_play">\uea83</string>
     <string name="icon_pause">\uea88</string>
     <string name="icon_chevron_up">\ue901</string>
@@ -110,5 +111,9 @@
     <string name="icon_update">\ue909</string>
     <string name="icon_device">\ue90a</string>
     <string name="icon_pin_to_top2">\ue90b</string>
+    <string name="icon_data_and_storage">\ueb1a</string>
+    <string name="icon_language">\ueabe</string>
+    <string name="icon_privacy_and_security">\uea7e</string>
+    <string name="icon_notification">\uea8f</string>
 
 </resources>
