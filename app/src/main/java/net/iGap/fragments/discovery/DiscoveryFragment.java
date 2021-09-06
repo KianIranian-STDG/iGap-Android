@@ -100,6 +100,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         this.needToReload = needToRelaod;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        G.updateResources(getContext());
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
