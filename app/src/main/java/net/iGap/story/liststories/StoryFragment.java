@@ -1,5 +1,7 @@
 package net.iGap.story.liststories;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -103,6 +106,10 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private int userStoryIndex = 0;
     private LinearLayout actionButtonsRootView;
     private FrameLayout floatActionLayout;
+    private boolean floatingHidden;
+    private float floatingButtonHideProgress;
+    private float floatingButtonTranslation;
+    private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private FrameLayout customStatusActionLayout;
     int objectsCounter = 0;
     boolean isHaveFailedUpload = false;
@@ -315,6 +322,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                             goingDown = firstVisibleItem > prevPosition;
                         }
                         if (changed && scrollUpdated && (goingDown || scrollingManually)) {
+                            hideFloatingButton(goingDown);
                         }
                         prevPosition = firstVisibleItem;
                         prevTop = firstViewTop;
@@ -389,6 +397,25 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         adapter.addRow();
     }
 
+    private void hideFloatingButton(boolean hide) {
+        if (floatingHidden == hide) {
+            return;
+        }
+        floatingHidden = hide;
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonHideProgress, floatingHidden ? 1f : 0f);
+        valueAnimator.addUpdateListener(animation -> {
+            floatingButtonHideProgress = (float) animation.getAnimatedValue();
+            floatingButtonTranslation = (LayoutCreator.dp(200) * floatingButtonHideProgress);
+            actionButtonsRootView.setTranslationY(floatingButtonTranslation - 0 * (1f - floatingButtonHideProgress));
+        });
+        animatorSet.playTogether(valueAnimator);
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(floatingInterpolator);
+        actionButtonsRootView.setClickable(!hide);
+        animatorSet.start();
+    }
 
     @Override
     public void onClick(View view, int position) {

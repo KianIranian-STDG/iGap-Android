@@ -1,5 +1,7 @@
 package net.iGap.story.liststories;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -69,6 +72,14 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private List<List<String>> displayNameList;
     private FrameLayout customStatusActionLayout;
     private LinearLayout actionButtonsRootView;
+    private int firstVisibleItemPosition;
+    private int firstVisibleItemPositionOffset;
+    private boolean floatingHidden;
+    private float floatingButtonHideProgress;
+    private float floatingButtonTranslation;
+    public static boolean storyListFetched = false;
+    public int mOffset = 0;
+    private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
     private ProgressBar progressBar;
     int counter = 0;
@@ -216,6 +227,64 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 new HelperFragment(getActivity().getSupportFragmentManager(), new StatusTextFragment()).setReplace(false).load();
             }
         });
+
+        mOffset = 0;
+        recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean scrollUpdated;
+            private boolean scrollingManually;
+            private int prevTop;
+            private int prevPosition;
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                scrollingManually = newState == RecyclerView.SCROLL_STATE_DRAGGING;
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                View view = layoutManager.getChildAt(0);
+                if (firstVisibleItemPosition > 0 && view != null) {
+                    firstVisibleItemPositionOffset = view.getTop();
+                }
+
+                if (!storyListFetched) {
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+//                            GetStoryList(mOffset, 50);
+                        }
+                    }
+                }
+
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItem != RecyclerView.NO_POSITION) {
+                    RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(firstVisibleItem);
+                    if (holder != null && holder.getAdapterPosition() != 0) {
+                        int firstViewTop = holder.itemView.getTop();
+                        boolean goingDown;
+                        boolean changed = true;
+                        if (prevPosition == firstVisibleItem) {
+                            final int topDelta = prevTop - firstViewTop;
+                            goingDown = firstViewTop < prevTop;
+                            changed = Math.abs(topDelta) > 1;
+                        } else {
+                            goingDown = firstVisibleItem > prevPosition;
+                        }
+                        if (changed && scrollUpdated && (goingDown || scrollingManually)) {
+                            hideFloatingButton(goingDown);
+                        }
+                        prevPosition = firstVisibleItem;
+                        prevTop = firstViewTop;
+                        scrollUpdated = true;
+                    }
+                }
+            }
+        });
     }
 
     private void loadStories() {
@@ -247,6 +316,28 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
 
     }
+
+
+    private void hideFloatingButton(boolean hide) {
+        if (floatingHidden == hide) {
+            return;
+        }
+        floatingHidden = hide;
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonHideProgress, floatingHidden ? 1f : 0f);
+        valueAnimator.addUpdateListener(animation -> {
+            floatingButtonHideProgress = (float) animation.getAnimatedValue();
+            floatingButtonTranslation = (LayoutCreator.dp(200) * floatingButtonHideProgress);
+            actionButtonsRootView.setTranslationY(floatingButtonTranslation - 0 * (1f - floatingButtonHideProgress));
+        });
+        animatorSet.playTogether(valueAnimator);
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(floatingInterpolator);
+        actionButtonsRootView.setClickable(!hide);
+        animatorSet.start();
+    }
+
 
     @Override
     public void onClick(View view, int position) {
