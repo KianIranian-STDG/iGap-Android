@@ -406,7 +406,7 @@ public class StoryCell extends FrameLayout {
                         } else if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
                             realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
                             HttpUploader.isStoryUploading = true;
-                            Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getFile().getLocalFilePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.IMAGE));
+                            Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getFile().getLocalFilePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.STORY));
                         }
                         EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_SENDING);
                     });
