@@ -157,6 +157,7 @@ public class MultiTouchListener implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 activePointerId = INVALID_POINTER_ID;
+                isMoving = false;
 //                if (deleteView != null && isViewInBounds(deleteView, x, y)) {
 //                    if (onMultiTouchListener != null)
 //                        onMultiTouchListener.onRemoveViewListener(view);
