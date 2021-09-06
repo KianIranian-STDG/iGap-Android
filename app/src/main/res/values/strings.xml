@@ -2290,6 +2290,8 @@ Want to get it?</string>
     <string name="story_you_can_not_share_more_than_items">You can not share more than 6 media items!</string>
     <string name="story_viewed_by">Viewed by</string>
     <string name="story_person">person</string>
+    <string name="type_a_moment">Type a moment</string>
+    <string name="your_status_characters">Your status update cannot exceed 500 characters</string>
     <string name="moments_string">Moments</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->

@@ -210,6 +210,23 @@
         <item>#91218c</item>
         <item>#d32b1e</item>
     </array>
+
+    <array name="default_status_color">
+        <item>#1d1d1d</item>
+        <item>#ba1c30</item>
+        <item>#db6917</item>
+        <item>#ebce2b</item>
+        <item>#5fa641</item>
+        <item>#463397</item>
+        <item>#91218c</item>
+        <item>#d32b1e</item>
+        <item>#c0bd7f</item>
+        <item>#e1a11a</item>
+        <item>#4277b6</item>
+        <item>#d485b2</item>
+        <item>#92ae31</item>
+    </array>
+
     <!--Kelly's 22 contrast colors-->
     <color name="kelly_1">#F2F3F4</color>
     <color name="kelly_2">#1d1d1d</color>

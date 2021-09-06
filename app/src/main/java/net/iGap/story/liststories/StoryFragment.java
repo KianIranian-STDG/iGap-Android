@@ -56,6 +56,7 @@ import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
+import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
 import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.HeaderCell;
@@ -100,7 +101,9 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private List<StoryObject> storyInLocal = new ArrayList<>();
     boolean isAddedUserStory = false;
     private int userStoryIndex = 0;
+    private LinearLayout actionButtonsRootView;
     private FrameLayout floatActionLayout;
+    private FrameLayout customStatusActionLayout;
     int objectsCounter = 0;
     boolean isHaveFailedUpload = false;
     private int myStoryCount = 0;
@@ -160,6 +163,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
         if (getActivity() != null) {
             getActivity().setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
@@ -207,6 +211,22 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         progressBar.setVisibility(View.GONE);
         rootView.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
+        actionButtonsRootView = new LinearLayout(context);
+        actionButtonsRootView.setOrientation(LinearLayout.VERTICAL);
+        actionButtonsRootView.setVisibility(View.GONE);
+        rootView.addView(actionButtonsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
+
+
+        customStatusActionLayout = new FrameLayout(context);
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        customStatusActionLayout.setBackground(customStatusDrawable);
+        IconView customStatusAddButton = new IconView(context);
+        customStatusAddButton.setIcon(R.string.icon_edit);
+        customStatusAddButton.setIconColor(Color.WHITE);
+
+        customStatusActionLayout.addView(customStatusAddButton);
+        actionButtonsRootView.addView(customStatusActionLayout, LayoutCreator.createLinear(42, 42, Gravity.CENTER, 0, 0, 0, 0));
+
 
         floatActionLayout = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
@@ -214,9 +234,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
-        floatActionLayout.setVisibility(View.GONE);
         floatActionLayout.addView(addButton);
-        rootView.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
+        actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
         return rootView;
     }
 
@@ -231,6 +250,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_INFO, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_STATUS_UPLOAD, this);
         mOffset = 0;
         userIdList = new ArrayList<>();
         displayNameList = new ArrayList<>();
@@ -240,6 +260,12 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             @Override
             public void onClick(View view) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment()).setReplace(false).load();
+            }
+        });
+        customStatusActionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StatusTextFragment()).setReplace(false).load();
             }
         });
         recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -392,7 +418,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             G.runOnUiThread(() -> loadStories());
         } else if (id == EventManager.STORY_UPLOAD) {
             G.runOnUiThread(() -> {
-                floatActionLayout.setVisibility(View.GONE);
+                actionButtonsRootView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             });
             objectsCounter = 0;
@@ -445,16 +471,57 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 }
             });
 
+        } else if (id == EventManager.STORY_STATUS_UPLOAD) {
+            String path = (String) args[0];
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                long storyId = SUID.id().get();
+                long lastUploadedStoryId = storyId + 1L;
+                int[] imageDimens = {0, 0};
+                long attachementId = SUID.id().get();
+                imageDimens = AndroidUtils.getImageDimens(path);
+
+                RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class, attachementId);
+                realmAttachment.setLocalFilePath(path);
+                realmAttachment.setWidth(imageDimens[0]);
+                realmAttachment.setHeight(imageDimens[1]);
+                realmAttachment.setSize(new File(path).length());
+                realmAttachment.setName(new File(path).getName());
+
+                StoryObject storyObject = new StoryObject();
+                storyObject.isSeen = false;
+                storyObject.realmAttachment = realmAttachment;
+                storyObject.userId = AccountManager.getInstance().getCurrentUser().getId();
+                storyObject.createdAt = System.currentTimeMillis();
+                storyObject.caption = "";
+                storyObject.status = MessageObject.STATUS_SENDING;
+                storyObject.id = lastUploadedStoryId;
+                List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
+                if (realmStories != null && realmStories.size() > 0) {
+                    storyObject.index = realmStories.get(0).getIndex() + 1;
+                } else {
+                    storyObject.index = 0;
+                }
+                storyInLocal.add(storyObject);
+                RealmStory.putOrUpdate(realm, false, storyObject.userId, storyInLocal);
+                storyInLocal.remove(0);
+                HttpUploader.isStoryUploading = true;
+                Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, path, null, "", ProtoGlobal.RoomMessageType.STORY));
+
+                objectsCounter++;
+                G.runOnUiThread(() -> loadStories());
+                storyInLocal = new ArrayList<>();
+            });
+
         } else if (id == EventManager.STORY_SENDING) {
             if (isAdded() && isVisible()) {
                 progressBar.setVisibility(View.GONE);
-                floatActionLayout.setVisibility(View.GONE);
+                actionButtonsRootView.setVisibility(View.GONE);
                 G.runOnUiThread(() -> loadStories());
             }
         } else if (id == EventManager.STORY_UPLOADED_FAILED) {
             if (isAdded()) {
                 progressBar.setVisibility(View.GONE);
-                floatActionLayout.setVisibility(View.VISIBLE);
+                actionButtonsRootView.setVisibility(View.VISIBLE);
             }
             G.runOnUiThread(() -> loadStories());
 
@@ -529,7 +596,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                             if (realmStory != null) {
                                 if (realmStory.isSentAll()) {
                                     G.runOnUiThread(() -> {
-                                        floatActionLayout.setVisibility(View.VISIBLE);
+                                        actionButtonsRootView.setVisibility(View.VISIBLE);
                                     });
                                     storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, otherUserRealmStory.size() > 0, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
@@ -542,7 +609,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                         realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).findAll();
                                         for (int i = 0; i < realmStoryProtos.size(); i++) {
                                             if (Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProtos.get(i).getId())) || MessageController.isSendingStory || HttpUploader.isStoryUploading) {
-                                                floatActionLayout.setVisibility(View.GONE);
+                                                actionButtonsRootView.setVisibility(View.GONE);
                                                 isHaveFailedUpload = false;
                                                 break;
                                             } else {
@@ -558,7 +625,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
                                     if (isHaveFailedUpload) {
                                         G.runOnUiThread(() -> {
-                                            floatActionLayout.setVisibility(View.VISIBLE);
+                                            actionButtonsRootView.setVisibility(View.VISIBLE);
                                             storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                             storyCell.deleteIconVisibility(true);
@@ -567,7 +634,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
                                     } else {
                                         G.runOnUiThread(() -> {
-                                            floatActionLayout.setVisibility(View.GONE);
+                                            actionButtonsRootView.setVisibility(View.GONE);
                                             storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                             storyCell.deleteIconVisibility(true);
@@ -588,7 +655,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     storyCell.setImage(R.drawable.avatar, avatarHandler);
                                     storyCell.addIconVisibility(true);
                                     storyCell.deleteIconVisibility(false);
-                                    floatActionLayout.setVisibility(View.VISIBLE);
+                                    actionButtonsRootView.setVisibility(View.VISIBLE);
                                 });
                                 isAddedUserStory = false;
                             }

@@ -2229,6 +2229,8 @@
     <string name="story_uploading">در حال آپلود...</string>
     <string name="story_sending">در حال ارسال...</string>
     <string name="story_could_not_sent">ارسال نشد!</string>
+    <string name="type_a_moment">پیام خود را بنویسید</string>
+    <string name="your_status_characters">لحظه شما نمیتواند بیشتر از ۵۰۰ حرف باشد.</string>
     <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
 
     <string name="stories_setting">تنظیمات داستان</string>

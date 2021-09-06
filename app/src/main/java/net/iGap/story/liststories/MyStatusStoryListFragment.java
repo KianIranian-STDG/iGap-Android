@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.storyviews.StoryCell;
@@ -65,6 +67,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     List<RealmStoryProto> storyProto;
     private FrameLayout floatActionLayout;
     private List<List<String>> displayNameList;
+    private FrameLayout customStatusActionLayout;
+    private LinearLayout actionButtonsRootView;
     public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
     private ProgressBar progressBar;
     int counter = 0;
@@ -84,6 +88,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
     }
 
     @Nullable
@@ -122,6 +127,19 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         progressBar.setVisibility(View.GONE);
         rootView.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
+        actionButtonsRootView = new LinearLayout(context);
+        actionButtonsRootView.setOrientation(LinearLayout.VERTICAL);
+        rootView.addView(actionButtonsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
+
+        customStatusActionLayout = new FrameLayout(context);
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        customStatusActionLayout.setBackground(customStatusDrawable);
+        IconView customStatusAddButton = new IconView(context);
+        customStatusAddButton.setIcon(R.string.icon_edit);
+        customStatusAddButton.setIconColor(Color.WHITE);
+        customStatusActionLayout.addView(customStatusAddButton);
+        actionButtonsRootView.addView(customStatusActionLayout, LayoutCreator.createLinear(42, 42, Gravity.CENTER, 0, 0, 0, 0));
+
 
         floatActionLayout = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
@@ -130,7 +148,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
-        rootView.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
+        actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
+
         return rootView;
     }
 
@@ -145,6 +164,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_SENDING, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_INFO, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_STATUS_UPLOAD, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
@@ -190,6 +210,12 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
             }
         });
 
+        customStatusActionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StatusTextFragment()).setReplace(false).load();
+            }
+        });
     }
 
     private void loadStories() {
@@ -318,17 +344,17 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED ||
                 id == EventManager.STORY_UPLOADED_FAILED || id == EventManager.STORY_USER_INFO) {
             G.runOnUiThread(() -> {
-                floatActionLayout.setVisibility(View.VISIBLE);
+                actionButtonsRootView.setVisibility(View.VISIBLE);
                 loadStories();
             });
-        } else if (id == EventManager.STORY_UPLOAD) {
+        } else if (id == EventManager.STORY_UPLOAD || id == EventManager.STORY_STATUS_UPLOAD) {
             G.runOnUiThread(() -> {
-                floatActionLayout.setVisibility(View.GONE);
+                actionButtonsRootView.setVisibility(View.GONE);
                 loadStories();
             });
         } else if (id == EventManager.STORY_SENDING) {
             G.runOnUiThread(() -> {
-                floatActionLayout.setVisibility(View.GONE);
+                actionButtonsRootView.setVisibility(View.GONE);
             });
         }
     }
@@ -375,12 +401,12 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         if (position < storyProto.size()) {
 
                             if (storyProto.get(position).getStatus() == MessageObject.STATUS_FAILED) {
-                                floatActionLayout.setVisibility(View.VISIBLE);
+                                actionButtonsRootView.setVisibility(View.VISIBLE);
                                 storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                             } else if (storyProto.get(position).getStatus() == MessageObject.STATUS_SENDING) {
                                 if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).getId())) && !MessageController.isSendingStory && !HttpUploader.isStoryUploading) {
-                                    floatActionLayout.setVisibility(View.VISIBLE);
+                                    actionButtonsRootView.setVisibility(View.VISIBLE);
                                     long failedStoryId = storyProto.get(position).getId();
                                     DbManager.getInstance().doRealmTransaction(realm -> {
                                         realm.where(RealmStoryProto.class).equalTo("id", failedStoryId).findFirst().setStatus(MessageObject.STATUS_FAILED);
@@ -388,7 +414,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                                     storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                 } else {
-                                    floatActionLayout.setVisibility(View.GONE);
+                                    actionButtonsRootView.setVisibility(View.GONE);
                                     storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
 
