@@ -140,7 +140,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
     private final ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
-    public ObservableField<String> referralMaskObservableField = new ObservableField<>("###-###-####");
+    public ObservableField<String> referralMaskObservableField = new ObservableField<>("##########");
     private final SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
