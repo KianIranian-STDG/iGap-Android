@@ -270,6 +270,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         if (webView != null) {
             webView.destroy();
         }
+        G.updateResources(getContext());
     }
 
     @Override
