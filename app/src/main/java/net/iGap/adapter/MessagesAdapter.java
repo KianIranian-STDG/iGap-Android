@@ -347,7 +347,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     private void makeSelected(View v) {
         //noinspection RedundantCast
-        ((FrameLayout) v).setForeground(new ColorDrawable(v.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+        ((FrameLayout) v).setForeground(v.getResources().getDrawable(R.drawable.message_selected_mode));
     }
 
     private void makeDeselected(View v) {
