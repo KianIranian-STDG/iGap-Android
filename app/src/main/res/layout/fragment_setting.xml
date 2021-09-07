@@ -177,6 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_weight="2"
                     android:paddingStart="@dimen/dp10"
                     android:text="@string/language"
                     android:textColor="?iGapTitleTextColor"
@@ -187,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp12"
+                    android:layout_marginEnd="@dimen/dp18"
                     android:text="@{viewModel.currentLanguage}"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize" />
