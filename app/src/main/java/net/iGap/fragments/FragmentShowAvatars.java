@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.R.string.array_Delete_photo;
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentShowAvatars extends BaseFragment {
 
@@ -398,10 +400,15 @@ public class FragmentShowAvatars extends BaseFragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     HelperSaveFile.savePicToGallery(media, true, new OnFileCopyComplete() {
                         @Override
-                        public void complete(int successMessage) {
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        public void complete(int successMessage,int completePercent) {
+                            progressDialog.setProgress(completePercent);
+                            if (completePercent == 100) {
+                                progressDialog.dismiss();
+                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }

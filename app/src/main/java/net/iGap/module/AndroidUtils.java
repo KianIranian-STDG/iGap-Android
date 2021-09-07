@@ -12,6 +12,7 @@ package net.iGap.module;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -396,11 +397,14 @@ public final class AndroidUtils {
 
     public static void copyFile(File src, File dst, int successMessage, OnFileCopyComplete onFileCopyComplete) throws IOException {
         InputStream in = new FileInputStream(src);
-
-        copyFile(in, dst, successMessage, onFileCopyComplete);
+        copyFile(in, dst, src.length(), successMessage, onFileCopyComplete);
     }
 
-    public static void copyFile(InputStream in, File dst,int successMessage,OnFileCopyComplete onFileCopyComplete) throws IOException {
+    public static void copyFile(InputStream in, File dst)throws IOException{
+        copyFile(in, dst, 0, 0,null);
+    }
+
+    public static void copyFile(InputStream in, File dst, long fileLength, int successMessage,OnFileCopyComplete onFileCopyComplete) throws IOException {
 
         OutputStream out = new FileOutputStream(dst);
         Thread thread = new Thread(new Runnable() {
@@ -410,10 +414,20 @@ public final class AndroidUtils {
                     // Transfer bytes from in to out
                     byte[] buf = new byte[1024];
                     int len = 0;
-
+                    long total = 0;
                     while (true) {
                         if (!((len = in.read(buf)) > 0)) break;
                         out.write(buf, 0, len);
+                        total += len;
+                        long finalTotal = total;
+                        if (fileLength != 0 && onFileCopyComplete != null) {
+                            G.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onFileCopyComplete.complete(successMessage, (int) ((finalTotal * 100) / fileLength));
+                                }
+                            });
+                        }
                     }
 
                     in.close();
@@ -423,7 +437,7 @@ public final class AndroidUtils {
                         G.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onFileCopyComplete.complete(successMessage);
+                                onFileCopyComplete.complete(successMessage,100);
                             }
                         });
                     }
@@ -433,6 +447,16 @@ public final class AndroidUtils {
             }
         });
         thread.start();
+    }
+
+    public static ProgressDialog createProgressDialog(Activity activity){
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setCancelable(false);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(100);
+        progressDialog.show();
+        return progressDialog;
     }
 
     public static boolean deleteFile(File src) {
