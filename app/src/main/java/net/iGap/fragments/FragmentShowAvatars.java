@@ -400,13 +400,10 @@ public class FragmentShowAvatars extends BaseFragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     HelperSaveFile.savePicToGallery(media, true, new OnFileCopyComplete() {
                         @Override
                         public void complete(int successMessage,int completePercent) {
-                            progressDialog.setProgress(completePercent);
-                            if (completePercent == 100) {
-                                progressDialog.dismiss();
+                            if(completePercent == 100) {
                                 Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -337,6 +337,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private void saveToGallery(MessageObject messageObject) {
         if (messageObject != null) {
             String path = getFilePath(messageObject);
+            String extension = path.substring(path.lastIndexOf("."));
             int messageType;
             if (messageObject.forwardedMessage != null) {
                 messageType = messageObject.forwardedMessage.messageType;
@@ -347,7 +348,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
                     ProgressDialog progressDialog = createProgressDialog(getActivity());
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, new OnFileCopyComplete() {
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + extension, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, new OnFileCopyComplete() {
                         @Override
                         public void complete(int successMessage,int completePercent) {
                             progressDialog.setProgress(completePercent);
@@ -358,17 +359,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         }
                     });
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                    ProgressDialog progressDialog = new ProgressDialog(G.context);
-                    progressDialog.setCancelable(false);
-                    progressDialog.setIndeterminate(false);
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressDialog.setMax(100);
-                    progressDialog.show();
                     HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
                         @Override
                         public void complete(int successMessage,int completePercent) {
-                            //prgWaiting.setVisibility(View.GONE);
-                            progressDialog.setProgress(completePercent);
                             if (completePercent == 100) {
                                 Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
                             }

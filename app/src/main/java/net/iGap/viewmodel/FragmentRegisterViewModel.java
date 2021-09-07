@@ -329,13 +329,10 @@ public class FragmentRegisterViewModel extends BaseViewModel {
         }
         File file = new File(_resultQrCode);
         if (file.exists()) {
-            ProgressDialog progressDialog = createProgressDialog(G.fragmentActivity);
             HelperSaveFile.savePicToGallery(_resultQrCode, true, new OnFileCopyComplete() {
                 @Override
                 public void complete(int successMessage,int completePercent) {
-                    progressDialog.setProgress(completePercent);
                     if (completePercent == 100) {
-                        progressDialog.dismiss();
                         Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
