@@ -11,179 +11,246 @@
             type="net.iGap.viewmodel.FragmentSettingViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ProgressBar
-                    android:id="@+id/loading"
+            <View
+                android:id="@+id/line2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="?iGapDividerLine"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/chatSetting"
+                app:layout_constraintWidth_percent=".95" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp18"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onClickNotifyAndSound()}"
+                android:paddingStart="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:paddingEnd="@dimen/dp18"
+                android:paddingBottom="@dimen/dp10"
+                android:text="@string/notificaion_and_sound"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/notification_icon"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+            <TextView
+                android:id="@+id/notification_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_notification"
+                app:layout_constraintBottom_toBottomOf="@id/notification"
+                app:layout_constraintEnd_toStartOf="@id/notification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/notification" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/privacyAndSecurity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onClickPrivacySecurity()}"
+                android:paddingStart="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:paddingEnd="@dimen/dp18"
+                android:paddingBottom="@dimen/dp10"
+                android:text="@string/st_title_Privacy_Security"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="@id/notification"
+                app:layout_constraintStart_toEndOf="@id/privacy_and_security_icon"
+                app:layout_constraintTop_toBottomOf="@id/notification" />
+
+            <TextView
+                android:id="@+id/privacy_and_security_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_privacy_and_security"
+                app:layout_constraintBottom_toBottomOf="@id/privacyAndSecurity"
+                app:layout_constraintEnd_toStartOf="@id/privacyAndSecurity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/privacyAndSecurity" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/dataAndStorage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onClickDataStorage()}"
+                android:paddingStart="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:paddingEnd="@dimen/dp18"
+                android:paddingBottom="@dimen/dp10"
+                android:text="@string/data_storage"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="@id/notification"
+                app:layout_constraintStart_toEndOf="@id/data_storage_icon"
+                app:layout_constraintTop_toBottomOf="@id/privacyAndSecurity" />
+
+            <TextView
+                android:id="@+id/data_storage_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_data_and_storage"
+                app:layout_constraintBottom_toBottomOf="@id/dataAndStorage"
+                app:layout_constraintEnd_toStartOf="@id/dataAndStorage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dataAndStorage" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/chatSetting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onChatSettingClick()}"
+                android:paddingStart="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:paddingEnd="@dimen/dp18"
+                android:paddingBottom="@dimen/dp10"
+                android:text="@string/chat_setting_title"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="@id/notification"
+                app:layout_constraintStart_toEndOf="@id/chat_setting_icon"
+                app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
+
+            <TextView
+                android:id="@+id/chat_setting_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_chat_setting"
+                app:layout_constraintBottom_toBottomOf="@id/chatSetting"
+                app:layout_constraintEnd_toStartOf="@id/chatSetting"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/chatSetting" />
+
+
+            <LinearLayout
+                android:id="@+id/languageContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onLanguageClick()}"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp10"
+                android:paddingBottom="@dimen/dp10"
+                app:layout_constraintEnd_toEndOf="@id/notification"
+                app:layout_constraintStart_toEndOf="@id/language_icon"
+                app:layout_constraintTop_toBottomOf="@id/line2">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/languageTitle"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:indeterminate="true"
-                    android:padding="8dp"
-                    android:visibility="@{viewModel.showLoading}"
-                    app:layout_constraintBottom_toBottomOf="@+id/logout"
-                    app:layout_constraintEnd_toEndOf="@+id/logout"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/logout"
-                    app:layout_constraintTop_toTopOf="@+id/logout" />
-
-                <View
-                    android:id="@+id/line2"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="?iGapDividerLine"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/chatSetting"
-                    app:layout_constraintWidth_percent=".95" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="@dimen/dp10"
+                    android:text="@string/language"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/notification"
-                    android:layout_width="0dp"
+                    android:id="@+id/language"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp18"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickNotifyAndSound()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@string/notificaion_and_sound"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp12"
+                    android:text="@{viewModel.currentLanguage}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/privacyAndSecurity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickPrivacySecurity()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@string/st_title_Privacy_Security"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="@id/notification"
-                    app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/notification" />
+            </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/dataAndStorage"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onClickDataStorage()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@string/data_storage"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="@id/notification"
-                    app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/privacyAndSecurity" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/chatSetting"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onChatSettingClick()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@string/chat_setting_title"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="@id/notification"
-                    app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
+            <TextView
+                android:id="@+id/language_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_language"
+                app:layout_constraintBottom_toBottomOf="@id/languageContainer"
+                app:layout_constraintEnd_toStartOf="@id/languageContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/languageContainer" />
 
 
-                <LinearLayout
-                    android:id="@+id/languageContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->viewModel.onLanguageClick()}"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:background="?attr/selectableItemBackground"
-                    app:layout_constraintEnd_toStartOf="@id/chatSetting"
-                    app:layout_constraintStart_toStartOf="@id/chatSetting"
-                    app:layout_constraintTop_toBottomOf="@id/line2">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onLogoutClick()}"
+                android:paddingStart="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:paddingEnd="@dimen/dp18"
+                android:paddingBottom="@dimen/dp10"
+                android:text="@string/logout"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="@id/notification"
+                app:layout_constraintStart_toEndOf="@id/logout_icon"
+                app:layout_constraintTop_toBottomOf="@id/languageContainer" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/languageTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/language"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/standardTextSize" />
+            <TextView
+                android:id="@+id/logout_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/standardIconSize"
+                android:layout_height="@dimen/standardIconSize"
+                android:layout_marginStart="@dimen/dp18"
+                android:text="@string/icon_log_out"
+                app:layout_constraintBottom_toBottomOf="@id/logout"
+                app:layout_constraintEnd_toStartOf="@id/logout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/logout" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/language"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{viewModel.currentLanguage}"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="@dimen/smallTextSize" />
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:indeterminate="true"
+                android:padding="8dp"
+                android:visibility="@{viewModel.showLoading}"
+                app:layout_constraintBottom_toBottomOf="@+id/logout"
+                app:layout_constraintEnd_toEndOf="@+id/logout"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/logout"
+                app:layout_constraintTop_toTopOf="@+id/logout" />
 
-                </LinearLayout>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/logout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onLogoutClick()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@string/logout"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="@id/notification"
-                    app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/languageContainer" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
