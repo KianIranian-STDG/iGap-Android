@@ -343,7 +343,12 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             File file = new File(path);
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, null);
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, new OnFileCopyComplete() {
+                        @Override
+                        public void complete(int successMessage) {
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
                     HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
                         @Override
