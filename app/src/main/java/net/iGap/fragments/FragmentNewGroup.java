@@ -704,7 +704,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
 
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
-        RealmRoom.updateMemberCount(roomId, roomType, ContactGroupFragment.selectedContacts.size() + 1); // plus with 1 , for own account
+        RealmRoom.updateMemberCount(roomId, roomType, countMember+ 1); // plus with 1 , for own account
         if (getActivity() != null && isAdded()) {
             G.handler.post(new Runnable() {
                 @Override
