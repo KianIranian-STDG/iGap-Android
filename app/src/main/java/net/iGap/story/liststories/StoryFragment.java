@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -29,6 +31,7 @@ import net.iGap.R;
 import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BaseMainFragments;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
@@ -55,6 +58,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoomList;
@@ -114,6 +118,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     int objectsCounter = 0;
     boolean isHaveFailedUpload = false;
     private int myStoryCount = 0;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -197,22 +202,24 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 .getView();
 
 
-        FrameLayout rootView = new FrameLayout(getContext());
-        if (G.themeColor == Theme.DARK) {
-            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-        } else {
-            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-        }
-
-
+        FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
+//        if (G.themeColor == Theme.DARK) {
+//            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
+//        } else {
+//            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+//        }
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+
+        swipeRefreshLayout = new SwipeRefreshLayout(context);
+        swipeRefreshLayout.setRefreshing(false);
+        rootView.addView(swipeRefreshLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();
         recyclerListView.setAdapter(adapter);
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
-        rootView.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
+        swipeRefreshLayout.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
 
         progressBar = new ProgressBar(context);
         progressBar.setVisibility(View.GONE);
@@ -275,11 +282,21 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 new HelperFragment(getActivity().getSupportFragmentManager(), new StatusTextFragment()).setReplace(false).load();
             }
         });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    MessageController.getInstance(AccountManager.selectedAccount).GetStories(realm.where(RealmContacts.class).findAll().size());
+                });
+            }
+        });
         recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean scrollUpdated;
             private boolean scrollingManually;
             private int prevTop;
             private int prevPosition;
+            private int currentScrollPosition = 0;
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -290,7 +307,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
+                currentScrollPosition += dy;
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 View view = layoutManager.getChildAt(0);
@@ -306,7 +323,9 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                         }
                     }
                 }
-
+//                if (currentScrollPosition == 0) {
+//                    swipeRefreshLayout.setRefreshing(true);
+//                }
                 int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
                 if (firstVisibleItem != RecyclerView.NO_POSITION) {
                     RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(firstVisibleItem);
@@ -369,6 +388,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     private void loadStories() {
 
         DbManager.getInstance().doRealmTransaction(realmDB -> {
+            realmDB.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
             stories = realmDB.where(RealmStory.class).findAll();
             myStoryCount = realmDB.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).size();
             otherUserRealmStory = realmDB.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
@@ -441,6 +461,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
+        swipeRefreshLayout.setRefreshing(false);
         if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_INFO) {
             G.runOnUiThread(() -> loadStories());
         } else if (id == EventManager.STORY_UPLOAD) {
@@ -625,7 +646,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     G.runOnUiThread(() -> {
                                         actionButtonsRootView.setVisibility(View.VISIBLE);
                                     });
-                                    storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, otherUserRealmStory.size() > 0, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
+                                    storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                     storyCell.deleteIconVisibility(true);
                                     storyCell.addIconVisibility(false);
@@ -653,7 +674,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     if (isHaveFailedUpload) {
                                         G.runOnUiThread(() -> {
                                             actionButtonsRootView.setVisibility(View.VISIBLE);
-                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
+                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                             storyCell.deleteIconVisibility(true);
                                             storyCell.addIconVisibility(true);
@@ -662,7 +683,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     } else {
                                         G.runOnUiThread(() -> {
                                             actionButtonsRootView.setVisibility(View.GONE);
-                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
+                                            storyCell.setData(realmStory, userDisplayNames.get(position).get(0), userDisplayNames.get(position).get(1), context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                             storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                             storyCell.deleteIconVisibility(true);
                                             storyCell.addIconVisibility(false);
@@ -676,7 +697,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
                             } else {
                                 G.runOnUiThread(() -> {
-                                    storyCell.initView(context, true, StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
+                                    storyCell.initView(context, false, StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
                                     storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
                                     storyCell.setText(getString(R.string.my_status), getString(R.string.tap_to_add_status_update));
                                     storyCell.setImage(R.drawable.avatar, avatarHandler);
@@ -690,7 +711,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "", displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "", displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69", context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
