@@ -43,6 +43,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -66,7 +68,7 @@ public class RoomListCell extends FrameLayout {
     public final int GIF = 0x1F308;
     public final int WALLET = 0x1F4B3;
 
-    private AppCompatTextView roomNameTv;
+    private TextView roomNameTv;
     private FontIconTextView verifyIconTv;
     private CircleImageView avatarImageView;
     private TextView messageDateTv;
@@ -215,7 +217,7 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (room.getTitle() != null && !haveName) {
-            roomNameTv = new AppCompatTextView(getContext());
+            roomNameTv = new TextView(getContext());
             roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
             setTextSize(roomNameTv, R.dimen.dp15);
             roomNameTv.setSingleLine(true);
@@ -301,6 +303,7 @@ public class RoomListCell extends FrameLayout {
             removeView(checkBox);
             haveCheckBox = false;
         }
+        requestLayout();
     }
 
     @Override
@@ -328,7 +331,7 @@ public class RoomListCell extends FrameLayout {
                 int roomNameWidth = LayoutCreator.getTextWidth(roomNameTv);
                 int emojiCount = EmojiManager.getEmojiCount(roomNameTv.getText().toString());
                 if (emojiCount > 0) {
-                    roomNameWidth = roomNameWidth + emojiCount * LayoutCreator.dp(1);
+                    roomNameWidth = roomNameWidth + LayoutCreator.dp(emojiCount * 2);
                 }
                 int roomTop = h2 - roomNameHeight;
                 int nameLeft = 0;
