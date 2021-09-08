@@ -37,7 +37,7 @@ public class ProvinceSuggestionListAdapter extends ArrayAdapter<IGashtProvince> 
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.custom_row_igasht_province_suggestion_list, null);
         }
-        TextView customerNameLabel = v.findViewById(R.id.itemTitle);
+        TextView customerNameLabel = v.findViewById(R.id.item_title);
         if (customerNameLabel != null) {
             customerNameLabel.setText(getProvinceTitle(items.get(position)));
         }

@@ -130,7 +130,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/itemTitle"
+                            android:id="@+id/item_title"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
@@ -160,8 +160,8 @@
                             android:textSize="@dimen/smallTextSize"
                             app:layout_constraintBottom_toBottomOf="@id/itemImage"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/itemTitle"
-                            app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+                            app:layout_constraintStart_toStartOf="@id/item_title"
+                            app:layout_constraintTop_toBottomOf="@id/item_title" />
 
                         <net.iGap.module.CircleImageView
                             android:id="@+id/itemImage"

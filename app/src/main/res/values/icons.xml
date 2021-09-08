@@ -39,6 +39,7 @@
     <string name="icon_contacts">\ueb13</string>
     <string name="icon_add_whit_circle">\ueb52</string> <!-- icon add whit circle -->
     <string name="icon_music">\uea9b</string>
+    <string name="icon_music_file">\uea9c</string>
     <string name="icon_document">\ueb0d</string>
     <string name="icon_location">\ueab7</string> <!-- igap_gps  -->
     <string name="icon_lock">\ueab6</string>
@@ -67,6 +68,7 @@
     <string name="icon_secret_chat">\uea73</string>
     <string name="icon_delete">\ueb1c</string>
     <string name="icon_delete_minus">\ueb1d</string>  <!-- icon delete: minus whit circle  -->
+    <string name="icon_delete_all">\ue908</string>
     <string name="icon_clearing">\ue905</string>
     <string name="icon_clear_history">\ue904</string>
     <string name="icon_share">\uea6c</string>
@@ -107,7 +109,6 @@
     <string name="icon_convert_chat_to_group">\ue906</string>
     <string name="icon_export_chat">\ue907</string>
     <string name="icon_danger">\ueb17</string>
-    <string name="icon_delete_all">\ue908</string>
     <string name="icon_update">\ue909</string>
     <string name="icon_device">\ue90a</string>
     <string name="icon_pin_to_top2">\ue90b</string>

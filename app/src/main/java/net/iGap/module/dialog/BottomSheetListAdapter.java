@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CustomListItemBottomSheetBinding;
 
@@ -38,6 +39,7 @@ public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetList
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.binding.setTitle(items.get(position));
+        holder.binding.setIcon(findRelevantIcon(position));
         holder.binding.setPosition(position);
         holder.binding.executePendingBindings();
         holder.binding.itemTitle.setSelected(true/*position < range*/);
@@ -55,6 +57,39 @@ public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetList
         ViewHolder(@NonNull CustomListItemBottomSheetBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+        }
+    }
+
+    public String findRelevantIcon(int position) {
+        String item = items.get(position);
+        if (item.equals(G.context.getResources().getString(R.string.replay_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_reply);
+        } else if (item.equals(G.context.getResources().getString(R.string.share_item_dialog)) ||
+                item.equals(G.context.getResources().getString(R.string.share_link_item_dialog)) ||
+                item.equals(G.context.getResources().getString(R.string.share_file_link))) {
+            return G.context.getResources().getString(R.string.icon_share);
+        } else if (item.equals(G.context.getResources().getString(R.string.forward_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_forward);
+        } else if (item.equals(G.context.getResources().getString(R.string.delete_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_delete);
+        } else if (item.equals(G.context.getResources().getString(R.string.delete_from_storage))) {
+            return G.context.getResources().getString(R.string.icon_clear_history);
+        } else if (item.equals(G.context.getResources().getString(R.string.save_to_gallery))) {
+            return G.context.getResources().getString(R.string.icon_gallery);
+        } else if (item.equals(G.context.getResources().getString(R.string.save_to_Music))) {
+            return G.context.getResources().getString(R.string.icon_music_file);
+        } else if (item.equals(G.context.getResources().getString(R.string.saveToDownload_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_download);
+        } else if (item.equals(G.context.getResources().getString(R.string.copy_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_copy);
+        } else if (item.equals(G.context.getResources().getString(R.string.edit_item_dialog))) {
+            return G.context.getResources().getString(R.string.icon_edit);
+        } else if (item.equals(G.context.getResources().getString(R.string.PIN))) {
+            return G.context.getResources().getString(R.string.icon_pin_to_top);
+        } else if (item.equals(G.context.getResources().getString(R.string.report))) {
+            return G.context.getResources().getString(R.string.icon_error);
+        } else {
+            return G.context.getResources().getString(R.string.icon_download);
         }
     }
 }
