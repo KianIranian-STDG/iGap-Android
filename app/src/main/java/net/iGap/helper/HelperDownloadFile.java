@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -41,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 
 public class HelperDownloadFile {
@@ -483,10 +486,15 @@ public class HelperDownloadFile {
                 if (file.exists()) {
 
                     if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
+                        ProgressDialog progressDialog = createProgressDialog(G.fragmentActivity);
                         HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false, new OnFileCopyComplete() {
                             @Override
-                            public void complete(int successMessage) {
-                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                            public void complete(int successMessage,int completePercent) {
+                                progressDialog.setProgress(completePercent);
+                                if (completePercent == 100) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     }

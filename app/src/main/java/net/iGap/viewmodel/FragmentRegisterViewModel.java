@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentRegisterViewModel extends BaseViewModel {
 
@@ -328,8 +331,10 @@ public class FragmentRegisterViewModel extends BaseViewModel {
         if (file.exists()) {
             HelperSaveFile.savePicToGallery(_resultQrCode, true, new OnFileCopyComplete() {
                 @Override
-                public void complete(int successMessage) {
-                    Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                public void complete(int successMessage,int completePercent) {
+                    if (completePercent == 100) {
+                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
