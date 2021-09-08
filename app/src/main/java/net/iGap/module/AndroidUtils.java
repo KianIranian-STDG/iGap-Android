@@ -420,7 +420,7 @@ public final class AndroidUtils {
                         out.write(buf, 0, len);
                         total += len;
                         long finalTotal = total;
-                        if (fileLength != 0 && onFileCopyComplete != null) {
+                        if (successMessage != 0 && fileLength != 0 && onFileCopyComplete != null) {
                             G.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -433,14 +433,6 @@ public final class AndroidUtils {
                     in.close();
                     out.close();
 
-                    if (successMessage != 0 && onFileCopyComplete != null) {
-                        G.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onFileCopyComplete.complete(successMessage,100);
-                            }
-                        });
-                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
