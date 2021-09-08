@@ -26,8 +26,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 261
-        versionName "2.2.3.alpha2"
+        versionCode 262
+        versionName "2.2.3.alpha4"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -336,12 +336,12 @@ dependencies {
     //huawei
     implementation 'com.huawei.hms:base:5.0.5.300'
     //exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.0'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.14.0'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.0'
-    implementation 'com.google.android.exoplayer:extension-ima:2.14.0'
-    implementation 'com.google.android.exoplayer:extension-mediasession:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer:2.14.2'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
+    implementation 'com.google.android.exoplayer:extension-ima:2.14.2'
+    implementation 'com.google.android.exoplayer:extension-mediasession:2.14.2'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
