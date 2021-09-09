@@ -709,9 +709,12 @@ public class AttachFile {
                 }
                 //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location location =  getLastKnownLocation();
                 if (location == null) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            0L,
+                            0L, (LocationListener) this);
                     location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
                 if (location != null) {
@@ -734,6 +737,21 @@ public class AttachFile {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private Location getLastKnownLocation() {
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
     void showSettingsAlert(final Fragment fragment) {
