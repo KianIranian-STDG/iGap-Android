@@ -41,7 +41,7 @@ public class CPaySpinnerAdapter extends BaseAdapter {
             holder = new viewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item_without_theme, parent, false);
 
-            holder.txtTitle = convertView.findViewById(R.id.itemTitle);
+            holder.txtTitle = convertView.findViewById(R.id.item_title);
             convertView.setTag(holder);
         } else {
             holder = (viewHolder) convertView.getTag();

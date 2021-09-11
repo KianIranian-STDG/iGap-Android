@@ -10,9 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
-import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -44,11 +42,11 @@ public class UserUpdateStatusResponse extends MessageHandler {
 
         if (identity instanceof RequestUserUpdateStatus.onUserStatus) {
             ((RequestUserUpdateStatus.onUserStatus) identity).onUpdateUserStatus();
-        } else {
+        } /*else {
             if (builder.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
                 HelperLog.getInstance().setErrorLog(new Exception("Wht the hel bagi"));
             }
-        }
+        }*/
 
     }
 

@@ -43,6 +43,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -66,7 +68,7 @@ public class RoomListCell extends FrameLayout {
     public final int GIF = 0x1F308;
     public final int WALLET = 0x1F4B3;
 
-    private AppCompatTextView roomNameTv;
+    private TextView roomNameTv;
     private FontIconTextView verifyIconTv;
     private CircleImageView avatarImageView;
     private TextView messageDateTv;
@@ -215,7 +217,7 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (room.getTitle() != null && !haveName) {
-            roomNameTv = new AppCompatTextView(getContext());
+            roomNameTv = new TextView(getContext());
             roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
             setTextSize(roomNameTv, R.dimen.dp15);
             roomNameTv.setSingleLine(true);
@@ -301,6 +303,7 @@ public class RoomListCell extends FrameLayout {
             removeView(checkBox);
             haveCheckBox = false;
         }
+        requestLayout();
     }
 
     @Override
@@ -328,7 +331,7 @@ public class RoomListCell extends FrameLayout {
                 int roomNameWidth = LayoutCreator.getTextWidth(roomNameTv);
                 int emojiCount = EmojiManager.getEmojiCount(roomNameTv.getText().toString());
                 if (emojiCount > 0) {
-                    roomNameWidth += roomNameWidth + emojiCount;
+                    roomNameWidth = roomNameWidth + LayoutCreator.dp(emojiCount * 2);
                 }
                 int roomTop = h2 - roomNameHeight;
                 int nameLeft = 0;
@@ -366,144 +369,154 @@ public class RoomListCell extends FrameLayout {
                         nameRight = avatarRight + roomNameWidth + standardMargin;
                     }
                 }
-                if (haveDate) {
-                    int dateWidth = LayoutCreator.getTextWidth(messageDateTv);
-                    int dateHeight = LayoutCreator.getTextHeight(messageDateTv);
-                    int dateTop = h2 - dateHeight;
+                int dateWidth = 0;
+                int dateHeight = 0;
+                int dateTop;
+                int dateLeft;
+                int dateRight;
 
-                    int dateRight = isRtl ? dateWidth + paddingEnd : getWidth() - paddingEnd;
-                    int dateLeft = isRtl ? paddingEnd : getWidth() - dateWidth - paddingEnd;
+                if (haveDate) {
+                    dateWidth = LayoutCreator.getTextWidth(messageDateTv);
+                    dateHeight = LayoutCreator.getTextHeight(messageDateTv);
+                    dateTop = h2 - dateHeight;
+
+                    dateRight = isRtl ? dateWidth + paddingEnd : getWidth() - paddingEnd;
+                    dateLeft = isRtl ? paddingEnd : getWidth() - dateWidth - paddingEnd;
 
                     messageDateTv.measure(makeMeasureSpec(dateWidth, AT_MOST), makeMeasureSpec(dateHeight, AT_MOST));
                     messageDateTv.layout(dateLeft, dateTop, dateRight, h2);
+                } else {
+                    dateTop = h2;
+                    dateRight = isRtl ? paddingEnd : getWidth() - paddingEnd;
+                    dateLeft = isRtl ? paddingEnd : getWidth() - paddingEnd;
+                }
 
-                    int muteRight;
-                    int muteLeft;
-                    int muteWidth = 0;
+                int muteRight;
+                int muteLeft;
+                int muteWidth = 0;
 
-                    int verifyRight;
-                    int verifyLeft;
-                    int verifyWidth = 0;
+                int verifyRight;
+                int verifyLeft;
+                int verifyWidth = 0;
 
-                    if (roomVerified) {
+                if (roomVerified) {
 
-                        verifyWidth = LayoutCreator.getTextWidth(verifyIconTv);
-                        int t = (dateHeight - verifyWidth) / 2;
-                        if (isMute) {
-                            muteWidth = LayoutCreator.getTextWidth(muteIconTv);
-                            int muteTop = dateTop + t;
-
-                            finalNameLeft = isRtl ? nameLeft : nameLeft;
-                            finalNameRight = isRtl ? nameRight : nameRight;
-
-                            muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
-                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
-
-                            muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
-                            muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
-
-                            verifyRight = isRtl ? muteLeft - smallMargin : muteRight + verifyWidth + smallMargin;
-                            verifyLeft = isRtl ? muteLeft - verifyWidth - smallMargin : muteRight + smallMargin;
-
-                        } else {
-                            verifyRight = isRtl ? nameLeft : nameRight + verifyWidth + smallMargin;
-                            verifyLeft = isRtl ? nameLeft - verifyWidth - smallMargin : nameRight + smallMargin;
-
-                            finalNameLeft = isRtl ? nameLeft : nameLeft;
-                            finalNameRight = isRtl ? nameRight : nameRight;
-                        }
-
-                        int verifyTop = dateTop + t;
-
-                        verifyIconTv.measure(makeMeasureSpec(verifyWidth, AT_MOST), makeMeasureSpec(verifyWidth, AT_MOST));
-                        verifyIconTv.layout(verifyLeft, verifyTop, verifyRight, h2 - t);
-                    } else {
-                        if (isMute) {
-                            muteWidth = LayoutCreator.getTextWidth(muteIconTv);
-                            int t = (dateHeight - muteWidth) / 2;
-                            int muteTop = dateTop + t;
-
-                            if (isRtl) {
-                                if (nameLeft < dateRight + muteWidth) {
-                                    finalNameLeft = dateRight + muteWidth + standardMargin;
-                                } else {
-                                    finalNameLeft = nameLeft;
-                                }
-                                finalNameRight = nameRight;
-
-                            } else {
-                                finalNameLeft = nameLeft;
-                                if (nameRight > dateLeft - muteWidth) {
-                                    finalNameRight = dateLeft - muteWidth - standardMargin;
-                                } else {
-                                    finalNameRight = nameRight;
-                                }
-                            }
-
-                            muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
-                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
-
-                            muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
-                            muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
-                        } else {
-                            finalNameLeft = isRtl ? dateRight + standardMargin : nameLeft;
-                            finalNameRight = isRtl ? nameRight : dateLeft - standardMargin;
-                        }
-                    }
-
-
-                    if (haveStatus) {
-                        int statusHeight = LayoutCreator.getTextHeight(statusTv);
-                        int statusWidth = LayoutCreator.getTextWidth(statusTv);
-
-
-                        int statusRight = isRtl ? dateRight + statusWidth + standardMargin : dateLeft - standardMargin;
-                        int statusLeft = isRtl ? dateRight + standardMargin : dateLeft - statusWidth - standardMargin;
-
-                        int t = (dateHeight - statusHeight) / 2;
-                        statusTv.measure(makeMeasureSpec(statusWidth, AT_MOST), makeMeasureSpec(statusHeight, AT_MOST));
-                        statusTv.layout(statusLeft, dateTop + t, statusRight, h2 - t);
+                    verifyWidth = LayoutCreator.getTextWidth(verifyIconTv);
+                    int t = (dateHeight - verifyWidth) / 2;
+                    if (isMute) {
+                        muteWidth = LayoutCreator.getTextWidth(muteIconTv);
+                        int muteTop = dateTop + t;
 
                         finalNameLeft = isRtl ? nameLeft : nameLeft;
                         finalNameRight = isRtl ? nameRight : nameRight;
 
-                        int newMuteLeft = 0;
-                        int newMuteRight;
-                        int newVerifyLeft;
-                        int newVerifyRight;
-                        if (!isRtl) {
-                            if (nameRight > statusLeft) {
-                                finalNameRight = statusLeft - statusWidth - muteWidth - verifyWidth;
-                                newMuteLeft = finalNameRight;
-                                newMuteRight = finalNameRight + muteWidth;
-                                if (isMute) {
-                                    muteIconTv.layout(newMuteLeft, dateTop + t, newMuteRight, h2 - t);
-                                }
-                                newVerifyLeft = newMuteRight + smallMargin;
-                                newVerifyRight = newMuteRight + verifyWidth;
-                                if (roomVerified) {
-                                    verifyIconTv.layout(newVerifyLeft, dateTop + t, newVerifyRight, h2 - t);
-                                }
-                            }
-                        } else {
-                            if (nameLeft < statusRight) {
-                                finalNameLeft = statusRight + statusWidth + muteWidth + verifyWidth;
-                                newMuteRight = finalNameLeft - smallMargin;
-                                newMuteLeft = finalNameLeft - muteWidth - smallMargin;
-                                if (isMute) {
-                                    muteIconTv.layout(newMuteLeft, dateTop + t, newMuteRight, h2 - t);
-                                }
+                        muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
+                        muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
 
-                                newVerifyRight = newMuteLeft - smallMargin;
-                                newVerifyLeft = newMuteLeft - verifyWidth - smallMargin;
-                                if (roomVerified) {
-                                    verifyIconTv.layout(newVerifyLeft, dateTop + t, newVerifyRight, h2 - t);
-                                }
+                        muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
+                        muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
+
+                        verifyRight = isRtl ? muteLeft - smallMargin : muteRight + verifyWidth + smallMargin;
+                        verifyLeft = isRtl ? muteLeft - verifyWidth - smallMargin : muteRight + smallMargin;
+
+                    } else {
+                        verifyRight = isRtl ? nameLeft : nameRight + verifyWidth + smallMargin;
+                        verifyLeft = isRtl ? nameLeft - verifyWidth - smallMargin : nameRight + smallMargin;
+
+                        finalNameLeft = isRtl ? nameLeft : nameLeft;
+                        finalNameRight = isRtl ? nameRight : nameRight;
+                    }
+
+                    int verifyTop = dateTop + t;
+
+                    verifyIconTv.measure(makeMeasureSpec(verifyWidth, AT_MOST), makeMeasureSpec(verifyWidth, AT_MOST));
+                    verifyIconTv.layout(verifyLeft, verifyTop, verifyRight, h2 - t);
+                } else {
+                    if (isMute) {
+                        muteWidth = LayoutCreator.getTextWidth(muteIconTv);
+                        int t = (dateHeight - muteWidth) / 2;
+                        int muteTop = dateTop + t;
+
+                        if (isRtl) {
+                            if (nameLeft < dateRight + muteWidth) {
+                                finalNameLeft = dateRight + muteWidth + standardMargin;
+                            } else {
+                                finalNameLeft = nameLeft;
+                            }
+                            finalNameRight = nameRight;
+
+                        } else {
+                            finalNameLeft = nameLeft;
+                            if (nameRight > dateLeft - muteWidth) {
+                                finalNameRight = dateLeft - muteWidth - standardMargin;
+                            } else {
+                                finalNameRight = nameRight;
+                            }
+                        }
+
+                        muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
+                        muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
+
+                        muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
+                        muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
+                    } else {
+                        finalNameLeft = isRtl ? dateRight + standardMargin : nameLeft;
+                        finalNameRight = isRtl ? nameRight : dateLeft - standardMargin;
+                    }
+                }
+
+
+                if (haveStatus) {
+                    int statusHeight = LayoutCreator.getTextHeight(statusTv);
+                    int statusWidth = LayoutCreator.getTextWidth(statusTv);
+
+
+                    int statusRight = isRtl ? dateRight + statusWidth + standardMargin : dateLeft - standardMargin;
+                    int statusLeft = isRtl ? dateRight + standardMargin : dateLeft - statusWidth - standardMargin;
+
+                    int t = (dateHeight - statusHeight) / 2;
+                    statusTv.measure(makeMeasureSpec(statusWidth, AT_MOST), makeMeasureSpec(statusHeight, AT_MOST));
+                    statusTv.layout(statusLeft, dateTop + t, statusRight, h2 - t);
+
+                    finalNameLeft = isRtl ? nameLeft : nameLeft;
+                    finalNameRight = isRtl ? nameRight : nameRight;
+
+                    int newMuteLeft = 0;
+                    int newMuteRight;
+                    int newVerifyLeft;
+                    int newVerifyRight;
+                    if (!isRtl) {
+                        if (nameRight > statusLeft) {
+                            finalNameRight = statusLeft - statusWidth - muteWidth - verifyWidth;
+                            newMuteLeft = finalNameRight;
+                            newMuteRight = finalNameRight + muteWidth;
+                            if (isMute) {
+                                muteIconTv.layout(newMuteLeft, dateTop + t, newMuteRight, h2 - t);
+                            }
+                            newVerifyLeft = newMuteRight + smallMargin;
+                            newVerifyRight = newMuteRight + verifyWidth;
+                            if (roomVerified) {
+                                verifyIconTv.layout(newVerifyLeft, dateTop + t, newVerifyRight, h2 - t);
+                            }
+                        }
+                    } else {
+                        if (nameLeft < statusRight) {
+                            finalNameLeft = statusRight + statusWidth + muteWidth + verifyWidth;
+                            newMuteRight = finalNameLeft - smallMargin;
+                            newMuteLeft = finalNameLeft - muteWidth - smallMargin;
+                            if (isMute) {
+                                muteIconTv.layout(newMuteLeft, dateTop + t, newMuteRight, h2 - t);
+                            }
+
+                            newVerifyRight = newMuteLeft - smallMargin;
+                            newVerifyLeft = newMuteLeft - verifyWidth - smallMargin;
+                            if (roomVerified) {
+                                verifyIconTv.layout(newVerifyLeft, dateTop + t, newVerifyRight, h2 - t);
                             }
                         }
                     }
-
                 }
+
                 roomNameTv.measure(makeMeasureSpec(finalNameRight - finalNameLeft, EXACTLY), makeMeasureSpec(roomNameHeight, AT_MOST));
                 roomNameTv.layout(finalNameLeft, roomTop, finalNameRight, h2);
             }
@@ -548,6 +561,14 @@ public class RoomListCell extends FrameLayout {
                 } else {
                     lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
                     lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
+                }
+            } else {
+                if (havePin) {
+                    int pinRight = isRtl ? paddingEnd + LayoutCreator.getTextWidth(pinIcon) + standardMargin : getWidth() - paddingEnd;
+                    int pinLeft = isRtl ? paddingEnd : getWidth() - LayoutCreator.getTextWidth(pinIcon) - paddingEnd - standardMargin;
+
+                    pinIcon.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(35, EXACTLY));
+                    pinIcon.layout(pinLeft, h2 + dpToPx(4), pinRight, h2 + dpToPx(30));
                 }
             }
 

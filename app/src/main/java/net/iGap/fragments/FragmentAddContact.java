@@ -11,42 +11,52 @@
 package net.iGap.fragments;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.AdapterDialog;
+import net.iGap.databinding.FragmentAddContactBinding;
 import net.iGap.helper.HelperAddContact;
-import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.OnCountryCallBack;
+import net.iGap.module.SoftKeyboard;
 import net.iGap.observers.interfaces.OnUserContactEdit;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.CountryReader;
@@ -54,6 +64,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsEdit;
+import net.iGap.viewmodel.FragmentAddContactViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -71,21 +82,14 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     private static final String CONTACT_ID = "CONTACT_ID";
     private static final String CONTACT_NAME = "NAME";
     private static final String CONTACT_FAMILY = "FAMILY";
-
-    public static OnCountryCallBack onCountryCallBack;
     private OnContactUpdate onContactUpdate;
-    private EditText edtFirstName;
-    private EditText edtLastName;
-    private MaskedEditText edtPhoneNumber;
-    private ViewGroup parent;
-    private EditText txtCodeCountry;
     private HelperToolbar mHelperToolbar;
     private long mContactId = 0;
     private long mContactPhone = 0;
     private String mContactName = "", mContactFamily = "";
     private ContactMode pageMode;
-    private ProgressBar loader;
-    private TextView phoneNumberError;
+    private FragmentAddContactViewModel viewModel;
+    private FragmentAddContactBinding binding;
 
     public static FragmentAddContact newInstance(String phone, ContactMode mode) {
         FragmentAddContact fragment = new FragmentAddContact();
@@ -109,65 +113,64 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentAddContactViewModel(new CountryReader().readFromAssetsTextFile("country.txt", getContext()));
+            }
+        }).get(FragmentAddContactViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_add_contact, container, false));
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_contact, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        edtFirstName = view.findViewById(R.id.ac_edt_firstName);
-        edtLastName = view.findViewById(R.id.ac_edt_lastName);
-        edtPhoneNumber = view.findViewById(R.id.ac_edt_phoneNumber);
-        txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
-        parent = view.findViewById(R.id.ac_layoutParent);
-        loader = view.findViewById(R.id.loader);
-        phoneNumberError = view.findViewById(R.id.phoneNumberError);
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             pageMode = ContactMode.valueOf(bundle.getString(CONTACT_MODE, ContactMode.ADD.name()));
-
             String contactName = bundle.getString(NAME, "");
-            edtFirstName.setText(contactName);
+            binding.acEdtFirstName.setText(contactName);
 
             if (pageMode == ContactMode.EDIT) {
                 mContactId = bundle.getLong(CONTACT_ID, 0);
                 mContactName = bundle.getString(CONTACT_NAME, "");
                 mContactFamily = bundle.getString(CONTACT_FAMILY, "");
                 mContactPhone = Long.valueOf(bundle.getString(PHONE, "+0").substring(1));
-
-                edtFirstName.setText(mContactName);
-                edtLastName.setText(mContactFamily);
-                edtPhoneNumber.setEnabled(false);
-                txtCodeCountry.setEnabled(false);
+                binding.acEdtFirstName.setText(mContactName);
+                binding.acEdtLastName.setText(mContactFamily);
+                binding.acEdtPhoneNumber.setEnabled(false);
+                binding.acTxtCodeCountry.setEnabled(false);
             }
         }
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-        initComponent(view);
+        initComponent();
     }
 
-    private void initComponent(final View view) {
-
-        setupToolbar(view);
-
+    private void initComponent() {
+        setupToolbar();
         String phoneFromUrl = "";
-        String countryCode = "";
+        String countryCodee = "";
         try {
             phoneFromUrl = getArguments().getString(PHONE);
             if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
-
                 if (phoneFromUrl.startsWith("+")) {
                     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
                     try {
                         Phonenumber.PhoneNumber numberProto = phoneUtil.parse(phoneFromUrl, "");
                         phoneFromUrl = numberProto.getNationalNumber() + "";
-                        countryCode = numberProto.getCountryCode() + "";
+                        countryCodee = numberProto.getCountryCode() + "";
                     } catch (NumberParseException e) {
                         phoneFromUrl = phoneFromUrl.substring(1);
                     }
@@ -179,47 +182,17 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             e.printStackTrace();
         }
 
-        parent.setOnClickListener(view1 -> {
-
-        });
-
-        txtCodeCountry.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChooseCountry()).setReplace(false).load();
-                closeKeyboard(v);
-            }
-        });
-
-        //when user clicked on edit text keyboard wont open with this code
-        txtCodeCountry.setOnFocusChangeListener((v, hasFocus) -> {
+        binding.acTxtCodeCountry.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                closeKeyboard(txtCodeCountry);
-
+                closeKeyboard(binding.acTxtCodeCountry);
             }
         });
 
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
-            edtPhoneNumber.setText(phoneFromUrl);
+            binding.acEdtPhoneNumber.setText(phoneFromUrl);
         }
 
-        edtFirstName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                isEnableSetButton();
-            }
-        });
-        edtLastName.addTextChangedListener(new TextWatcher() {
+        binding.acEdtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -235,7 +208,25 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                 isEnableSetButton();
             }
         });
-        edtPhoneNumber.addTextChangedListener(new TextWatcher() {
+
+        binding.acEdtLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                isEnableSetButton();
+            }
+        });
+
+        binding.acEdtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -250,57 +241,151 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             }
         });
 
-        edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                phoneNumberError.setText(R.string.empty_error_message);
-                if (edtPhoneNumber.getText().toString().startsWith("0")) {
-                    phoneNumberError.setText(R.string.Toast_First_0);
-                    edtPhoneNumber.setText("");
-                }
+        binding.acEdtPhoneNumber.setOnFocusChangeListener((v, hasFocus) -> {
+            binding.phoneNumberError.setText(R.string.empty_error_message);
+            if (binding.acEdtPhoneNumber.getText().toString().startsWith("0")) {
+                binding.phoneNumberError.setText(R.string.Toast_First_0);
+                binding.acEdtPhoneNumber.setText("");
             }
         });
 
         G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        onCountryCallBack = (nameCountry, code, mask) -> G.handler.post(() -> {
-            txtCodeCountry.setText(nameCountry);
-            txtCodeCountry.setText("+" + code);
-            if (!mask.equals(" ")) {
-                edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
-
-            } else {
-                edtPhoneNumber.setMask("###-###-####");
-            }
-        });
-
-        if (countryCode.length() > 0) {
-            txtCodeCountry.setText("+" + countryCode);
+        if (countryCodee.length() > 0) {
+            binding.acTxtCodeCountry.setText("+" + countryCodee);
             CountryReader countryReade = new CountryReader();
             StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
             String[] listArray = fileListBuilder.toString().split("\\r?\\n");
 
             for (String aListArray : listArray) {
                 String[] listItem = aListArray.split(";");
-                if (countryCode.equals(listItem[0])) {
-                    txtCodeCountry.setText(listItem[2]);
+                if (countryCodee.equals(listItem[0])) {
+                    binding.acTxtCodeCountry.setText(listItem[2]);
                     if (listItem.length > 3) {
                         if (!listItem[3].equals(" ")) {
-                            edtPhoneNumber.setMask(listItem[3].replace("X", "#").replace(" ", "-"));
+                            binding.acEdtPhoneNumber.setMask(listItem[3].replace("X", "#").replace(" ", "-"));
                         }
                     }
                     break;
                 }
             }
         }
+
+        viewModel.getCodeCountryClick().observe(getViewLifecycleOwner(), isClick -> {
+            if (isClick && getActivity() != null) {
+                showCountryDialog();
+                closeKeyboard(getView());
+            }
+        });
+
+        viewModel.getHasError().observe(getViewLifecycleOwner(), hasError -> {
+            if (hasError) {
+                HelperError.showSnackMessage(context.getResources().getString(R.string.error), true);
+            }
+        });
     }
 
-    private void setupToolbar(View view) {
+    private void showCountryDialog() {
+        if (getActivity() != null) {
+            Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.rg_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+            int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
+            int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
+            dialog.getWindow().setLayout(setWidth, setHeight);
+            final TextView txtTitle = dialog.findViewById(R.id.rg_txt_titleToolbar);
+            SearchView edtSearchView = dialog.findViewById(R.id.rg_edtSearch_toolbar);
+
+            txtTitle.setOnClickListener(view -> {
+                edtSearchView.setIconified(false);
+                edtSearchView.setIconifiedByDefault(true);
+                txtTitle.setVisibility(View.GONE);
+            });
+
+            edtSearchView.setOnCloseListener(() -> {
+                txtTitle.setVisibility(View.VISIBLE);
+                return false;
+            });
+
+            final ListView listView = dialog.findViewById(R.id.lstContent);
+            AdapterDialog adapterDialog = new AdapterDialog(viewModel.structCountryList);
+            listView.setAdapter(adapterDialog);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                viewModel.setCountry(adapterDialog.getItem(position));
+                dialog.dismiss();
+            });
+
+            final ViewGroup root = dialog.findViewById(android.R.id.content);
+            InputMethodManager im = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+            softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+                @Override
+                public void onSoftKeyboardHide() {
+                    G.handler.post(() -> {
+                        if (edtSearchView.getQuery().toString().length() > 0) {
+                            edtSearchView.setIconified(false);
+                            edtSearchView.clearFocus();
+                            txtTitle.setVisibility(View.GONE);
+                        } else {
+                            edtSearchView.setIconified(true);
+                            txtTitle.setVisibility(View.VISIBLE);
+                        }
+                        adapterDialog.notifyDataSetChanged();
+                    });
+                }
+
+                @Override
+                public void onSoftKeyboardShow() {
+                    G.handler.post(() -> txtTitle.setVisibility(View.GONE));
+                }
+            });
+
+            final View border = dialog.findViewById(R.id.rg_borderButton);
+            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    if (i > 0) {
+                        border.setVisibility(View.VISIBLE);
+                    } else {
+                        border.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            AdapterDialog.mSelectedVariation = -1;
+
+            adapterDialog.notifyDataSetChanged();
+
+            edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    adapterDialog.getFilter().filter(s);
+                    return false;
+                }
+            });
+
+            dialog.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialog.dismiss());
+
+            if (!(getActivity()).isFinishing()) {
+                dialog.show();
+            }
+        }
+    }
+
+    private void setupToolbar() {
         String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit);
-
-        ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
-
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -309,13 +394,11 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                 .setDefaultTitle(toolbarTitle)
                 .setLogoShown(true)
                 .setListener(this);
-
-        toolbarLayout.addView(mHelperToolbar.getView());
+        binding.frgAddContactToolbar.addView(mHelperToolbar.getView());
     }
 
     private void isEnableSetButton() {
-
-        if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) && edtPhoneNumber.getText().toString().length() > 0) {
+        if ((binding.acEdtFirstName.getText().toString().length() > 0 || binding.acEdtLastName.getText().toString().length() > 0) && binding.acEdtPhoneNumber.getText().toString().length() > 0) {
             mHelperToolbar.getRightButton().setEnabled(true);
         } else {
             mHelperToolbar.getRightButton().setEnabled(false);
@@ -328,48 +411,38 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         removeFromBaseFragment(FragmentAddContact.this);
     }
 
-    /**
-     * import contact to server with True force
-     */
     private void addContactToServer() {
-
         if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }
-
-        String _phone = edtPhoneNumber.getText().toString();
-        String codeCountry = txtCodeCountry.getText().toString();
+        String _phone = binding.acEdtPhoneNumber.getText().toString();
+        String codeCountry = binding.acTxtCodeCountry.getText().toString();
         String saveNumber = codeCountry + _phone;
-
         List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
-        contact.firstName = edtFirstName.getText().toString();
-        contact.lastName = edtLastName.getText().toString();
+        contact.firstName = binding.acEdtFirstName.getText().toString();
+        contact.lastName = binding.acEdtLastName.getText().toString();
         contact.phone = saveNumber;
-
         contacts.add(contact);
-
         new RequestUserContactImport().contactImport(contacts, true, RequestUserContactImport.KEY);
     }
 
     private void addToContactList(View view) {
-        if (edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) {
-            if (edtPhoneNumber.getText().toString().length() > 0) {
-
-                final String phone = edtPhoneNumber.getText().toString();
-                final String firstName = edtFirstName.getText().toString();
-                final String lastName = edtLastName.getText().toString();
-                final String codeNumber = txtCodeCountry.getText().toString();
+        if (binding.acEdtFirstName.getText().toString().length() > 0 || binding.acEdtLastName.getText().toString().length() > 0) {
+            if (binding.acEdtPhoneNumber.getText().toString().length() > 0) {
+                final String phone = binding.acEdtPhoneNumber.getText().toString();
+                final String firstName = binding.acEdtFirstName.getText().toString();
+                final String lastName = binding.acEdtLastName.getText().toString();
+                final String codeNumber = binding.acTxtCodeCountry.getText().toString();
                 String displayName = firstName + " " + lastName;
-
 
                 if (pageMode == ContactMode.ADD) {
                     changePage(view);
                     HelperAddContact.addContact(displayName, codeNumber, phone);
                 } else if (pageMode == ContactMode.EDIT) {
                     closeKeyboard(view);
-                    loader.setVisibility(View.VISIBLE);
+                    binding.loader.setVisibility(View.VISIBLE);
                     G.onUserContactEdit = this;
                     new RequestUserContactsEdit().contactsEdit(mContactId, mContactPhone, firstName, lastName);
                 }
@@ -382,17 +455,15 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         }
     }
 
-
     @Override
     public void onLeftIconClickListener(View view) {
         changePage(view);
-
     }
 
     @Override
     public void onRightIconClickListener(View view) {
-        edtPhoneNumber.clearFocus();
-        if (!TextUtils.isEmpty(edtPhoneNumber.getText())) {
+        binding.acEdtPhoneNumber.clearFocus();
+        if (!TextUtils.isEmpty(binding.acEdtPhoneNumber.getText())) {
             if (pageMode == ContactMode.ADD) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -435,7 +506,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                             } else {
                                 addToContactList(view);
                             }
-                            editContactByApi();
                             dialog.dismiss();
                         })
                         .show();
@@ -443,25 +513,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         }
     }
 
-    private void editContactByApi() {
-    }
-
-    public EditText getEdtFirstName() {
-        return edtFirstName;
-    }
-
-    public EditText getEdtLastName() {
-        return edtLastName;
-    }
-
-    public MaskedEditText getEdtPhoneNumber() {
-        return edtPhoneNumber;
-    }
-
     @Override
     public void onContactEdit(String firstName, String lastName, String initials) {
         G.handler.postDelayed(() -> {
-            loader.setVisibility(View.GONE);
+            binding.loader.setVisibility(View.GONE);
             //HelperError.showSnackMessage(getString(R.string.user_edited), false);
             if (onContactUpdate != null)
                 onContactUpdate.updateContact(firstName, lastName);
@@ -472,23 +527,22 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     @Override
     public void onContactEditTimeOut() {
         G.handler.post(() -> {
-            loader.setVisibility(View.GONE);
-            Toast.makeText(loader.getContext(), R.string.server_do_not_response, Toast.LENGTH_SHORT).show();
+            binding.loader.setVisibility(View.GONE);
+            Toast.makeText(binding.loader.getContext(), R.string.server_do_not_response, Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
     public void onContactEditError(int majorCode, int minorCode) {
         G.handler.post(() -> {
-            loader.setVisibility(View.GONE);
-            Toast.makeText(loader.getContext(), R.string.server_error, Toast.LENGTH_SHORT).show();
+            binding.loader.setVisibility(View.GONE);
+            Toast.makeText(binding.loader.getContext(), R.string.server_error, Toast.LENGTH_SHORT).show();
         });
     }
 
     public enum ContactMode {
         ADD, EDIT
     }
-
 
     @FunctionalInterface
     public interface OnContactUpdate {

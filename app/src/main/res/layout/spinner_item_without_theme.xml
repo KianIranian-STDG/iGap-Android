@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemTitle"
+    android:id="@+id/item_title"
     android:textColor="@color/black"
     android:background="@color/white"
     android:layout_width="match_parent"

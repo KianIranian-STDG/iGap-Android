@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentStorageDataBinding;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.DataStorageViewModel;
 
@@ -34,6 +36,8 @@ public class DataStorageFragment extends BaseFragment {
 
     private FragmentStorageDataBinding binding;
     private DataStorageViewModel viewModel;
+    private Toolbar dataStorageToolbar;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,22 +64,19 @@ public class DataStorageFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.toolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.data_storage))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
-                    }
-                })
-                .getView()
-        );
+        dataStorageToolbar = new Toolbar(getContext());
+        dataStorageToolbar.setBackIcon(new BackDrawable(false));
+        dataStorageToolbar.setTitle(getString(R.string.data_storage));
+        dataStorageToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
+                    }popBackStackFragment();
+                    break;
+            }
+        });
+        binding.toolbar.addView(dataStorageToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         viewModel.getGoToDataUsagePage().observe(getViewLifecycleOwner(), isWifiData -> {
             if (getActivity() instanceof ActivityManageSpace && isWifiData != null) {

@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,9 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPrivacyAndSecurityBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserProfileGetSelfRemove;
@@ -40,6 +42,8 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     private FragmentPrivacyAndSecurityViewModel fragmentPrivacyAndSecurityViewModel;
     private FragmentPrivacyAndSecurityBinding fragmentPrivacyAndSecurityBinding;
+    private Toolbar privacyAndSecurityToolbar;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,18 +70,17 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(getString(R.string.st_title_Privacy_Security))
-                .setLeftIcon(R.string.icon_back)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                }).getView());
+        privacyAndSecurityToolbar = new Toolbar(getContext());
+        privacyAndSecurityToolbar.setBackIcon(new BackDrawable(false));
+        privacyAndSecurityToolbar.setTitle(getString(R.string.st_title_Privacy_Security));
+        privacyAndSecurityToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    break;
+            }
+        });
+        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(privacyAndSecurityToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
 

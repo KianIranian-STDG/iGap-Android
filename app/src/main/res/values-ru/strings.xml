@@ -467,10 +467,10 @@
     <string name="iGap_settings">Настройки учетной записи iGap</string>
     <string name="please_write_your_message">Пожалуйста, напишите ваше сообщение!</string>
     <string name="share_audio_file">Поделиться аудио файлом</string>
+    <string name="shared_images">Поделиться фотографией</string>
     <string name="share_image">Поделиться фотографией</string>
-    <string name="share_image_2">Поделиться фотографией</string>
-    <string name="share_video_file_2">Поделиться видеофайлом</string>
     <string name="share_video_file">Поделиться видеофайлом</string>
+    <string name="shared_videos_file">Поделиться видеофайлом</string>
     <string name="share_file">Поделитьс файлом</string>
     <string name="text_copied">Скопированный текст</string>
     <string name="message">Сообщение</string>
@@ -1667,4 +1667,7 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+    <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است</string>
+
+    <string name="how_to_get_points">Как заработать баллы</string>
 </resources>

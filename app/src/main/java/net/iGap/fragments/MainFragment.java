@@ -275,6 +275,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         floatActionLayout = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
         floatActionLayout.setBackground(drawable);
+        floatActionLayout.setAlpha(.9f);
         floatActionLayout.setOnClickListener(v -> onFloatActionClick());
         layout.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 

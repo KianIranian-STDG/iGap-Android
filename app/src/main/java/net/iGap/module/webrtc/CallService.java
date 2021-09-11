@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -464,7 +463,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         super.onDestroy();
 
         if (myPhoneStateService != null) {
-            myPhoneStateService.onDestroy();
+            //myPhoneStateService.onDestroy();
             unregisterReceiver(myPhoneStateService);
             myPhoneStateService = null;
         }

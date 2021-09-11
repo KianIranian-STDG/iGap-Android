@@ -12,7 +12,7 @@
     <ScrollView
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -125,8 +125,8 @@
                 android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/referralEditText"
                 app:layout_constraintLeft_toLeftOf="@id/name"
-                app:layout_constraintTop_toTopOf="@id/referralEditText"
-                app:layout_constraintRight_toLeftOf="@id/referralEditText"/>
+                app:layout_constraintRight_toLeftOf="@id/referralEditText"
+                app:layout_constraintTop_toTopOf="@id/referralEditText" />
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/referralEditText"
@@ -155,11 +155,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.referralError}"
-                app:layout_constraintStart_toStartOf="@id/name"
-                app:layout_constraintTop_toBottomOf="@id/referralEditText"
                 android:textColor="@color/red"
                 android:textDirection="ltr"
-                android:textSize="@dimen/smallTextSize"/>
+                android:textSize="@dimen/smallTextSize"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/referralEditText" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/gender"

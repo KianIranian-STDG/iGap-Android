@@ -477,6 +477,13 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = false;
                 break;
+            case "Español":
+                selectedLanguage = "es";
+                HelperCalander.isPersianUnicode = false;
+                G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
+                break;
             case "Russian":
                 selectedLanguage = "ru";
                 HelperCalander.isPersianUnicode = false;

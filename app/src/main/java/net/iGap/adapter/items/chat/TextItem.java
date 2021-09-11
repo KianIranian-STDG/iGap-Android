@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -61,7 +62,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.END);
             setLayoutMessageContainer(layout_577);
         }
     }

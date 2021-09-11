@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import net.iGap.libs.swipeback.VerticalSwipeBackLayout;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -76,10 +78,11 @@ import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Sort;
+
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private TextView contentNumberTv;
@@ -154,6 +157,13 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 imgPlay.setActivated(isPlaying);
+                if (isPlaying) {
+                    if (MusicPlayer.isMusicPlyerEnable) {
+                        if (MusicPlayer.mp.isPlaying()) {
+                            MusicPlayer.playAndPause();
+                        }
+                    }
+                }
             }
         });
     }
@@ -210,7 +220,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         });
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage(roomMessages.get(selectedFile)));
+        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuTopSheet(roomMessages.get(selectedFile)));
 
         imgPlay = view.findViewById(R.id.imgPlay);
         viewPager = view.findViewById(R.id.asi_view_pager);
@@ -288,15 +298,15 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         viewPager.registerOnPageChangeCallback(viewPagerListener);
     }
 
-    public void popUpMenuShowImage(RealmRoomMessage roomMessage) {
+    public void popUpMenuTopSheet(RealmRoomMessage roomMessage) {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.save_to_gallery));
         MessageObject messageObject = MessageObject.create(roomMessage);
         ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            items.add(getString(R.string.share_video_file_2));
+            items.add(getString(R.string.share_video_file));
         } else {
-            items.add(getString(R.string.share_image_2));
+            items.add(getString(R.string.share_image));
         }
         if (RoomObject.isRoomPublic(room)) {
             if (MessageObject.canSharePublic(messageObject)) {
@@ -326,6 +336,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private void saveToGallery(MessageObject messageObject) {
         if (messageObject != null) {
             String path = getFilePath(messageObject);
+            String extension = path.substring(path.lastIndexOf("."));
             int messageType;
             if (messageObject.forwardedMessage != null) {
                 messageType = messageObject.forwardedMessage.messageType;
@@ -335,12 +346,24 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             File file = new File(path);
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, null);
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + extension, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, new OnFileCopyComplete() {
+                        @Override
+                        public void complete(int successMessage,int completePercent) {
+                            progressDialog.setProgress(completePercent);
+                            if (completePercent == 100) {
+                                progressDialog.dismiss();
+                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
                     HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
                         @Override
-                        public void complete(int successMessage) {
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        public void complete(int successMessage,int completePercent) {
+                            if (completePercent == 100) {
+                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }

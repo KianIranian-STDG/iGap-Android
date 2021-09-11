@@ -9,7 +9,9 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
@@ -328,25 +330,24 @@ public class DataStorageViewModel extends ViewModel {
     public void setClearCashData(boolean isPhoto, boolean isVideo, boolean isDocument, boolean isAudio, boolean isMap, boolean isOther) {
         FileUtils fileUtils = new FileUtils();
         if (isPhoto) {
-            fileUtils.clearImageFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearImageFile);
         }
         if (isVideo) {
-            fileUtils.clearVideoFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearVideoFile);
         }
         if (isDocument) {
-            fileUtils.clearDocumentFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearDocumentFile);
         }
         if (isAudio) {
-            fileUtils.clearAudioFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearAudioFile);
         }
         if (isMap) {
-            fileUtils.clearMapFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearMapFile);
         }
         if (isOther) {
-            fileUtils.clearOtherFile();
+            AndroidUtils.globalQueue.postRunnable(fileUtils::clearOtherFile);
         }
-
-        fileUtils.getFileTotalSize(size -> clearCacheSize.set(totalSize = size));
+        AndroidUtils.globalQueue.postRunnable(() -> fileUtils.getFileTotalSize(size -> clearCacheSize.set(totalSize = size)));
     }
 
     public void onClickCleanUp() {

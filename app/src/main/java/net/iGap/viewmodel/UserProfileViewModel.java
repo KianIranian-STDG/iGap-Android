@@ -141,7 +141,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
     private final ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
-    public ObservableField<String> referralMaskObservableField = new ObservableField<>("###-###-####");
+    public ObservableField<String> referralMaskObservableField = new ObservableField<>("##########");
     private final SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
     private final SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
@@ -313,6 +313,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onUserProfileNickNameError(int majorCode, int minorCode) {
                 G.runOnUiThread(() -> {
+                    name.set(currentName);
                     showLoading.set(View.GONE);
                     nameErrorEnable.setValue(true);
                     nameErrorMessage.set(R.string.name_error);
@@ -323,6 +324,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onUserProfileNickNameTimeOut() {
                 G.runOnUiThread(() -> {
+                    name.set(currentName);
                     showLoading.set(View.GONE);
                     nameErrorEnable.setValue(true);
                     nameErrorMessage.set(R.string.time_out_error);
@@ -348,6 +350,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void Error(final int majorCode, int minorCode, final int time) {
                 G.handler.post(() -> {
+                    userName.set(currentUserName);
                     showLoading.set(View.GONE);
                     usernameErrorEnable.setValue(true);
                     toastId.setValue(R.string.user_name_error);
@@ -361,6 +364,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void timeOut() {
                 G.runOnUiThread(() -> {
+                    userName.set(currentUserName);
                     showLoading.set(View.GONE);
                     usernameErrorEnable.setValue(true);
                     toastId.setValue(R.string.user_name_error);
@@ -386,6 +390,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void error(int majorCode, int minorCode) {
                 G.handler.post(() -> {
+                    bio.set(currentBio);
                     showLoading.set(View.GONE);
                     bioErrorEnable.setValue(true);
                     bioErrorMessage.set(R.string.error);
@@ -396,6 +401,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void timeOut() {
                 G.handler.post(() -> {
+                    bio.set(currentBio);
                     showLoading.set(View.GONE);
                     bioErrorEnable.setValue(true);
                     bioErrorMessage.set(R.string.time_out_error);
@@ -422,6 +428,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void Error(int majorCode, int minorCode) {
                 G.runOnUiThread(() -> {
+                    email.set(currentUserEmail);
                     showLoading.set(View.GONE);
                     emailErrorEnable.setValue(true);
                     emailErrorMessage.set(R.string.invalid_email);
@@ -432,6 +439,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onTimeOut() {
                 G.runOnUiThread(() -> {
+                    email.set(currentUserEmail);
                     showLoading.set(View.GONE);
                     emailErrorEnable.setValue(true);
                     emailErrorMessage.set(R.string.time_out_error);
@@ -497,6 +505,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void Error(int majorCode, int minorCode) {
                 G.runOnUiThread(() -> {
+                    gender.set(currentGender);
                     showLoading.set(View.GONE);
                     toastId.setValue(R.string.gender_error);
                     genderErrorEnable.setValue(true);
@@ -506,6 +515,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onTimeOut() {
                 G.runOnUiThread(() -> {
+                    gender.set(currentGender);
                     showLoading.set(View.GONE);
                     toastId.setValue(R.string.gender_error);
                     genderErrorEnable.setValue(true);
@@ -653,11 +663,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             showAddAvatarButton.set(View.GONE);
             cancelProfileShow.set(View.GONE);
             checkProfileShow.set(View.GONE);
-            name.set(currentName);
-            userName.set(currentUserName);
-            bio.set(currentBio);
-            email.set(currentUserEmail);
-            gender.set(currentGender);
             hideErrorEnable();
             editProfileIcon.set(View.VISIBLE);
             isEditProfile = false;

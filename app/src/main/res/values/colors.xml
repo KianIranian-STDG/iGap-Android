@@ -87,7 +87,7 @@
 
     <!-- emoji popup window-->
 
-    <color name="colorChatMessageSelectableItemBg">#99AADFF7</color>
+    <color name="colorChatMessageSelectableItemBg">#60AADFF7</color>
 
     <!--ripple-->
     <color name="rippelColor">#FFFFFF</color>

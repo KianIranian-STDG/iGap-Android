@@ -253,7 +253,7 @@
 
     <!-- tarjome nashavad -->
     <string name="of">"از"</string>
-    <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
+    <string name="save_to_music_folder">"با موفقیت در پوشه موسیقی دخیره شد"</string>
     <string name="choose_picture">"انتخاب تصویر از"</string>
     <string name="cansel">"لغو"</string>
     <string name="from_camera">"دوربین"</string>
@@ -511,10 +511,10 @@
     <string name="iGap_settings">تنظیمات حساب آیگپ</string>
     <string name="please_write_your_message">لطفاْ پیام خود را بنویسید!</string>
     <string name="share_audio_file">به اشتراک گذاشتن فایل صوتی</string>
+    <string name="shared_images">به اشتراک گذاشتن تصویر</string>
     <string name="share_image">به اشتراک گذاشتن تصویر</string>
-    <string name="share_image_2">به اشتراک گذاشتن تصویر</string>
-    <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
+    <string name="shared_videos_file">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_file">به اشتراک گذاشتن فایل</string>
     <string name="text_copied">متن کپی شد</string>
 
@@ -2278,4 +2278,8 @@
     <string name="moment_not_available">قابل دسترسی نمی باشد</string>
     <string name="mement_is_no_longer_available">لحظه در دسترس نمی باشد</string>
     <string name="unavailable_moment">لحظه غیر فعال</string>
+    <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است </string>
+
+    <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
+
 </resources>

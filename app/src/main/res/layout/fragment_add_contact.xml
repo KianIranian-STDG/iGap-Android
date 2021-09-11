@@ -1,138 +1,148 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ac_layoutParent"
-    style="@style/IGapRootViewStyle"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    android:orientation="vertical"
-    tools:ignore="MissingPrefix">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/frg_add_contact_toolbar"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentAddContactViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ac_layoutParent"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr"
+        android:orientation="vertical"
+        tools:ignore="MissingPrefix">
 
+        <LinearLayout
+            android:id="@+id/frg_add_contact_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/ac_edt_firstName"
-        style="@style/iGapEditTextStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/fac_First_Name"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:singleLine="true"
-        android:textSize="@dimen/dp15"
-        app:layout_constraintBottom_toTopOf="@id/ac_edt_lastName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frg_add_contact_toolbar"
-        app:layout_constraintVertical_chainStyle="packed" />
+        <EditText
+            android:id="@+id/ac_edt_firstName"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/fac_First_Name"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textSize="@dimen/dp15"
+            app:layout_constraintBottom_toTopOf="@id/ac_edt_lastName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frg_add_contact_toolbar"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <EditText
-        android:id="@+id/ac_edt_lastName"
-        style="@style/iGapEditTextStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/fac_Last_Name"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:singleLine="true"
-        android:textSize="@dimen/dp15"
-        app:layout_constraintBottom_toTopOf="@+id/ac_edt_phoneNumber"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ac_edt_firstName" />
+        <EditText
+            android:id="@+id/ac_edt_lastName"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/fac_Last_Name"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textSize="@dimen/dp15"
+            app:layout_constraintBottom_toTopOf="@+id/ac_edt_phoneNumber"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ac_edt_firstName" />
 
-    <EditText
-        android:id="@+id/ac_txt_codeCountry"
-        style="@style/iGapEditTextStyle"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:gravity="center"
-        android:inputType="phone"
-        android:maxLength="8"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:singleLine="true"
-        android:text="+98"
-        android:textSize="@dimen/dp15"
-        app:layout_constraintBottom_toBottomOf="@+id/ac_edt_phoneNumber"
-        app:layout_constraintStart_toStartOf="@id/ac_edt_lastName"
-        app:layout_constraintTop_toTopOf="@+id/ac_edt_phoneNumber" />
+        <EditText
+            android:id="@+id/ac_txt_codeCountry"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:maxLength="5"
+            android:onClick="@{()->viewModel.onCountryCodeClick()}"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:text="@{viewModel.countryCode}"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textDirection="ltr"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/dp14"
+            app:layout_constraintBottom_toBottomOf="@+id/ac_edt_phoneNumber"
+            app:layout_constraintStart_toStartOf="@id/ac_edt_lastName"
+            app:layout_constraintTop_toTopOf="@+id/ac_edt_phoneNumber" />
 
-    <com.vicmikhailau.maskededittext.MaskedEditText
-        android:id="@+id/ac_edt_phoneNumber"
-        style="@style/iGapEditTextStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:hint="9xxxxxxxxx"
-        android:maxLength="12"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="@dimen/dp14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ac_txt_codeCountry"
-        app:layout_constraintTop_toBottomOf="@id/ac_edt_lastName"
-        app:mask="###-###-####"
-        android:gravity="left|center_vertical"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="phone"
-        android:textAlignment="gravity"
-        android:maxLines="1"
-        tools:ignore="RtlHardcoded" />
+        <com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/ac_edt_phoneNumber"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginRight="56dp"
+            android:gravity="left|center_vertical"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="phone"
+            android:maxLength="18"
+            android:maxLines="1"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textAlignment="gravity"
+            android:textSize="@dimen/dp14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/ac_txt_codeCountry"
+            app:layout_constraintTop_toBottomOf="@id/ac_edt_lastName"
+            app:mask="@{viewModel.phoneNumberMask}" />
 
-    <TextView
-        android:id="@+id/phoneNumberError"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@id/ac_edt_phoneNumber"
-        app:layout_constraintEnd_toEndOf="@id/ac_edt_phoneNumber"
-        app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber"
-        android:textColor="@color/red"
-        android:textDirection="locale"
-        android:textAlignment="center"
-        android:textSize="@dimen/smallTextSize"/>
+        <TextView
+            android:id="@+id/phoneNumberError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textDirection="locale"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintEnd_toEndOf="@id/ac_edt_phoneNumber"
+            app:layout_constraintStart_toStartOf="@id/ac_edt_phoneNumber"
+            app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber" />
 
-    <ProgressBar
-        android:id="@+id/loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/dp24"/>
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:visibility="@{viewModel.showProgress}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

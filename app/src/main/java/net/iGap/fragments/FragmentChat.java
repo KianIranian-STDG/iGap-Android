@@ -9,6 +9,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -332,6 +333,7 @@ import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -368,7 +370,6 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.WALLET_VALUE;
-import static net.iGap.realm.RealmRoomMessage.getRealmRoomMessage;
 import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
@@ -749,7 +750,7 @@ public class FragmentChat extends BaseFragment
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
-        rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
+        rootView = (FrameLayout) inflater.inflate(R.layout.fragment_chat, container, false);
 
         chatContainer = rootView.findViewById(R.id.chatMainContainer);
         mediaContainer = new FragmentMediaContainer(getActivity(), this);
@@ -5290,7 +5291,7 @@ public class FragmentChat extends BaseFragment
         if (isFileExistInLocalStorage(messageObject)) {
             if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE || roomMessageType == GIF_TEXT_VALUE) {
                 items.add(R.string.save_to_gallery);
-            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == VOICE_VALUE) {
+            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == AUDIO_TEXT_VALUE || roomMessageType == VOICE_VALUE) {
                 items.add(R.string.save_to_Music);
             } else if (roomMessageType == FILE_VALUE) {
                 items.add(R.string.saveToDownload_item_dialog);
@@ -5446,23 +5447,29 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
 
             case R.string.save_to_Music:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
@@ -5699,6 +5706,9 @@ public class FragmentChat extends BaseFragment
         if (message.message != null && !message.message.isEmpty()) {
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
+        }
+        if(!(message.messageType == TEXT_VALUE)) {
+            edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
         // found is user trying to edit a message
@@ -7203,17 +7213,19 @@ public class FragmentChat extends BaseFragment
                     intent.setType("audio/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.share_audio_file);
                     break;
+                case GIF_VALUE:
+                case GIF_TEXT_VALUE:
                 case IMAGE_VALUE:
                 case IMAGE_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_image);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_images);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("video/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_video_file);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_videos_file);
                     break;
                 case FILE_VALUE:
                 case FILE_TEXT_VALUE:

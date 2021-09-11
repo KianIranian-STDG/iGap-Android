@@ -93,7 +93,7 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
             super(itemView);
 
             itemImageView = itemView.findViewById(R.id.itemImage);
-            itemTitleTextView = itemView.findViewById(R.id.itemTitle);
+            itemTitleTextView = itemView.findViewById(R.id.item_title);
             itemAddressTextView = itemView.findViewById(R.id.itemAddress);
             itemLocationTextView = itemView.findViewById(R.id.itemLocation);
             buyTicketButton = itemView.findViewById(R.id.buyTicketButton);

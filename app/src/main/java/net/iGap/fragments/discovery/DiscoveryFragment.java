@@ -100,6 +100,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         this.needToReload = needToRelaod;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        G.updateResources(getContext());
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -219,6 +225,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         pullToRefresh.setOnRefreshListener(() -> {
             setRefreshing(true);
             boolean isSend = updateOrFetchRecycleViewData();
+
             if (!isSend) {
                 setRefreshing(false);
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
@@ -262,6 +269,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             } else {
                 emptyRecycle.setVisibility(View.VISIBLE);
             }
+            BottomNavigationFragment.isShowedAdd = false;
         }
     }
     private void onScannerClickListener() {

@@ -169,6 +169,48 @@
             app:layout_constraintEnd_toEndOf="@id/franceLanguage"
             app:layout_constraintTop_toTopOf="@id/franceLanguage" />
 
+
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/spanishLanguage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickSpanish()}"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/txtLanguage_Es"
+            app:layout_constraintEnd_toEndOf="@id/persianLanguage"
+            app:layout_constraintStart_toStartOf="@id/persianLanguage"
+            app:layout_constraintTop_toBottomOf="@id/franceLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtLanguage_Es"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp8"
+            android:text="Español"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/spanishLanguage"
+            app:layout_constraintTop_toTopOf="@id/spanishLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/st_icon_es"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/icon_sent"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.isSpanish}"
+            app:layout_constraintBottom_toBottomOf="@id/spanishLanguage"
+            app:layout_constraintEnd_toEndOf="@id/spanishLanguage"
+            app:layout_constraintTop_toTopOf="@id/spanishLanguage" />
+
+
+
         <androidx.constraintlayout.widget.Group
             android:id="@+id/russianLanguage"
             android:layout_width="0dp"
@@ -180,7 +222,7 @@
             app:layout_constraintBottom_toBottomOf="@id/txtLanguageRu"
             app:layout_constraintEnd_toEndOf="@id/persianLanguage"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
-            app:layout_constraintTop_toBottomOf="@id/franceLanguage" />
+            app:layout_constraintTop_toBottomOf="@id/spanishLanguage" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageRu"

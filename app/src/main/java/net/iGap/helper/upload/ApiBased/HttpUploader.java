@@ -34,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -127,6 +128,11 @@ public class HttpUploader implements IUpload {
     @Override
     public boolean cancelUploading(String messageId) {
         UploadHttpRequest request = findExistedRequest(messageId);
+        for(String taskId: pendingCompressTasks.keySet()){
+            if (taskId.equals(messageId)) {
+                Objects.requireNonNull(pendingCompressTasks.get(taskId)).setCancel();
+            }
+        }
         if (request == null) {
             return false;
         } else {
