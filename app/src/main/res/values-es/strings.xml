@@ -229,7 +229,7 @@
     <string name="elecBill_main_billMyList">Mis facturas</string>
     <string name="kuknos_send_successServer">La transferencia se realiza con éxito.</string>
     <string name="kuknos_trade_fail">La conexión al servidor se pierde. Por favor, inténtelo de nuevo en unos momentos.</string>
-    <string name="share_video_file_2">Compartir video</string>
+    <string name="share_video_file">Compartir video</string>
     <string name="file_selected_for_send">Archivo seleccionado</string>
     <string name="mobile_bank_load_detail_MUnpaidInfo">Información impaga madurada</string>
     <string name="WalletRrnNumber">Numero de referencia</string>
@@ -504,7 +504,7 @@
     <string name="parsian_bank">Mi Parsian</string>
     <string name="emoji_category_symbols">Símbolos</string>
     <string name="elecBill_cell_billPayMidTerm">La mitad del ciclo</string>
-    <string name="share_image_2">Compartir imagen</string>
+    <string name="share_image">Compartir imagen</string>
     <string name="pass_count">Aprobado:</string>
     <string name="news_add_comment_errorAuthor">Por favor ingrese su nombre</string>
     <string name="videos">Videos</string>
@@ -1263,7 +1263,7 @@
     <string name="E_118_5">ADVERTENCIA: Número de contactos Chunk ha excedido las restricciones del servidor.</string>
     <string name="kuknos_trade_sell">Venta</string>
     <string name="please_enter_code_for_verify">Introduzca el código.</string>
-    <string name="share_video_file">Videos compartidos</string>
+    <string name="shared_videos_file">Videos compartidos</string>
     <string name="dont_show_again">No mostrar de nuevo</string>
     <string name="need_browser">Requiere que el navegador use.</string>
     <string name="elecBill_main_billIDHint">ID de factura</string>
@@ -1975,7 +1975,7 @@
     <string name="do_you_want_to_turn_on_gps">Tu GPS está apagado, ¿quieres encenderlo?</string>
     <string name="kuknos_viewRecoveryEP_wrongPINE">El código PIN está incorrecto. Inténtalo de nuevo.</string>
     <string name="unsuccessful">Fallido</string>
-    <string name="share_image">Imágenes compartidas</string>
+    <string name="shared_images">Imágenes compartidas</string>
     <string name="kuknos_setting_title">Configuración</string>
     <string name="call_error_offer">La oferta no es posible.</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">La longitud del nombre es demasiado corta.</string>

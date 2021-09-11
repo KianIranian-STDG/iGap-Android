@@ -78,7 +78,6 @@ import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Sort;
@@ -221,7 +220,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         });
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage(roomMessages.get(selectedFile)));
+        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuTopSheet(roomMessages.get(selectedFile)));
 
         imgPlay = view.findViewById(R.id.imgPlay);
         viewPager = view.findViewById(R.id.asi_view_pager);
@@ -299,15 +298,15 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         viewPager.registerOnPageChangeCallback(viewPagerListener);
     }
 
-    public void popUpMenuShowImage(RealmRoomMessage roomMessage) {
+    public void popUpMenuTopSheet(RealmRoomMessage roomMessage) {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.save_to_gallery));
         MessageObject messageObject = MessageObject.create(roomMessage);
         ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            items.add(getString(R.string.share_video_file_2));
+            items.add(getString(R.string.share_video_file));
         } else {
-            items.add(getString(R.string.share_image_2));
+            items.add(getString(R.string.share_image));
         }
         if (RoomObject.isRoomPublic(room)) {
             if (MessageObject.canSharePublic(messageObject)) {

@@ -66,7 +66,9 @@ public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetList
             return G.context.getResources().getString(R.string.icon_reply);
         } else if (item.equals(G.context.getResources().getString(R.string.share_item_dialog)) ||
                 item.equals(G.context.getResources().getString(R.string.share_link_item_dialog)) ||
-                item.equals(G.context.getResources().getString(R.string.share_file_link))) {
+                item.equals(G.context.getResources().getString(R.string.share_file_link)) ||
+                item.equals(G.context.getResources().getString(R.string.share_image)) ||
+        item.equals(G.context.getResources().getString(R.string.share_video_file))) {
             return G.context.getResources().getString(R.string.icon_share);
         } else if (item.equals(G.context.getResources().getString(R.string.forward_item_dialog))) {
             return G.context.getResources().getString(R.string.icon_forward);
