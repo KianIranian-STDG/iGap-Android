@@ -1,14 +1,12 @@
 package net.iGap.story.viewPager;
 
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,21 +25,20 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
@@ -50,11 +47,11 @@ import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.Status;
-import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmStory;
@@ -62,12 +59,8 @@ import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.ExpandableTextView;
 import net.iGap.story.ViewUserDialogFragment;
 import net.iGap.story.liststories.ImageLoadingView;
-import net.iGap.story.liststories.MyStatusStoryListFragment;
-import net.iGap.story.liststories.StoryFragment;
-import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.storyviews.StoryCell;
 import net.iGap.structs.AttachmentObject;
-import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.List;
@@ -197,7 +190,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onViewCreated(view, savedInstanceState);
         counter = 0;
         setUpUi();
-        loadingProgressbar.setVisibility(View.VISIBLE);
         replayFrame.setOnClickListener(view1 -> {
             setupReplay();
         });
@@ -309,6 +301,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     private void updateStory() {
         storyDisplayImage.setVisibility(View.VISIBLE);
+        loadingProgressbar.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
 
         if (stories.get(counter).getTxt() == null || stories.get(counter).getTxt().trim().equals("") || stories.get(counter).getTxt().trim().isEmpty()) {
@@ -348,12 +341,46 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 ProtoFileDownload.FileDownload.Selector selector = null;
                 long fileSize = 0;
 
-                if (ra.getSmallThumbnail() != null) {
-                    selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                    fileSize = ra.getSmallThumbnail().getSize();
-                } else if (ra.getLargeThumbnail() != null) {
+                if (ra.getLargeThumbnail() != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
                     fileSize = ra.getLargeThumbnail().getSize();
+                    path = AndroidUtils.getFilePathWithCashId(ra.getSmallThumbnail().cacheId, ra.getName(), G.DIR_IMAGES, true);
+                    if (new File(path).exists()) {
+                        String finalPath = path;
+                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                    } else {
+                        DownloadObject downloadObject = DownloadObject.createForThumb(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        if (downloadObject != null) {
+                            getDownloader().download(downloadObject, selector, arg -> {
+                                switch (arg.status) {
+                                    case SUCCESS:
+                                        String filePath = arg.data.getFilePath();
+                                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        break;
+                                }
+                            });
+                        }
+                    }
+                } else if (ra.getSmallThumbnail() != null) {
+                    selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                    fileSize = ra.getSmallThumbnail().getSize();
+                    path = AndroidUtils.getFilePathWithCashId(ra.getSmallThumbnail().cacheId, ra.getName(), G.DIR_IMAGES, true);
+                    if (new File(path).exists()) {
+                        String finalPath = path;
+                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                    } else {
+                        DownloadObject downloadObject = DownloadObject.createForThumb(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        if (downloadObject != null) {
+                            getDownloader().download(downloadObject, selector, arg -> {
+                                switch (arg.status) {
+                                    case SUCCESS:
+                                        String filePath = arg.data.getFilePath();
+                                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        break;
+                                }
+                            });
+                        }
+                    }
                 }
 
                 if (selector != null && fileSize > 0) {
@@ -365,16 +392,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             if (arg.status == Status.SUCCESS && arg.data != null) {
                                 String filepath = arg.data.getFilePath();
                                 String downloadedFileToken = arg.data.getToken();
-
                                 if (!(new File(filepath).exists())) {
                                     HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                 }
-
                                 G.runOnUiThread(() -> loadImage(filepath));
 
-
                             }
-
                         });
                     }
                 } else {
@@ -390,9 +413,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     private void loadImage(String path) {
         loadingProgressbar.setVisibility(View.GONE);
-        Glide.with(storyDisplayImage.getContext()).load(path).into(storyDisplayImage);
+        Glide.with(storyDisplayImage.getContext()).load(path).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                storyDisplayImage.setImageDrawable(resource);
+            }
+        });
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-        Glide.with(tumNailImage.getContext()).load(path).into(tumNailImage);
 
         if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
