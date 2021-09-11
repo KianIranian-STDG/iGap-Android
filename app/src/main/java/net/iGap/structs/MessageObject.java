@@ -158,7 +158,7 @@ public class MessageObject {
         } else {
             messageObject.roomId = roomMessage.getAuthorRoomId();
             if (isForwardOrReplay) {// FIXME: 12/15/20
-                RealmRoom.needGetRoom(roomMessage.getRoomId());
+                RealmRoom.needGetRoom(roomMessage.getAuthorRoomId());
             }
         }
 
