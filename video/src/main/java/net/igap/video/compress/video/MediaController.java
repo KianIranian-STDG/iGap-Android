@@ -31,7 +31,6 @@ public class MediaController {
     private final static int PROCESSOR_TYPE_TI = 5;
     private static volatile MediaController Instance = null;
     private boolean videoConvertFirstWrite = true;
-
     private boolean isCancel;
 
 
@@ -263,7 +262,6 @@ public class MediaController {
 
     @TargetApi(16)
     public boolean convertVideo(final String path, String savePath, OnPercentCompress onPercentCompress) {
-        isCancel = false;
         String width;
         String height;
         String rotation;
@@ -701,6 +699,7 @@ public class MediaController {
                             }
                         } catch (Exception e) {
                             error = true;
+                            return false;
                         }
 
                         extractor.unselectTrack(videoIndex);
@@ -731,6 +730,7 @@ public class MediaController {
                 }
             } catch (Exception e) {
                 error = true;
+                return false;
             } finally {
                 if (extractor != null) {
                     extractor.release();
