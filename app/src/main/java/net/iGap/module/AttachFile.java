@@ -40,6 +40,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -91,6 +93,8 @@ public class AttachFile {
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
+    private FusedLocationProviderClient fusedLocationClient;
+    Location locationGPS = null;
     LocationListener locationListener = new LocationListener() {
 
         @Override
@@ -709,11 +713,7 @@ public class AttachFile {
                 }
                 //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (location == null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                }
+                Location location = getLastBestLocation();
                 if (location != null) {
                     location.getLatitude();
                     location.getLongitude();
@@ -733,6 +733,35 @@ public class AttachFile {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private Location getLastBestLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener((com.google.android.gms.tasks.OnSuccessListener<? super Location>) location -> {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        locationGPS = location;
+                    }
+                });
+        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        long GPSLocationTime = 0;
+        if (null != locationGPS) {
+            GPSLocationTime = locationGPS.getTime();
+        }
+
+        long NetLocationTime = 0;
+
+        if (null != locationNet) {
+            NetLocationTime = locationNet.getTime();
+        }
+
+        if (0 < GPSLocationTime - NetLocationTime) {
+            return locationGPS;
+        } else {
+            return locationNet;
         }
     }
 
