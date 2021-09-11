@@ -5270,7 +5270,7 @@ public class FragmentChat extends BaseFragment
         }
 
         //check and remove share base on type and download state
-        if (roomMessageType == LOCATION_VALUE || roomMessageType == VOICE_VALUE) {
+        if (roomMessageType == LOCATION_VALUE) {
             items.remove(Integer.valueOf(R.string.share_item_dialog));
         } else if (roomMessageType != TEXT_VALUE && roomMessageType != CONTACT_VALUE) {
             String filepath_;
