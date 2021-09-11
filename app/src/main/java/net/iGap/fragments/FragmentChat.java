@@ -9,6 +9,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -331,6 +332,7 @@ import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -5442,23 +5444,29 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
 
             case R.string.save_to_Music:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;

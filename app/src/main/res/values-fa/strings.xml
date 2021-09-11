@@ -253,7 +253,7 @@
 
     <!-- tarjome nashavad -->
     <string name="of">"از"</string>
-    <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
+    <string name="save_to_music_folder">"با موفقیت در پوشه موسیقی دخیره شد"</string>
     <string name="choose_picture">"انتخاب تصویر از"</string>
     <string name="cansel">"لغو"</string>
     <string name="from_camera">"دوربین"</string>

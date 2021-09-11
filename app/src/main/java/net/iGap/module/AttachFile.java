@@ -256,7 +256,7 @@ public class AttachFile {
             } else {
                 InputStream input = G.context.getContentResolver().openInputStream(uri);
 
-                AndroidUtils.copyFile(input, new File(destinationPath), 0, null);
+                AndroidUtils.copyFile(input, new File(destinationPath));
             }
 
             return destinationPath;
