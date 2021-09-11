@@ -7209,13 +7209,13 @@ public class FragmentChat extends BaseFragment
                 case IMAGE_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_image);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_images);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("video/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_video_file);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_videos_file);
                     break;
                 case FILE_VALUE:
                 case FILE_TEXT_VALUE:

@@ -466,10 +466,10 @@
     <string name="iGap_settings">رێکبەندیی حسابی ئای­گەپ</string>
     <string name="please_write_your_message">تکایە پەیامەکەت بنووسە!</string>
     <string name="share_audio_file">شەیرکردنی فایلی دەنگی</string>
+    <string name="shared_images">شەیرکردنی وێنە</string>
     <string name="share_image">شەیرکردنی وێنە</string>
-    <string name="share_image_2">شەیرکردنی وێنە</string>
-    <string name="share_video_file_2">شەیرکردنی فایلی ڤیدیۆیی</string>
     <string name="share_video_file">شەیرکردنی فایلی ڤیدیۆیی</string>
+    <string name="shared_videos_file">شەیرکردنی فایلی ڤیدیۆیی</string>
     <string name="share_file">شەیرکردنی فایل</string>
     <string name="text_copied">دەقی کۆپی­کراو</string>
     <string name="message">پەیام</string>
