@@ -105,6 +105,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     private int colorCode;
     private Bitmap finalBitmap;
     private FrameLayout addTextRootView;
+    private int typingState = 0;
 
 
     @Override
@@ -256,16 +257,16 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
             }
         });
-        addTextEditTExt.setListener(new EventEditText.Listener() {
-            @Override
-            public void onInternalTouchEvent(MotionEvent event) {
-                if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
-                    showPopUPView(KeyboardView.MODE_KEYBOARD);
-                } else if (isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
-                    emoji.performClick();
-                }
-            }
-        });
+//        addTextEditTExt.setListener(new EventEditText.Listener() {
+//            @Override
+//            public void onInternalTouchEvent(MotionEvent event) {
+//                if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    showPopUPView(KeyboardView.MODE_KEYBOARD);
+//                } else if (isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    emoji.performClick();
+//                }
+//            }
+//        });
         addTextEditTExt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -301,17 +302,35 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 500) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (typingState > charSequence.length()) {
+                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
+                        addTextEditTExt.setTextSize(editTextSize++);
+                    }
+                    if (charSequence.length() == 0) {
+                        editTextSize = 40;
+                        addTextEditTExt.setTextSize(editTextSize);
+                    }
+                } else {
+                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
+                        addTextEditTExt.setTextSize(editTextSize--);
+                    }
+                    if (charSequence.length() == 0) {
+                        editTextSize = 40;
+                        addTextEditTExt.setTextSize(editTextSize);
+                    }
+                }
+                typingState = charSequence.length();
+                if (charSequence.length() > 500) {
                     showPopUPView(-1);
                     new MaterialDialog.Builder(getContext()).title(getString(R.string.your_status_characters))
                             .titleGravity(GravityEnum.START)
                             .positiveText(R.string.ok)
                             .onNegative((dialog1, which) -> dialog1.dismiss()).show();
                 }
-                if (s.length() > 0) {
+                if (charSequence.length() > 0) {
                     floatActionLayout.setVisibility(VISIBLE);
-                } else if (s.length() == 0) {
+                } else if (charSequence.length() == 0) {
                     floatActionLayout.setVisibility(View.GONE);
                 }
             }
@@ -330,6 +349,13 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
                 //layoutRootView.setVisibility(View.GONE);
                 addTextRootView.setVisibility(VISIBLE);
                 textTv.setText(text);
+                if (text.length() >= 300) {
+                    TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 15, 20, 1,
+                            TypedValue.COMPLEX_UNIT_DIP);
+                } else if (text.length() <= 100) {
+                    TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 22, 34, 1,
+                            TypedValue.COMPLEX_UNIT_DIP);
+                }
                 bottomPanelRootView.setVisibility(View.GONE);
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -338,7 +364,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
                             Bitmap bitmap = writeTextOnDrawable(text);
                         });
                     }
-                },100);
+                }, 100);
 
 
             }
