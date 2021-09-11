@@ -88,7 +88,16 @@ public class HelperTracker {
 
 
     private static HelperTracker instance;
-    private static boolean canSendMetrixEvent = false;
+    private static Boolean canSendMetrixEvent;
+
+    public static Boolean getCanSendMetrixEvent() {
+        if (canSendMetrixEvent == null) {
+            canSendMetrixEvent = false;
+            String packageName = G.context.getPackageName();
+            canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
+        }
+        return canSendMetrixEvent;
+    }
 
     public static HelperTracker getInstance() {
         if (instance == null) {
@@ -118,7 +127,7 @@ public class HelperTracker {
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.KEY_TRACKER_FILE, SHP_SETTING.KEY_TRACKER_INSTALL_USER, true);
         }
 
-        if (allowSendTracker && canSendMetrixEvent) {
+        if (allowSendTracker && getCanSendMetrixEvent()) {
             switch (trackerTag) {
                 case TRACKER_CHANGE_LANGUAGE:
                     Metrix.newEvent("rvwun");
