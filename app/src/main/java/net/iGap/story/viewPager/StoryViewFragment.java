@@ -32,6 +32,7 @@ import net.iGap.realm.RealmStoryProto;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -51,6 +52,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private boolean isSingle = false;
     private long storyId;
     private int myStoryCount = 0;
+    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
 
 
     public StoryViewFragment(long userId, boolean muStory) {
@@ -93,12 +95,13 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         super.onViewCreated(view, savedInstanceState);
         if (isSingle) {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                storyResults = realm.where(RealmStory.class).equalTo("id", userId).findAll();
+                storyResults = realm.where(RealmStory.class).equalTo("userId", userId).findAll();
             });
         } else {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                storyResults = realm.where(RealmStory.class).sort("id", Sort.DESCENDING).findAll();
-            });
+            realm.beginTransaction();
+            storyResults = realm.where(RealmStory.class).findAll();
+            realm.commitTransaction();
+
         }
         setUpPager();
     }

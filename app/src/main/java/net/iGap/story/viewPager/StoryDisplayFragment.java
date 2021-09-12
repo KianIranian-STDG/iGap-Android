@@ -67,6 +67,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.realm.Realm;
+
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener, StoriesProgressView.StoryProgressListener, RecyclerListView.OnItemClickListener, ViewUserDialogFragment.ViewUserDialogState {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
@@ -108,6 +110,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private RecyclerView userViewsRecycler;
     int rowSize = 0;
     int userRow = 0;
+    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
 
     public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory) {
 
@@ -434,29 +437,33 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             }
         }
 
-        AbstractObject req = null;
-        IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
-        story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
-        req = story_add_view;
-        getRequestManager().sendRequest(req, (response, error) -> {
-            if (error == null) {
-                IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
-                DbManager.getInstance().doRealmTransaction(realm -> {
+        if (stories.get(counter).getStoryId() != 0) {
+            AbstractObject req = null;
+            IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
+            story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
+            req = story_add_view;
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
+                    realm.beginTransaction();
                     realm.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(res.storyId)).findFirst().setSeen(true);
-                });
+                    realm.commitTransaction();
 
-            } else {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+        }
 
 
         downloadCounter++;
 
         if (downloadCounter == stories.size()) {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmStory.putOrUpdate(realm, stories.get(counter).getUserId(), true);
-            });
+            realm.beginTransaction();
+            RealmStory.putOrUpdate(realm, stories.get(counter).getUserId(), true);
+            realm.commitTransaction();
+
             EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
         }
     }
@@ -634,17 +641,18 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void savePosition(int pos) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", storyUser.getUserId()).findFirst();
-            if (realmStory != null) {
-                realmStory.setIndexOfSeen(pos);
-            }
-        });
+        realm.beginTransaction();
+        RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", storyUser.getUserId()).findFirst();
+        if (realmStory != null) {
+            realmStory.setIndexOfSeen(pos);
+        }
+        realm.commitTransaction();
+
     }
 
     public int restorePosition() {
         return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<Integer>) realm -> {
-            RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", storyUser.getUserId()).findFirst();
+            RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", storyUser.getUserId()).findFirst();
             if (realmStory != null) {
                 return realmStory.getIndexOfSeen();
             }

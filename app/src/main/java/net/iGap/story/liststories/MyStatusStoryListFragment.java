@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.Sort;
 
 import static android.content.Context.EUICC_SERVICE;
@@ -86,6 +87,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int rowSize;
     private int recentHeaderRow;
     private int recentStoryRow;
+    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
 
 
     @Override
@@ -187,26 +189,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 IG_RPC.Res_Story_Get_Own_Story_Views res = (IG_RPC.Res_Story_Get_Own_Story_Views) response;
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    int counter = 0;
-                    for (int i = 0; i < res.groupedViews.size(); i++) {
-                        for (int j = 0; j < res.groupedViews.get(i).getStoryViewsList().size(); j++) {
-                            if (res.groupedViews.get(i).getStoryViewsList().get(j).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                                counter++;
-                            }
-                        }
-                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", res.groupedViews.get(i).getStoryId()).findFirst();
-                        if (realmStoryProto != null) {
-                            realmStoryProto.setViewCount(counter);
-                            realmStoryProto.setRealmStoryViewInfos(realm, res.groupedViews.get(i));
-                        }
-
-                        counter = 0;
-                    }
-
-
-                });
-
+                getMessageDataStorage().updateOwnViews(res.groupedViews);
                 G.runOnUiThread(() -> loadStories());
 
             } else {
@@ -288,16 +271,17 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     }
 
     private void loadStories() {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
-        });
+        realm.beginTransaction();
+        realm.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+        storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+
         if (storyProto != null && storyProto.size() == 0) {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findAll().deleteAllFromRealm();
-                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
-            });
+            realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().deleteAllFromRealm();
+            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
         }
+        realm.commitTransaction();
+
+
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(AccountManager.getInstance().getCurrentUser().getId());
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
@@ -500,9 +484,11 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                                 if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).getId())) && !MessageController.isSendingStory && !HttpUploader.isStoryUploading) {
                                     actionButtonsRootView.setVisibility(View.VISIBLE);
                                     long failedStoryId = storyProto.get(position).getId();
-                                    DbManager.getInstance().doRealmTransaction(realm -> {
-                                        realm.where(RealmStoryProto.class).equalTo("id", failedStoryId).findFirst().setStatus(MessageObject.STATUS_FAILED);
-                                    });
+
+                                    realm.beginTransaction();
+                                    realm.where(RealmStoryProto.class).equalTo("id", failedStoryId).findFirst().setStatus(MessageObject.STATUS_FAILED);
+                                    realm.commitTransaction();
+
                                     storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                 } else {
