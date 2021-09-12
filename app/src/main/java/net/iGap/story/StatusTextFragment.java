@@ -176,7 +176,6 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         addTextEditTExt.setTextColor(Color.WHITE);
         addTextEditTExt.setHint(getString(R.string.type_a_moment));
         addTextEditTExt.setTextSize(editTextSize);
-        addTextEditTExt.setHintTextColor(Color.WHITE);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(501)});
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
