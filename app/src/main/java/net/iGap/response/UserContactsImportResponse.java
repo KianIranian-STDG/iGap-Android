@@ -70,7 +70,7 @@ public class UserContactsImportResponse extends MessageHandler {
         }
 
         DbManager.getInstance().doRealmTransaction(realm -> {
-            MessageController.getInstance(AccountManager.selectedAccount).GetStories(realm.where(RealmContacts.class).findAll().size());
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
         });
     }
 

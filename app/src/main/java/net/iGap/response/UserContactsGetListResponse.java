@@ -20,8 +20,6 @@ import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 
-import io.realm.Realm;
-
 public class UserContactsGetListResponse extends MessageHandler {
 
     private static long getListTime;
@@ -58,7 +56,7 @@ public class UserContactsGetListResponse extends MessageHandler {
                 }
             });
             DbManager.getInstance().doRealmTransaction(realm -> {
-                MessageController.getInstance(AccountManager.selectedAccount).GetStories(realm.where(RealmContacts.class).findAll().size());
+                MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
             });
             G.refreshRealmUi();
             G.handler.post(new Runnable() {

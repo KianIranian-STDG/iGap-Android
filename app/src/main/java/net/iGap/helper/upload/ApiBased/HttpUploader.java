@@ -7,6 +7,7 @@ import androidx.collection.ArrayMap;
 
 import net.iGap.G;
 import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
@@ -314,12 +315,9 @@ public class HttpUploader implements IUpload {
 
                         makeFailed(fileObject.messageId);
                         if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
-
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(false);
-                                realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setStatus(MessageObject.STATUS_FAILED);
+                                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(),false);
+                                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId,MessageObject.STATUS_FAILED);
                                 G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
-                            });
                         }
                         if (fileObject.onUploadListener != null) {
                             fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));

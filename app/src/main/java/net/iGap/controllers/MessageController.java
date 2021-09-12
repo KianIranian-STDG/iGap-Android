@@ -166,7 +166,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     }
 
-    public void GetStories(int contactCount) {
+    public void getStories(int contactCount) {
         AbstractObject req = null;
         IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
         get_stories.offset = 0;

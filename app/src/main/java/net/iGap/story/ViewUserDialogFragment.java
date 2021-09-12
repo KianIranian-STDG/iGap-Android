@@ -67,7 +67,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
     private FrameLayout toolbarView;
     private AppCompatTextView toolbarTitleTextView;
     private Typeface tfMain;
-    private RealmList<RealmStoryViewInfo> userIdList;
+    private List<StoryViewInfoObject>userIdList;
     private List<List<String>> displayNameList;
     private List<Long> userId;
     public AvatarHandler avatarHandler;
@@ -81,7 +81,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         this.viewUserDialogState = viewUserDialogState;
     }
 
-    public ViewUserDialogFragment(int count, RealmList<RealmStoryViewInfo> userIdList) {
+    public ViewUserDialogFragment(int count, List<StoryViewInfoObject> userIdList) {
         this.count = count;
         this.userIdList = userIdList;
     }
@@ -160,8 +160,8 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
         userId = new ArrayList<>();
         createdAtList = new ArrayList<>();
-        for (RealmStoryViewInfo realmStoryViewInfo : userIdList) {
-            userId.add(realmStoryViewInfo.getUserId());
+        for (StoryViewInfoObject realmStoryViewInfo : userIdList) {
+            userId.add(realmStoryViewInfo.userId);
         }
 
         displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
@@ -209,8 +209,8 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         if (id == EventManager.STORY_USER_INFO) {
             userId = new ArrayList<>();
             createdAtList = new ArrayList<>();
-            for (RealmStoryViewInfo realmStoryViewInfo : userIdList) {
-                userId.add(realmStoryViewInfo.getUserId());
+            for (StoryViewInfoObject realmStoryViewInfo : userIdList) {
+                userId.add(realmStoryViewInfo.userId);
             }
 
             displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
@@ -258,7 +258,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             storyCell.initView(context, true, StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
             storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
             if (position < displayNameList.size()) {
-                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position).get(0) : "", HelperCalander.getTimeForMainRoom(userIdList.get(position).getCreatedTime() * 1000L));
+                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position).get(0) : "", HelperCalander.getTimeForMainRoom(userIdList.get(position).createdTime * 1000L));
                 storyCell.setUserColorId(displayNameList.get(position) != null ? displayNameList.get(position).get(1) : "#4aca69", displayNameList.get(position).get(0));
                 storyCell.setImage(avatarHandler, userId.get(position));
             }

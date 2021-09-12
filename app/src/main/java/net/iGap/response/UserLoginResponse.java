@@ -10,12 +10,9 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
-import android.util.Log;
-import android.view.View;
 
 import net.iGap.BuildConfig;
 import net.iGap.Config;
@@ -23,40 +20,23 @@ import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.MessageController;
-import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
-import net.iGap.network.AbstractObject;
-import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmStory;
-import net.iGap.realm.RealmStoryProto;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
-import net.iGap.story.StoryObject;
-import net.iGap.structs.MessageObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
 
 import java.util.Date;
-
-import io.realm.Realm;
 
 public class UserLoginResponse extends MessageHandler {
 
@@ -177,7 +157,7 @@ public class UserLoginResponse extends MessageHandler {
         });
 
         if (!isFetched) {
-            MessageController.getInstance(AccountManager.selectedAccount).GetStories(contactCount);
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(contactCount);
         }
     }
 

@@ -1,7 +1,6 @@
 package net.iGap.story.storyviews;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,9 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -41,15 +38,15 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.Status;
-import net.iGap.module.upload.UploadHttpRequest;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryUserAddNew;
-import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.story.MainStoryObject;
+import net.iGap.story.StoryObject;
 import net.iGap.story.liststories.ImageLoadingView;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
@@ -59,12 +56,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.Sort;
-import yogesh.firzen.mukkiasevaigal.P;
-
-import static android.widget.Toast.LENGTH_SHORT;
-import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
-import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
 
 public class StoryCell extends FrameLayout {
 
@@ -143,9 +134,9 @@ public class StoryCell extends FrameLayout {
         this.storyIndex = storyIndex;
     }
 
-    public void setData(RealmStoryProto realmStoryProto, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
-        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStoryProto.getCreatedAt());
-        this.userId = realmStoryProto.getUserId();
+    public void setData(StoryObject storyObject, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
+        initView(context, needDivider, status, imageLoadingStatus, iconClicked, storyObject.createdAt);
+        this.userId = storyObject.userId;
         this.isFromMyStatus = true;
 
         String name = HelperImageBackColor.getFirstAlphabetName(displayName);
@@ -173,17 +164,17 @@ public class StoryCell extends FrameLayout {
             middleText.setVisibility(GONE);
             deleteIcon.setVisibility(VISIBLE);
             if (G.selectedLanguage.equals("fa")) {
-                topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmStoryProto.getViewCount())) + " " + context.getString(R.string.story_views));
+                topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(storyObject.viewCount)) + " " + context.getString(R.string.story_views));
             } else {
-                topText.setText(realmStoryProto.getViewCount() + " " + context.getString(R.string.story_views));
+                topText.setText(storyObject.viewCount + " " + context.getString(R.string.story_views));
             }
-            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStoryProto.getCreatedAt()));
+            bottomText.setText(HelperCalander.getTimeForMainRoom(storyObject.createdAt));
         }
 
-        RealmAttachment attachment = realmStoryProto.getFile();
-        if (attachment != null && (attachment.getLocalThumbnailPath() != null || attachment.getLocalFilePath() != null)) {
+        AttachmentObject attachment = storyObject.attachmentObject;
+        if (attachment != null && (attachment.thumbnailPath != null || attachment.filePath != null)) {
             try {
-                Glide.with(context).load(attachment.getLocalFilePath() != null ? attachment.getLocalFilePath() : attachment.getLocalThumbnailPath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                Glide.with(context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             } catch (Exception e) {
                 Glide.with(context).load(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color)).into(circleImageLoading);
             }
@@ -191,7 +182,7 @@ public class StoryCell extends FrameLayout {
 
         } else if (attachment != null) {
             Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-            DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
+            DownloadObject object = DownloadObject.createForStoryAvatar(attachment, true);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                     if (arg.status == Status.SUCCESS && arg.data != null) {
@@ -222,9 +213,9 @@ public class StoryCell extends FrameLayout {
 
     }
 
-    public void setData(RealmStory realmStory, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
-        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getCreatedAt());
-        this.userId = realmStory.getUserId();
+    public void setData(MainStoryObject mainStoryObject, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
+        initView(context, needDivider, status, imageLoadingStatus, iconClicked, mainStoryObject.storyObjects.get(0).createdAt);
+        this.userId = mainStoryObject.userId;
         circleImageLoading.setStatus(imageLoadingStatus);
         if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             topText.setText(context.getString(R.string.my_status));
@@ -242,15 +233,15 @@ public class StoryCell extends FrameLayout {
             bottomText.setText(context.getString(R.string.story_sending));
             deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
         } else {
-            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getCreatedAt()));
+            bottomText.setText(HelperCalander.getTimeForMainRoom(mainStoryObject.storyObjects.get(0).createdAt));
         }
 
 
-        RealmAttachment attachment = realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getFile();
+        AttachmentObject attachment = mainStoryObject.storyObjects.get(0).attachmentObject;
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
-            if (attachment != null && (attachment.getLocalThumbnailPath() != null || attachment.getLocalFilePath() != null)) {
+            if (attachment != null && (attachment.thumbnailPath != null || attachment.filePath != null)) {
                 try {
-                    Glide.with(context).load(attachment.getLocalFilePath() != null ? attachment.getLocalFilePath() : attachment.getLocalThumbnailPath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                    Glide.with(context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
 
                 } catch (Exception e) {
 
@@ -261,7 +252,7 @@ public class StoryCell extends FrameLayout {
 
             } else if (attachment != null) {
                 Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
+                DownloadObject object = DownloadObject.createForStoryAvatar(attachment, true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                         if (arg.status == Status.SUCCESS && arg.data != null) {
@@ -273,11 +264,11 @@ public class StoryCell extends FrameLayout {
                             }
 
 
-                            realm.beginTransaction();
-                            for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
-                                realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                            }
-                            realm.commitTransaction();
+                            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                                    realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                                }
+                            });
 
                             G.runOnUiThread(new Runnable() {
                                 @Override

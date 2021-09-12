@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.network.AbstractObject;
-import net.iGap.network.IG_RPC;
-import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.story.MainStoryObject;
+import net.iGap.story.StoryObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -47,12 +39,11 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private ArrayList<StructBottomSheet> itemGalleryList;
     private Bitmap bitmap;
     private boolean myStory = true;  // ->  To determine if I have storyList or my contacts has storyList
-    private RealmResults<RealmStory> storyResults;
+    private List<MainStoryObject> storyResults = new ArrayList<>();
     private long userId;
     private boolean isSingle = false;
     private long storyId;
     private int myStoryCount = 0;
-    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
 
 
     public StoryViewFragment(long userId, boolean muStory) {
@@ -94,14 +85,9 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (isSingle) {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                storyResults = realm.where(RealmStory.class).equalTo("userId", userId).findAll();
-            });
+            storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(userId, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
         } else {
-            realm.beginTransaction();
-            storyResults = realm.where(RealmStory.class).findAll();
-            realm.commitTransaction();
-
+            storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(0, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
         }
         setUpPager();
     }
@@ -115,33 +101,33 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         List<StoryUser> storyUserList = new ArrayList<>();
 
         for (int i = 0; i < storyResults.size(); i++) {
-            RealmResults<RealmStoryProto> realmStoryProtos = storyResults.get(i).getRealmStoryProtos().sort("createdAt");
+            List<StoryObject> realmStoryProtos = storyResults.get(i).storyObjects;
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
-            storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(storyResults.get(i).getUserId()));
+            storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(storyResults.get(i).userId));
             storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
-            storyUser.setUserId(storyResults.get(i).getUserId());
+            storyUser.setUserId(storyResults.get(i).userId);
             for (int j = 0; j < realmStoryProtos.size(); j++) {
-                RealmStoryProto realmStoryProto = realmStoryProtos.get(j);
-                if (realmStoryProto.getUserId() == userId) {
+                StoryObject storyObject = realmStoryProtos.get(j);
+                if (storyObject.userId == userId) {
                     currentPage = i;
                 }
                 if (isSingle) {
-                    if (realmStoryProto.getStoryId() != 0 && realmStoryProto.getStoryId() == storyId) {
-                        Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
+                    if (storyObject.storyId != 0 && storyObject.storyId == storyId) {
+                        Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
+                                storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
-                    } else if (realmStoryProto.getIndex() == storyId) {
-                        Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
+                    } else if (storyObject.index == storyId) {
+                        Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
+                                storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
                         stories.add(story);
                         storyUser.setStories(stories);
                     }
                 } else {
-                    Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(), realmStoryProto.getRealmStoryViewInfos());
+                    Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
+                            storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
                     stories.add(story);
                     storyUser.setStories(stories);
                 }

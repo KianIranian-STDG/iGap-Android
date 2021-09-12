@@ -48,7 +48,7 @@ public class UserContactsEditResponse extends MessageHandler {
             G.onUserContactEdit.onContactEdit(builder.getFirstName(), builder.getLastName(), builder.getInitials());
         }
         DbManager.getInstance().doRealmTransaction(realm -> {
-            MessageController.getInstance(AccountManager.selectedAccount).GetStories(realm.where(RealmContacts.class).findAll().size());
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
         });
     }
 

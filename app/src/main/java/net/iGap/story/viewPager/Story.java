@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStoryViewInfo;
+import net.iGap.story.StoryViewInfoObject;
+import net.iGap.structs.AttachmentObject;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
 import io.realm.RealmList;
 
@@ -19,12 +22,12 @@ public class Story implements Serializable {
     private long storyData;
     private long userId;
     private long storyId;
-    private RealmAttachment attachment;
+    private AttachmentObject attachment;
     private ProtoGlobal.File file;
     private int viewCount;
-    private RealmList<RealmStoryViewInfo> userIdList;
+    private  List<StoryViewInfoObject> userIdList;
 
-    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, RealmAttachment attachment, ProtoGlobal.File file, int viewCount, RealmList<RealmStoryViewInfo> userIdList) {
+    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, AttachmentObject attachment, ProtoGlobal.File file, int viewCount, List<StoryViewInfoObject> userIdList) {
         this.url = url;
         this.bitmap = bitmap;
         this.txt = txt;
@@ -48,13 +51,7 @@ public class Story implements Serializable {
         this.url = url;
     }
 
-    public RealmAttachment getAttachment() {
-        return attachment;
-    }
 
-    public void setAttachment(RealmAttachment attachment) {
-        this.attachment = attachment;
-    }
 
     public long getUserId() {
         return userId;
@@ -112,11 +109,19 @@ public class Story implements Serializable {
         this.viewCount = viewCount;
     }
 
-    public RealmList<RealmStoryViewInfo> getUserIdList() {
+    public AttachmentObject getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(AttachmentObject attachment) {
+        this.attachment = attachment;
+    }
+
+    public List<StoryViewInfoObject> getUserIdList() {
         return userIdList;
     }
 
-    public void setUserIdList(RealmList<RealmStoryViewInfo> userIdList) {
+    public void setUserIdList(List<StoryViewInfoObject> userIdList) {
         this.userIdList = userIdList;
     }
 }

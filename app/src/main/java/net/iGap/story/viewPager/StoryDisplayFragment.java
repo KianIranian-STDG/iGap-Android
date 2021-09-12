@@ -328,14 +328,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         userName.setText(storyUser.getUserName());
         nameFrom.setText(storyUser.getUserName());
         descriptionFrom.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
-        RealmAttachment ra = stories.get(counter).getAttachment();
-        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : ra.getLocalThumbnailPath();
+        AttachmentObject ra = stories.get(counter).getAttachment();
+        String path = ra.filePath != null ? ra.filePath : ra.thumbnailPath;
 
         File file = new File(path != null ? path : "");
         if (file.exists()) {
             loadImage(path);
         } else {
-            path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
+            path = ra.thumbnailPath != null ? ra.thumbnailPath : "";
             file = new File(path);
             if (file.exists()) {
                 loadImage(path);
@@ -344,15 +344,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 ProtoFileDownload.FileDownload.Selector selector = null;
                 long fileSize = 0;
 
-                if (ra.getLargeThumbnail() != null) {
+                if (ra.largeThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-                    fileSize = ra.getLargeThumbnail().getSize();
-                    path = AndroidUtils.getFilePathWithCashId(ra.getSmallThumbnail().cacheId, ra.getName(), G.DIR_IMAGES, true);
+                    fileSize = ra.largeThumbnail.size;
+                    path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         String finalPath = path;
                         G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
                     } else {
-                        DownloadObject downloadObject = DownloadObject.createForThumb(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
                             getDownloader().download(downloadObject, selector, arg -> {
                                 switch (arg.status) {
@@ -364,15 +364,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             });
                         }
                     }
-                } else if (ra.getSmallThumbnail() != null) {
+                } else if (ra.smallThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                    fileSize = ra.getSmallThumbnail().getSize();
-                    path = AndroidUtils.getFilePathWithCashId(ra.getSmallThumbnail().cacheId, ra.getName(), G.DIR_IMAGES, true);
+                    fileSize = ra.smallThumbnail.size;
+                    path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         String finalPath = path;
                         G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
                     } else {
-                        DownloadObject downloadObject = DownloadObject.createForThumb(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
                             getDownloader().download(downloadObject, selector, arg -> {
                                 switch (arg.status) {
@@ -388,7 +388,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
                 if (selector != null && fileSize > 0) {
 
-                    DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(ra), true);
+                    DownloadObject object = DownloadObject.createForStoryAvatar(ra, true);
                     if (object != null) {
                         ProtoFileDownload.FileDownload.Selector imageSelector = ProtoFileDownload.FileDownload.Selector.FILE;
                         Downloader.getInstance(AccountManager.selectedAccount).download(object, imageSelector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
