@@ -58,6 +58,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.Sort;
 import yogesh.firzen.mukkiasevaigal.P;
 
@@ -91,6 +92,7 @@ public class StoryCell extends FrameLayout {
     private int sendStatus;
     private int storyIndex;
     private String userColorId = "#4aca69";
+    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
     private static boolean isCreatedView = false;
 
     public String getFileToken() {
@@ -201,11 +203,12 @@ public class StoryCell extends FrameLayout {
                         }
 
 
-                        DbManager.getInstance().doRealmTransaction(realm -> {
-                            for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("id", userId).findAll()) {
-                                realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                            }
-                        });
+                        realm.beginTransaction();
+                        for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                            realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                        }
+                        realm.commitTransaction();
+
                         G.runOnUiThread(() -> Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
 
 
@@ -270,11 +273,12 @@ public class StoryCell extends FrameLayout {
                             }
 
 
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("id", userId).findAll()) {
-                                    realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                                }
-                            });
+                            realm.beginTransaction();
+                            for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                                realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                            }
+                            realm.commitTransaction();
+
                             G.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -294,7 +298,7 @@ public class StoryCell extends FrameLayout {
     }
 
     public void initView(Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked, long createTime) {
-         removeAllViews();
+        removeAllViews();
         if (G.themeColor == Theme.DARK) {
             setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
         } else {
@@ -570,8 +574,8 @@ public class StoryCell extends FrameLayout {
 
     public void setUserColorId(String userColorId, String name) {
         this.userColorId = userColorId;
-        Log.e("dkfslkdj", ": "+name);
-      circleImage.setImageBitmap( HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), HelperImageBackColor.getFirstAlphabetName(name), userColorId));
+        Log.e("dkfslkdj", ": " + name);
+        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), HelperImageBackColor.getFirstAlphabetName(name), userColorId));
     }
 
     public ImageLoadingView getCircleImageLoading() {
