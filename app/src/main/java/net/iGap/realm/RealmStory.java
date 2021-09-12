@@ -7,6 +7,7 @@ import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -35,9 +36,9 @@ public class RealmStory extends RealmObject {
     }
 
     public static RealmStory putOrUpdate(Realm realm, boolean isSeenAll, final long userId, final List<StoryObject> stories) {
-        RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
+        RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", userId).findFirst();
         if (realmStory == null) {
-            realmStory = realm.createObject(RealmStory.class, userId);
+            realmStory = realm.createObject(RealmStory.class, SUID.id().get());
             realmStory.setSeenAll(false);
         }
         realmStory.setUserId(userId);
@@ -47,9 +48,9 @@ public class RealmStory extends RealmObject {
     }
 
     public static RealmStory putOrUpdate(Realm realm, final long userId, boolean isSeenAll) {
-        RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
+        RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", userId).findFirst();
         if (realmStory == null) {
-            realmStory = realm.createObject(RealmStory.class, userId);
+            realmStory = realm.createObject(RealmStory.class,SUID.id().get());
         }
         realmStory.setSeenAll(isSeenAll);
         return realmStory;

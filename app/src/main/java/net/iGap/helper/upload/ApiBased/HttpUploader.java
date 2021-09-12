@@ -316,7 +316,7 @@ public class HttpUploader implements IUpload {
                         if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
 
                             DbManager.getInstance().doRealmTransaction(realm -> {
-                                realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(false);
+                                realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(false);
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setStatus(MessageObject.STATUS_FAILED);
                                 G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
                             });
