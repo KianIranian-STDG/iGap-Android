@@ -5427,6 +5427,7 @@ public class FragmentChat extends BaseFragment
             case R.string.share_file_link:
                 shareMediaLink(message);
                 break;
+
             case R.string.forward_item_dialog:
                 forwardSelectedMessageToOutOfChat(message);
                 break;
