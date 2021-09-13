@@ -402,8 +402,8 @@ public class FragmentShowAvatars extends BaseFragment {
                 if (file.exists()) {
                     HelperSaveFile.savePicToGallery(media, true, new OnFileCopyComplete() {
                         @Override
-                        public void complete(int successMessage,int completePercent) {
-                            if(completePercent == 100) {
+                        public void complete(int successMessage, int completePercent) {
+                            if (completePercent == 100) {
                                 Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -628,9 +628,8 @@ public class FragmentShowAvatars extends BaseFragment {
             progress.setOnClickListener(view -> {
 
                 String _cashId = avatarList.get(position).getFile().getCacheId();
-
-                if (getDownloader().isDownloading(_cashId)) {
-                    getDownloader().cancelDownload(_cashId);
+                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
+                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView);
