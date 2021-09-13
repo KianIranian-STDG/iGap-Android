@@ -28,6 +28,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
 
@@ -129,7 +130,7 @@ public class HttpUploader implements IUpload {
     @Override
     public boolean cancelUploading(String messageId) {
         UploadHttpRequest request = findExistedRequest(messageId);
-        for(String taskId: pendingCompressTasks.keySet()){
+        for (String taskId : pendingCompressTasks.keySet()) {
             if (taskId.equals(messageId)) {
                 Objects.requireNonNull(pendingCompressTasks.get(taskId)).setCancel();
             }
@@ -253,43 +254,42 @@ public class HttpUploader implements IUpload {
                             sendMessage(fileObject);
                         }
                         if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setFileToken(fileObject.fileToken);
 
-                                if (isMultiUpload) {
-                                    if (realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().getRealmStoryProtos().size() ==
-                                            realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).isNotNull("fileToken").findAll().size()) {
-                                        List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll().sort("createdAt");
-                                        if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
-                                            List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
-                                            for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                                ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                                storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
-                                                storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
-                                                storyObjects.add(storyAddRequest.build());
-                                            }
-                                            isStoryUploading = false;
-                                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
-                                        }
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryFileToken(fileObject.messageId, fileObject.fileToken);
 
-                                    }
-                                } else {
-                                    List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll();
+
+                            if (isMultiUpload) {
+                                if (MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryById(AccountManager.getInstance().getCurrentUser().getId(), false).storyObjects.size() ==
+                                        MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), 0).size()) {
+                                    List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING, true, new String[]{"createdAt"});
                                     if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
                                         List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
                                         for (int i = 0; i < realmStoryProtos.size(); i++) {
                                             ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                            storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
-                                            storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
+                                            storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                                            storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
                                             storyObjects.add(storyAddRequest.build());
                                         }
                                         isStoryUploading = false;
                                         MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
                                     }
+
                                 }
+                            } else {
+                                List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING);
+                                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                    for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                        storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                                        storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
+                                        storyObjects.add(storyAddRequest.build());
+                                    }
+                                    isStoryUploading = false;
+                                    MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                }
+                            }
 
-
-                            });
                         }
                         if (fileObject.onUploadListener != null) {
                             fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
@@ -315,9 +315,9 @@ public class HttpUploader implements IUpload {
 
                         makeFailed(fileObject.messageId);
                         if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
-                                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(),false);
-                                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId,MessageObject.STATUS_FAILED);
-                                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(), false);
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId, MessageObject.STATUS_FAILED);
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
                         }
                         if (fileObject.onUploadListener != null) {
                             fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
