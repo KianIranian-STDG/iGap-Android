@@ -286,8 +286,8 @@ public class FragmentEditProfile extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 }

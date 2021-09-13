@@ -3975,32 +3975,26 @@ public class FragmentChat extends BaseFragment
         }
 
         if (mode == KeyboardView.MODE_EMOJI) {
-            if (keyboardView == null) {
+
+            if (keyboardView == null)
                 createKeyboardView();
-            }
 
             if (keyboardView.getParent() == null)
                 keyboardContainer.addView(keyboardView);
 
-            keyboardVisible = false;
-
-            if (keyboardHeight <= 0) {
+            if (keyboardHeight <= 0)
                 keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-            }
 
-            if (keyboardHeightLand <= 0) {
+            if (keyboardHeightLand <= 0)
                 keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-            }
 
+            keyboardVisible = false;
             int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
             keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
-
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
             layoutParams.height = currentHeight;
             keyboardView.setLayoutParams(layoutParams);
-
             keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.STICKER);
-
             keyboardView.setVisibility(View.VISIBLE);
 
         } else if (mode == KeyboardView.MODE_ATTACHMENT) {
@@ -4012,25 +4006,19 @@ public class FragmentChat extends BaseFragment
 
             if (keyboardView != null) {
 
-                keyboardView.setCurrentMode(KeyboardView.MODE_KEYBOARD, -1);
-
-                if (keyboardHeight <= 0) {
+                if (keyboardHeight <= 0)
                     keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-                }
 
-                if (keyboardHeightLand <= 0) {
+                if (keyboardHeightLand <= 0)
                     keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-                }
 
+                keyboardView.setCurrentMode(KeyboardView.MODE_KEYBOARD, -1);
                 int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
                 keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
-
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
                 layoutParams.height = currentHeight;
                 keyboardView.setLayoutParams(layoutParams);
-
                 keyboardView.setVisibility(View.VISIBLE);
-
                 keyboardVisible = true;
             }
         } else {
@@ -4038,7 +4026,6 @@ public class FragmentChat extends BaseFragment
                 keyboardView.setCurrentMode(mode, -1);
 
             showKeyboardOnResume = false;
-
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
         }
@@ -5447,8 +5434,9 @@ public class FragmentChat extends BaseFragment
             case R.string.save_to_gallery:
                 saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
                     ProgressDialog progressDialog = createProgressDialog(getActivity());
+
                     @Override
-                    public void complete(int successMessage,int completePercent) {
+                    public void complete(int successMessage, int completePercent) {
                         progressDialog.setProgress(completePercent);
                         if (completePercent == 100) {
                             progressDialog.dismiss();
@@ -5461,8 +5449,9 @@ public class FragmentChat extends BaseFragment
             case R.string.save_to_Music:
                 saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
                     ProgressDialog progressDialog = createProgressDialog(getActivity());
+
                     @Override
-                    public void complete(int successMessage,int completePercent) {
+                    public void complete(int successMessage, int completePercent) {
                         progressDialog.setProgress(completePercent);
                         if (completePercent == 100) {
                             progressDialog.dismiss();
@@ -5705,7 +5694,7 @@ public class FragmentChat extends BaseFragment
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
         }
-        if(!(message.messageType == TEXT_VALUE)) {
+        if (!(message.messageType == TEXT_VALUE)) {
             edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
