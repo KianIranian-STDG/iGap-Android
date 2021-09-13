@@ -199,14 +199,8 @@ public class RealmAttachment extends RealmObject {
                         File _File1 = new File(_filePath);
                         if (_File1.exists()) {
 
-                            if (_filePath.contains(_Dir)) {
-                                _File1.renameTo(new File(_defaultFilePAth));
-                                realmAttachment.setLocalFilePath(_defaultFilePAth);
-                            } else {
-                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth),0,null);
-                                realmAttachment.setLocalFilePath(_defaultFilePAth);
-
-                            }
+                            AndroidUtils.copyFile(_File1, new File(_defaultFilePAth),0,null);
+                            realmAttachment.setLocalFilePath(_defaultFilePAth);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
