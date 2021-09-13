@@ -50,7 +50,7 @@ public class RealmStory extends RealmObject {
     public static RealmStory putOrUpdate(Realm realm, final long userId, boolean isSeenAll) {
         RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", userId).findFirst();
         if (realmStory == null) {
-            realmStory = realm.createObject(RealmStory.class,SUID.id().get());
+            realmStory = realm.createObject(RealmStory.class, SUID.id().get());
         }
         realmStory.setSeenAll(isSeenAll);
         return realmStory;
@@ -162,6 +162,7 @@ public class RealmStory extends RealmObject {
             storyProto.setSeen(igapStory.isSeen);
             storyProto.setStatus(igapStory.status);
             storyProto.setId(igapStory.id);
+            storyProto.setForReply(false);
             if (isExist) {
                 storyProto.setIndex(storyProto.getIndex());
             } else {
@@ -179,8 +180,8 @@ public class RealmStory extends RealmObject {
             realmStoryProtos.add(storyProto);
             isExist = false;
         }
-        if (realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
-                realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
+        if (realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
+                realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
             setSentAll(false);
         } else {
             setSentAll(true);

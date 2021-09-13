@@ -687,7 +687,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                         }
 
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
-                        if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
+                        if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size() && otherUserRealmStory.get(recentStoryCounter).storyObjects.size() > 0) {
 
                             storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "", displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69", context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll) {

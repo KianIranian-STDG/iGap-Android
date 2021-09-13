@@ -921,6 +921,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isSeen", boolean.class)
                     .addField("viewCount", int.class)
                     .addField("index", int.class)
+                    .addField("isForReply", boolean.class)
                     .addRealmObjectField("realmStoryViewInfos", realmStoryViewInfo)
                     .addField("status", int.class);
 
