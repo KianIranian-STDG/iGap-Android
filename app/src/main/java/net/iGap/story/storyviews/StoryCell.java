@@ -83,7 +83,7 @@ public class StoryCell extends FrameLayout {
     private int sendStatus;
     private int storyIndex;
     private String userColorId = "#4aca69";
-    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
+
     private static boolean isCreatedView = false;
 
     public String getFileToken() {
@@ -194,11 +194,11 @@ public class StoryCell extends FrameLayout {
                         }
 
 
-                        realm.beginTransaction();
-                        for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                        for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
                             realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                         }
-                        realm.commitTransaction();
+                        });
 
                         G.runOnUiThread(() -> Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
 
@@ -265,7 +265,7 @@ public class StoryCell extends FrameLayout {
 
 
                             DbManager.getInstance().doRealmTransaction(realm1 -> {
-                                for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                                for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
                                     realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                                 }
                             });

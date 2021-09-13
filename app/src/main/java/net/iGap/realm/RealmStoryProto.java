@@ -25,6 +25,7 @@ public class RealmStoryProto extends RealmObject {
     private int viewCount;
     private int status;
     private int index;
+    private boolean isForReply;
     private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
@@ -41,6 +42,7 @@ public class RealmStoryProto extends RealmObject {
         realmStory.setFileToken(story.getFileToken());
         realmStory.setStoryId(story.getId());
         realmStory.setUserId(story.getUserId());
+        realmStory.setForReply(true);
         return realmStory;
     }
 
@@ -138,6 +140,14 @@ public class RealmStoryProto extends RealmObject {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public boolean isForReply() {
+        return isForReply;
+    }
+
+    public void setForReply(boolean forReply) {
+        isForReply = forReply;
     }
 
     public RealmList<RealmStoryViewInfo> getRealmStoryViewInfos() {
