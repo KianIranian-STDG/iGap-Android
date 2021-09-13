@@ -358,7 +358,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                 switch (arg.status) {
                                     case SUCCESS:
                                         String filePath = arg.data.getFilePath();
-                                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        if (!(new File(stories.get(counter).getAttachment().filePath).exists())) {
+                                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        }
                                         break;
                                 }
                             });
@@ -378,7 +380,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                 switch (arg.status) {
                                     case SUCCESS:
                                         String filePath = arg.data.getFilePath();
-                                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        if (!(new File(stories.get(counter).getAttachment().filePath).exists())) {
+                                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                        }
                                         break;
                                 }
                             });
