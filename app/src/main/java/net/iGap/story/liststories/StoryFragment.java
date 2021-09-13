@@ -615,7 +615,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     StoryCell storyCell = (StoryCell) holder.itemView;
                     if (position == addStoryRow) {
 
-                        MainStoryObject mainStoryObject = getMessageDataStorage().getStoryById(AccountManager.getInstance().getCurrentUser().getId(),true);
+                        MainStoryObject mainStoryObject = getMessageDataStorage().getStoryById(AccountManager.getInstance().getCurrentUser().getId(), true);
                         List<Long> userId = new ArrayList<>();
                         userId.add(AccountManager.getInstance().getCurrentUser().getId());
                         List<List<String>> userDisplayNames = getMessageDataStorage().getDisplayNameWithUserId(userId);
@@ -630,9 +630,9 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 storyCell.addIconVisibility(false);
 
                             } else {
-                                if (getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING).size() > 0) {
+                                if (getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING, false, null).size() > 0) {
                                     List<StoryObject> realmStoryProtos;
-                                    realmStoryProtos = getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING);
+                                    realmStoryProtos = getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING, false, null);
                                     for (int i = 0; i < realmStoryProtos.size(); i++) {
                                         if (Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProtos.get(i).id)) || MessageController.isSendingStory || HttpUploader.isStoryUploading) {
                                             actionButtonsRootView.setVisibility(View.GONE);
@@ -644,7 +644,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                         }
                                     }
 
-                                } else if (getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_FAILED).size() > 0) {
+                                } else if (getMessageDataStorage().getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_FAILED, false, null).size() > 0) {
                                     isHaveFailedUpload = true;
                                 }
 

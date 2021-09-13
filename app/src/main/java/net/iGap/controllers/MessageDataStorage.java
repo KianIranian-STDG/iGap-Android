@@ -1436,14 +1436,24 @@ public class MessageDataStorage extends BaseController {
     }
 
 
-    public List<StoryObject> getStoryByStatus(long userId, int status) {
+    public List<StoryObject> getStoryByStatus(long userId, int status, boolean isNotNullToken, String[] fieldSort) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         List<RealmStoryProto> stories = new ArrayList<>();
         List<StoryObject> storyObjects = new ArrayList<>();
         storageQueue.postRunnable(() -> {
             try {
 
-                stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).findAll());
+                if (isNotNullToken) {
+                    if (fieldSort == null) {
+                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).isNotNull("fileToken").findAll());
+                    } else {
+                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).isNotNull("fileToken").findAll().sort(fieldSort, new Sort[]{Sort.ASCENDING}));
+                    }
+
+                } else {
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).findAll());
+                }
+
 
                 for (int i = 0; i < stories.size(); i++) {
                     storyObjects.add(StoryObject.create(database.copyFromRealm(stories.get(i))));
@@ -1468,6 +1478,43 @@ public class MessageDataStorage extends BaseController {
 
     }
 
+
+    public List<StoryObject> getNotNullTokenStories(long userId, int status) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        List<RealmStoryProto> stories = new ArrayList<>();
+        List<StoryObject> storyObjects = new ArrayList<>();
+        storageQueue.postRunnable(() -> {
+            try {
+
+                if (status == 0) {
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).isNotNull("fileToken").findAll());
+                } else {
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).isNotNull("fileToken").findAll());
+                }
+
+
+                for (int i = 0; i < stories.size(); i++) {
+                    storyObjects.add(StoryObject.create(database.copyFromRealm(stories.get(i))));
+                }
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        return storyObjects;
+
+    }
 
     public void updateStoryStatus(long id, int status) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -1496,6 +1543,32 @@ public class MessageDataStorage extends BaseController {
 
 
     }
+
+    public void updateStoryFileToken(long messageId, String fileToken) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        storageQueue.postRunnable(() -> {
+            try {
+                database.executeTransaction(realm -> {
+                    realm.where(RealmStoryProto.class).equalTo("id", messageId).findFirst().setFileToken(fileToken);
+                });
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     public void updateStorySentStatus(long userId, boolean status) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
