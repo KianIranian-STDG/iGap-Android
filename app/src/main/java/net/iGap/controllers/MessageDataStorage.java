@@ -1324,8 +1324,7 @@ public class MessageDataStorage extends BaseController {
         List<MainStoryObject> stories = new ArrayList<>();
         storageQueue.postRunnable(() -> {
             try {
-                RealmResults<RealmStoryProto> realmStoryProtos = null;
-                List<StoryObject> storyObjects = new ArrayList<>();
+                RealmResults<RealmStoryProto> realmStoryProtos;
                 RealmResults<RealmStory> realmStory;
 
                 if (userId == 0) {
@@ -1336,19 +1335,17 @@ public class MessageDataStorage extends BaseController {
 
                 if (realmStory != null && realmStory.size() > 0) {
                     for (int i = 0; i < realmStory.size(); i++) {
+                        List<StoryObject> storyObjects = new ArrayList<>();
                         realmStoryProtos = realmStory.get(i).getRealmStoryProtos().sort(sortBy, orderBy);
                         stories.add(MainStoryObject.create(realmStory.get(i)));
-                    }
 
-                    for (int i = 0; i < realmStoryProtos.size(); i++) {
-                        storyObjects.add(StoryObject.create(realmStoryProtos.get(i)));
-                    }
+                        for (int j = 0; j < realmStoryProtos.size(); j++) {
+                            storyObjects.add(StoryObject.create(realmStoryProtos.get(j)));
+                        }
 
-                    for (int i = 0; i < stories.size(); i++) {
                         stories.get(i).storyObjects = storyObjects;
                     }
                 }
-
                 countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
