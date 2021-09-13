@@ -1373,18 +1373,20 @@ public class MessageDataStorage extends BaseController {
                 List<StoryObject> storyObjects = new ArrayList<>();
                 MainStoryObject mainStoryObject;
                 RealmStory realmStory = database.where(RealmStory.class).equalTo("userId", userId).findFirst();
-                if (needSort) {
-                    RealmResults<RealmStoryProto> realmStoryProtos = realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
-                    for (int i = 0; i < realmStoryProtos.size(); i++) {
-                        storyObjects.add(StoryObject.create(realmStoryProtos.get(i)));
-                    }
-                    mainStoryObject = MainStoryObject.create(realmStory);
-                    mainStoryObject.storyObjects = storyObjects;
+                if (realmStory != null) {
+                    if (needSort) {
+                        RealmResults<RealmStoryProto> realmStoryProtos = realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+                        for (int i = 0; i < realmStoryProtos.size(); i++) {
+                            storyObjects.add(StoryObject.create(realmStoryProtos.get(i)));
+                        }
+                        mainStoryObject = MainStoryObject.create(realmStory);
+                        mainStoryObject.storyObjects = storyObjects;
 
-                } else {
-                    mainStoryObject = MainStoryObject.create(realmStory);
+                    } else {
+                        mainStoryObject = MainStoryObject.create(realmStory);
+                    }
+                    stories.add(mainStoryObject);
                 }
-                stories.add(mainStoryObject);
                 countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -1400,7 +1402,7 @@ public class MessageDataStorage extends BaseController {
         }
 
 
-        return stories.get(0);
+        return (stories.size() > 0 ? stories.get(0) : null);
     }
 
 
