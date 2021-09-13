@@ -2646,5 +2646,10 @@
     <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
 
     <string name="how_to_get_points">كيف تحصل على النقاط</string>
+    <string name="Loading">Loading</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">StopLoading</string>
+    <string name="WaitMore">WaitMore</string>
+    <string name="Stop">Stop</string>
 
 </resources>

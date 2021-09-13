@@ -203,7 +203,7 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth),0,null);
+                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
 
                             }

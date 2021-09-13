@@ -2272,5 +2272,10 @@ Want to get it?</string>
     <string name="AccessBan">Access is closed to view members</string>
 
     <string name="how_to_get_points">How To Get Points</string>
+    <string name="Loading">Loading</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">StopLoading</string>
+    <string name="WaitMore">WaitMore</string>
+    <string name="Stop">Stop</string>
 
 </resources>

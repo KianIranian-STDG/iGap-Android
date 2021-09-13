@@ -9,11 +9,9 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.app.ProgressDialog;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -26,7 +24,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.helper.HelperTracker;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -35,7 +32,6 @@ import net.iGap.module.CountryListComparator;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructCountry;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.request.RequestQrCodeNewDevice;
 
@@ -44,8 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentRegisterViewModel extends BaseViewModel {
 
@@ -329,14 +323,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
         }
         File file = new File(_resultQrCode);
         if (file.exists()) {
-            HelperSaveFile.savePicToGallery(_resultQrCode, true, new OnFileCopyComplete() {
-                @Override
-                public void complete(int successMessage,int completePercent) {
-                    if (completePercent == 100) {
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            HelperSaveFile.savePicToGallery(_resultQrCode, true);
         }
     }
 

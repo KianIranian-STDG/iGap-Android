@@ -2237,5 +2237,10 @@
     <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است </string>
 
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
+    <string name="Loading">بارگذاری</string>
+    <string name="AppName">آی گپ</string>
+    <string name="StopLoading">توقف بارگیری</string>
+    <string name="WaitMore">بیشتر منتظر باشید</string>
+    <string name="Stop">متوقف کردن</string>
 
 </resources>

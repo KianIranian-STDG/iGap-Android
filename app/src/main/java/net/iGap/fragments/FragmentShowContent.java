@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,7 +60,6 @@ import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmConstants;
@@ -81,8 +78,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Sort;
-
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private TextView contentNumberTv;
@@ -346,26 +341,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             File file = new File(path);
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + extension, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, new OnFileCopyComplete() {
-                        @Override
-                        public void complete(int successMessage,int completePercent) {
-                            progressDialog.setProgress(completePercent);
-                            if (completePercent == 100) {
-                                progressDialog.dismiss();
-                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + extension, HelperSaveFile.FolderType.video);
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                    HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
-                        @Override
-                        public void complete(int successMessage,int completePercent) {
-                            if (completePercent == 100) {
-                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    HelperSaveFile.savePicToGallery(path, true);
                 }
             }
         }

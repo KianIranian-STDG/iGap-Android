@@ -2061,5 +2061,10 @@
     <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: %1$s</string>
 
     <string name="how_to_get_points">Cómo ganar puntos</string>
+    <string name="Loading">Loading</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">StopLoading</string>
+    <string name="WaitMore">WaitMore</string>
+    <string name="Stop">Stop</string>
 
 </resources>
