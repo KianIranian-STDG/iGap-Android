@@ -189,11 +189,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
 
         FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
-//        if (G.themeColor == Theme.DARK) {
-//            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-//        } else {
-//            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-//        }
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
 
         swipeRefreshLayout = new SwipeRefreshLayout(context);

@@ -128,7 +128,6 @@ public class RealmStory extends RealmObject {
             }
             if (storyProto == null) {
                 storyProto = realm.createObject(RealmStoryProto.class);
-                setSeenAll(false);
                 setSentAll(false);
                 setUploadedAll(false);
             } else {
