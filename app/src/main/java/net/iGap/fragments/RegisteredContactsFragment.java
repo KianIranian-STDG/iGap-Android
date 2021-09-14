@@ -276,7 +276,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             contactsToolbar.setTitle(getString(R.string.create_chat));
         }
         createActionMode();
-        toolbarLayout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM,0,60,0,0));
+        toolbarLayout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM, 0, 60, 0, 0));
         toolbarLayout.addView(contactsToolbar);
         contactsToolbar.setListener(i -> {
             switch (i) {
@@ -859,6 +859,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
     public class ContactListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollerBarBaseAdapter {
 
         private List<RealmContacts> usersList = new ArrayList<>();
+        public boolean isClickable = true;
 
         void adapterUpdate(List<RealmContacts> contacts) {
             usersList = contacts;
@@ -927,6 +928,49 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                     return;
                 }
 
+                viewHolder.root.setOnClickListener(view -> {
+                    if (!isMultiSelect) {
+                        if (isCallAction) {
+                            long userId = contact.getId();
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
+
+
+                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
+
+                                        switch (which) {
+                                            case 0:
+                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                                                popBackStackFragment();
+                                                break;
+                                            case 1:
+                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+
+                                                popBackStackFragment();
+                                                break;
+                                        }
+
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                            }
+
+                        } else {
+                            if (isClickable) {
+                                isClickable = false;
+                                HelperPublicMethod.goToChatRoom(contact.getId(), () -> {
+                                    isClickable = true;
+                                }, () -> {
+                                    isClickable = true;
+                                });
+                            }
+                        }
+                    } else {
+                        if (onClickRecyclerView != null)
+                            onClickRecyclerView.onClick(view, i);
+                    }
+                });
                 viewHolder.title.setText(EmojiManager.getInstance().replaceEmoji(contact.getDisplay_name(), viewHolder.title.getPaint().getFontMetricsInt()));
                 viewHolder.subtitle.setText(
                         setUserStatus(
@@ -1062,45 +1106,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
                 root.setOnClickListener(v -> {
 
-                    if (!isMultiSelect) {
-                        if (isCallAction) {
-                            long userId = realmContacts.getId();
-                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
-
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
-                                    @Override
-                                    public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
-
-                                        switch (which) {
-                                            case 0:
-                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-                                                popBackStackFragment();
-                                                break;
-                                            case 1:
-                                                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-
-                                                popBackStackFragment();
-                                                break;
-                                        }
-
-                                        dialog.dismiss();
-                                    }
-                                }).show();
-                            }
-
-                        } else {
-                            showProgress();
-
-                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), () -> {
-                                hideProgress();
-                                /*popBackStackFragment();*/
-                            }, () -> hideProgress());
-                        }
-                    } else {
-                        if (onClickRecyclerView != null)
-                            onClickRecyclerView.onClick(v, getAdapterPosition());
-                    }
                 });
             }
         }

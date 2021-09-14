@@ -953,19 +953,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
-     /*   if (holder instanceof NewChatItemHolder && !(holder instanceof GiftStickerItem.ViewHolder))
-            mHolder = (NewChatItemHolder) holder;
-        else
-            return;*/
+//        if (holder instanceof NewChatItemHolder && !(holder instanceof GiftStickerItem.ViewHolder))
+//            mHolder = (NewChatItemHolder) holder;
+//        else
+//            return;
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
         View cslr_ll_forward22 = ((NewChatItemHolder) holder).getContentBloke().findViewById(R.id.cslr_ll_forward);
-/*
-        if (cslr_ll_forward22 != null) {
+/*        if (cslr_ll_forward22 != null) {
             mHolder.getContentBloke().removeView(cslr_ll_forward22);
-        }
-*/
+        }*/
 
         if (messageObject.forwardedMessage != null) {
 
@@ -1074,8 +1072,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (minWith < maxWith) {
                 minWith = maxWith;
             }
-      //      mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
-         //   mHolder.getContentBloke().addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            // mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+          //  mHolder.getContentBloke().addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 

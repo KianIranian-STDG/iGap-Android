@@ -36,6 +36,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,12 +61,14 @@ import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.KeyboardUtils;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
@@ -83,7 +86,6 @@ import net.iGap.observers.interfaces.OnLocationChanged;
 import net.iGap.observers.interfaces.OnMapClose;
 import net.iGap.observers.interfaces.OnMapRegisterState;
 import net.iGap.observers.interfaces.OnMapUsersGet;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmGeoNearbyDistance;
@@ -130,7 +132,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends BaseFragment implements ToolbarListener, OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
+public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
@@ -185,7 +187,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private int orientation = G.rotationState;
     private TopSheetDialog dialog;
 
-    private HelperToolbar mHelperToolbar;
+    private Toolbar mHelperToolbar;
+    private final int toolbarDotsTag = 1;
+
+
     private FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
     public static FragmentiGapMap getInstance() {
@@ -702,18 +707,112 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     private void initToolbar(View view) {
+        mHelperToolbar = new Toolbar(getContext());
+        mHelperToolbar.setTitle(getString(R.string.igap_nearby));
+        mHelperToolbar.setBackIcon(new BackDrawable(false));
+        mHelperToolbar.addItem(toolbarDotsTag, R.string.icon_other_vertical_dots, Color.WHITE);
+        mHelperToolbar.setListener(i -> {
+                    switch (i) {
+                        case -1:
+                            // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
+                            if (getActivity() != null &&
+                                    getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
+                                    getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
+                            ) {
+                                return;
+                            }
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.igap_nearby))
-                .setLeftIcon(R.string.icon_back)
-                .setRightIcons(R.string.icon_other_vertical_dots)
-                .setListener(this);
+                            if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
+                                rippleMoreMap.setVisibility(View.VISIBLE);
+                                fabGps.show();
+                                fabStateSwitcher.setVisibility(View.VISIBLE);
+                            }
+                            if (!isBackPress) {
+                                //getActivity().getSupportFragmentManager().popBackStack();
+                                G.fragmentActivity.onBackPressed();
+                            }
+                            closeKeyboard(view);
+                            isBackPress = false;
+                            page = pageiGapMap;
+                            break;
+                        case toolbarDotsTag:
+                            if (getActivity() != null) {
+                                List<Integer> items = new ArrayList<>();
+                                items.add(R.string.list_user_map);
+                                items.add(R.string.nearby);
+                                if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
+                                    items.add(R.string.map_registration);
+                                } else {
+                                    items.add(R.string.map_registration_enable);
+                                }
+
+                                dialog = new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, new BottomSheetItemClickCallback() {
+                                    @Override
+                                    public void onClick(int position) {
+                                        if (items.get(position) == R.string.list_user_map) {
+                                            fabGps.hide();
+                                            fabStateSwitcher.setVisibility(View.GONE);
+                                            rippleMoreMap.setVisibility(View.GONE);
+                                            page = pageUserList;
+                                            try {
+                                                if (getActivity() != null) {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                                                }
+                                            } catch (Exception e) {
+                                                e.getStackTrace();
+                                            }
+                                        } else if (items.get(position) == R.string.nearby) {
+                                            if (location != null && !isSendRequestGeoCoordinate) {
+                                                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                                showProgress(true);
+                                                isSendRequestGeoCoordinate = true;
+                                            }
+                                        } else if (items.get(position) == R.string.map_registration) {
+                                            new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                @Override
+                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                                    new RequestGeoRegister().register(false);
+
+                                                }
+                                            }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                                @Override
+                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                                }
+                                            }).show();
+                                        } else if (items.get(position) == R.string.map_registration_enable) {
+                                            if (!isGpsOn) {
+                                                try {
+                                                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                                } catch (ActivityNotFoundException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            } else {
+                                                new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        if (getRequestManager().isUserLogin()) {
+                                                            new RequestGeoRegister().register(true);
+                                                        } else {
+                                                            toggleGps.setChecked(false);
+                                                            showSnackBar(getString(R.string.please_check_your_connenction));
+                                                        }
+                                                    }
+                                                }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
+                                            }
+                                        }
+                                    }
+                                });
+                                dialog.show();
+                            }
+                            break;
+                    }
+                }
+        );
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fm_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+        layoutToolbar.addView(mHelperToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
     }
 
 
@@ -1555,103 +1654,5 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
     public enum MarkerColor {
         GRAY, GREEN
-    }
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
-        if (getActivity() != null &&
-                getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
-                getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
-        ) {
-            return;
-        }
-
-        if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
-            rippleMoreMap.setVisibility(View.VISIBLE);
-            fabGps.show();
-            fabStateSwitcher.setVisibility(View.VISIBLE);
-        }
-        if (!isBackPress) {
-            //getActivity().getSupportFragmentManager().popBackStack();
-            G.fragmentActivity.onBackPressed();
-        }
-        closeKeyboard(view);
-        isBackPress = false;
-        page = pageiGapMap;
-    }
-
-    @Override
-    public void onRightIconClickListener(View view) {
-        if (getActivity() != null) {
-            List<Integer> items = new ArrayList<>();
-            items.add(R.string.list_user_map);
-            items.add(R.string.nearby);
-            if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
-                items.add(R.string.map_registration);
-            } else {
-                items.add(R.string.map_registration_enable);
-            }
-
-            dialog = new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, new BottomSheetItemClickCallback() {
-                @Override
-                public void onClick(int position) {
-                    if (items.get(position) == R.string.list_user_map) {
-                        fabGps.hide();
-                        fabStateSwitcher.setVisibility(View.GONE);
-                        rippleMoreMap.setVisibility(View.GONE);
-                        page = pageUserList;
-                        try {
-                            if (getActivity() != null) {
-                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
-                            }
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    } else if (items.get(position) == R.string.nearby) {
-                        if (location != null && !isSendRequestGeoCoordinate) {
-                            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                            showProgress(true);
-                            isSendRequestGeoCoordinate = true;
-                        }
-                    } else if (items.get(position) == R.string.map_registration) {
-                        new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                new RequestGeoRegister().register(false);
-
-                            }
-                        }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            }
-                        }).show();
-                    } else if (items.get(position) == R.string.map_registration_enable) {
-                        if (!isGpsOn) {
-                            try {
-                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                            } catch (ActivityNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    if (getRequestManager().isUserLogin()) {
-                                        new RequestGeoRegister().register(true);
-                                    } else {
-                                        toggleGps.setChecked(false);
-                                        showSnackBar(getString(R.string.please_check_your_connenction));
-                                    }
-                                }
-                            }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
-                        }
-                    }
-                }
-            });
-            dialog.show();
-        }
     }
 }

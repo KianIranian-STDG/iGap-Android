@@ -39,8 +39,6 @@ import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.structs.MessageObject;
 
-import org.parceler.Parcel;
-
 import java.io.File;
 import java.util.Calendar;
 

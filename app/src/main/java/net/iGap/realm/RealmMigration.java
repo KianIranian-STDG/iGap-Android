@@ -629,10 +629,9 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-/*
         if (oldVersion == 38) { // REALM_LATEST_MIGRATION_VERSION = 38
 
-            RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
+/*            RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
                     .addField("kuknosSeedKey", String.class)
                     .addField("kuknosPublicKey", String.class)
                     .addField("kuknosPIN", String.class)
@@ -641,11 +640,10 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
                 realmUserInfo.addRealmObjectField("kuknosM", realmKuknos);
-            }
+            }*/
 
             oldVersion++;
         }
-*/
 
         if (oldVersion == 39) {
             DynamicRealmObject realmUserInfo = realm.where("RealmUserInfo").findFirst();
@@ -724,21 +722,19 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-/*
         if (oldVersion == 43) {
 
-            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
+/*            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
                     .addField("cardName", String.class)
                     .addField("cardNumber", String.class)
                     .addField("bankName", String.class)
                     .addField("expireDate", String.class)
                     .addField("isOrigin", boolean.class, FieldAttribute.REQUIRED);
 
-            realmMB.addPrimaryKey("cardNumber");
+            realmMB.addPrimaryKey("cardNumber");*/
 
             oldVersion++;
         }
-*/
 
         if (oldVersion == 44) {
             RealmObjectSchema realmBill = schema.create(RealmRoomMessageWalletBill.class.getSimpleName())
@@ -789,12 +785,12 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-/*        if (oldVersion == 45) {
-
+        if (oldVersion == 45) {
+/*
             RealmObjectSchema realmMB = schema.create(RealmMobileBankAccounts.class.getSimpleName())
                     .addField("accountNumber", String.class)
                     .addField("accountName", String.class);
-            realmMB.addPrimaryKey("accountNumber");
+            realmMB.addPrimaryKey("accountNumber");*/
 
             RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUser != null) {
@@ -835,18 +831,20 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 46) {
 
-            RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
+   /*         RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
             if (realmMbCards != null) {
                 realmMbCards.addField("status", String.class);
             }
+
 
             RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
             if (realmMbDeposits != null) {
                 realmMbDeposits.addField("status", String.class);
             }
+*/
 
             oldVersion++;
-        }*/
+        }
 
         if (oldVersion == 47) {
 
@@ -893,15 +891,15 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
-/*
+
         if (oldVersion == 49) {
-            RealmObjectSchema realmMbCards = schema.get(RealmKuknos.class.getSimpleName());
+  /*          RealmObjectSchema realmMbCards = schema.get(RealmKuknos.class.getSimpleName());
             if (realmMbCards != null) {
                 realmMbCards.addField("iban", String.class);
             }
-
+*/
             oldVersion++;
-        }*/
+        }
     }
 
     @Override

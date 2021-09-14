@@ -57,7 +57,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_692.setMargins(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         cslum_txt_unread_message.setLayoutParams(layout_692);
-
+        cslum_txt_unread_message.setAlpha(.6f);
         return cslum_txt_unread_message;
     }
 

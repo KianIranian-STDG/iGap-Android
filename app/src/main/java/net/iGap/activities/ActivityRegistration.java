@@ -41,8 +41,8 @@ public class ActivityRegistration extends ActivityEnhanced {
 
         isOnGetPermission = true;
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_registeration);
+        G.updateResources(getBaseContext());
 
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull

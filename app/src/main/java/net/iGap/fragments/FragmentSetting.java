@@ -3,7 +3,9 @@ package net.iGap.fragments;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +32,14 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +56,9 @@ public class FragmentSetting extends BaseFragment {
 
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
+    private Toolbar settingToolbar;
+    private final int toolbarDotsTag = 1;
+
 
 
     @Override
@@ -80,27 +86,24 @@ public class FragmentSetting extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HelperToolbar t = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setRightIcons(R.string.icon_other_vertical_dots)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.settings))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
+        settingToolbar = new Toolbar(getContext());
+        settingToolbar.setBackIcon(new BackDrawable(false));
+        settingToolbar.setTitle(getString(R.string.settings));
+        settingToolbar.addItem(toolbarDotsTag, R.string.icon_other_vertical_dots, Color.WHITE);
+        settingToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
                     }
+                    break;
+                case toolbarDotsTag:
+                    showMenu();
+                    break;
+            }});
 
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        showMenu();
-                    }
-                });
-        binding.toolbar.addView(t.getView());
+
+        binding.toolbar.addView(settingToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         viewModel.setCurrentLanguage();
 

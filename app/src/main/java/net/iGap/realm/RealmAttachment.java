@@ -21,7 +21,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import java.io.File;
 import java.io.IOException;

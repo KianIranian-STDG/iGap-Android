@@ -506,10 +506,10 @@
     <string name="iGap_settings">iGap Account Settings</string>
     <string name="please_write_your_message">Please type your message!</string>
     <string name="share_audio_file">Shared Audios</string>
-    <string name="share_image">Shared Images</string>
-    <string name="share_image_2">Share Image</string>
-    <string name="share_video_file_2">Share Video</string>
-    <string name="share_video_file">Shared Videos</string>
+    <string name="shared_images">Shared Images</string>
+    <string name="share_image">Share Image</string>
+    <string name="share_video_file">Share Video</string>
+    <string name="shared_videos_file">Shared Videos</string>
     <string name="share_file">Shared Files</string>
     <string name="text_copied">Text Copied</string>
 
@@ -2269,4 +2269,8 @@ Want to get it?</string>
     <string name="name_error">Name not verified</string>
     <string name="email_error">Wrong Email Address</string>
     <string name="email_added">added Email Address</string>
+    <string name="AccessBan">Access is closed to view members</string>
+
+    <string name="how_to_get_points">How To Get Points</string>
+
 </resources>

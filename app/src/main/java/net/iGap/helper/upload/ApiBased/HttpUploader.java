@@ -27,6 +27,7 @@ import net.igap.video.compress.OnCompress;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -119,6 +120,11 @@ public class HttpUploader implements IUpload {
     @Override
     public boolean cancelUploading(String messageId) {
         UploadHttpRequest request = findExistedRequest(messageId);
+        for (String taskId : pendingCompressTasks.keySet()) {
+            if (taskId.equals(messageId)) {
+                Objects.requireNonNull(pendingCompressTasks.get(taskId)).setCancel();
+            }
+        }
         if (request == null) {
             return false;
         } else {
@@ -168,7 +174,7 @@ public class HttpUploader implements IUpload {
                     }
 
                     @Override
-                    public void onCompressFinish(String id, boolean compress) {
+                    public void onCompressFinish(String id, boolean compress, boolean isCancel) {
                         try {
                             File originalFile = new File(fileObject.path);
 
@@ -181,8 +187,9 @@ public class HttpUploader implements IUpload {
                             }
                             G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
                             pendingCompressTasks.remove(fileObject.messageId + "");
-
-                            startUpload(fileObject, completedCompressFile);
+                            if (!isCancel) {
+                                startUpload(fileObject, completedCompressFile);
+                            }
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -307,7 +314,7 @@ public class HttpUploader implements IUpload {
             return;
 
         UploadHttpRequest request = uploadQueue.poll();
-        if (request == null){
+        if (request == null) {
             return;
         }
 

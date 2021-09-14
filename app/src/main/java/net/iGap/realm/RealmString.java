@@ -12,7 +12,6 @@ package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;

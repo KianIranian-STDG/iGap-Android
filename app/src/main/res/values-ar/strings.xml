@@ -930,12 +930,12 @@
 
     <string name="share_audio_file">اشتراك الملف الصوتي </string>
 
-    <string name="share_image">اشتراك الصورة </string>
+    <string name="shared_images">اشتراك الصورة </string>
 
-    <string name="share_image_2">اشتراك الصورة</string>
-    <string name="share_video_file_2">اشتراك ملف الفيديو</string>
+    <string name="share_image">اشتراك الصورة</string>
+    <string name="share_video_file">اشتراك ملف الفيديو</string>
 
-    <string name="share_video_file">اشتراك ملف الفيديو </string>
+    <string name="shared_videos_file">اشتراك ملف الفيديو </string>
 
     <string name="share_file">اشتراك الملف </string>
 
@@ -2643,4 +2643,8 @@
     <string name="seted_gender">Gender confirmed</string>
     <string name="seted_name">Name confirmed</string>
     <string name="email_added">added Email Address</string>
+    <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
+
+    <string name="how_to_get_points">كيف تحصل على النقاط</string>
+
 </resources>

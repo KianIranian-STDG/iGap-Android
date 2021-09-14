@@ -80,6 +80,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private final int passCodeTag = 2;
     private Toolbar discoveryToolbar;
     private ToolbarItem passCodeItem;
+    private int scroll = 0;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -98,6 +99,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
     public void setNeedToReload(boolean needToRelaod) {
         this.needToReload = needToRelaod;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        G.updateResources(getContext());
     }
 
     @Nullable
@@ -194,31 +201,26 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 }
             }
         });
-
-//        /*if (page == 0) {
-//            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                @Override
-//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                    super.onScrolled(recyclerView, dx, dy);
-//
-//                    int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-//
-//                    //check recycler scroll for search box animation
-//                    if (dy <= 0) {
-//                        // Scrolling up
-//                        mHelperToolbar.animateSearchBox(false, position, -2);
-//                    } else {
-//                        // Scrolling down
-//                        mHelperToolbar.animateSearchBox(true, position, -2);
-//                    }
-//                }
-//            });
-
-//       }
+/**detect scroll down or up for tapcell send request*/
 
         pullToRefresh.setOnRefreshListener(() -> {
+            scroll = 1;
             setRefreshing(true);
             boolean isSend = updateOrFetchRecycleViewData();
+            rcDiscovery.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    if (dy <= 0) {
+                        return;
+                    } else {
+                        if (scroll == 1)
+                            BottomNavigationFragment.isShowedAdd = false;
+                    }
+                    scroll++;
+                }
+            });
             if (!isSend) {
                 setRefreshing(false);
                 HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
@@ -262,8 +264,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             } else {
                 emptyRecycle.setVisibility(View.VISIBLE);
             }
+            BottomNavigationFragment.isShowedAdd = false;
         }
     }
+
     private void onScannerClickListener() {
         DbManager.getInstance().doRealmTask(realm -> {
             String phoneNumber = "";
@@ -291,6 +295,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
         });
     }
+
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
@@ -308,6 +313,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             setRefreshing(false);
         }
     }
+
     public void checkPassCodeVisibility() {
         if (PassCode.getInstance().isPassCode()) {
             if (passCodeItem == null) {
@@ -324,6 +330,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             passCodeItem.setVisibility(View.GONE);
         }
     }
+
     private boolean updateOrFetchRecycleViewData() {
         return new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override

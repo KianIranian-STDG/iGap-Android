@@ -1,6 +1,8 @@
 package net.iGap.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
 import net.iGap.viewmodel.FragmentSecurityViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,8 +37,8 @@ public class FragmentSecurity extends BaseFragment {
     public static OnPopBackStackFragment onPopBackStackFragment;
     public FragmentSecurityViewModel fragmentSecurityViewModel;
     public FragmentFragmentSecurityBinding fragmentSecurityBinding;
-    private HelperToolbar mHelperToolbar;
-
+    private Toolbar securityToolbar;
+    private final int rippleOkTag = 1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,31 +57,27 @@ public class FragmentSecurity extends BaseFragment {
     public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(G.context.getResources().getString(R.string.two_step_verification_title))
-                .setLeftIcon(R.string.icon_back)
-                .setRightIcons(R.string.icon_sent)
-                .setLogoShown(true)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        fragmentSecurityViewModel.onClickRippleBack(view);
-                    }
+        securityToolbar = new Toolbar(getContext());
+        securityToolbar.setBackIcon(new BackDrawable(false));
+        securityToolbar.setTitle(getString(R.string.two_step_pass_code));
+        ToolbarItem toolbarItem;
+        toolbarItem = securityToolbar.addItem(rippleOkTag, R.string.icon_sent, Color.WHITE);
+        securityToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    fragmentSecurityViewModel.onClickRippleBack(view);
+                    break;
+                case rippleOkTag:
+                    fragmentSecurityViewModel.onClickRippleOk(view);
+                    break;
+            }
+        });
+        fragmentSecurityBinding.ffsLayoutToolbar.addView(securityToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
+        toolbarItem.setVisibility(View.GONE);
 
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        fragmentSecurityViewModel.onClickRippleOk(view);
-                    }
-                });
+        fragmentSecurityViewModel.titleToolbar.observe(G.fragmentActivity, s -> securityToolbar.setTitle(s));
 
-        fragmentSecurityBinding.ffsLayoutToolbar.addView(mHelperToolbar.getView());
-        mHelperToolbar.getRightButton().setVisibility(View.GONE);
-
-        fragmentSecurityViewModel.titleToolbar.observe(G.fragmentActivity, s -> mHelperToolbar.setDefaultTitle(s));
-
-        fragmentSecurityViewModel.rippleOkVisibility.observe(G.fragmentActivity, visibility -> mHelperToolbar.getRightButton().setVisibility(visibility));
+        fragmentSecurityViewModel.rippleOkVisibility.observe(G.fragmentActivity, visibility -> toolbarItem.setVisibility(visibility));
 
         fragmentSecurityViewModel.goToSetSecurityPassword.observe(getViewLifecycleOwner(), password -> {
             if (getActivity() != null && password != null) {

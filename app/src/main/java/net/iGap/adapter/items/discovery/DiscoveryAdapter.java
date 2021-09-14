@@ -19,6 +19,7 @@ import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type8ViewHolder;
 import net.iGap.adapter.items.discovery.holder.TypeUnknownViewHolder;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false), activity);
             case 8:
             case 9:
+                BottomNavigationFragment.isShowedAdd = false;
                 return new Type8ViewHolder(layoutInflater.inflate(R.layout.banner, viewGroup, false), activity);
         }
         return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false), activity);

@@ -9,6 +9,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -329,6 +330,7 @@ import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
+import static net.iGap.module.AndroidUtils.createProgressDialog;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -364,7 +366,6 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.WALLET_VALUE;
-import static net.iGap.realm.RealmRoomMessage.getRealmRoomMessage;
 import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
@@ -745,7 +746,7 @@ public class FragmentChat extends BaseFragment
 
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
 
-        rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
+        rootView = (FrameLayout) inflater.inflate(R.layout.fragment_chat, container, false);
 
         chatContainer = rootView.findViewById(R.id.chatMainContainer);
         mediaContainer = new FragmentMediaContainer(getActivity(), this);
@@ -4211,26 +4212,11 @@ public class FragmentChat extends BaseFragment
                                 }
 
                                 new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToken, result -> {
-                                            /* if (result.isSuccess()) {
-                               Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
-
-                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
-                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
-                                            @Override
-                                            public void onNegativeButton(StructIGSticker structIGSticker) {
-                                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
-                                            }
-
-                                            @Override
-                                            public void onPositiveButton(StructIGSticker structIGSticker) {
-                                                sendStickerAsMessage(structIGSticker);
-                                            }
-                                        });
-
-                                        bottomSheet.show(FragmentChat.this.getActivity().getSupportFragmentManager(), null);
-                                  } else {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
+                                    } else {
                                         Toast.makeText(getActivity(), getString(R.string.unsuccessful_payment), Toast.LENGTH_LONG).show();
-                                    }  */
+                                    }
                                 });
 
                             }
@@ -5267,7 +5253,7 @@ public class FragmentChat extends BaseFragment
         }
 
         //check and remove share base on type and download state
-        if (roomMessageType == LOCATION_VALUE || roomMessageType == VOICE_VALUE) {
+        if (roomMessageType == LOCATION_VALUE) {
             items.remove(Integer.valueOf(R.string.share_item_dialog));
         } else if (roomMessageType != TEXT_VALUE && roomMessageType != CONTACT_VALUE) {
             String filepath_;
@@ -5285,7 +5271,7 @@ public class FragmentChat extends BaseFragment
         if (isFileExistInLocalStorage(messageObject)) {
             if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE || roomMessageType == GIF_TEXT_VALUE) {
                 items.add(R.string.save_to_gallery);
-            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == VOICE_VALUE) {
+            } else if (roomMessageType == AUDIO_VALUE || roomMessageType == AUDIO_TEXT_VALUE || roomMessageType == VOICE_VALUE) {
                 items.add(R.string.save_to_Music);
             } else if (roomMessageType == FILE_VALUE) {
                 items.add(R.string.saveToDownload_item_dialog);
@@ -5424,6 +5410,7 @@ public class FragmentChat extends BaseFragment
             case R.string.share_file_link:
                 shareMediaLink(message);
                 break;
+
             case R.string.forward_item_dialog:
                 forwardSelectedMessageToOutOfChat(message);
                 break;
@@ -5441,23 +5428,29 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
 
             case R.string.save_to_Music:
-                prgWaiting.setVisibility(View.VISIBLE);
                 saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
+                    ProgressDialog progressDialog = createProgressDialog(getActivity());
                     @Override
-                    public void complete(int successMessage) {
-                        prgWaiting.setVisibility(View.GONE);
-                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    public void complete(int successMessage,int completePercent) {
+                        progressDialog.setProgress(completePercent);
+                        if (completePercent == 100) {
+                            progressDialog.dismiss();
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;
@@ -5694,6 +5687,9 @@ public class FragmentChat extends BaseFragment
         if (message.message != null && !message.message.isEmpty()) {
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
+        }
+        if(!(message.messageType == TEXT_VALUE)) {
+            edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
         // found is user trying to edit a message
@@ -6673,15 +6669,14 @@ public class FragmentChat extends BaseFragment
 
         MessageObject messageObject = MessageObject.create(roomMessage);
 
-  /*      if (structIGSticker.isGiftSticker()) {
-            mAdapter.add(new GiftStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
+        if (structIGSticker.isGiftSticker()) {
         } else {
             if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
             else
                 mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
         }
-*/
+
         scrollToEnd();
 
         if (isReply()) {
@@ -7191,17 +7186,19 @@ public class FragmentChat extends BaseFragment
                     intent.setType("audio/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.share_audio_file);
                     break;
+                case GIF_VALUE:
+                case GIF_TEXT_VALUE:
                 case IMAGE_VALUE:
                 case IMAGE_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_image);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_images);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("video/*");
-                    chooserDialogText = getActivity().getResources().getString(R.string.share_video_file);
+                    chooserDialogText = getActivity().getResources().getString(R.string.shared_videos_file);
                     break;
                 case FILE_VALUE:
                 case FILE_TEXT_VALUE:
@@ -8395,13 +8392,13 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER_VALUE:
-              /*          if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.GIFT_STICKER) {
+                        if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.GIFT_STICKER) {
                             if (!addTop) {
-                                mAdapter.add(new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+//                                mAdapter.add(new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+//                                mAdapter.add(index, new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
                             }
-                        } else*/ if (messageObject.getAttachment() != null && messageObject.getAttachment().name != null && messageObject.getAttachment().isAnimatedSticker()) {
+                        } else if (messageObject.getAttachment() != null && messageObject.getAttachment().name != null && messageObject.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
                             } else {

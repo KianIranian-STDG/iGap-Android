@@ -1432,13 +1432,13 @@
     <string name="shamsi">هجری شمسی </string>
     <string name="share_audio_file">سس فایلینی اشتراکا قویون </string>
     <string name="share_file">فایل اشتراکا قویماق </string>
+    <string name="shared_images">تصویر اشتراکا قویماق </string>
     <string name="share_image">تصویر اشتراکا قویماق </string>
-    <string name="share_image_2">تصویر اشتراکا قویماق </string>
     <string name="share_image_from_igap">آیگپدن تصویر اشتراکا قویماق </string>
     <string name="share_item_dialog">اشتراک</string>
     <string name="share_link_item_dialog">اشتراک لینکی </string>
+    <string name="shared_videos_file">ویدئو فایلی اشتراکا قویماق </string>
     <string name="share_video_file">ویدئو فایلی اشتراکا قویماق </string>
-    <string name="share_video_file_2">ویدئو فایلی اشتراکا قویماق </string>
     <string name="share_video_from_igap">آیگپدن ویدئو اشتراکا قویماق </string>
     <string name="shared_audio">اشتراکا قویولموش سس لر</string>
     <string name="shared_files">اشتراکا قویولموش فایل لار</string>
@@ -1916,4 +1916,8 @@
     <string name="bio_error">Bio doğrulanmadı</string>
     <string name="email_added">اعتبارلی ایمیل آدرسی</string>
     <string name="seted_gender">Cinsiyet lanmadı</string>
+    <string name="AccessBan">Üyeleri görüntülemek için erişim kapatıldı</string>
+
+    <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
+
 </resources>

@@ -215,6 +215,11 @@ public class MessageController extends BaseController implements EventManager.Ev
             if (error == null) {
                 IG_RPC.Res_Channel_Delete res = (IG_RPC.Res_Channel_Delete) response;
                 getMessageDataStorage().deleteRoomFromStorage(res.roomId);
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                if (err.major == 411 && err.minor == 2) {
+                    getMessageDataStorage().deleteRoomFromStorage(roomId);
+                }
             }
         });
     }
@@ -421,7 +426,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     public void channelAddMessageVote(MessageObject messageObject, int reaction) {
         final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
-        req.messageId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.id : messageObject.id;
+        req.messageId = messageObject.id;
         req.roomId = messageObject.roomId;
         req.reaction = ProtoGlobal.RoomMessageReaction.forNumber(reaction);
 

@@ -29,7 +29,7 @@ public class Type0ViewHolder extends BaseViewHolder implements HandShakeCallback
      /*   ivWeather = itemView.findViewById(R.id.iv_weather);
         tvCityName = itemView.findViewById(R.id.tv_cityName);
         tvDegree = itemView.findViewById(R.id.tv_degree);*/
-     //   tvDate = itemView.findViewById(R.id.tv_date);
+    /*    tvDate = itemView.findViewById(R.id.tv_date);*/
         tvScore = itemView.findViewById(R.id.tv_score);
         tvContent = itemView.findViewById(R.id.textView2);
 

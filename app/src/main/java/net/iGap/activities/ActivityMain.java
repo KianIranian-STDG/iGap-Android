@@ -955,15 +955,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
                 }
                 break;
-/*            case kuknosRequestCodeQrCode:
+            case kuknosRequestCodeQrCode:
                 IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (kuknosWID.getContents() != null) {
-                    KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (myFragment != null && myFragment.isVisible()) {
-                        myFragment.setWalletIDQrCode(kuknosWID.getContents());
-                    }
                 }
-                break;*/
+                break;
             case WALLET_REQUEST_CODE:
                 /*try {
                     getUserCredit();

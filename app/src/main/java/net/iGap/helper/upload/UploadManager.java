@@ -105,7 +105,7 @@ public class UploadManager {
                 }
 
                 @Override
-                public void onCompressFinish(String id, boolean compress) {
+                public void onCompressFinish(String id, boolean compress, boolean isCancel) {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {

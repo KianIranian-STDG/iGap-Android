@@ -175,22 +175,19 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
 //                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
-/*            case PARSLAND:
-                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
-                break;*/
+            case PARSLAND:
+                break;
             case FUN_SERVICE:
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
-/*            case BLOCKCHAIN:
-               if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-             new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
-               } else {
-                   HelperError.showSnackMessage("", true);
-               }
+            case BLOCKCHAIN:
+//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//                } else {
+//                    HelperError.showSnackMessage("", true);
+//                }
                 break;
             case VIRTUAL_GIFT_CARD:
-                new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
-                break;*/
+                break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();
                 if (!discoveryField.value.equals(""))

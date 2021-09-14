@@ -467,10 +467,10 @@
     <string name="iGap_settings">régalage du compte d\'iGap</string>
     <string name="please_write_your_message">veuillez écrire votre message!</string>
     <string name="share_audio_file">partager le fichier d\'audio</string>
+    <string name="shared_images">partager l\'image</string>
     <string name="share_image">partager l\'image</string>
-    <string name="share_image_2">partager l\'image</string>
-    <string name="share_video_file_2">partager le fichier de vidéo</string>
     <string name="share_video_file">partager le fichier de vidéo</string>
+    <string name="shared_videos_file">partager le fichier de vidéo</string>
     <string name="share_file">partager le fichier</string>
     <string name="text_copied">le texte copié</string>
     <string name="message">message </string>
@@ -1853,4 +1853,8 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+    <string name="AccessBan">L\'accès est fermé pour voir les membres</string>
+
+    <string name="how_to_get_points">Comment gagner des points</string>
+
 </resources>

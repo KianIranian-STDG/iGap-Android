@@ -62,8 +62,8 @@ public interface StickerApi {
     @GET("gift/activated-list")
     Single<UserGiftStickersDataModel> getMyActivatedGiftSticker(@Query("skip") int skip, @Query("limit") int limit);
 
-    @GET("gift/activated-list")
-    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
+//    @GET("gift/activated-list")
+//    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
 
     @GET("gift/giftable-list")
     Single<StickerCategoryGroupDataModel> getGiftableStickers();

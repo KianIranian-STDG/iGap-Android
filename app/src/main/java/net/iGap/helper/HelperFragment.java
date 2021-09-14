@@ -345,11 +345,6 @@ public class HelperFragment {
         load();
     }
 
-/*    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
-        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, sendOtherListener, mode);
-        fragment.show(fragmentManager, "gift sticker card");
-    }*/
-
     private boolean isRelatedToChat(String fragmentName) {
         return fragmentName.equals(FragmentChannelProfile.class.getName()) || fragmentName.equals(EditChannelFragment.class.getName()) ||
                 fragmentName.equals(FragmentGroupProfile.class.getName()) || fragmentName.equals(EditGroupFragment.class.getName()) ||
