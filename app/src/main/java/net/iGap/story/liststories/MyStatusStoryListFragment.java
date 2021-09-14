@@ -2,6 +2,7 @@ package net.iGap.story.liststories;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,13 +29,18 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
@@ -43,6 +49,7 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
 import net.iGap.story.StoryPagerFragment;
@@ -51,10 +58,13 @@ import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.MessageObject;
 
+import org.paygear.WalletActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static net.iGap.G.isAppRtl;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
     private RecyclerListView recyclerListView;
@@ -78,6 +88,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int rowSize;
     private int recentHeaderRow;
     private int recentStoryRow;
+    private final int qrWalletTag = 1;
 
 
     @Override
@@ -94,24 +105,56 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getEventManager().removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
     }
 
+    private void onScannerClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
+
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getContext() == null)
             return super.onCreateView(inflater, container, savedInstanceState);
 
-        HelperToolbar helperToolbar = HelperToolbar.create();
-        View toolBar = helperToolbar
-                .setContext(getContext())
-                .setLogoShown(true)
-                .setListener(this)
-                .setLeftIcon(R.string.icon_back)
-                .setDefaultTitle(getString(R.string.my_status))
-                .getView();
+        Toolbar myStoryToolbar = new Toolbar(getContext());
+        myStoryToolbar.setTitle(getString(R.string.my_status));
+        ToolbarItems toolbarItems = myStoryToolbar.createToolbarItems();
+        toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
+
+        myStoryToolbar.setListener(i -> {
+            switch (i) {
+                case qrWalletTag:
+                    onScannerClickListener();
+                    break;
+            }
+        });
 
 
         FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
-        rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+        rootView.addView(myStoryToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
 
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();

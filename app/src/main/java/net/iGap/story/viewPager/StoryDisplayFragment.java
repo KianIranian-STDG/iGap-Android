@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,8 +26,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.G;
@@ -342,7 +339,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
                     return;
                 }
-                Glide.with(storyDisplayImage.getContext()).load(path).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage);
+//                Glide.with(storyDisplayImage.getContext()).load(path).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage);
+                Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(path));
+                storyDisplayImage.setImageBitmap(bitmap);
+
             } else {
                 ProtoFileDownload.FileDownload.Selector selector;
                 if (ra.largeThumbnail != null) {
@@ -353,7 +353,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
                             return;
                         }
-                        Glide.with(storyDisplayImage.getContext()).load(path).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage);
+                        Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(path));
+                        storyDisplayImage.setImageBitmap(bitmap);
 
                     } else {
                         DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
@@ -368,7 +369,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                             if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
                                                 return;
                                             }
-                                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                            Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(filePath));
+                                            G.runOnUiThread(() -> storyDisplayImage.setImageBitmap(bitmap));
                                         }
                                     }
                                 }
@@ -383,7 +385,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
                             return;
                         }
-                        Glide.with(storyDisplayImage.getContext()).load(path).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage);
+                        Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(path));
+                        storyDisplayImage.setImageBitmap(bitmap);
                     } else {
                         DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
@@ -397,7 +400,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                             if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
                                                 return;
                                             }
-                                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(filePath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                                            Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(filePath));
+                                            G.runOnUiThread(() -> storyDisplayImage.setImageBitmap(bitmap));
                                         }
                                     }
                                 }
@@ -429,14 +433,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     private void loadImage(String path) {
         loadingProgressbar.setVisibility(View.GONE);
-        Glide.with(storyDisplayImage.getContext()).load(path).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                storyDisplayImage.setImageDrawable(resource);
-            }
-        });
+        storyDisplayImage.setImageBitmap(BitmapFactory.decodeFile(path));
+//        Glide.with(storyDisplayImage.getContext()).load(path).into(new SimpleTarget<Drawable>() {
+//            @Override
+//            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+//
+//            }
+//        });
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-
+        Glide.with(tumNailImage.getContext()).load(path).into(tumNailImage);
         if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
         } else {

@@ -2,6 +2,7 @@ package net.iGap.story.liststories;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -27,12 +28,16 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseMainFragments;
+import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.Theme;
@@ -51,6 +56,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.story.MainStoryObject;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
@@ -60,6 +66,8 @@ import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.MessageObject;
 
+import org.paygear.WalletActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +75,7 @@ import java.util.List;
 import io.realm.Sort;
 
 import static net.iGap.G.isAppRtl;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class StoryFragment extends BaseMainFragments implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
 
@@ -104,6 +113,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     boolean isHaveFailedUpload = false;
     private int myStoryCount = 0;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private final int qrWalletTag = 1;
 
 
     @Override
@@ -135,8 +145,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     public void onDestroy() {
         super.onDestroy();
         if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
     }
 
@@ -144,8 +153,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 
@@ -161,34 +169,30 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         getEventManager().removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
         getEventManager().removeObserver(EventManager.STORY_USER_INFO, this);
         getEventManager().removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         if (getContext() == null)
             return super.onCreateView(inflater, container, savedInstanceState);
 
-        HelperToolbar helperToolbar = HelperToolbar.create();
-        View toolBar = helperToolbar
-                .setContext(getContext())
-                .setLogoShown(true)
-                .setListener(this)
-                .setDefaultTitle(getString(R.string.status))
-                .getView();
+        Toolbar storyToolbar = new Toolbar(getContext());
+        storyToolbar.setTitle(getString(R.string.status));
+        ToolbarItems toolbarItems = storyToolbar.createToolbarItems();
+        toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
 
+        storyToolbar.setListener(i -> {
+            switch (i) {
+                case qrWalletTag:
+                    onScannerClickListener();
+                    break;
+            }
+        });
 
         FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
-        rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+        rootView.addView(storyToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
 
         swipeRefreshLayout = new SwipeRefreshLayout(context);
         swipeRefreshLayout.setRefreshing(false);
@@ -231,6 +235,34 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         floatActionLayout.addView(addButton);
         actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
         return rootView;
+    }
+
+    private void onScannerClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
+
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
     }
 
     @Override
