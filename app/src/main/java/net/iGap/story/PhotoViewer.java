@@ -784,8 +784,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         finalBitmapsPaths.add(path);
         counter++;
         if (counter == itemGalleryList.size()) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
             EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths, itemGalleryList);
+            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
         }
 
     }
