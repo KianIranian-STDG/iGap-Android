@@ -2059,7 +2059,18 @@
     <string name="Auto_lock_description">La aplicación se bloqueará después de cada vez que elija y necesite desbloquearlo al principio.</string>
     <string name="kuknos_recieve_copyToast">Dirección de la billetera copiada en la memoria.</string>
     <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: %1$s</string>
-
+    <string name="apply">solicitar</string>
     <string name="how_to_get_points">Cómo ganar puntos</string>
+    <string name="code_registration">Inserte el código</string>
+    <string name="scan_code">Escanea el codigo</string>
+    <string name="manually_enter_code">Ingrese el código manualmente</string>
+    <string name="acceptor_name">Nombre del Recipiente</string>
+    <string name="acceptor_code">Código de destinatario</string>
+    <string name="please_enter_desired_amount">Ingrese la cantidad deseada:</string>
+    <string name="confirm">confirmar</string>
+    <string name="you_have_not_specified_the_amount">No has especificado la cantidad</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">La cantidad no puede ser inferior a 1000 riales.</string>
+    <string name="code_length_is_10_digit">¡La longitud del código es de 10 dígitos!</string>
+
 
 </resources>

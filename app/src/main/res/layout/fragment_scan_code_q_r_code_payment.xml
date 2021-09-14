@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.qrCodePayment.viewModels.ScanCodeQRCodePaymentViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/iGapWalletDarkerBackground"
+        android:fillViewport="true"
+        tools:context=".fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <net.iGap.libs.codescanner.CodeScannerView
+                android:id="@+id/code_scanner"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:autoFocusButtonColor="?attr/iGapButtonColor"
+                app:autoFocusButtonVisible="true"
+                app:flashButtonColor="?attr/iGapButtonColor"
+                app:flashButtonVisible="true"
+                app:frameAspectRatioHeight="1"
+                app:frameAspectRatioWidth="1"
+                app:frameColor="?attr/iGapButtonColor"
+                app:frameCornersRadius="15dp"
+                app:frameCornersSize="60dp"
+                app:frameSize="0.5"
+                app:frameThickness="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_container"
+                app:maskColor="#80F5F8F5" />
+
+            <TextView
+                android:id="@+id/scan_code_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="96dp"
+                android:text="@string/scan_code"
+                android:textColor="?attr/iGapButtonColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="36dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/code_enter_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/code_enter_button"
+                style="@style/iGapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:onClick="@{()-> viewModel.onManuallyEnterButtonClick()}"
+                android:text="@string/manually_enter_code"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
