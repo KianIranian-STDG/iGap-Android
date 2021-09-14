@@ -1920,25 +1920,23 @@
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
     <string name="please_try_later">لطفا بعدا تلاش کنید</string>
-    <string name="access_folder">پوشه غیر مجاز</string>
-    <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
     <string name="name_error">نام تایید نشد</string>
     <string name="user_name_error">نام کاربری تایید نشد</string>
     <string name="email_error">ایمیل تایید نشد</string>
     <string name="gender_error">جنسیت تایید نشد</string>
-    <string name="seted_name">Name confirmed</string>
-    <string name="user_name_added">Username confirmed</string>
-    <string name="bio_added">Bio verified</string>
-    <string name="bio_error">Bio not verified</string>
-    <string name="email_added">added Email Address</string>
-    <string name="seted_gender">Gender confirmed</string>
-    <string name="AccessBan">The group has been deleted</string>
-
+    <string name="access_folder">پوشه غیر مجاز</string>
+    <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
+    <string name="seted_name">نام تایید شد</string>
+    <string name="user_name_added">نام کاربری تایید شد</string>
+    <string name="bio_added">بیو تایید شد</string>
+    <string name="bio_error">بیو تایید نشد</string>
+    <string name="email_added">ایمیل تایید شد</string>
+    <string name="seted_gender">جنسیت تایید شد</string>
+    <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است </string>
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
-    <string name="Loading">Loading</string>
-    <string name="AppName">iGap</string>
-    <string name="StopLoading">StopLoading</string>
-    <string name="WaitMore">WaitMore</string>
-    <string name="Stop">Stop</string>
-
+    <string name="Loading">بارگذاری</string>
+    <string name="AppName">آی گپ</string>
+    <string name="StopLoading">توقف بارگیری</string>
+    <string name="WaitMore">بیشتر منتظر باشید</string>
+    <string name="Stop">متوقف کردن</string>
 </resources>

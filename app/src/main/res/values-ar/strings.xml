@@ -2601,8 +2601,8 @@
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
-    <string name="mic">Mic</string>
-    <string name="hold">Hold</string>
+    <string name="mic">ميكروفون</string>
+    <string name="hold">معلق</string>
     <string name="payment_userScore">درجاتك</string>
     <string name="Increase_score">زيادة درجاتك الآن!</string>
     <string name="refund_token">رمز الاسترداد</string>
@@ -2627,29 +2627,29 @@
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
-    <string name="remind_me_later">Remind me later</string>
-    <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please Try later</string>
+    <string name="remind_me_later">ذكرني لاحقا</string>
+    <string name="score_request_text">هل ترغب في تقييم التطبيق؟</string>
+    <string name="please_try_later">يرجى المحاولة لاحقًا</string>
     <string name="name_error">لم يتم التحقق من الاسم</string>
     <string name="user_name_error">اسم المستخدم غير مؤكد</string>
     <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
     <string name="gender_error">لم يتم تأكيد الجنس</string>
-    <string name="access_folder">Unauthorized Folder</string>
-    <string name="restrict_folder">Access to this folder is restricted.</string>
-    <string name="bio_error">Bio not verified</string>
-    <string name="bio_added">Bio verified</string>
-    <string name="user_name_added">Username confirmed</string>
+    <string name="access_folder">مجلد غير مصرح به</string>
+    <string name="restrict_folder">الوصول إلى هذا المجلد مقيد.</string>
+    <string name="bio_error">لم يتم التحقق من السيرة الذاتية</string>
+    <string name="bio_added">تم التحقق من السيرة الذاتية</string>
+    <string name="user_name_added">تم تأكيد اسم المستخدم</string>
     <string name="update_lock_error">"درخواست خارج از تعداد"</string>
-    <string name="seted_gender">Gender confirmed</string>
-    <string name="seted_name">Name confirmed</string>
-    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">تم تأكيد الجنس</string>
+    <string name="seted_name">تم تأكيد الاسم</string>
+    <string name="email_added">تمت إضافة عنوان البريد الإلكتروني</string>
     <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
 
     <string name="how_to_get_points">كيف تحصل على النقاط</string>
-    <string name="Loading">Loading</string>
-    <string name="AppName">iGap</string>
-    <string name="StopLoading">StopLoading</string>
-    <string name="WaitMore">WaitMore</string>
-    <string name="Stop">Stop</string>
+    <string name="Loading">تحميل</string>
+    <string name="AppName">آی گپ</string>
+    <string name="StopLoading">توقف عن التحميل</string>
+    <string name="WaitMore">انتظر المزيد</string>
+    <string name="Stop">قف</string>
 
 </resources>
