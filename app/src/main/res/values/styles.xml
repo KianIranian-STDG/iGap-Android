@@ -205,5 +205,4 @@ z
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowFullscreen">false</item>
     </style>
-
 </resources>
