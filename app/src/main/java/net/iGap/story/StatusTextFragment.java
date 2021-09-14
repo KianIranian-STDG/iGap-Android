@@ -177,6 +177,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         addTextEditTExt.setHint(getString(R.string.type_a_moment));
         addTextEditTExt.setTextSize(editTextSize);
         addTextEditTExt.setSingleLine(false);
+        addTextEditTExt.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         addTextEditTExt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(501)});
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
@@ -214,14 +215,6 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         bottomLyoutPannel.addView(palletTextView, LayoutCreator.createLinear(32, 32, 0, 0, 0, 10));
 
 
-//        addTextView = new MaterialDesignTextView(context);
-//        addTextView.setGravity(Gravity.CENTER);
-//        addTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-//        addTextView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
-//        addTextView.setBackground(context.getResources().getDrawable(R.drawable.ic_cam_text));
-//        addTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-//        bottomLyoutPannel.addView(addTextView, LayoutCreator.createLinear(32, 32, 0, 0, 8, 0));
-
 
         emoji = new MaterialDesignTextView(context);
         emoji.setGravity(Gravity.CENTER);
@@ -256,16 +249,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
             }
         });
-//        addTextEditTExt.setListener(new EventEditText.Listener() {
-//            @Override
-//            public void onInternalTouchEvent(MotionEvent event) {
-//                if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    showPopUPView(KeyboardView.MODE_KEYBOARD);
-//                } else if (isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    emoji.performClick();
-//                }
-//            }
-//        });
+
         addTextEditTExt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

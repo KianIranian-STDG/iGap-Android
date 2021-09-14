@@ -111,7 +111,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private RecyclerView userViewsRecycler;
     int rowSize = 0;
     int userRow = 0;
-    private Realm realm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
+
 
     public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory) {
 
@@ -456,11 +456,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             getRequestManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
-                    realm.beginTransaction();
-                    realm.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(res.storyId)).findFirst().setSeen(true);
-                    realm.commitTransaction();
-
-
+                    getMessageDataStorage().storySetSeen(res.storyId);
                 } else {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -470,10 +466,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
         downloadCounter++;
 
-        if (downloadCounter == stories.size()) {
-            realm.beginTransaction();
-            RealmStory.putOrUpdate(realm, stories.get(counter).getUserId(), true);
-            realm.commitTransaction();
+        if (counter == (stories.size() - 1)) {
+            getMessageDataStorage().storySetSeenAll(stories.get(counter).getUserId(), true);
 
             EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
         }
@@ -652,13 +646,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void savePosition(int pos) {
-        realm.beginTransaction();
-        RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", storyUser.getUserId()).findFirst();
-        if (realmStory != null) {
-            realmStory.setIndexOfSeen(pos);
-        }
-        realm.commitTransaction();
-
+        getMessageDataStorage().storySetIndexOfSeen(storyUser.getUserId(), pos);
     }
 
     public int restorePosition() {
