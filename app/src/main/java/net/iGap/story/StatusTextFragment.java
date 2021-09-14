@@ -161,6 +161,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         textTv.setId(R.id.story_added_text);
         textTv.setTextColor(Color.WHITE);
         textTv.setGravity(Gravity.CENTER);
+        textTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         textTv.setTextSize(30);
         TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 22, 30, 1,
                 TypedValue.COMPLEX_UNIT_DIP);
