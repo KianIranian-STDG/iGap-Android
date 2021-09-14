@@ -34,7 +34,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
     public int progress;
     public int priority;
     public ProtoGlobal.RoomMessageType messageType;
-    public int downloadId;
+    public long downloadId;
 
     private DownloadObject() {
     }
@@ -221,7 +221,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         return struct;
     }
 
-    public static DownloadObject createForStoryAvatar(AttachmentObject attachment, boolean big) {
+    public static DownloadObject createForStory(AttachmentObject attachment, long storyId, boolean big) {
 
         if (attachment == null) {
             return null;
@@ -242,6 +242,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.fileSize = attachment.largeThumbnail.size;
         struct.mimeType = struct.extractMime(struct.fileName);
         struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+        struct.downloadId = storyId;
         String filePath = null;
         if (big) {
             filePath = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(1));

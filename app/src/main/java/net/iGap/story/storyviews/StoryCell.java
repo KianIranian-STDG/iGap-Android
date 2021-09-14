@@ -55,8 +55,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 public class StoryCell extends FrameLayout {
 
     private CircleImageView circleImage;
@@ -182,7 +180,7 @@ public class StoryCell extends FrameLayout {
 
         } else if (attachment != null) {
             Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-            DownloadObject object = DownloadObject.createForStoryAvatar(attachment, true);
+            DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                     if (arg.status == Status.SUCCESS && arg.data != null) {
@@ -195,9 +193,9 @@ public class StoryCell extends FrameLayout {
 
 
                         DbManager.getInstance().doRealmTransaction(realm1 -> {
-                        for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
-                            realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                        }
+                            for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
+                                realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                            }
                         });
 
                         G.runOnUiThread(() -> Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
@@ -252,7 +250,7 @@ public class StoryCell extends FrameLayout {
 
             } else if (attachment != null) {
                 Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-                DownloadObject object = DownloadObject.createForStoryAvatar(attachment, true);
+                DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                         if (arg.status == Status.SUCCESS && arg.data != null) {

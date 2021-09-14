@@ -28,6 +28,10 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
@@ -62,12 +66,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.webrtc.ContextUtils.getApplicationContext;
 
 public final class AndroidUtils {
     public static Pattern hashTagLink = Pattern.compile("[#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b");
@@ -221,12 +225,14 @@ public final class AndroidUtils {
         }
         return null;
     }
+
     public static int dp(float value) {
         if (value == 0) {
             return 0;
         }
         return (int) Math.ceil(density * value);
     }
+
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
         String outPath = G.DIR_TEMP + "/thumb_" + SUID.id().get() + ".jpg";
@@ -396,7 +402,7 @@ public final class AndroidUtils {
         File cutTo = new File(newPath);
         File cutFrom = new File(pathTmp);
 
-        copyFile(cutFrom, cutTo,0,null);
+        copyFile(cutFrom, cutTo, 0, null);
         deleteFile(cutFrom);
     }
 
@@ -405,11 +411,11 @@ public final class AndroidUtils {
         copyFile(in, dst, src.length(), successMessage, onFileCopyComplete);
     }
 
-    public static void copyFile(InputStream in, File dst)throws IOException{
-        copyFile(in, dst, 0, 0,null);
+    public static void copyFile(InputStream in, File dst) throws IOException {
+        copyFile(in, dst, 0, 0, null);
     }
 
-    public static void copyFile(InputStream in, File dst, long fileLength, int successMessage,OnFileCopyComplete onFileCopyComplete) throws IOException {
+    public static void copyFile(InputStream in, File dst, long fileLength, int successMessage, OnFileCopyComplete onFileCopyComplete) throws IOException {
 
         OutputStream out = new FileOutputStream(dst);
         Thread thread = new Thread(new Runnable() {
@@ -446,7 +452,7 @@ public final class AndroidUtils {
         thread.start();
     }
 
-    public static ProgressDialog createProgressDialog(Activity activity){
+    public static ProgressDialog createProgressDialog(Activity activity) {
         ProgressDialog progressDialog = new ProgressDialog(activity);
         progressDialog.setCancelable(false);
         progressDialog.setIndeterminate(false);
@@ -971,6 +977,30 @@ public final class AndroidUtils {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static Bitmap blurImage(Bitmap input) {
+        try {
+            RenderScript rsScript = RenderScript.create(getApplicationContext());
+            Allocation alloc = Allocation.createFromBitmap(rsScript, input);
+
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rsScript, Element.U8_4(rsScript));
+            blur.setRadius(21);
+            blur.setInput(alloc);
+
+            Bitmap result = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+            Allocation outAlloc = Allocation.createFromBitmap(rsScript, result);
+
+            blur.forEach(outAlloc);
+            outAlloc.copyTo(result);
+
+            rsScript.destroy();
+            return result;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return input;
+        }
+
     }
 
     public interface CopyFileCompleted {
