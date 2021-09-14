@@ -83,15 +83,15 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_NEW, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_VIEW, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
+        getEventManager().removeObserver(EventManager.STORY_LIST_FETCHED, this);
+        getEventManager().removeObserver(EventManager.STORY_USER_ADD_NEW, this);
+        getEventManager().removeObserver(EventManager.STORY_USER_ADD_VIEW, this);
+        getEventManager().removeObserver(EventManager.STORY_DELETED, this);
+        getEventManager().removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        getEventManager().removeObserver(EventManager.STORY_UPLOAD, this);
+        getEventManager().removeObserver(EventManager.STORY_SENDING, this);
+        getEventManager().removeObserver(EventManager.STORY_USER_INFO, this);
+        getEventManager().removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
     }
 
     @Nullable
@@ -155,15 +155,15 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_LIST_FETCHED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_NEW, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_VIEW, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_SENDING, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_INFO, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_STATUS_UPLOAD, this);
+        getEventManager().addObserver(EventManager.STORY_LIST_FETCHED, this);
+        getEventManager().addObserver(EventManager.STORY_USER_ADD_NEW, this);
+        getEventManager().addObserver(EventManager.STORY_USER_ADD_VIEW, this);
+        getEventManager().addObserver(EventManager.STORY_DELETED, this);
+        getEventManager().addObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        getEventManager().addObserver(EventManager.STORY_UPLOAD, this);
+        getEventManager().addObserver(EventManager.STORY_SENDING, this);
+        getEventManager().addObserver(EventManager.STORY_USER_INFO, this);
+        getEventManager().addObserver(EventManager.STORY_STATUS_UPLOAD, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
