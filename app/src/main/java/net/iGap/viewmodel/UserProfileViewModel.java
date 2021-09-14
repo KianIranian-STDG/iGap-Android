@@ -149,6 +149,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToIGapMapPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToContactsPage = new SingleLiveEvent<>();
     public SingleLiveEvent<String> goToFAQPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
@@ -740,6 +741,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onInviteFriendsClick() {
         HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
         shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
+    }
+
+    public void onContactsClick() {
+        goToContactsPage.setValue(true);
     }
 
     public void onQRCodeScannerClick() {
