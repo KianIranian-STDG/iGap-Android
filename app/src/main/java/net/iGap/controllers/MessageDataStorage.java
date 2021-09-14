@@ -1390,15 +1390,24 @@ public class MessageDataStorage extends BaseController {
     public List<MainStoryObject> getOtherUsersStories() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         List<RealmStory> stories = new ArrayList<>();
-        List<MainStoryObject> storyObjects = new ArrayList<>();
+        List<MainStoryObject> mainStoryObjects = new ArrayList<>();
         storageQueue.postRunnable(() -> {
             try {
+
 
                 stories.addAll(database.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll());
 
                 for (int i = 0; i < stories.size(); i++) {
-                    storyObjects.add(MainStoryObject.create(database.copyFromRealm(stories.get(i))));
+                    List<StoryObject> storyObjects = new ArrayList<>();
+                    RealmResults<RealmStoryProto> realmStoryProtos = stories.get(i).getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+                    for (int j = 0; j < realmStoryProtos.size(); j++) {
+                        storyObjects.add(StoryObject.create(realmStoryProtos.get(i)));
+                    }
+                    MainStoryObject mainStoryObject = MainStoryObject.create(database.copyFromRealm(stories.get(i)));
+                    mainStoryObject.storyObjects = storyObjects;
+                    mainStoryObjects.add(mainStoryObject);
                 }
+
 
 
                 countDownLatch.countDown();
@@ -1416,7 +1425,7 @@ public class MessageDataStorage extends BaseController {
         }
 
 
-        return storyObjects;
+        return mainStoryObjects;
     }
 
 
