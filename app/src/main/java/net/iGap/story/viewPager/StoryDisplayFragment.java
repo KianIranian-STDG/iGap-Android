@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -350,7 +351,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         String finalPath = path;
-                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                        if (!(new File(stories.get(counter).getAttachment().filePath).exists())) {
+                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                        }
                     } else {
                         DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
@@ -372,7 +375,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         String finalPath = path;
-                        G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                        if (!(new File(stories.get(counter).getAttachment().filePath).exists())) {
+                            G.runOnUiThread(() -> Glide.with(storyDisplayImage.getContext()).load(finalPath).transform(new BlurTransformation(getContext())).dontAnimate().into(storyDisplayImage));
+                        }
                     } else {
                         DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
@@ -402,7 +407,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                 if (!(new File(filepath).exists())) {
                                     HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                 }
-                                G.runOnUiThread(() -> loadImage(filepath));
+                                if (filepath.equals(stories.get(counter).getAttachment().filePath)) {
+                                    G.runOnUiThread(() -> loadImage(filepath));
+                                }
 
                             }
                         });
