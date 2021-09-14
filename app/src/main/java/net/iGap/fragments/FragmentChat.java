@@ -3699,6 +3699,7 @@ public class FragmentChat extends BaseFragment
             if (getActivity() == null) return;
             if (mAttachmentPopup == null) initPopupAttachment();
             mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
+            hideKeyboard();
             mAttachmentPopup.show();
         });
 
