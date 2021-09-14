@@ -899,39 +899,41 @@ public class MessageDataStorage extends BaseController {
         CountDownLatch countdown = new CountDownLatch(1);
         storageQueue.postRunnable(() -> {
             try {
-                int counter = 0;
-                for (int i = 0; i < groupedViews.size(); i++) {
-                    for (int j = 0; j < groupedViews.get(i).getStoryViewsList().size(); j++) {
-                        if (groupedViews.get(i).getStoryViewsList().get(j).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
-                            counter++;
-                        }
-                    }
-                    RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("storyId", groupedViews.get(i).getStoryId()).findFirst();
-                    if (realmStoryProto != null) {
-                        realmStoryProto.setViewCount(counter);
-                        boolean isExist = false;
+                database.executeTransaction(realm -> {
+                    int counter = 0;
+                    for (int i = 0; i < groupedViews.size(); i++) {
                         for (int j = 0; j < groupedViews.get(i).getStoryViewsList().size(); j++) {
-                            RealmStoryViewInfo realmStoryViewInfo;
-                            realmStoryViewInfo = database.where(RealmStoryViewInfo.class).equalTo("userId", groupedViews.get(i).getStoryViewsList().get(j).getUserId()).findFirst();
-                            if (realmStoryViewInfo == null) {
-                                realmStoryViewInfo = database.createObject(RealmStoryViewInfo.class);
-                            } else {
-                                isExist = true;
+                            if (groupedViews.get(i).getStoryViewsList().get(j).getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
+                                counter++;
                             }
-                            realmStoryViewInfo.setId(groupedViews.get(i).getStoryId());
-                            realmStoryViewInfo.setUserId(groupedViews.get(i).getStoryViewsList().get(j).getUserId());
-                            realmStoryViewInfo.setCreatedTime(groupedViews.get(i).getStoryViewsList().get(j).getViewedAt());
-                            if (isExist) {
-                                realmStoryProto.getRealmStoryViewInfos().remove(realmStoryViewInfo);
-                            }
-                            realmStoryProto.getRealmStoryViewInfos().add(realmStoryViewInfo);
-                            isExist = false;
                         }
+                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", groupedViews.get(i).getStoryId()).findFirst();
+                        if (realmStoryProto != null) {
+                            realmStoryProto.setViewCount(counter);
+                            boolean isExist = false;
+                            for (int j = 0; j < groupedViews.get(i).getStoryViewsList().size(); j++) {
+                                RealmStoryViewInfo realmStoryViewInfo;
+                                realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", groupedViews.get(i).getStoryViewsList().get(j).getUserId()).findFirst();
+                                if (realmStoryViewInfo == null) {
+                                    realmStoryViewInfo = realm.createObject(RealmStoryViewInfo.class);
+                                } else {
+                                    isExist = true;
+                                }
+                                realmStoryViewInfo.setId(groupedViews.get(i).getStoryId());
+                                realmStoryViewInfo.setUserId(groupedViews.get(i).getStoryViewsList().get(j).getUserId());
+                                realmStoryViewInfo.setCreatedTime(groupedViews.get(i).getStoryViewsList().get(j).getViewedAt());
+                                if (isExist) {
+                                    realmStoryProto.getRealmStoryViewInfos().remove(realmStoryViewInfo);
+                                }
+                                realmStoryProto.getRealmStoryViewInfos().add(realmStoryViewInfo);
+                                isExist = false;
+                            }
 
+                        }
+                        counter = 0;
                     }
-                    counter = 0;
-                }
 
+                });
 
                 countdown.countDown();
             } catch (Exception e) {
