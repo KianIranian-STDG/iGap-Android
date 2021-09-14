@@ -1600,6 +1600,94 @@ public class MessageDataStorage extends BaseController {
         }
     }
 
+
+    public void storySetSeen(long storyId) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                    if (realmStoryProto != null) {
+                        realmStoryProto.setSeen(true);
+                    }
+                });
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void storySetSeenAll(long userId, boolean seen) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", userId).findFirst();
+                    if (realmStory != null) {
+                        realmStory.setSeenAll(seen);
+                    }
+                });
+
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void storySetIndexOfSeen(long userId, int position) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", userId).findFirst();
+                    if (realmStory != null) {
+                        realmStory.setIndexOfSeen(position);
+                    }
+                });
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface DatabaseDelegate {
         void run(Object... object);
     }
