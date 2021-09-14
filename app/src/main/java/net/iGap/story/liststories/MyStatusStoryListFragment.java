@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,13 +110,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 .getView();
 
 
-        FrameLayout rootView = new FrameLayout(getContext());
-        if (G.themeColor == Theme.DARK) {
-            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-        } else {
-            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-        }
+        FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();
         recyclerListView.setAdapter(adapter);
