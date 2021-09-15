@@ -936,6 +936,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addRealmListField("realmStoryProtos", realmStoryProto);
 
             realmStorySchema.addPrimaryKey("id");
+            realmStorySchema.addIndex("userId");
 
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
 
