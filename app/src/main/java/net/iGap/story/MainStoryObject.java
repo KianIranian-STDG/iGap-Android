@@ -8,7 +8,6 @@ import java.util.List;
 public class MainStoryObject {
 
     public long id;
-    public long uid; // id for sorting avatars
     public long userId; // userId for users and roomId for rooms
     public boolean isSeenAll;
     public boolean isSentAll;
@@ -19,9 +18,8 @@ public class MainStoryObject {
     public MainStoryObject() {
     }
 
-    public MainStoryObject(long id, long uid, long userId, boolean isSeenAll, boolean isSentAll, boolean isUploadedAll, int indexOfSeen, List<StoryObject> storyObjects) {
+    public MainStoryObject(long id, long userId, boolean isSeenAll, boolean isSentAll, boolean isUploadedAll, int indexOfSeen, List<StoryObject> storyObjects) {
         this.id = id;
-        this.uid = uid;
         this.userId = userId;
         this.isSeenAll = isSeenAll;
         this.isSentAll = isSentAll;
@@ -34,7 +32,6 @@ public class MainStoryObject {
         MainStoryObject mainStoryObject = new MainStoryObject();
 
         mainStoryObject.id = realmStory.getId();
-        mainStoryObject.uid = realmStory.getUid();
         mainStoryObject.userId = realmStory.getUserId();
         mainStoryObject.isSeenAll = realmStory.isSeenAll();
         mainStoryObject.isSentAll = realmStory.isSentAll();

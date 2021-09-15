@@ -18,7 +18,6 @@ import io.realm.annotations.PrimaryKey;
 public class RealmStory extends RealmObject {
     @PrimaryKey
     private long id;
-    private long uid; // id for sorting avatars
     @Index
     private long userId; // userId for users and roomId for rooms
     private boolean isSeenAll;
@@ -62,14 +61,6 @@ public class RealmStory extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public void setUid(long uid) {
-        this.uid = uid;
     }
 
     public long getUserId() {

@@ -922,18 +922,20 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("viewCount", int.class)
                     .addField("index", int.class)
                     .addField("isForReply", boolean.class)
-                    .addRealmObjectField("realmStoryViewInfos", realmStoryViewInfo)
+                    .addRealmListField("realmStoryViewInfos", realmStoryViewInfo)
                     .addField("status", int.class);
 
 
             RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
-                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
+                    .addField("id", long.class)
                     .addField("userId", long.class)
                     .addField("isSeenAll", boolean.class)
                     .addField("isSentAll", boolean.class)
                     .addField("isUploadedAll", boolean.class)
                     .addField("indexOfSeen", int.class)
-                    .addRealmObjectField("realmStoryProtos", realmStoryProto);
+                    .addRealmListField("realmStoryProtos", realmStoryProto);
+
+            realmStorySchema.addPrimaryKey("id");
 
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
 
