@@ -31,11 +31,11 @@ import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.Theme;
@@ -47,8 +47,6 @@ import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmStory;
-import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
@@ -62,6 +60,7 @@ import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static net.iGap.G.isAppRtl;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
@@ -141,11 +140,15 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
         Toolbar myStoryToolbar = new Toolbar(getContext());
         myStoryToolbar.setTitle(getString(R.string.my_status));
+        myStoryToolbar.setBackIcon(new BackDrawable(false));
         ToolbarItems toolbarItems = myStoryToolbar.createToolbarItems();
         toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
 
         myStoryToolbar.setListener(i -> {
             switch (i) {
+                case -1:
+                    requireActivity().onBackPressed();
+                    break;
                 case qrWalletTag:
                     onScannerClickListener();
                     break;
@@ -514,7 +517,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                                     long failedStoryId = storyProto.get(position).id;
 
 
-                                    getMessageDataStorage().updateStoryStatus(failedStoryId,MessageObject.STATUS_FAILED);
+                                    getMessageDataStorage().updateStoryStatus(failedStoryId, MessageObject.STATUS_FAILED);
 
                                     storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
