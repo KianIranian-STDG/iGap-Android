@@ -2274,7 +2274,7 @@
     <string name="email_added">ایمیل تایید شد</string>
     <string name="seted_gender">جنسیت تایید شد</string>
     <string name="moments_string">لحظه ها</string>
-    <string name="reply_sent">پاسخ ارسال شد</string>
+    <string name="sending_reply">در حال ارسال پاسخ...</string>
     <string name="moment_not_available">قابل دسترسی نمی باشد</string>
     <string name="mement_is_no_longer_available">لحظه در دسترس نمی باشد</string>
     <string name="unavailable_moment">لحظه غیر فعال</string>

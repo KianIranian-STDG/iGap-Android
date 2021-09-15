@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -221,7 +219,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             } else {
                 ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), replyText);
-                Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.sending_reply), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -602,7 +600,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     keyboardStateChanged(keyboardViewVisible);
                 }
                 closeKeyboard = new AtomicInteger();
-                setEdtChat();
             } else {
 
                 llReplay.setVisibility(View.INVISIBLE);
@@ -626,30 +623,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             pauseCurrentStory();
             clickable = true;
         }
-    }
-
-    private void setEdtChat() {
-        edtChat.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (edtChat.getText() != null && edtChat.getText().length() > 0) {
-                    tvSend.setVisibility(View.VISIBLE);
-                } else {
-                    tvSend.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-
-            }
-        });
     }
 
     public void savePosition(int pos) {

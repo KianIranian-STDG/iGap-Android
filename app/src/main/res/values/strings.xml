@@ -2717,7 +2717,7 @@ Want to get it?</string>
 
     <string name="how_to_get_points">How To Get Points</string>
 
-    <string name="reply_sent">Reply sent</string>
+    <string name="sending_reply">Reply is sending...</string>
     <string name="moment_not_available">Moment is not available</string>
     <string name="mement_is_no_longer_available">Moment is no longer available</string>
     <string name="unavailable_moment">Unavailable Moment</string>

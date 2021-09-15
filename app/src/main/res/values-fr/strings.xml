@@ -1858,7 +1858,7 @@
 
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
-    <string name="reply_sent">"réponse envoyée "</string>
+    <string name="sending_reply">"la réponse est envoyée..."</string>
     <string name="AccessBan">L\'accès est fermé pour voir les membres</string>
 
     <string name="how_to_get_points">Comment gagner des points</string>

@@ -203,16 +203,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/tv_chatRoom_emoji"
-                style="@style/myIconTextViewStyleGray"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="@dimen/dp52"
-                android:layout_gravity="bottom"
-                android:paddingLeft="@dimen/dp8"
-                android:paddingRight="@dimen/dp8"
-                android:text="@string/icon_emoji_smile" />
-
             <net.iGap.module.customView.EventEditText
                 android:id="@+id/et_chatRoom_writeMessage"
                 style="@style/iGapEditTextStyle"
@@ -238,7 +228,7 @@
                 android:layout_height="@dimen/dp44"
                 android:layout_gravity="center"
                 android:padding="@dimen/dp8"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/btn_chatRoom_send"

@@ -1660,7 +1660,7 @@
     <string name="user_name_error">Имя пользователя не подтверждено</string>
     <string name="email_error">Электронная почта не подтверждена</string>
     <string name="gender_error">Пол не подтвержден</string>
-    <string name="reply_sent">"ответ отправлен "</string>
+    <string name="sending_reply">"ответ отправляется..."</string>
     <string name="seted_name">Name confirmed</string>
     <string name="user_name_added">Username confirmed</string>
     <string name="bio_added">Bio verified</string>
