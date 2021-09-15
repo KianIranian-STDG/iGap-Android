@@ -179,7 +179,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             return super.onCreateView(inflater, container, savedInstanceState);
 
         Toolbar storyToolbar = new Toolbar(getContext());
-        storyToolbar.setTitle(getString(R.string.status));
+        storyToolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         ToolbarItems toolbarItems = storyToolbar.createToolbarItems();
         toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
 
