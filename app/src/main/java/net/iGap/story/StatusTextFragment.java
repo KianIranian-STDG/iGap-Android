@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -129,7 +130,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         rootView = new NotifyFrameLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
@@ -189,7 +190,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         bottomPanelRootView.addView(addTextEditTExt, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER, 5, 0, 5, 0));
 
         layoutRootView = new FrameLayout(context);
-        bottomPanelRootView.addView(layoutRootView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
+        bottomPanelRootView.addView(layoutRootView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 8));
 
 
         bottomLyoutPannel = new LinearLayout(context);
