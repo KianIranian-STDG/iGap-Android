@@ -87,7 +87,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int rowSize;
     private int recentHeaderRow;
     private int recentStoryRow;
-    private final int qrWalletTag = 1;
 
 
     @Override
@@ -104,33 +103,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getEventManager().removeObserver(EventManager.STORY_STATUS_UPLOAD, this);
     }
 
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
-    }
 
     @Nullable
     @Override
@@ -141,16 +113,10 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         Toolbar myStoryToolbar = new Toolbar(getContext());
         myStoryToolbar.setTitle(getString(R.string.my_status));
         myStoryToolbar.setBackIcon(new BackDrawable(false));
-        ToolbarItems toolbarItems = myStoryToolbar.createToolbarItems();
-        toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
-
         myStoryToolbar.setListener(i -> {
             switch (i) {
                 case -1:
                     requireActivity().onBackPressed();
-                    break;
-                case qrWalletTag:
-                    onScannerClickListener();
                     break;
             }
         });

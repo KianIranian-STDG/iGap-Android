@@ -1,13 +1,12 @@
 package net.iGap.realm;
 
 import net.iGap.module.SUID;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.AttachmentFor;
-import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -24,6 +23,7 @@ public class RealmStory extends RealmObject {
     private boolean isSentAll;
     private boolean isUploadedAll;
     private int indexOfSeen;
+    private long sessionId;
     private RealmList<RealmStoryProto> realmStoryProtos;
 
 
@@ -40,6 +40,7 @@ public class RealmStory extends RealmObject {
             realmStory = realm.createObject(RealmStory.class, SUID.id().get());
             realmStory.setSeenAll(false);
         }
+        realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
         realmStory.setUserId(userId);
         realmStory.setSeenAll(isSeenAll);
         realmStory.setRealmStoryProtos(realm, stories);
@@ -97,6 +98,14 @@ public class RealmStory extends RealmObject {
 
     public void setSentAll(boolean sentAll) {
         isSentAll = sentAll;
+    }
+
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 
     public boolean isUploadedAll() {

@@ -14,8 +14,6 @@ import net.iGap.G;
 import net.iGap.model.PassCode;
 import net.iGap.module.accountManager.AccountManager;
 
-import java.util.HashMap;
-
 import javax.activation.MimetypesFileTypeMap;
 
 import io.realm.DynamicRealm;
@@ -933,6 +931,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isSentAll", boolean.class)
                     .addField("isUploadedAll", boolean.class)
                     .addField("indexOfSeen", int.class)
+                    .addField("sessionId", long.class)
                     .addRealmListField("realmStoryProtos", realmStoryProto);
 
             realmStorySchema.addPrimaryKey("id");

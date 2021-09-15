@@ -72,6 +72,7 @@ import net.iGap.observers.eventbus.EventManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
@@ -130,7 +131,6 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         rootView = new NotifyFrameLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
@@ -235,6 +235,17 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

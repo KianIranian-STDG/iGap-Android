@@ -957,20 +957,20 @@ public class MessageDataStorage extends BaseController {
             try {
                 database.beginTransaction();
                 List<StoryObject> storyObjects = new ArrayList<>();
-                if (stories.size() > 0 && stories.size() >= database.where(RealmStory.class).findAll().size()) {
+                if (stories.size() > 0 && stories.size() >= database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll().size()) {
                     for (int i = 0; i < stories.size(); i++) {
-                        for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
-                            storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+                        if (stories.get(i).getStoriesList().size() > 0) {
+                            for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
+                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+                            }
+                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
+                            storyObjects.removeAll(storyObjects);
                         }
-                        // RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
-                        //  MessageDataStorage.getInstance(AccountManager.selectedAccount).updateUserAddedStoryWithStoryObjects(stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
-                        putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
-                        storyObjects.removeAll(storyObjects);
                     }
-                } else if (stories.size() != 0 && stories.size() < database.where(RealmStory.class).findAll().size()) {
+                } else if (stories.size() != 0 && stories.size() < database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll().size()) {
 
                     boolean isExist = false;
-                    List<RealmStory> realmStories = database.where(RealmStory.class).findAll();
+                    List<RealmStory> realmStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
                     if (realmStories != null && realmStories.size() > 0) {
                         for (int i = 0; i < realmStories.size(); i++) {
                             for (int j = 0; j < stories.size(); j++) {
@@ -989,19 +989,20 @@ public class MessageDataStorage extends BaseController {
                         }
                     }
                     for (int i = 0; i < stories.size(); i++) {
-                        for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
-                            storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+
+                        if (stories.get(i).getStoriesList().size() > 0) {
+                            for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
+                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+                            }
+                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
+                            storyObjects.removeAll(storyObjects);
                         }
 
-                        // RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getOriginatorId(), storyObjects);
-                        // MessageDataStorage.getInstance(AccountManager.selectedAccount).updateUserAddedStoryWithStoryObjects(stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
-                        putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects);
-                        storyObjects.removeAll(storyObjects);
                     }
 
                 } else if (stories.size() == 0) {
                     database.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
-                    List<RealmStory> realmStories = database.where(RealmStory.class).findAll();
+                    List<RealmStory> realmStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
                     if (realmStories != null && realmStories.size() > 0) {
                         for (int i = 0; i < realmStories.size(); i++) {
                             if (realmStories.get(i).getRealmStoryProtos().size() == 0) {
@@ -1026,15 +1027,26 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void deleteExpiredStories() {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
         storageQueue.postRunnable(() -> {
             try {
-                database.beginTransaction();
-                database.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-                database.commitTransaction();
+                database.executeTransaction(realm -> {
+                    realm.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+                });
+
+                countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
             }
         });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void putStoriesToDatabase(Realm database, boolean isSeenAll, long userId, List<StoryObject> stories) {
@@ -1046,6 +1058,7 @@ public class MessageDataStorage extends BaseController {
             }
 
             database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
+            realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
             realmStory.setUserId(userId);
             realmStory.setSeenAll(isSeenAll);
             realmStory.setRealmStoryProtos(database, stories);
@@ -1096,6 +1109,7 @@ public class MessageDataStorage extends BaseController {
                     storyObjects.add(StoryObject.create(stories.get(i), i, null));
                 }
 
+                realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
                 realmStory.setUserId(stories.get(0).getUserId());
                 realmStory.setSeenAll(false);
                 realmStory.setRealmStoryProtos(database, storyObjects);
@@ -1244,9 +1258,9 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 if (sortAs != null) {
-                    stories.addAll(database.where(RealmStory.class).findAll().sort(sortAs));
+                    stories.addAll(database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(sortAs));
                 } else {
-                    stories.addAll(database.where(RealmStory.class).findAll());
+                    stories.addAll(database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll());
                 }
 
 
@@ -1277,7 +1291,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
 
-                RealmResults<RealmStoryProto> realmStoryProto = database.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+                RealmResults<RealmStoryProto> realmStoryProto = database.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
 
                 for (int i = 0; i < realmStoryProto.size(); i++) {
                     stories.add(StoryObject.create(realmStoryProto.get(i)));
@@ -1312,7 +1326,7 @@ public class MessageDataStorage extends BaseController {
                 RealmResults<RealmStory> realmStory;
 
                 if (userId == 0) {
-                    realmStory = database.where(RealmStory.class).findAll();
+                    realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
                 } else {
                     realmStory = database.where(RealmStory.class).equalTo("userId", userId).findAll();
                 }
@@ -1400,14 +1414,16 @@ public class MessageDataStorage extends BaseController {
                 for (int i = 0; i < stories.size(); i++) {
                     List<StoryObject> storyObjects = new ArrayList<>();
                     RealmResults<RealmStoryProto> realmStoryProtos = stories.get(i).getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
-                    for (int j = 0; j < realmStoryProtos.size(); j++) {
-                        storyObjects.add(StoryObject.create(realmStoryProtos.get(i)));
+                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                        for (int j = 0; j < realmStoryProtos.size(); j++) {
+                            storyObjects.add(StoryObject.create(realmStoryProtos.get(j)));
+                        }
+                        MainStoryObject mainStoryObject = MainStoryObject.create(database.copyFromRealm(stories.get(i)));
+                        mainStoryObject.storyObjects = storyObjects;
+                        mainStoryObjects.add(mainStoryObject);
                     }
-                    MainStoryObject mainStoryObject = MainStoryObject.create(database.copyFromRealm(stories.get(i)));
-                    mainStoryObject.storyObjects = storyObjects;
-                    mainStoryObjects.add(mainStoryObject);
-                }
 
+                }
 
 
                 countDownLatch.countDown();
@@ -1594,7 +1610,9 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
 
-                database.where(RealmStory.class).equalTo("userId", userId).findAll().deleteAllFromRealm();
+                database.executeTransaction(realm -> {
+                    realm.where(RealmStory.class).equalTo("userId", userId).findAll().deleteAllFromRealm();
+                });
 
                 countDownLatch.countDown();
             } catch (Exception e) {

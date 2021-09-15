@@ -172,14 +172,14 @@ public class StoryCell extends FrameLayout {
         AttachmentObject attachment = storyObject.attachmentObject;
         if (attachment != null && (attachment.thumbnailPath != null || attachment.filePath != null)) {
             try {
-                Glide.with(context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                Glide.with(G.context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             } catch (Exception e) {
-                Glide.with(context).load(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color)).into(circleImageLoading);
+                Glide.with(G.context).load(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color)).into(circleImageLoading);
             }
 
 
         } else if (attachment != null) {
-            Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+            Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
@@ -198,7 +198,7 @@ public class StoryCell extends FrameLayout {
                             }
                         });
 
-                        G.runOnUiThread(() -> Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
+                        G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
 
 
                     }
@@ -206,7 +206,7 @@ public class StoryCell extends FrameLayout {
                 });
             }
         } else {
-            Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+            Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
         }
 
     }
@@ -239,17 +239,17 @@ public class StoryCell extends FrameLayout {
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             if (attachment != null && (attachment.thumbnailPath != null || attachment.filePath != null)) {
                 try {
-                    Glide.with(context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                    Glide.with(G.context).load(attachment.filePath != null ? attachment.filePath : attachment.thumbnailPath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
 
                 } catch (Exception e) {
 
-                    Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                    Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
 
                 }
 
 
             } else if (attachment != null) {
-                Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
                 DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
@@ -268,12 +268,7 @@ public class StoryCell extends FrameLayout {
                                 }
                             });
 
-                            G.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-                                }
-                            });
+                            G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
 
 
                         }
@@ -281,7 +276,7 @@ public class StoryCell extends FrameLayout {
                     });
                 }
             } else {
-                Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             }
         }
     }

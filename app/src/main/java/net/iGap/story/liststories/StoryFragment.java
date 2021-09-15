@@ -582,7 +582,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
     @Override
     public boolean isAllowToBackPressed() {
-        return false;
+        return true;
     }
 
     @Override
