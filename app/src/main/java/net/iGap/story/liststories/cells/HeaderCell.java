@@ -21,7 +21,7 @@ public class HeaderCell extends AppCompatTextView {
         setPadding(LayoutCreator.dp(16), LayoutCreator.dp(4), LayoutCreator.dp(16), LayoutCreator.dp(4));
         setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
         if (G.themeColor == Theme.DARK) {
-            setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
+            setBackgroundColor(getResources().getColor(R.color.gray_3c));
         } else {
             setBackgroundColor(getResources().getColor(R.color.gray_300));
         }
