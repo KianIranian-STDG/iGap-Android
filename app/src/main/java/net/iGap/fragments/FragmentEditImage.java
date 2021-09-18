@@ -407,6 +407,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     public void closeKeyboard() {
         edtChat.clearFocus();
         AndroidUtils.hideKeyboard(edtChat);
+        changeEmojiButtonImageResource(R.string.icon_emoji_smile);
+        isTheFirstFocus = true;
+
     }
 
     private boolean isKeyboardVisible() {
