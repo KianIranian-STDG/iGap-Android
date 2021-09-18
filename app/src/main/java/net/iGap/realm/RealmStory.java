@@ -176,7 +176,9 @@ public class RealmStory extends RealmObject {
             if (isExist) {
                 realmStoryProtos.remove(storyProto);
             }
+
             realmStoryProtos.add(storyProto);
+
             isExist = false;
         }
         if (realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||

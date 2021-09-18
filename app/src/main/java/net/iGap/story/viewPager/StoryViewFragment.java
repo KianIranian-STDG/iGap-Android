@@ -18,6 +18,7 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.MainStoryObject;
@@ -105,7 +106,6 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
             storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(storyResults.get(i).userId));
-            storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
             storyUser.setUserId(storyResults.get(i).userId);
             for (int j = 0; j < realmStoryProtos.size(); j++) {
                 StoryObject storyObject = realmStoryProtos.get(j);
