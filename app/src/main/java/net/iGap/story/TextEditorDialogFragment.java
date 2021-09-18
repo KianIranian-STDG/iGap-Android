@@ -26,6 +26,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -110,6 +111,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextEditTExt.setText(getArguments() != null ? getArguments().getString(EXTRA_INPUT_TEXT, "") : "");
         addTextEditTExt.setTextSize(editTextSize);
         addTextEditTExt.setSingleLine(false);
+        addTextEditTExt.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         editTextRootView.addView(addTextEditTExt, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
 
