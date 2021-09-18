@@ -2,6 +2,7 @@ package net.iGap.story;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -43,6 +44,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
@@ -54,6 +56,9 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+import com.yalantis.ucrop.UCrop;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -94,6 +99,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
 
@@ -163,6 +169,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private int counter = 0;
     private RecyclerView previewRecycler;
     private PreviewAdapter previewAdapter;
+    private String SAMPLE_CROPPED_IMAGE_NAME;
+    private int num = 0;
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -267,7 +275,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         cropTextView.setGravity(Gravity.CENTER);
         cropTextView.setText(context.getString(R.string.icon_crop_picture));
-        cropTextView.setVisibility(View.GONE);
         cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT));
 
@@ -440,7 +447,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 viewPager.setPagingEnabled(true);
                 paintTextView.setBackground(null);
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER) {
+                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER || mode == StoryModes.CROP) {
                     textStickersParentView.setPaintMode(false, "");
                 } else {
                     textStickersParentView.setPaintMode(false, "");
@@ -463,6 +470,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
                     textTv.setGravity(Gravity.CENTER);
+                    textTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
                     textTv.setTextSize(30);
                     TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 22, 30, 1,
                             TypedValue.COMPLEX_UNIT_DIP);
@@ -479,7 +487,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             public void onClick(View view) {
                 viewPager.setPagingEnabled(false);
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER) {
+                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER || mode == StoryModes.CROP) {
                     textStickersParentView.setPaintMode(true, "");
                 } else {
                     textStickersParentView.setPaintMode(true, "");
@@ -553,13 +561,24 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewHolderPostion).getPath())).setReplace(false).load();
             }
         });
+
+        cropTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                paintTextView.setBackground(null);
+                viewPager.setPagingEnabled(true);
+                mode = StoryModes.CROP;
+                modes.put(viewHolderPostion, StoryModes.CROP);
+                goToCropPage(view);
+            }
+        });
+
         updateImage = new UpdateImage() {
 
             @Override
             public void result(Bitmap finalBitmap) {
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 textStickersParentView.updateImageBitmap(finalBitmap);
-
             }
 
             @Override
@@ -1235,6 +1254,75 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         public void onStopViewChangeListener() {
 
         }
+    }
+
+    private void goToCropPage(View v) {
+        AndroidUtils.closeKeyboard(v);
+        if (itemGalleryList.size() == 0) {
+            return;
+        }
+        String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
+        if (newPath.lastIndexOf(".") <= 0) {
+            return;
+        }
+
+        String fileNameWithOutExt = newPath.substring(newPath.lastIndexOf("/"));
+        String extension = newPath.substring(newPath.lastIndexOf("."));
+        SAMPLE_CROPPED_IMAGE_NAME = fileNameWithOutExt.substring(0, fileNameWithOutExt.lastIndexOf(".")) + num + extension;
+        num++;
+        Uri uri = Uri.parse(newPath);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            UCrop.Options options = new UCrop.Options();
+            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setCompressionQuality(80);
+            options.setFreeStyleCropEnabled(true);
+
+            UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, SAMPLE_CROPPED_IMAGE_NAME)))
+                    .withOptions(options)
+                    .useSourceImageAspectRatio()
+                    .start(G.context, PhotoViewer.this);
+        } else {
+            CropImage.activity(uri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setMinCropResultSize(120, 120)
+                    .setAutoZoomEnabled(false)
+                    .setInitialCropWindowPaddingRatio(.08f) // padding window from all
+                    .setBorderCornerLength(50)
+                    .setBorderCornerOffset(0)
+                    .setAllowCounterRotation(true)
+                    .setBorderCornerThickness(8.0f)
+                    .setShowCropOverlay(true)
+                    .setAspectRatio(1, 1)
+                    .setFixAspectRatio(false)
+                    .setBorderCornerColor(getResources().getColor(R.color.whit_background))
+                    .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                    .setScaleType(CropImageView.ScaleType.FIT_CENTER)
+                    .start(G.fragmentActivity, PhotoViewer.this);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String path;
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+            path = AttachFile.getFilePathFromUri(resultUri);
+            textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
+            textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(path));
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                path = result.getUri().getPath();
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
+                textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(path));
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Exception error = result.getError();
+            }
+        }
+
     }
 
     public void openPhotoForEdit(List<GalleryItemModel> selectedPhotos, String message, boolean isSelected) {
