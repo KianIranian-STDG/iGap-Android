@@ -1309,9 +1309,12 @@ public class MessageDataStorage extends BaseController {
             try {
                 RealmResults<RealmStoryProto> realmStoryProtos;
                 RealmResults<RealmStory> realmStory;
+                RealmStory myRealmStory = null;
 
                 if (userId == 0) {
-                    realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).sort("id", Sort.DESCENDING).findAll();
+                    myRealmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+                    realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
+
                 } else {
                     realmStory = database.where(RealmStory.class).equalTo("userId", userId).findAll();
                 }
@@ -1328,7 +1331,17 @@ public class MessageDataStorage extends BaseController {
 
                         stories.get(i).storyObjects = storyObjects;
                     }
+                    if (userId == 0 && myRealmStory != null) {
+                        List<StoryObject> storyObjects = new ArrayList<>();
+                        realmStoryProtos = myRealmStory.getRealmStoryProtos().sort(sortBy, orderBy);
+                        stories.add(0, MainStoryObject.create(myRealmStory));
+                        for (int j = 0; j < realmStoryProtos.size(); j++) {
+                            storyObjects.add(StoryObject.create(realmStoryProtos.get(j)));
+                        }
+                        stories.get(0).storyObjects = storyObjects;
+                    }
                 }
+
                 countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
