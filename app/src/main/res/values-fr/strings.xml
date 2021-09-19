@@ -15,6 +15,7 @@
     <string name="pu_desc_profileUser">Entrez votre nom d’utilisateur et choisissiez une photo de profil , si vous voulez. </string>
     <string name="pu_nikname_profileUser">Prénom</string>
     <string name="pu_Lets_Go">Continuez</string>
+    <string name="stories">histoires</string>
     <string name="kuknos_edit_info_empty_sheba_and_birthdate">"La date de naissance et la nuit n'ont pas changé!"</string>
     <string name="kuknos_edit_info_sending_info">"Envoi d'informations ..."</string>
     <string name="kuknos_edit_info_empty_sheba">"Le champ de nuit ne peut pas être vide"</string>
@@ -255,6 +256,7 @@
     <string name="confirm_email_text">Un code de confirmation a été envoyé à votre adresse e-mail pour identifier et vérifier l\'e-mail.</string>
     <string name="chats">discussion</string>
     <string name="contacts">contact</string>
+    <string name="bottom_navigation_my_story">Des moments</string>
     <string name="messages">messages </string>
     <string name="show_message_count">messages affichables</string>
     <string name="count_of_show_message">nombre des messages affichables</string>
@@ -1853,6 +1855,10 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
+    <string name="sending_reply">"la réponse est envoyée..."</string>
     <string name="AccessBan">L\'accès est fermé pour voir les membres</string>
 
     <string name="how_to_get_points">Comment gagner des points</string>

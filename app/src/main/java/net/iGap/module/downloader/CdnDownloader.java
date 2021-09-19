@@ -51,13 +51,13 @@ public class CdnDownloader extends BaseController implements IDownloader {
         }
         DownloadObject publicMessage = requestedDownload.get(file.key);
         if (publicMessage != null) {
-            Status status = PRDownloader.getStatus(publicMessage.downloadId);
+            Status status = PRDownloader.getStatus((int) publicMessage.downloadId);
             switch (status) {
                 case COMPLETED:
                     requestedDownload.remove(publicMessage.key);
                     return;
                 case PAUSED:
-                    PRDownloader.resume(publicMessage.downloadId);
+                    PRDownloader.resume((int) publicMessage.downloadId);
                     if (observer != null)
                         publicMessage.addObserver(observer);
                     return;
@@ -105,7 +105,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
     private void handleProgress(DownloadObject message, Progress progress) {
         int percent = (int) ((progress.currentBytes * 100) / progress.totalBytes);
         if (percent > message.progress) {
-            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.destFile.getAbsolutePath(), message.fileToken,message.selector)));
+            message.notifyObservers(Resource.loading(new HttpRequest.Progress(message, percent, message.destFile.getAbsolutePath(), message.fileToken, message.selector)));
         }
     }
 
@@ -124,7 +124,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
                 storage.setAttachmentFilePath(file.mainCacheId, path = file.tempFile.getAbsolutePath(), true);
             }
 
-            file.notifyObservers(Resource.success(new HttpRequest.Progress(100, path, file.fileToken, file.selector)));
+            file.notifyObservers(Resource.success(new HttpRequest.Progress(file, 100, path, file.fileToken, file.selector)));
             requestedDownload.remove(file.key);
             Downloader.getInstance(currentAccount).onCdnDownloadComplete(file.mainCacheId);//must be change!
         } catch (IOException e) {
@@ -154,7 +154,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
         if (message == null)
             return;
 
-        PRDownloader.pause(message.downloadId);
+        PRDownloader.pause((int) message.downloadId);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
         if (message == null)
             return false;
 
-        Status status = PRDownloader.getStatus(message.downloadId);
+        Status status = PRDownloader.getStatus((int) message.downloadId);
         return status == Status.RUNNING;
     }
 }

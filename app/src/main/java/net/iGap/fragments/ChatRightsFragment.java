@@ -585,6 +585,11 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         }
     }
 
+    @Override
+    public void onLongClick(View view, int position) {
+
+    }
+
     private boolean isChannel() {
         return realmRoom.getType().equals(ProtoGlobal.Room.Type.CHANNEL) && userId != 0;
     }

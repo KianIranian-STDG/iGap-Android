@@ -1,11 +1,29 @@
 package net.iGap.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 
-public class GalleryItemModel {
+import java.io.Serializable;
 
-    private long id ;
-    private String address ;
+public class GalleryItemModel implements Serializable {
+
+    private long id;
+    private String address;
+    private String mediaType;
+
+    public GalleryItemModel() {
+
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
 
     public long getId() {
         return id;
@@ -25,9 +43,10 @@ public class GalleryItemModel {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof GalleryItemModel){
-            return ((GalleryItemModel) obj).getId() == this.id ;
+        if (obj instanceof GalleryItemModel) {
+            return ((GalleryItemModel) obj).getId() == this.id;
         }
         return super.equals(obj);
     }
+
 }

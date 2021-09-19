@@ -14,6 +14,7 @@
     <string name="kuknos_rial_max_buy">"Maksimum izin verilen"</string>
     <string name="kuknos_rial_min_buy">"İzin verilen minimum"</string>
     <string name="kuknos_rial_price_of_day">"Günün fiyatı"</string>
+    <string name="stories">çîrokan</string>
     <string name="kuknos_edit_info_sending_info">"Bilgi gönderiliyor ..."</string>
     <string name="kuknos_receipt_bill">"Geri ödeme makbuzu"</string>
     <string name="kuknos_edit_info_empty_sheba">"Gece alanı boş olamaz"</string>
@@ -253,6 +254,7 @@
     <string name="confirm_email_text">بەمەبەستی دەستنیشان­کردن و پەسەندی پۆستی ئەلەکترۆنیکی، کۆدی پەسەند بۆ ئیمەیلەکەت رەوانە کراوە.</string>
     <string name="chats">وتووێژ</string>
     <string name="contacts">بەردەنگەکان</string>
+    <string name="bottom_navigation_my_story">Moments</string>
     <string name="messages">پەیامەکان</string>
     <string name="show_message_count">پەیامی شیاوی نمایش</string>
     <string name="count_of_show_message">ژمارەی پەیامی شیاوی نمایش</string>
@@ -1916,6 +1918,8 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="Submitـomment">برای مشاهده نظرسنجی باید  نظر خود را ثبت کنید</string>
     <string name="share_file_link">عوامی لنک شیئر کریں</string>
+    <string name="remove_follower">حذف دنبال کننده</string>
+    <string name="hide_story">پنهان کردن استوری</string>
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>

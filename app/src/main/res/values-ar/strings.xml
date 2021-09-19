@@ -504,6 +504,8 @@
 
     <string name="contacts">"جهات الاتصال"</string>
 
+    <string name="bottom_navigation_my_story">لحظات</string>
+
     <string name="messages">"الرسائل"</string>
 
     <string name="show_message_count">"الرسائل القابلة للاظهار"</string>
@@ -2626,6 +2628,8 @@
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
     <string name="remind_me_later">ذكرني لاحقا</string>
     <string name="score_request_text">هل ترغب في تقييم التطبيق؟</string>

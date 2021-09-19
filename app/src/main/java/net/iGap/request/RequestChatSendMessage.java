@@ -62,6 +62,10 @@ public class RequestChatSendMessage {
         return this;
     }
 
+    public RequestChatSendMessage storyReply(ProtoGlobal.RoomMessageStoryReply storyReply) {
+        chatSendMessage.setStoryReply(storyReply);
+        return this;
+    }
     public RequestChatSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         chatSendMessage.setRandomId(Long.parseLong(fakeMessageIdAsIdentity));
         RequestWrapper requestWrapper = new RequestWrapper(201, chatSendMessage, fakeMessageIdAsIdentity);

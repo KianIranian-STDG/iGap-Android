@@ -94,6 +94,7 @@ public class HelperToolbar {
     private TextView mBtnClearSearch;
     private View callLayout;
     private LinearLayout userNameLayout;
+    private boolean isStaticToolbar = false;
 
     private CircleImageView mTabletUserAvatar;
     private TextView mTabletUserName;
@@ -146,6 +147,8 @@ public class HelperToolbar {
         return new HelperToolbar();
     }
 
+
+
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
         return this;
@@ -170,7 +173,10 @@ public class HelperToolbar {
         System.arraycopy(drawables, 0, mRightIcons, 0, drawables.length);
         return this;
     }
-
+    public HelperToolbar setStaticToolbar(boolean staticToolbar) {
+        this.isStaticToolbar = staticToolbar;
+        return this;
+    }
     //icons used and set from right side : contain : add , edit , search
     public HelperToolbar setTabletIcons(@StringRes int... icons) {
         System.arraycopy(icons, 0, mTabletIcons, 0, icons.length);
@@ -875,7 +881,7 @@ public class HelperToolbar {
     private void connectionStateChecker(LifecycleOwner owner) {
 
         //check first time state then for every changes observer will change title
-        if (G.connectionState != null) {
+        if (G.connectionState != null && !isStaticToolbar) {
             if (G.connectionState == ConnectionState.CONNECTING) {
                 mTxtLogo.setText(R.string.connecting);
                 checkIGapFont();
@@ -887,7 +893,7 @@ public class HelperToolbar {
 
         G.connectionStateMutableLiveData.observe(owner, connectionState -> {
 
-            if (mTxtLogo != null) {
+            if (mTxtLogo != null && !isStaticToolbar) {
 
                 if (connectionState != null) {
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -2223,6 +2229,7 @@ public class HelperToolbar {
         public CircleImageView getSmallAvatar() {
             return smallAvatar;
         }
+
 
         //endregion getters
     }

@@ -260,6 +260,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_credit" />
 
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/contactIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="@string/icon_contacts"
+            app:layout_constraintStart_toStartOf="@id/fup_btn_contact"
+            app:layout_constraintTop_toTopOf="@id/fup_btn_contact" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/contactTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
+            android:text="@string/contacts"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="@id/contactIcon"
+            app:layout_constraintEnd_toEndOf="@id/fup_btn_contact"
+            app:layout_constraintStart_toEndOf="@id/contactIcon"
+            app:layout_constraintTop_toTopOf="@id/contactIcon" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/fup_btn_contact"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp8"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onContactsClick()}"
+            app:layout_constraintBottom_toBottomOf="@id/contactIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fup_splitter_3"
+            app:layout_constraintWidth_percent=".85" />
+
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/inviteIcon"
             style="@style/myIconTextViewStyle"
@@ -291,10 +329,9 @@
             android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onInviteFriendsClick()}"
             app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fup_splitter_3"
-            app:layout_constraintWidth_percent=".85" />
+            app:layout_constraintEnd_toEndOf="@id/fup_btn_contact"
+            app:layout_constraintStart_toStartOf="@id/fup_btn_contact"
+            app:layout_constraintTop_toBottomOf="@id/fup_btn_contact" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/scanQRIcon"

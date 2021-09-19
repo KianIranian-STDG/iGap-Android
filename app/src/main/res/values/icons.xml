@@ -6,6 +6,16 @@
     <string name="logo_igap_en">\ueaa5</string>
     <string name="icon_check_ok">\uea8d</string>
     <string name="icon_emoji_smile">\ueaef</string>
+    <string name="md_emoticon_with_happy_face">\ue936</string>
+    <string name="md_igap_paint">\ue935</string>
+    <string name="md_black_keyboard_with_white_keys">\ue952</string>
+    <string name="md_close_button">@string/close_icon</string>
+    <string name="close_icon">\ue919</string>
+    <string name="md_crop_button">\ue91f</string>
+    <string name="check_icon">\ue988</string>
+    <string name="forward_icon">\ue94a</string>
+    <string name="md_igap_tune">\ue934</string>
+    <string name="md_send_button">\ue984</string>
     <string name="icon_keyboard">\ueaf7</string>
     <string name="icon_send">\uea72</string>
     <string name="icon_send_arrow_up">\uea71</string>

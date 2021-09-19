@@ -15,6 +15,7 @@
     <string name="pu_desc_profileUser">Введите свое имя и выберите свою фотографию пользователя</string>
     <string name="pu_nikname_profileUser">Имя</string>
     <string name="pu_Lets_Go">Продолжение</string>
+    <string name="stories">рассказы</string>
     <string name="kuknos_receipt_bill">"Квитанция о возмещении"</string>
     <string name="kuknos_edit_info_sending_info">"Отправка информации ..."</string>
     <string name="kuknos_edit_info_saved_successfully">"Информация успешно сохранена"</string>
@@ -253,6 +254,7 @@
     <string name="confirm_email_text">Код подтверждения был отправлен на ваш адрес электронной почты, чтобы идентифицировать и подтвердить адрес электронной почты.</string>
     <string name="chats">Диалог</string>
     <string name="contacts">Контакты</string>
+    <string name="bottom_navigation_my_story">Моменты</string>
     <string name="messages">Сообщения</string>
     <string name="show_message_count">Отображаемые сообщения</string>
     <string name="count_of_show_message">Количество отображаемых сообщений</string>
@@ -1645,6 +1647,8 @@
     <string name="location_list_tile">Поиск развлекательных центров</string>
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
     <string name="remind_me_later">Напомни мне позже</string>
     <string name="score_request_text">Хотите оценить приложение?</string>

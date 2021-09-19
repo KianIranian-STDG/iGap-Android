@@ -26,6 +26,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
@@ -64,7 +65,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
@@ -87,6 +87,7 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.story.viewPager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.model.Card;
@@ -148,6 +149,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToIGapMapPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToContactsPage = new SingleLiveEvent<>();
     public SingleLiveEvent<String> goToFAQPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
@@ -741,6 +743,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
     }
 
+    public void onContactsClick() {
+        goToContactsPage.setValue(true);
+    }
+
     public void onQRCodeScannerClick() {
         goToScannerPage.setValue(true);
     }
@@ -804,11 +810,18 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
-        if (DbManager.getInstance().doRealmTask(realm -> {
+ /*       if (DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
-        }
+        }*/
+/*
+        FragmentStoryViews fragment = new FragmentStoryViews();
+        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();*/
+
+        StoryViewFragment fragment = new StoryViewFragment();
+        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();
+
     }
 
     public void onAddImageClick() {

@@ -1,5 +1,7 @@
 package net.iGap.network;
 
+import android.util.Log;
+
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAddMessageReaction;
@@ -17,6 +19,7 @@ import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDelete;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
+import net.iGap.proto.ProtoChatGetRoom;
 import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoClientMuteRoom;
@@ -32,6 +35,14 @@ import net.iGap.proto.ProtoGroupLeft;
 import net.iGap.proto.ProtoGroupPinMessage;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoInfoConfig;
+import net.iGap.proto.ProtoStoryAddView;
+import net.iGap.proto.ProtoStoryDeleteStory;
+import net.iGap.proto.ProtoStoryGetOwnStoryViews;
+import net.iGap.proto.ProtoStoryGetStories;
+import net.iGap.proto.ProtoStoryRoomAddNew;
+import net.iGap.proto.ProtoStoryUserAddNew;
+import net.iGap.proto.ProtoUserInfo;
+import net.iGap.request.RequestPagination;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +64,345 @@ public class IG_RPC {
             major = response.getMajorCode();
         }
     }
+
+    public static class TimeOut_error extends Error {
+        public TimeOut_error() {
+            Log.e("IG_RPC_timeout", "TimeOut_error");
+            major = 5;
+            minor = 1;
+        }
+    }
+
+
+    public static class Story_Get_Own_Story_Views extends AbstractObject {
+        public static int actionId = 1205;
+        public int offset;
+        public int limit;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Story_Get_Own_Story_Views.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViews.Builder builder = ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViews.newBuilder();
+            builder.setPagination(new RequestPagination().pagination(offset, limit));
+            return builder;
+        }
+    }
+
+    public static class Res_Story_Get_Own_Story_Views extends AbstractObject {
+        public static int actionId = 31205;
+        public List<ProtoStoryGetOwnStoryViews.GroupedViews> groupedViews;
+
+        public static Res_Story_Get_Own_Story_Views deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Story_Get_Own_Story_Views object = null;
+            try {
+                object = new Res_Story_Get_Own_Story_Views();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViewsResponse response = ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViewsResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            groupedViews = response.getGroupedViewsList();
+        }
+    }
+
+
+    public static class Story_User_Add_New extends AbstractObject {
+        public static int actionId = 1201;
+        public List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Story_User_Add_New.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryUserAddNew.StoryUserAddNew.Builder builder = ProtoStoryUserAddNew.StoryUserAddNew.newBuilder();
+            builder.addAllTokenBatch(storyAddRequests);
+            return builder;
+        }
+    }
+
+    public static class Res_Story_User_Add_New extends AbstractObject {
+        public static int actionId = 31201;
+        public List<ProtoGlobal.Story> stories;
+
+
+        public static Res_Story_User_Add_New deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Story_User_Add_New object = null;
+            try {
+                object = new Res_Story_User_Add_New();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryUserAddNew.StoryUserAddNewResponse response = ProtoStoryUserAddNew.StoryUserAddNewResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            stories = response.getStoryList();
+
+        }
+    }
+
+
+    public static class Story_Room_Add_New extends AbstractObject {
+        public static int actionId = 1202;
+        public List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Story_Room_Add_New.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryRoomAddNew.StoryRoomAddNew.Builder builder = ProtoStoryRoomAddNew.StoryRoomAddNew.newBuilder();
+            builder.addAllTokenBatch(storyAddRequests);
+            return builder;
+        }
+    }
+
+    public static class Res_Story_Room_Add_New extends AbstractObject {
+        public static int actionId = 31202;
+        public List<ProtoGlobal.Story> stories;
+
+        public static Res_Story_Room_Add_New deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Story_Room_Add_New object = null;
+            try {
+                object = new Res_Story_Room_Add_New();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryRoomAddNew.StoryRoomAddNewResponse response = ProtoStoryRoomAddNew.StoryRoomAddNewResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            stories = response.getStoryList();
+        }
+    }
+
+
+    public static class Get_Stories extends AbstractObject {
+        public static int actionId = 1203;
+        public int offset;
+        public int limit;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Get_Stories.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryGetStories.StoryGetStories.Builder builder = ProtoStoryGetStories.StoryGetStories.newBuilder();
+            builder.setPagination(new RequestPagination().pagination(offset, limit));
+            return builder;
+        }
+    }
+
+    public static class Res_Get_Stories extends AbstractObject {
+        public static int actionId = 31203;
+        public List<ProtoStoryGetStories.GroupedStories> stories;
+
+        public static Res_Get_Stories deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Get_Stories object = null;
+            try {
+                object = new Res_Get_Stories();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryGetStories.StoryGetStoriesResponse response = ProtoStoryGetStories.StoryGetStoriesResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            stories = response.getGroupedStoriesList();
+        }
+    }
+
+
+    public static class Story_Delete extends AbstractObject {
+        public static int actionId = 1206;
+        public long storyId;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Story_Delete.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryDeleteStory.StoryDeleteStory.Builder builder = ProtoStoryDeleteStory.StoryDeleteStory.newBuilder();
+            builder.setStoryId(storyId);
+            return builder;
+        }
+    }
+
+    public static class Res_Story_Delete extends AbstractObject {
+        public static int actionId = 31206;
+        public long storyId;
+        public long userId;
+
+        public static Res_Story_Delete deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Story_Delete object = null;
+            try {
+                object = new Res_Story_Delete();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryDeleteStory.StoryDeleteStoryResponse response = ProtoStoryDeleteStory.StoryDeleteStoryResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            storyId = response.getStoryId();
+            userId = response.getUserId();
+        }
+    }
+
+
+    public static class Story_Add_View extends AbstractObject {
+        public static int actionId = 1204;
+        public String storyId;
+
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Story_Add_View.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoStoryAddView.StoryAddView.Builder builder = ProtoStoryAddView.StoryAddView.newBuilder();
+            builder.setStoryId(storyId);
+            return builder;
+        }
+    }
+
+    public static class Res_Story_Add_View extends AbstractObject {
+        public static int actionId = 31204;
+        public long storyId;
+        public long storyOwnerUserId;
+        public long userId;
+        public int viewAt;
+
+        public static Res_Story_Add_View deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Story_Add_View object = null;
+            try {
+                object = new Res_Story_Add_View();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoStoryAddView.StoryAddViewResponse response = ProtoStoryAddView.StoryAddViewResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            storyId = response.getStoryId();
+            storyOwnerUserId = response.getStoryOwnerUserId();
+            userId = response.getUserId();
+            viewAt = response.getViewedAt();
+        }
+    }
+
 
     public static class Group_Update_Status extends AbstractObject {
         public static int actionId = 311;
@@ -1784,5 +2134,115 @@ public class IG_RPC {
             return actionId;
         }
 
+    }
+
+    public static class Chat_get_room extends AbstractObject {
+        public static final int actionId = 200;
+        public long peerId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatGetRoom.ChatGetRoom.Builder builder = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+            builder.setPeerId(peerId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_chat_get_room().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_chat_get_room extends AbstractObject {
+        public static final int actionId = 30200;
+
+        public ProtoGlobal.Room room;
+
+        public AbstractObject deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_chat_get_room object = null;
+            try {
+                object = new Res_chat_get_room();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatGetRoom.ChatGetRoomResponse response = ProtoChatGetRoom.ChatGetRoomResponse.parseFrom(message);
+            room = response.getRoom();
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class User_info extends AbstractObject {
+        public static final int actionId = 117;
+        public long userId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_user_info().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
+            builder.setUserId(userId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_user_info extends AbstractObject {
+        public static final int actionId = 30117;
+
+        public ProtoGlobal.RegisteredUser user;
+
+        public Res_user_info deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_user_info object = null;
+            try {
+                object = new Res_user_info();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoUserInfo.UserInfoResponse response = ProtoUserInfo.UserInfoResponse.parseFrom(message);
+
+            user = response.getUser();
+            resId = response.getResponse().getId();
+        }
     }
 }

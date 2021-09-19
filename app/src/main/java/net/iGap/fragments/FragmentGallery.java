@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
@@ -306,7 +307,7 @@ public class FragmentGallery extends BaseFragment {
     private void setupGalleryWithPhotoAdapter(View view, RecyclerView rvGallery) {
 
         mGalleryPhotoAdapter = new AdapterGalleryPhoto(isSubFolder);
-        mGalleryPhotoAdapter.setMultiState(canMultiSelected );
+        mGalleryPhotoAdapter.setMultiState(canMultiSelected);
         rvGallery.setAdapter(mGalleryPhotoAdapter);
         mGalleryPhotoAdapter.setListener(new GalleryItemListener() {
             @Override

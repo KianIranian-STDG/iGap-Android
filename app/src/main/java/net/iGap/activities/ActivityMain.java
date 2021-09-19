@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -186,6 +187,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
     private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_VOLUME_DOWN_KEY);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     public static void setMediaLayout() {
         try {

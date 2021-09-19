@@ -13,6 +13,7 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperConnectionState;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.response.UserLoginResponse;
 
 import static net.iGap.G.context;
 import static net.iGap.G.hasNetworkBefore;
@@ -109,6 +110,7 @@ public class ConnectionManager {
 
                     hasNetworkBefore = false;
                     HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
+                    UserLoginResponse.isFetched = false;
                     WebSocketClient.getInstance().disconnectSocket(true);
                 }
             }

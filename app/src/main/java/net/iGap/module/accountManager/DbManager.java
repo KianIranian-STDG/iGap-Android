@@ -61,6 +61,7 @@ public class DbManager {
         if (uiRealm != null) {
             uiRealm.removeAllChangeListeners();
             uiRealm.close();
+
         }
     }
 

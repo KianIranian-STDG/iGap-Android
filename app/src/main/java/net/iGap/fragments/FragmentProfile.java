@@ -164,6 +164,14 @@ public class FragmentProfile extends BaseFragment {
             }
         });
 
+
+        viewModel.goToContactsPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(),  RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS)).setReplace(false).load();
+            }
+        });
+
+
         viewModel.goToUserScorePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();

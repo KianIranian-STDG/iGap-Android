@@ -281,6 +281,7 @@
     <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>
     <string name="chats">"گفتگو"</string>
     <string name="contacts">"مخاطبین"</string>
+    <string name="bottom_navigation_my_story">لحظه ها</string>
     <string name="messages">"پیام‌ها"</string>
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
     <string name="count_of_show_message">"تعداد پیام‌های قابل نمایش"</string>
@@ -2210,6 +2211,44 @@
     <string name="token_not_selected">هیچ توکنی انتخاب نشده است</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
+    <string name="remove_follower">حذف دنبال کننده</string>
+    <string name="hide_story">پنهان کردن استوری</string>
+    <string name="stories">histoires</string>
+    <string name="status">لحظه ها</string>
+    <string name="status_title">لحظه</string>
+    <string name="my_status">لحظه من</string>
+    <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
+    <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
+    <string name="recent_updates">بروز رسانی های اخیر</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">لحظه های شما پس از ۲۴ ساعت حذف می شوند.</string>
+    <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
+    <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
+    <string name="story_views">دیده شده</string>
+    <string name="story_viewed_by">دیده شده توسط</string>
+    <string name="story_person">نفر</string>
+    <string name="story_uploading">در حال آپلود...</string>
+    <string name="story_sending">در حال ارسال...</string>
+    <string name="story_could_not_sent">ارسال نشد!</string>
+    <string name="type_a_moment">پیام خود را بنویسید</string>
+    <string name="your_status_characters">لحظه شما نمیتواند بیشتر از ۵۰۰ حرف باشد.</string>
+    <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
+
+    <string name="stories_setting">تنظیمات داستان</string>
+    <string name="hide_story_from">پنهان کردن داستان</string>
+    <string name="story_replies">مجوز پاسخ ها و واکنش ها به داستان</string>
+    <string name="story_saving">ذخیره سازی</string>
+    <string name="story_sharing">اشتراک گذاری </string>
+    <string name="hide_specific_people">داستان و فیلم های زنده خود را از افراد خاص پنهان کنید.</string>
+    <string name="react_story">انتخاب کنید چه کسی می تواند به داستان شما پاسخ دهد و به او واکنش نشان دهد.</string>
+    <string name="people_feed_post">افراد دیگر می توانند پست های خبرمایه شما را به داستان های خود اضافه کنند.</string>
+    <string name="show_username"> نام کاربری شما همیشه با ارسال شما نشان داده می شود.</string>
+    <string name="allow_share_story">به دیگران اجازه دهید عکس ها و فیلم های داستان شما را به عنوان پیام به اشتراک بگذارند</string>
+    <string name="save_gallery">ذخیره در گالری</string>
+    <string name="resharing_story">به اشتراک گذاشتن مجدد داستان ها</string>
+    <string name="allow_sharing">مجوز اشتراک گذاری</string>
+    <string name="everyone">همه</string>
+    <string name="follower">افرادی که آنها را دنبال می کنید</string>
+    <string name="off">خاموش</string>
 
 
     <string name="unmuted">اعلان صدا دار شد.</string>
@@ -2234,6 +2273,11 @@
     <string name="bio_error">بیو تایید نشد</string>
     <string name="email_added">ایمیل تایید شد</string>
     <string name="seted_gender">جنسیت تایید شد</string>
+    <string name="moments_string">لحظه ها</string>
+    <string name="sending_reply">در حال ارسال پاسخ...</string>
+    <string name="moment_not_available">قابل دسترسی نمی باشد</string>
+    <string name="mement_is_no_longer_available">لحظه در دسترس نمی باشد</string>
+    <string name="unavailable_moment">لحظه غیر فعال</string>
     <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است </string>
 
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>

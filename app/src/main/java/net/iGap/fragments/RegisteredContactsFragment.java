@@ -99,6 +99,7 @@ import org.paygear.WalletActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.Case;
 
@@ -144,7 +145,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
     private int tryRequest;
 
     private final int addUserTag = 1;
-    private final int walletTag = 2;
     private final int passCodeTag = 3;
     private final int multiSelectTag = 4;
     private final int searchTag = 5;
@@ -222,7 +222,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         ToolbarItems toolbarItems = contactsToolbar.createToolbarItems();
 
 
-        contactsToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
+        contactsToolbar.setTitle(getString(R.string.contacts));
+        contactsToolbar.setBackIcon(new BackDrawable(false));
         if (isContact) {
             ToolbarItem moreItem = toolbarItems.addItemWithWidth(moreItemTag, R.string.icon_other_vertical_dots, 54);
             addItem = moreItem.addSubItem(addUserTag, R.string.icon_add, getResources().getString(R.string.menu_add_contact));
@@ -237,7 +238,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             public void onSearchExpand() {
                 isSearchEnabled = true;
                 inSearchMode = true;
-                contactsToolbar.setBackIcon(new BackDrawable(true));
             }
 
             @Override
@@ -245,11 +245,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 isSearchEnabled = false;
                 inSearchMode = false;
                 loadContacts();
-                if (isContact) {
-                    contactsToolbar.setBackIcon(null);
-                } else {
-                    contactsToolbar.setBackIcon(new BackDrawable(false));
-                }
             }
 
             @Override
@@ -267,8 +262,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         if (!isContact) {
             contactsToolbar.setBackIcon(new BackDrawable(false));
             toolbarItems.addItemWithWidth(addUserTag, R.string.icon_add_contact, 54);
-        } else {
-            toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
         }
         if (mPageMode == CALL) {
             contactsToolbar.setTitle(getString(R.string.make_call));
@@ -290,6 +283,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                             contactsToolbar.hideActionToolbar();
                             contactsToolbar.setBackIcon(null);
                             setMultiSelectState(isMultiSelect);
+                        } else {
+                            if (!isSearchEnabled) {
+                                requireActivity().onBackPressed();
+                            }
                         }
                     }
                     break;
@@ -334,9 +331,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                     break;
                 case multiSelectTag:
                     showDialog();
-                    break;
-                case walletTag:
-                    onWalletClickListener();
                     break;
                 case syncContactTag:
                     if (isMultiSelect) setMultiSelectState(true);
@@ -782,14 +776,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
     @Override
     public boolean isAllowToBackPressed() {
-        if (isMultiSelect) {
-            setMultiSelectState(true);
-            contactsToolbar.setBackIcon(null);
-            contactsToolbar.hideActionToolbar();
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 
     @Override
@@ -820,34 +807,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
     private interface onLongClickRecyclerView {
         void onClick(View view, int position);
-    }
-
-    private void onWalletClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
     }
 
     /**

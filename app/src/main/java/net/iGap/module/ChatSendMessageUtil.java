@@ -29,6 +29,8 @@ import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
+import net.iGap.story.StoryObject;
+import net.iGap.story.viewPager.Story;
 import net.iGap.structs.AdditionalObject;
 import net.iGap.structs.MessageObject;
 
@@ -142,6 +144,32 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         }
 
         builder.sendMessage(Long.toString(message.id));
+        return this;
+    }
+
+    public ChatSendMessageUtil buildStoryReply(int roomType, long roomId, Story storyObject, String message) {
+        ChatSendMessageUtil builder = newBuilder(roomType, ProtoGlobal.RoomMessageType.STORY_REPLY.getNumber(), roomId);
+
+        if (message != null && !message.isEmpty()) {
+            builder.message(message);
+        }
+
+        if (storyObject != null) {
+            ProtoGlobal.RoomMessageStoryReply.Builder replyBuilder = ProtoGlobal.RoomMessageStoryReply.newBuilder();
+            replyBuilder.setStoryId(storyObject.getStoryId());
+            replyBuilder.setCaption(storyObject.getTxt());
+            builder.storyReply(replyBuilder.build());
+        }
+        builder.sendMessage(Long.toString(AppUtils.makeRandomId()));
+        return this;
+    }
+
+    public ChatSendMessageUtil storyReply(ProtoGlobal.RoomMessageStoryReply value) {
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.storyReply(value);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.storyReply(value);
+        }
         return this;
     }
 

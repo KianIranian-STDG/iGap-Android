@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.story.StoryPagerFragment;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -33,6 +34,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.realm.RealmRoom;
+import net.iGap.story.liststories.StoryFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,9 +159,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         Fragment fragment;
         switch (position) {
             case CONTACT_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
                 if (fragment == null) {
-                    fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                    fragment = new StoryFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <declare-styleable name="VerticalSlideColorPicker">
+        <attr name="borderColor" format="color" />
+        <attr name="defaultColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="colors" format="reference" />
+    </declare-styleable>
     <declare-styleable name="CollapsingImageBehavior">
         <attr name="collapsedTarget" format="reference" />
     </declare-styleable>
@@ -237,5 +242,9 @@
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
     <attr name="numberPickerTheme" format="reference" />
+
+    <declare-styleable name="StoriesProgressView">
+        <attr name="progressCount" format="integer|reference" />
+    </declare-styleable>
 
 </resources>

@@ -32,6 +32,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -76,6 +80,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.webrtc.ContextUtils.getApplicationContext;
 
 public final class AndroidUtils {
     private static SparseArray<File> mediaDirs = null;
@@ -230,6 +236,13 @@ public final class AndroidUtils {
             }
         }
         return null;
+    }
+
+    public static int dp(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return (int) Math.ceil(density * value);
     }
 
     public static String saveBitmap(Bitmap bmp) {
@@ -803,6 +816,7 @@ public final class AndroidUtils {
             case STICKER:
             case GIF:
             case GIF_TEXT:
+            case STORY:
                 return G.DIR_IMAGES;
             case VIDEO:
             case VIDEO_TEXT:
@@ -1299,6 +1313,30 @@ public final class AndroidUtils {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static Bitmap blurImage(Bitmap input) {
+        try {
+            RenderScript rsScript = RenderScript.create(getApplicationContext());
+            Allocation alloc = Allocation.createFromBitmap(rsScript, input);
+
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rsScript, Element.U8_4(rsScript));
+            blur.setRadius(21);
+            blur.setInput(alloc);
+
+            Bitmap result = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+            Allocation outAlloc = Allocation.createFromBitmap(rsScript, result);
+
+            blur.forEach(outAlloc);
+            outAlloc.copyTo(result);
+
+            rsScript.destroy();
+            return result;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return input;
+        }
+
     }
 
     public interface CopyFileCompleted {

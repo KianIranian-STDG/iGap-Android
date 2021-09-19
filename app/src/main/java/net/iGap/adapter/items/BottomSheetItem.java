@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -33,9 +34,16 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
     public StructBottomSheet mList;
     private OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     public boolean isChecked = false;
+    FragmentManager fm;
 
     public BottomSheetItem(StructBottomSheet item, OnPathAdapterBottomSheet OnPathAdapterBottomSheet) {
         this.mList = item;
+        this.onPathAdapterBottomSheet = OnPathAdapterBottomSheet;
+    }
+
+    public BottomSheetItem(FragmentManager fm, StructBottomSheet item, OnPathAdapterBottomSheet OnPathAdapterBottomSheet) {
+        this.mList = item;
+        this.fm = fm;
         this.onPathAdapterBottomSheet = OnPathAdapterBottomSheet;
     }
 
@@ -84,6 +92,7 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         });
 
         holder.cr.setOnClickListener(v -> {
+
             onPathAdapterBottomSheet.path(mList.getPath(), holder.checkBoxSelect.isChecked(), true, mList, mList.getId());
         });
     }

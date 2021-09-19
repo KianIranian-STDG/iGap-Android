@@ -293,6 +293,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -359,6 +360,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STORY_REPLY_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
@@ -4155,6 +4157,7 @@ public class FragmentChat extends BaseFragment
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
+                .setFragmentActivity(getActivity())
                 .setSharedPref(sharedPreferences)
                 .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
@@ -5272,7 +5275,7 @@ public class FragmentChat extends BaseFragment
         //check and remove share base on type and download state
         if (roomMessageType == LOCATION_VALUE) {
             items.remove(Integer.valueOf(R.string.share_item_dialog));
-        } else if (roomMessageType != TEXT_VALUE && roomMessageType != CONTACT_VALUE) {
+        } else if (roomMessageType != TEXT_VALUE && roomMessageType != STORY_REPLY_VALUE && roomMessageType != CONTACT_VALUE) {
             String filepath_;
             if (messageObject.forwardedMessage != null) {
                 filepath_ = messageObject.forwardedMessage.getAttachment().filePath != null ? messageObject.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.forwardedMessage.getAttachment().cacheId, messageObject.forwardedMessage.getAttachment().name, roomMessageType);
@@ -5905,8 +5908,14 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onReplyClick(MessageObject replyMessage) {// TODO: 12/29/20 MESSAGE_REFACTOR
-        if (!goToPositionWithAnimation(replyMessage.id, 1000)) {
-            long replayMessageId = Math.abs(replyMessage.id);
+        if (replyMessage.messageType == STORY_REPLY_VALUE && replyMessage.replayToMessage == null) {
+            if (replyMessage.storyObject != null && replyMessage.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(replyMessage.storyObject.userId, true, true, replyMessage.storyObject.storyId)).setReplace(false).load();
+            } else {
+                Toast.makeText(getContext(), R.string.moment_not_available , Toast.LENGTH_SHORT).show();
+            }
+        } else if (!goToPositionWithAnimation(replyMessage.replayToMessage.id, 1000)) {
+            long replayMessageId = Math.abs(replyMessage.replayToMessage.id);
             if (!goToPositionWithAnimation(replayMessageId, 1000)) {
                 if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
                     resetMessagingValue();
@@ -7156,6 +7165,7 @@ public class FragmentChat extends BaseFragment
             switch (type) {
 
                 case TEXT_VALUE:
+                case STORY_REPLY_VALUE:
                     intent.setType("text/plain");
                     String message = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.message : messageObject.message;
                     intent.putExtra(Intent.EXTRA_TEXT, message);
@@ -8316,6 +8326,7 @@ public class FragmentChat extends BaseFragment
 
                 switch (messageType) {
                     case TEXT_VALUE:
+                    case STORY_REPLY_VALUE:
                         if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.CARD_TO_CARD_MESSAGE)
                             if (!addTop) {
                                 mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject).withIdentifier(identifier));
