@@ -24,6 +24,7 @@ import java.util.List;
 public class BottomSheetFragment extends BaseBottomSheet {
 
     private List<String> itemList;
+    private List<Integer> itemListInt;
     private int range;
     private String title = null;
     private BottomSheetItemClickCallback bottomSheetItemClickCallback;
@@ -36,10 +37,8 @@ public class BottomSheetFragment extends BaseBottomSheet {
     }
 
     public BottomSheetFragment setListDataWithResourceId(Context context, List<Integer> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
-        this.itemList = new ArrayList<>();
-        for (int i = 0; i < itemListId.size(); i++) {
-            this.itemList.add(context.getString(itemListId.get(i)));
-        }
+        this.itemListInt = new ArrayList<>();
+        this.itemListInt.addAll(itemListId);
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         return this;
@@ -61,7 +60,7 @@ public class BottomSheetFragment extends BaseBottomSheet {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentBottomSheetDialogBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bottom_sheet_dialog, container, false);
 
-        BottomSheetListAdapter bottomSheetListAdapter = new BottomSheetListAdapter(itemList, range, position -> {
+        BottomSheetListAdapter bottomSheetListAdapter = new BottomSheetListAdapter(range, itemListInt, position -> {
             dismiss();
             bottomSheetItemClickCallback.onClick(position);
         });

@@ -4505,73 +4505,74 @@ public class FragmentChat extends BaseFragment
         if (!AndroidUtils.canOpenDialog()) {
             return;
         }
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.st_Abuse));
-        items.add(getString(R.string.st_Spam));
-        items.add(getString(R.string.st_Violence));
-        items.add(getString(R.string.st_Pornography));
-        items.add(getString(R.string.st_Other));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.st_Abuse);
+        items.add(R.string.st_Spam);
+        items.add(R.string.st_Violence);
+        items.add(R.string.st_Pornography);
+        items.add(R.string.st_Other);
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.st_Abuse))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Spam))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Violence))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Pornography))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Other))) {
-                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
-                        if (input.length() > 0) {
-
-                            report = input.toString();
-                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                            positive.setEnabled(true);
-
-                        } else {
-                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                            positive.setEnabled(false);
-                        }
-                    }
-                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment()
+                .setListDataWithResourceId(getContext(), items, -1, position -> {
+                    if (items.get(position) == R.string.st_Abuse) {
                         if (isMessage) {
-                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
                         } else {
-                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
                         }
+                    } else if (items.get(position) == R.string.st_Spam) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Violence) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Pornography) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Other) {
+                        final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                                if (input.length() > 0) {
+
+                                    report = input.toString();
+                                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                                    positive.setEnabled(true);
+
+                                } else {
+                                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                                    positive.setEnabled(false);
+                                }
+                            }
+                        }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                if (isMessage) {
+                                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                                } else {
+                                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                                }
+                            }
+                        }).negativeText(R.string.cancel).build();
+
+                        View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
+                        positive.setEnabled(false);
+
+                        DialogAnimation.animationDown(dialogReport);
+                        dialogReport.show();
                     }
-                }).negativeText(R.string.cancel).build();
-
-                View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
-                positive.setEnabled(false);
-
-                DialogAnimation.animationDown(dialogReport);
-                dialogReport.show();
-            }
-        });
+                });
         bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
 
         G.onReport = () -> error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
