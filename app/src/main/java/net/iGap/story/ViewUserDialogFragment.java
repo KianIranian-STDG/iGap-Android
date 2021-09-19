@@ -67,7 +67,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
     private FrameLayout toolbarView;
     private AppCompatTextView toolbarTitleTextView;
     private Typeface tfMain;
-    private List<StoryViewInfoObject>userIdList;
+    private List<StoryViewInfoObject> userIdList;
     private List<List<String>> displayNameList;
     private List<Long> userId;
     public AvatarHandler avatarHandler;
@@ -139,10 +139,10 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
-                .setDefaultTitle(G.selectedLanguage.equals("fa")?getString(R.string.story_viewed_by) + " " + HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(count)) + " " + getString(R.string.story_person):getString(R.string.story_viewed_by) + " " + count)
+                .setDefaultTitle(G.selectedLanguage.equals("fa") ? getString(R.string.story_viewed_by) + " " + HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(count)) + " " + getString(R.string.story_person) : getString(R.string.story_viewed_by) + " " + count)
                 .getView();
 
-        rootView.addView(toolBar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER| Gravity.TOP, 0, 0, 0, 0));
+        rootView.addView(toolBar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP, 0, 0, 0, 0));
 
         recyclerView = new RecyclerView(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -160,8 +160,9 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
         userId = new ArrayList<>();
         createdAtList = new ArrayList<>();
-        for (StoryViewInfoObject realmStoryViewInfo : userIdList) {
-            userId.add(realmStoryViewInfo.userId);
+        for (int i = userIdList.size() - 1; i >= 0; i--) {
+            userId.add(userIdList.get(i).userId);
+            createdAtList.add(userIdList.get(i).createdTime);
         }
 
         displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
@@ -209,8 +210,9 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         if (id == EventManager.STORY_USER_INFO) {
             userId = new ArrayList<>();
             createdAtList = new ArrayList<>();
-            for (StoryViewInfoObject realmStoryViewInfo : userIdList) {
-                userId.add(realmStoryViewInfo.userId);
+            for (int i = userIdList.size() - 1; i >= 0; i--) {
+                userId.add(userIdList.get(i).userId);
+                createdAtList.add(userIdList.get(i).createdTime);
             }
 
             displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
@@ -255,10 +257,10 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             StoryCell storyCell = (StoryCell) holder.itemView;
-            storyCell.initView(context, true, StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
+            storyCell.initView(context, (position + 1) != userIdList.size(), StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
             storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
             if (position < displayNameList.size()) {
-                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position).get(0) : "", HelperCalander.getTimeForMainRoom(userIdList.get(position).createdTime * 1000L));
+                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position).get(0) : "", HelperCalander.getTimeForMainRoom(createdAtList.get(position) * 1000L));
                 storyCell.setUserColorId(displayNameList.get(position) != null ? displayNameList.get(position).get(1) : "#4aca69", displayNameList.get(position).get(0));
                 storyCell.setImage(avatarHandler, userId.get(position));
             }
