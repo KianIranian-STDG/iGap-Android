@@ -254,9 +254,7 @@ public class AttachFile {
             if (FileProvider.getUriForFile(G.context, G.context.getApplicationContext().getPackageName() + ".provider", new File(destinationPath)).equals(uri)) {
                 // shared from igap to igap
             } else {
-                InputStream input = G.context.getContentResolver().openInputStream(uri);
-
-                AndroidUtils.copyFile(input, new File(destinationPath));
+                AndroidUtils.copyFile(new File(uri.getPath()), new File(destinationPath));
             }
 
             return destinationPath;

@@ -239,7 +239,6 @@ import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
 import net.iGap.observers.interfaces.OnDeleteChatFinishActivity;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnForwardBottomSheet;
 import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -332,7 +331,6 @@ import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -3976,26 +3974,32 @@ public class FragmentChat extends BaseFragment
         }
 
         if (mode == KeyboardView.MODE_EMOJI) {
-
-            if (keyboardView == null)
+            if (keyboardView == null) {
                 createKeyboardView();
+            }
 
             if (keyboardView.getParent() == null)
                 keyboardContainer.addView(keyboardView);
 
-            if (keyboardHeight <= 0)
-                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-
-            if (keyboardHeightLand <= 0)
-                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-
             keyboardVisible = false;
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+            }
+
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+            }
+
             int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
             keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
             layoutParams.height = currentHeight;
             keyboardView.setLayoutParams(layoutParams);
+
             keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.STICKER);
+
             keyboardView.setVisibility(View.VISIBLE);
 
         } else if (mode == KeyboardView.MODE_ATTACHMENT) {
@@ -4007,19 +4011,25 @@ public class FragmentChat extends BaseFragment
 
             if (keyboardView != null) {
 
-                if (keyboardHeight <= 0)
-                    keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-
-                if (keyboardHeightLand <= 0)
-                    keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-
                 keyboardView.setCurrentMode(KeyboardView.MODE_KEYBOARD, -1);
+
+                if (keyboardHeight <= 0) {
+                    keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+                }
+
+                if (keyboardHeightLand <= 0) {
+                    keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+                }
+
                 int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
                 keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
                 layoutParams.height = currentHeight;
                 keyboardView.setLayoutParams(layoutParams);
+
                 keyboardView.setVisibility(View.VISIBLE);
+
                 keyboardVisible = true;
             }
         } else {
@@ -4027,6 +4037,7 @@ public class FragmentChat extends BaseFragment
                 keyboardView.setCurrentMode(mode, -1);
 
             showKeyboardOnResume = false;
+
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
         }
@@ -5434,33 +5445,11 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
-
-                    @Override
-                    public void complete(int successMessage, int completePercent) {
-                        progressDialog.setProgress(completePercent);
-                        if (completePercent == 100) {
-                            progressDialog.dismiss();
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                saveSelectedMessageToGallery(message, adapterPosition);
                 break;
 
             case R.string.save_to_Music:
-                saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
-
-                    @Override
-                    public void complete(int successMessage, int completePercent) {
-                        progressDialog.setProgress(completePercent);
-                        if (completePercent == 100) {
-                            progressDialog.dismiss();
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                saveSelectedMessageToMusic(message, adapterPosition);
                 break;
 
             case R.string.saveToDownload_item_dialog:
@@ -5574,7 +5563,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToMusic(MessageObject message, int pos, OnFileCopyComplete onFileCopyComplete) {
+    private void saveSelectedMessageToMusic(MessageObject message, int pos) {
         String filename;
         String filepath;
 
@@ -5586,7 +5575,7 @@ public class FragmentChat extends BaseFragment
             filepath = message.getAttachment().filePath != null ? message.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cacheId, message.getAttachment().name, message.messageType);
         }
         if (new File(filepath).exists()) {
-            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
+            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music);
         } else {
             final int _messageType = message.forwardedMessage != null ? message.forwardedMessage.messageType : message.messageType;
             String cacheId = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().cacheId : message.getAttachment().cacheId;
@@ -5609,7 +5598,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(() -> {
                             if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
                                 if (arg.data != null && arg.data.getProgress() == 100) {
-                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music);
                                 }
                             }
                         });
@@ -5621,7 +5610,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos, OnFileCopyComplete onFileCopyComplete) {
+    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos) {
         String filename;
         String filepath;
         int messageType;
@@ -5637,11 +5626,11 @@ public class FragmentChat extends BaseFragment
         }
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video);
             } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif);
             } else if (messageType == IMAGE_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image);
             }
         } else {
             final int _messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
@@ -5671,11 +5660,11 @@ public class FragmentChat extends BaseFragment
                                         return;
                                     if (arg.data.getProgress() == 100) {
                                         if (_messageType == VIDEO_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video);
                                         } else if (_messageType == GIF_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif);
                                         } else if (_messageType == IMAGE_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image);
                                         }
                                     }
                                     break;
@@ -5696,7 +5685,7 @@ public class FragmentChat extends BaseFragment
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
         }
-        if (!(message.messageType == TEXT_VALUE)) {
+        if(!(message.messageType == TEXT_VALUE)) {
             edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
@@ -7191,23 +7180,23 @@ public class FragmentChat extends BaseFragment
                 case VOICE_VALUE:
                 case AUDIO_VALUE:
                 case AUDIO_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("audio/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.share_audio_file);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case GIF_VALUE:
                 case GIF_TEXT_VALUE:
                 case IMAGE_VALUE:
                 case IMAGE_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.shared_images);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("video/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.shared_videos_file);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case FILE_VALUE:
                 case FILE_TEXT_VALUE:

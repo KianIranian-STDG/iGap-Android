@@ -25,7 +25,6 @@ import com.yalantis.ucrop.util.FileUtils;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.AndroidUtils;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.File;
@@ -37,14 +36,14 @@ import java.io.OutputStream;
 
 public class HelperSaveFile {
 
-    public static void saveFileToDownLoadFolder(final String filePath, final String fileName, final FolderType folderType, final int successMessage, OnFileCopyComplete onFileCopyComplete) {
+    public static void saveFileToDownLoadFolder(final String filePath, final String fileName, final FolderType folderType) {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
                 HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
-                        saveFileToDownLoadFolder(filePath, fileName, folderType, successMessage, onFileCopyComplete);
+                        saveFileToDownLoadFolder(filePath, fileName, folderType);
                     }
 
                     @Override
@@ -135,7 +134,8 @@ public class HelperSaveFile {
 
                 if (shouldCopy) {
                     File file = new File(destinationPath);
-                    AndroidUtils.copyFile(src, file,successMessage, onFileCopyComplete);
+                    //AndroidUtils.copyFile(src, file,successMessage, onFileCopyComplete);
+                    AndroidUtils.saveFile(filePath,G.context,folderType == FolderType.video ? 1 : 0,null,null);
                     MediaScannerConnection.scanFile(G.context, new String[]{file.getAbsolutePath()}, null, null);
                 }
             } catch (Exception e) {
@@ -145,12 +145,12 @@ public class HelperSaveFile {
         }
     }
 
-    public static void savePicToGallery(final String filePath, final boolean showToast,OnFileCopyComplete onFileCopyComplete) {
+    public static void savePicToGallery(final String filePath, final boolean showToast) {
         try {
             String extension = filePath.substring(filePath.lastIndexOf("."));
-            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + extension, FolderType.image, R.string.file_save_to_picture_folder,onFileCopyComplete);
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + extension, FolderType.image);
         } catch (Exception e) {
-            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder,onFileCopyComplete);
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image);
             FileLog.e(e);
         }
     }
