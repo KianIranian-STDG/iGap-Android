@@ -1340,6 +1340,16 @@ public class MessageDataStorage extends BaseController {
                         }
                         stories.get(0).storyObjects = storyObjects;
                     }
+                } else {
+                    if (userId == 0 && myRealmStory != null) {
+                        List<StoryObject> storyObjects = new ArrayList<>();
+                        realmStoryProtos = myRealmStory.getRealmStoryProtos().sort(sortBy, orderBy);
+                        stories.add(0, MainStoryObject.create(myRealmStory));
+                        for (int j = 0; j < realmStoryProtos.size(); j++) {
+                            storyObjects.add(StoryObject.create(realmStoryProtos.get(j)));
+                        }
+                        stories.get(0).storyObjects = storyObjects;
+                    }
                 }
 
                 countDownLatch.countDown();
