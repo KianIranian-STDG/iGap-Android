@@ -19,6 +19,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.MainStoryObject;
@@ -45,25 +46,27 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private boolean isSingle = false;
     private long storyId;
     private int myStoryCount = 0;
+    private boolean isForReply = false;
 
 
-    public StoryViewFragment(long userId, boolean muStory) {
+    public StoryViewFragment(long userId, boolean myStory) {
         this.userId = userId;
-        this.myStory = muStory;
+        this.myStory = myStory;
     }
 
-    public StoryViewFragment(long userId, boolean muStory, boolean isSingle, long storyId) {
+    public StoryViewFragment(long userId, boolean myStory, boolean isSingle, long storyId) {
         this.userId = userId;
-        this.myStory = muStory;
+        this.myStory = myStory;
         this.isSingle = isSingle;
         this.storyId = storyId;
     }
 
-    public StoryViewFragment(long userId, boolean muStory, boolean isSingle, String filePath) {
+    public StoryViewFragment(long userId, boolean myStory, boolean isSingle, boolean isForReply, long storyId) {
         this.userId = userId;
-        this.myStory = muStory;
+        this.myStory = myStory;
         this.isSingle = isSingle;
         this.storyId = storyId;
+        this.isForReply = isForReply;
     }
 
     public StoryViewFragment() {
@@ -86,7 +89,22 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (isSingle) {
-            storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(userId, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
+            if (isForReply) {
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                    if (realmStoryProto != null) {
+                        MainStoryObject mainStoryObject = new MainStoryObject();
+                        List<StoryObject> storyObjects = new ArrayList<>();
+                        mainStoryObject.userId = realmStoryProto.getUserId();
+                        storyObjects.add(StoryObject.create(realmStoryProto));
+                        mainStoryObject.storyObjects = storyObjects;
+                        storyResults.add(mainStoryObject);
+                    }
+                });
+            } else {
+                storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(userId, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
+            }
+
         } else {
             storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(0, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
         }

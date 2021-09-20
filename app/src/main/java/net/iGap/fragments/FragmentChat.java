@@ -5910,7 +5910,7 @@ public class FragmentChat extends BaseFragment
     public void onReplyClick(MessageObject replyMessage) {// TODO: 12/29/20 MESSAGE_REFACTOR
         if (replyMessage.messageType == STORY_REPLY_VALUE && replyMessage.replayToMessage == null) {
             if (replyMessage.storyObject != null && replyMessage.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(replyMessage.storyObject.userId, true, true, replyMessage.storyObject.storyId)).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(replyMessage.storyObject.userId, true, true,true, replyMessage.storyObject.storyId)).setReplace(false).load();
             } else {
                 Toast.makeText(getContext(), R.string.moment_not_available , Toast.LENGTH_SHORT).show();
             }
