@@ -1674,4 +1674,28 @@
     <string name="StopLoading">Остановить загрузку</string>
     <string name="WaitMore">Подождите еще</string>
     <string name="Stop">Стоп</string>
+
+
+
+
+
+    <string name="my_status">Мой момент</string>
+    <string name="status">Моменты</string>
+    <string name="status_title">Момент</string>
+    <string name="tap_to_add_status_update">Нажмите, чтобы добавить момент</string>
+    <string name="viewed_updates">Просмотренные обновления</string>
+    <string name="recent_updates">Недавние обновления</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Ваши моменты будут удалены через 24 часа.</string>
+    <string name="your_device_does_not_have_a_camera">В вашем устройстве нет камеры!</string>
+    <string name="delete_status_update">Удалить этот момент? Он также будет удален у всех, кто его получил.</string>
+    <string name="story_views">Просмотры</string>
+    <string name="story_uploading">Загрузка ...</string>
+    <string name="story_sending">Отправка ...</string>
+    <string name="story_could_not_sent">CoНе удалось отправить!</string>
+    <string name="story_you_can_not_share_more_than_items">Вы не можете делиться более чем 6 объектами мультимедиа!</string>
+    <string name="story_viewed_by">Просмотрено</string>
+    <string name="story_person">человек</string>
+    <string name="type_a_moment">Введите момент</string>
+    <string name="your_status_characters">Ваше обновление статуса не может превышать 500 символов.</string>
+    <string name="moments_string">Моменты</string>
 </resources>

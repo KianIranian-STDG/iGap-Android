@@ -1965,4 +1965,25 @@
     <string name="WaitMore">بیشتر منتظر باشید</string>
     <string name="Stop">متوقف کردن</string>
     <string name="payment_userScore">سیزین پوءنینز</string>
+
+
+    <string name="my_status">My Moment</string>
+    <string name="status">Moments</string>
+    <string name="status_title">Moment</string>
+    <string name="tap_to_add_status_update">Tap bikin ku dem zêde bikin</string>
+    <string name="viewed_updates">Nûvekirin dîtin</string>
+    <string name="recent_updates">Nûvekirinên Dawîn</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Demên we dê piştî 24 demjimêran werin jêbirin.</string>
+    <string name="your_device_does_not_have_a_camera">Di cîhaza we de kamera tune!</string>
+    <string name="delete_status_update">Vê gavê jêbirin? Di heman demê de ew ê ji bo her kesê ku wergirtiye were jêbirin.</string>
+    <string name="story_views">views</string>
+    <string name="story_uploading">Barkirin ...</string>
+    <string name="story_sending">Ingandin ...</string>
+    <string name="story_could_not_sent">Nikare bişîne!</string>
+    <string name="story_you_can_not_share_more_than_items">Hûn nikarin zêdetirî 6 hêmanên medyayê parve bikin!</string>
+    <string name="story_viewed_by">Ji hêla dîtin</string>
+    <string name="story_person">şexs</string>
+    <string name="type_a_moment">Demek binivîse</string>
+    <string name="your_status_characters">Rojanekirina statuya we nikare ji 500 tîpan zêdetir be</string>
+    <string name="moments_string">Moments</string>
 </resources>
