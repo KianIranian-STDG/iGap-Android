@@ -2656,4 +2656,26 @@
     <string name="WaitMore">انتظر المزيد</string>
     <string name="Stop">قف</string>
 
+
+
+    <string name="my_status">لحظتي</string>
+    <string name="status">لحظات</string>
+    <string name="status_title">لحظه</string>
+    <string name="tap_to_add_status_update">انقر لإضافة لحظة</string>
+    <string name="viewed_updates">تم عرض التحديثات</string>
+    <string name="recent_updates">التحديثات الأخيرة</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">سيتم حذف لحظاتك بعد 24 ساعة.</string>
+    <string name="your_device_does_not_have_a_camera">جهازك ليس به كاميرا!</string>
+    <string name="delete_status_update">هل تريد حذف هذه اللحظة؟ سيتم حذفه أيضًا لكل من استلمه.</string>
+    <string name="story_views">الآراء</string>
+    <string name="story_uploading">جارٍ التحميل ...</string>
+    <string name="story_sending">إرسال...</string>
+    <string name="story_could_not_sent">لا يمكن الإرسال!</string>
+    <string name="story_you_can_not_share_more_than_items">لا يمكنك مشاركة أكثر من 6 عناصر وسائط!</string>
+    <string name="story_viewed_by">عرض بواسطة</string>
+    <string name="story_person">شخص</string>
+    <string name="type_a_moment">اكتب لحظة</string>
+    <string name="your_status_characters">لا يمكن أن يتجاوز تحديث حالتك 500 حرف</string>
+    <string name="moments_string">لحظات</string>
+
 </resources>

@@ -499,7 +499,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     storyObject.caption = itemGalleryList.get(objectsCounter).getText();
                     storyObject.status = MessageObject.STATUS_SENDING;
                     storyObject.id = lastUploadedStoryId;
-                    List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("isForReply",false).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
+                    List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
                     if (realmStories != null && realmStories.size() > 0) {
                         storyObject.index = realmStories.get(0).getIndex() + 1;
                     } else {
@@ -546,7 +546,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 storyObject.caption = "";
                 storyObject.status = MessageObject.STATUS_SENDING;
                 storyObject.id = lastUploadedStoryId;
-                List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("isForReply",false).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
+                List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
                 if (realmStories != null && realmStories.size() > 0) {
                     storyObject.index = realmStories.get(0).getIndex() + 1;
                 } else {
@@ -714,7 +714,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size() && otherUserRealmStory.get(recentStoryCounter).storyObjects.size() > 0) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "", displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69", context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), recentStoryCounter < displayNameList.size() ? displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(0) : "" : "", recentStoryCounter < displayNameList.size() ? displayNameList.get(recentStoryCounter) != null ? displayNameList.get(recentStoryCounter).get(1) : "#4aca69" : "#4aca69", context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {

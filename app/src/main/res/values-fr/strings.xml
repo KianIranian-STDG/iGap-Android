@@ -1868,4 +1868,24 @@
     <string name="WaitMore">Attendez plus</string>
     <string name="Stop">Arrêter</string>
 
+
+    <string name="my_status">Mon moment</string>
+    <string name="status">Des moments</string>
+    <string name="status_title">Moment</string>
+    <string name="tap_to_add_status_update">Appuyez pour ajouter un moment</string>
+    <string name="viewed_updates">Mises à jour consultées</string>
+    <string name="recent_updates">Mises à jour récentes</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Vos moments seront supprimés après 24 heures.</string>
+    <string name="your_device_does_not_have_a_camera">Votre appareil a pas d\'appareil photo !</string>
+    <string name="delete_status_update">Supprimer ce moment ? Il sera également supprimé pour tous ceux qui l\'ont reçu.</string>
+    <string name="story_views">vues</string>
+    <string name="story_uploading">Téléchargement...</string>
+    <string name="story_sending">Envoi en cours...</string>
+    <string name="story_could_not_sent">Impossible d\'envoyer !</string>
+    <string name="story_you_can_not_share_more_than_items">Vous ne pouvez pas partager plus de 6 éléments multimédias !</string>
+    <string name="story_viewed_by">Vu par</string>
+    <string name="story_person">personne</string>
+    <string name="type_a_moment">Tapez un instant</string>
+    <string name="your_status_characters">Votre mise à jour de statut ne peut pas dépasser 500 caractères</string>
+    <string name="moments_string">Des moments</string>
 </resources>
