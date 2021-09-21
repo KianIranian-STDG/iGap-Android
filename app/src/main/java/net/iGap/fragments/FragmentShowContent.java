@@ -294,24 +294,24 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     public void popUpMenuTopSheet(RealmRoomMessage roomMessage) {
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.save_to_gallery));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.save_to_gallery);
         MessageObject messageObject = MessageObject.create(roomMessage);
         ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            items.add(getString(R.string.share_video_file));
+            items.add(R.string.share_video_file);
         } else {
-            items.add(getString(R.string.share_image));
+            items.add(R.string.share_image);
         }
         if (RoomObject.isRoomPublic(room)) {
             if (MessageObject.canSharePublic(messageObject)) {
-                items.add(getString(R.string.share_file_link));
+                items.add(R.string.share_file_link);
             }
         }
-        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.save_to_gallery))) {
+        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+            if (items.get(position)==R.string.save_to_gallery) {
                 saveToGallery(messageObject);
-            } else if (items.get(position).equals(getString(R.string.share_file_link))) {
+            } else if (items.get(position)==R.string.share_file_link) {
                 shareMediaLink(messageObject);
             } else {
                 shareContent(messageObject);
