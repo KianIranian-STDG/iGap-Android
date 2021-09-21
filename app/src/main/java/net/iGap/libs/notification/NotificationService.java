@@ -88,8 +88,12 @@ public class NotificationService extends FirebaseMessagingService {
                             }
 
                             JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
-                            String text = loc_args.getString(1);
-
+                            String text = "";
+                            if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                                text = loc_args.getString(2);
+                            } else {
+                                text = loc_args.getString(1);
+                            }
                             RealmNotificationRoomMessage.putToDataBase(realm1, messageId, roomId);
 
                             ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
