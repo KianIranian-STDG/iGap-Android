@@ -218,4 +218,13 @@ public class RetrofitFactory {
                 .build()
                 .create(ShahkarApi.class);
     }
+
+    public PecQRApi getPecQrRetrofit(){
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.PEC_QR_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(PecQRApi.class);
+    }
 }
