@@ -30,11 +30,40 @@ public class StoryPagerFragment extends Fragment implements CameraStoryFragment.
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        CameraStoryFragment.isInStoryFragment = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CameraStoryFragment.isInStoryFragment = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        CameraStoryFragment.isInStoryFragment = false;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        CameraStoryFragment.isInStoryFragment = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CameraStoryFragment.isInStoryFragment = true;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_story, container, false);
-
         viewPager2 = view.findViewById(R.id.pager);
         if (allPermissionsGranted()) {
             viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);

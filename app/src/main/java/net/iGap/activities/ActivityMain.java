@@ -136,6 +136,7 @@ import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
+import net.iGap.story.CameraStoryFragment;
 import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.paygear.RaadApp;
@@ -192,7 +193,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_VOLUME_DOWN_KEY);
-            return true;
+            if (CameraStoryFragment.isInStoryFragment) {
+                return true;
+            } else {
+                return false;
+            }
+
         }
         return super.onKeyDown(keyCode, event);
     }
