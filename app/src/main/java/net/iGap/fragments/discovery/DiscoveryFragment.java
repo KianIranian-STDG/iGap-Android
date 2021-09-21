@@ -76,7 +76,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private boolean needToReload = false;
     private MaterialDialog materialDialog;
     private ArrayList<DiscoveryItem> discoveryArrayList;
-    private final int walletTag = 1;
+    private final int codeScannerTag = 1;
     private final int passCodeTag = 2;
     private Toolbar discoveryToolbar;
     private ToolbarItem passCodeItem;
@@ -153,7 +153,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             discoveryToolbar.setBackIcon(new BackDrawable(false));
 
         } else {
-            discoveryToolbar.addItem(walletTag, R.string.icon_QR_code, Color.WHITE);
+            discoveryToolbar.addItem(codeScannerTag, R.string.icon_QR_code, Color.WHITE);
             passCodeItem = discoveryToolbar.addItem(passCodeTag, R.string.icon_lock, Color.WHITE);
         }
         checkPassCodeVisibility();
@@ -162,8 +162,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 case -1:
                     popBackStackFragment();
                     break;
-                case walletTag:
-                    onScannerClickListener();
+                case codeScannerTag:
+                    onCodeScannerClickListener();
                     break;
                 case passCodeTag:
                     if (passCodeItem == null) {
@@ -267,33 +267,38 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             BottomNavigationFragment.isShowedAdd = false;
         }
     }
+    private void onCodeScannerClickListener() {
 
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
+        new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
+                .setAddToBackStack(true)
+                .setReplace(false)
+                .load();
 
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            String phoneNumber = "";
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            try {
+//                if (userInfo != null) {
+//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+//                } else {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                }
+//            } catch (Exception e) {
+//                //maybe exception was for realm substring
+//                try {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                } catch (Exception ex) {
+//                    //nothing
+//                }
+//            }
+//
+//            if (userInfo == null || !userInfo.isWalletRegister()) {
+//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+//            } else {
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+//            }
+//
+//        });
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {

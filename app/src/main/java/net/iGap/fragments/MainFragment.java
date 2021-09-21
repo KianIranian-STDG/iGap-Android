@@ -4,10 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -50,7 +49,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.fragments.populaChannel.RatingDialog;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -137,7 +136,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final int selectCounter = 8;
     private final int markAsReadTag = 9;
     private final int readAllTag = 10;
-    private final int walletTag = 11;
+    private final int codeScannerTag = 11;
     private ArrayList<View> actionModeViews = new ArrayList<>();
     private ToolbarItem passCodeItem;
     private ToolbarItem pintItem;
@@ -383,7 +382,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
-        toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
+        toolbarItems.addItemWithWidth(codeScannerTag,R.string.icon_QR_code,54);
         if (PassCode.getInstance().isPassCode()) {
             passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
@@ -398,8 +397,8 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                         disableMultiSelect();
                     }
                     break;
-                case walletTag:
-                    onScannerClickListener();
+                case codeScannerTag:
+                    onCodeScannerClickListener();
                     break;
                 case passCodeTag:
                     if (passCodeItem == null) {
@@ -731,11 +730,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 }
 
 
-                if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                    getMessageController().deleteChannel(item.getId());
-                } else {
-                    getRoomController().channelLeft(item.getId());
-                }
+            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                getMessageController().deleteChannel(item.getId());
+            } else {
+                getRoomController().channelLeft(item.getId());
             }
         }
         if (exit)
@@ -785,7 +783,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             iconView.setIcon(R.string.icon_speaker);
         else
             iconView.setIcon(R.string.icon_mute);
-        iconView.setIconColor(Theme.getInstance().getPrimaryColor(context));
+        iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
         TextView textView = new TextView(context);
@@ -795,14 +793,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             textView.setText(R.string.muted);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setTextColor(Theme.getInstance().getPrimaryColor(context));
+        textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
         frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(1000);
         iconView.setAnimation(fadeIn);
 
-        Snackbar snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getView()), "", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
         layout.setBackgroundColor(Color.TRANSPARENT);
         layout.addView(frameLayout, 0);
@@ -915,40 +913,38 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
-
-        if (toolbar.isInActionMode()) {
-            disableMultiSelect();
-        }
     }
-
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
+    private void onCodeScannerClickListener() {
+        new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
+                .setAddToBackStack(true)
+                .setReplace(false)
+                .load();
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            String phoneNumber = "";
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            try {
+//                if (userInfo != null) {
+//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+//                } else {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                }
+//            } catch (Exception e) {
+//                //maybe exception was for realm substring
+//                try {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                } catch (Exception ex) {
+//                    //nothing
+//                }
+//            }
+//
+//            if (userInfo == null || !userInfo.isWalletRegister()) {
+//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+//            } else {
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+//            }
+//
+//        });
     }
-
     private void onConnectionStateChange(final ConnectionState connectionState) {
         if (connectionState == null) {
             return;
