@@ -114,6 +114,7 @@
     <attr name="iGapSendMessageTextColor" format="reference|color" />
     <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
     <attr name="iGapSendMessageBubbleColor" format="reference|color" />
+    <attr name="iGapReplyContentBackground" format="reference|color" />
     <attr name="iGapSendReplayColor" format="reference|color" />
     <attr name="iGapLinkColor" format="reference|color" />
     <attr name="iGapDefaultChatBackground" format="reference|color" />
