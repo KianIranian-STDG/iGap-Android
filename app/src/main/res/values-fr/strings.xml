@@ -1893,7 +1893,17 @@
     <string name="status_of_transaction">Status of transaction</string>
     <string name="time_of_transaction">Time of transaction</string>
     <string name="to">To</string>
-    <string name="apply">Apply</string>
+    <string name="apply">appliquer</string>
     <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
+    <string name="scan_code">Scannez le code</string>
+    <string name="code_registration">enregistrement de code</string>
+    <string name="manually_enter_code">Entrer manuellement le code</string>
+    <string name="acceptor_name">nom de l\'accepteur</string>
+    <string name="acceptor_code">Code destinataire</string>
+    <string name="please_enter_desired_amount">Veuillez saisir le montant souhaité:</string>
+    <string name="confirm">confirmer</string>
+    <string name="you_have_not_specified_the_amount">Vous n\'avez pas précisé le montant</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">Le montant ne peut pas être inférieur à 1000 Rials</string>
+    <string name="code_length_is_10_digit">La longueur du code est de 10 chiffres !</string>
 
 </resources>

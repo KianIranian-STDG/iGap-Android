@@ -46,6 +46,7 @@
     <!--Reagent-->
     <string name="ra_enter_reagent_code">enter referral code(Optional)</string>
     <string name="ra_confirm">"Confirm"</string>
+    <string name="reagent_error_message">The number entered is incorrect for the referral.</string>
 
 
     <!-- Toast -->
@@ -1007,7 +1008,7 @@ Want to get it?</string>
     <string name="barcode_reader">Barcode reader</string>
     <string name="billing_id">Billing ID</string>
     <string name="payment_code">Payment code</string>
-    <string name="amount">Amount(Rial)</string>
+    <string name="amount">Amount</string>
     <string name="hamrahe_aval">Hamrahe Aval</string>
     <string name="irancell">IranCell</string>
     <string name="ritel">Ritel</string>
@@ -1402,7 +1403,7 @@ Want to get it?</string>
 
     <string name="amount_to_pay">Amount to pay (Rials) :</string>
     <string name="club_balance">Club card balance (Rials)</string>
-    <string name="wallet_balance">Wallet balance (Rials)</string>
+    <string name="wallet_balance">Wallet balance</string>
     <string name="total_amount">Total Amount (Rials) :</string>
     <string name="discount_amount">Discount Amount (Rials) :</string>
     <string name="personalAccountType">Personal</string>
@@ -2105,7 +2106,7 @@ Want to get it?</string>
     <string name="bill_payment">Bill Payment</string>
     <string name="topUp_message">Buying the charge message</string>
     <string name="bill_message">Bill payment message</string>
-    <string name="soon">Coming soon...</string>
+    <string name="soon">Soon</string>
     <string name="delete_recently_sticker">Delete Recently Sticker</string>
     <string name="delete_favorite_sticker">Delete Favorite Sticker</string>
     <string name="sticker_setting">Sticker setting</string>
@@ -2145,6 +2146,7 @@ Want to get it?</string>
     <string name="enter_discount_code">Enter the discount code.</string>
     <string name="save_discount_code">Save Code</string>
     <string name="enter_your_discount_code">Enter Your discount code.</string>
+    <string name="discount_code_not_valid">Sorry, your discount code is incorrect.</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
     <string name="mobile_bank_activeNotification">Activate Notification</string>
@@ -2202,6 +2204,11 @@ Want to get it?</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
     <string name="invalid_sim_type">Please change the SIM card type, There is no package for it. </string>
+    <string name="credit_sim">Credit SIM</string>
+    <string name="permanent_sim">Permanent SIM</string>
+    <string name="credit_tdlte_sim">Credit TD-LTE SIM</string>
+    <string name="tdlte_permanent_sim">Permanent TD-LTE SIM</string>
+    <string name="data_sim">Data SIM</string>
     <string name="no_history_found">No history found</string>
     <string name="no_number_found">No number found</string>
     <string name="no_package_selected">No package selected</string>
@@ -2229,6 +2236,7 @@ Want to get it?</string>
     <string name="refund_history">Refund History</string>
     <string name="history">History</string>
     <string name="history_asset_type">Asset Type</string>
+    <string name="history_hash">Hash</string>
     <string name="history_amount">Amount</string>
     <string name="histroy_fee">Fee</string>
     <string name="history_count">Count</string>
@@ -2238,6 +2246,8 @@ Want to get it?</string>
     <string name="enter_pmn_count">please enter the token count</string>
     <string name="refund_error">Refund progress error</string>
     <string name="token_not_selected">Token not selected</string>
+    <string name="refund_is_not_available">Refund for this Token is not available</string>
+    <string name="error_resume_file_expired">Resuming file is expired! please try again.</string>
     <string name="Submitـomment">To view the poll results, please register your vote first!</string>
     <string name="location_list_tile">Search entertainment centers</string>
     <string name="share_file_link">Share public Link</string>
@@ -2248,12 +2258,10 @@ Want to get it?</string>
     <string name="delete_selected_chat">Are you sure you want to delete selected chats?</string>
     <string name="leave_confirm">Are you sure you want to leave %s?</string>
     <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
+    <string name="shared_file">اشتراک گذاری فایل</string>
+    <string name="create_permission">ایجاد مجوز</string>
+    <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
-    <string name="remind_me_later">Remind me later</string>
-    <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please Try later</string>
-    <string name="access_folder">Unauthorized Folder</string>
-    <string name="restrict_folder">Access to this folder is restricted.</string>
     <string name="dear_subscription">Dear subscriber</string>
     <string name="wallet_introduction">Welcome to the wallet, By activating this section, you can benefit from payment and purchase services of recharge and internet package in igap</string>
     <string name="wallet_activation">Wallet Activation</string>
@@ -2293,6 +2301,17 @@ Want to get it?</string>
     <string name="to">To</string>
     <string name="apply">Apply</string>
     <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. this feature will be enabled soon</string>
+    <string name="how_to_get_points">How to get points</string>
+    <string name="code_registration">Code registration</string>
+    <string name="scan_code">Scan code!</string>
+    <string name="manually_enter_code">Manually enter code</string>
+    <string name="acceptor_name">Acceptor name</string>
+    <string name="acceptor_code">Acceptor code</string>
+    <string name="please_enter_desired_amount">Please enter desired amount:</string>
+    <string name="confirm">Confirm</string>
+    <string name="you_have_not_specified_the_amount">You have not specified the amount</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">The amount can not be less than 1000 Rials</string>
+    <string name="code_length_is_10_digit">Code length is 10 digit!</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>
@@ -2310,6 +2329,5 @@ Want to get it?</string>
     <string name="email_added">added Email Address</string>
     <string name="AccessBan">Access is closed to view members</string>
 
-    <string name="how_to_get_points">How To Get Points</string>
 
 </resources>

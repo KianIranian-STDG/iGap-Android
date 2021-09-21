@@ -1923,5 +1923,10 @@
     <string name="to">To</string>
     <string name="apply">Apply</string>
     <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
+    <string name="please_enter_desired_amount">Please enter desire amount:</string>
+    <string name="confirm">Confirm</string>
+    <string name="you_have_not_specified_the_amount">You have not specified the amount</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">The amount can not be less than 1000 Rials</string>
+    <string name="code_length_is_10_digit">Code length is 10 digit!</string>
 
 </resources>

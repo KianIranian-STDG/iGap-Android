@@ -9,6 +9,7 @@
                 android:startColor="#A3A2A2"
                 android:centerColor="@color/light_gray"
                 android:endColor="@color/transparent"
+                android:angle="270"
                  />
         </shape>
     </item>

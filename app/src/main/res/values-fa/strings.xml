@@ -6,7 +6,6 @@
     <string name="text_line_1_introduce_page2">"امنیت در آیگپ"</string>
     <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را برای شما برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
 
-
     <!-- Page 3 introduce app -->
     <string name="text_line_1_introduce_page3">"گفتگو در آیگپ"</string>
     <string name="text_line_2_introduce_page3">"شما میتوانید در آیگپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها کاربر دیگر نیز به اشتراک بگذارید."</string>
@@ -2277,4 +2276,14 @@
     <string name="to">تا</string>
     <string name="apply">اعمال</string>
     <string name="withdrawal_dialog_message">شما می توانید در هر زمان که بخواهید موجودی کیف نقدی را به صورت آنی به حساب بانکی خود منتقل کنید. این ویژگی به زودی فعال می شود</string>
+    <string name="code_registration">ثبت کد</string>
+    <string name="scan_code"> اسکن کنید!</string>
+    <string name="manually_enter_code">ورود دستی کد پذیرنده</string>
+    <string name="acceptor_name">نام پذیرنده</string>
+    <string name="acceptor_code">کد پذیرنده</string>
+    <string name="please_enter_desired_amount"> لطفا مبلغ دلخواه را وارد نمایید:</string>
+    <string name="confirm">تأیید</string>
+    <string name="you_have_not_specified_the_amount">مبلغ را مشخص نکرده اید</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>
+    <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
 </resources>
