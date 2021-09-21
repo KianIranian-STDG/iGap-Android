@@ -543,7 +543,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
         @Override
         public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
-            return viewType != 2;
+            return viewType != 1;
         }
     }
 }

@@ -151,6 +151,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private TextView textTv;
     private boolean isEraser = false;
     private float brushSize = INITIAL_WIDTH;
+    private float opacitySize = INITIAL_WIDTH;
     private float brushAlpha = MAX_ALPHA;
     private int brushColor = Color.WHITE;
     private BrushConfigDialog brushConfigDialog;
@@ -501,7 +502,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 if (brushConfigDialog.isAdded()) return;
 
                 brushConfigDialog.setBrushColor(brushColor);
-                brushConfigDialog.setBrushOpacity(brushAlpha);
+                brushConfigDialog.setBrushOpacity(opacitySize);
                 brushConfigDialog.setBrushSize(brushSize);
                 brushConfigDialog.show(getParentFragmentManager(), tag);
                 onEditActions.paint();
@@ -1600,6 +1601,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     @Override
     public void onOpacityChanged(int opacity) {
         brushAlpha = (opacity / MAX_PERCENT) * MAX_ALPHA;
+        this.opacitySize = opacity;
         updateBrushParams();
     }
 
