@@ -17,13 +17,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.ColorSeekBar;
+import net.iGap.libs.StoryColorSeekBar;
 
 public class BrushConfigDialog extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
     public static final String TAG = BrushConfigDialog.class.getSimpleName();
     private LinearLayout rootView;
     private TextView opacityTextView;
     private TextView brushSizeTextView;
-    private ColorSeekBar rvColors;
+    private StoryColorSeekBar rvColors;
     private SeekBar opacitySeekBar;
     private SeekBar sizeSeekBar;
     private float brushSize;
@@ -82,7 +83,7 @@ public class BrushConfigDialog extends BottomSheetDialogFragment implements Seek
         opacitySeekBar.setProgress((int) brushOpacity);
         rootView.addView(opacitySeekBar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, 8, 8, 8, 0));
 
-        rvColors = new ColorSeekBar(getContext());
+        rvColors = new StoryColorSeekBar(getContext());
         rvColors.setThumbBorderColor(Color.WHITE);
 
 //        rvColors.setOutlineAmbientShadowColor(Color.WHITE);

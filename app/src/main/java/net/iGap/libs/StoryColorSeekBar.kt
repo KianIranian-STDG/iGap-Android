@@ -1,15 +1,12 @@
 package net.iGap.libs
 
 import android.content.Context
-
 import android.graphics.*
-import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ArrayRes
-import net.iGap.R
 
-class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
+class StoryColorSeekBar(context: Context) : View(context) {
 
     private val minThumbRadius = 16f
     private var colorSeeds = intArrayOf(Color.parseColor("#000000"), Color.parseColor("#FF5252"), Color.parseColor("#FFEB3B"), Color.parseColor("#00C853"), Color.parseColor("#00B0FF"), Color.parseColor("#D500F9"), Color.parseColor("#8D6E63"))
@@ -34,16 +31,6 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
     private var colorChangeListener: OnColorChangeListener? = null
 
     init {
-        attributeSet.let {
-            val typedArray = context.obtainStyledAttributes(it, R.styleable.ColorSeekBar)
-            val colorsId = typedArray.getResourceId(R.styleable.ColorSeekBar_colorSeeds, 0)
-            if (colorsId != 0) colorSeeds = getColorsById(colorsId)
-            barCornerRadius = typedArray.getDimension(R.styleable.ColorSeekBar_cornerRadius, 8f)
-            barHeight = typedArray.getDimension(R.styleable.ColorSeekBar_barHeight, 20f).toInt()
-            thumbBorder = typedArray.getDimension(R.styleable.ColorSeekBar_thumbBorder, 4f)
-            thumbBorderColor = typedArray.getColor(R.styleable.ColorSeekBar_thumbBorderColor, Color.BLACK)
-            typedArray.recycle()
-        }
         rectPaint.isAntiAlias = true
 
         thumbBorderPaint.isAntiAlias = true
