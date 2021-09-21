@@ -77,6 +77,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
     private ImageButton settingButton;
     private OnGalleryIconClicked onGalleryIconClicked;
     private TextView bottomPanelTitle;
+    public static boolean isInStoryFragment = false;
 
     public static CameraStoryFragment newInstance(OnGalleryIconClicked onGalleryIconClicked) {
 
@@ -209,12 +210,11 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
+        getEventManager().removeObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
     }
 
     @Override
     public void onResume() {
-
         super.onResume();
     }
 
@@ -268,7 +268,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
+        getEventManager().addObserver(EventManager.ON_VOLUME_DOWN_KEY, this);
         galleryIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
