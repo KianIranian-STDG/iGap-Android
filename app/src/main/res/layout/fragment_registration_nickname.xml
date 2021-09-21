@@ -174,7 +174,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pu_btn_letsGo"
-            style="@style/iGapBHintutton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.OnClickBtnLetsGo(nameEditText.getEditableText().toString(),lastNameEditText.getEditableText().toString())}"

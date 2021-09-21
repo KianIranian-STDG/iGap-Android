@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.qrCodePayment.viewModels.QRCodePaymentViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/iGapWalletDarkerBackground"
+        android:fillViewport="true"
+        tools:context=".fragments.qrCodePayment.fragments.QRCodePaymentFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/white_view"
+                android:layout_width="match_parent"
+                android:layout_height="340dp"
+                android:background="@drawable/background_white_bottom_shadow"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+            <TextView
+                android:id="@+id/acceptor_image"
+                style="@style/myIconTextViewStyleGray"
+                android:layout_width="@dimen/dp100"
+                android:layout_height="@dimen/dp100"
+                android:layout_marginTop="@dimen/dp24"
+                android:background="@drawable/circle_font_icon_back_ground"
+                android:text="@string/icon_single_contact"
+                android:textSize="60dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+            <TextView
+                android:id="@+id/acceptor_name_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/acceptor_name"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptor_image" />
+
+            <TextView
+                android:id="@+id/acceptor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptor_name_textView"
+                tools:text="name" />
+
+            <TextView
+                android:id="@+id/acceptor_code_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/acceptor_code"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptor_name" />
+
+            <TextView
+                android:id="@+id/acceptor_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acceptor_code_textView"
+                tools:text="25698" />
+
+            <TextView
+                android:id="@+id/desire_amount_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/please_enter_desired_amount"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/white_view" />
+
+            <EditText
+                android:id="@+id/desire_amount"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_square_background"
+                android:gravity="center"
+                android:hint="@string/amount_in_rial"
+                android:inputType="number|numberDecimal"
+                android:digits="0123456789,"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textColorHint="?attr/iGapHintTextColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desire_amount_textView" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="36dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/desire_amount" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirm_button"
+                style="@style/iGapButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginBottom="24dp"
+                android:onClick="@{() -> viewModel.onConfirmButtonClick()}"
+                android:text="@string/confirm"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
