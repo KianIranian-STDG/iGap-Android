@@ -217,7 +217,6 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         bottomLyoutPannel.addView(palletTextView, LayoutCreator.createLinear(32, 32, 0, 0, 0, 10));
 
 
-
         emoji = new MaterialDesignTextView(context);
         emoji.setGravity(Gravity.CENTER);
         emoji.setText(R.string.icon_emoji_smile);
@@ -235,17 +234,6 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -262,12 +250,18 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
             }
         });
-
+        addTextEditTExt.setListener(new EventEditText.Listener() {
+            @Override
+            public void onInternalTouchEvent(MotionEvent event) {
+                if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
+                    showPopUPView(KeyboardView.MODE_KEYBOARD);
+                }
+            }
+        });
         addTextEditTExt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isPopupShowing()) {
-                    Log.e("fslkfjsdklfjh", "onClick2: ");
                     emoji.performClick();
                 }
             }
@@ -594,9 +588,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
         boolean oldValue = keyboardVisible;
         keyboardVisible = keyboardSize > 0;
-        if (keyboardVisible && isPopupShowing()) {
-            showPopUPView(-1);
-        }
+
         if (emojiPadding != 0 && !keyboardVisible && keyboardVisible != oldValue && !isPopupShowing()) {
             emojiPadding = 0;
             rootView.requestLayout();
