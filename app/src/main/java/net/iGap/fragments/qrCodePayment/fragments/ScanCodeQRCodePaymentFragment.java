@@ -34,6 +34,7 @@ import net.iGap.libs.codescanner.AutoFocusMode;
 import net.iGap.libs.codescanner.CodeScanner;
 import net.iGap.libs.codescanner.DecodeCallback;
 import net.iGap.libs.codescanner.ScanMode;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.qrCodePayment.MerchantInfo;
 
@@ -103,7 +104,7 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
     private void initToolbar() {
         mToolbar = new Toolbar(getActivity());
         mToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
-        mToolbar.setBackIcon(R.drawable.ic_back_btn);
+        mToolbar.setBackIcon(new BackDrawable(false));
         mToolbar.setListener(new Toolbar.ToolbarListener() {
             @Override
             public void onItemClick(int i) {

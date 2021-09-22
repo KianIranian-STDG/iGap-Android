@@ -27,6 +27,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.qrCodePayment.viewModels.EnterCodeQRPaymentViewModel;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.qrCodePayment.MerchantInfo;
 
@@ -81,7 +82,7 @@ public class EnterCodeQRCodePaymentFragment extends BaseFragment {
     private void initToolbar() {
         mToolbar = new Toolbar(getActivity());
         mToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
-        mToolbar.setBackIcon(R.drawable.ic_back_btn);
+        mToolbar.setBackIcon(new BackDrawable(false));
         mToolbar.setListener(new Toolbar.ToolbarListener() {
             @Override
             public void onItemClick(int i) {
