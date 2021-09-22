@@ -6,6 +6,7 @@ public class RealmStoryViewInfo  extends RealmObject {
     private long id;
     private long userId;
     private long createdTime;
+    private String displayName;
 
     public long getUserId() {
         return userId;
@@ -29,5 +30,13 @@ public class RealmStoryViewInfo  extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

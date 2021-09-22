@@ -66,6 +66,7 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
@@ -88,6 +89,7 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.story.storyviews.FragmentStoryViews;
 import net.iGap.story.viewPager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -811,18 +813,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
- /*       if (DbManager.getInstance().doRealmTask(realm -> {
+        if (DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
-        }*/
-/*
-        FragmentStoryViews fragment = new FragmentStoryViews();
-        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();*/
-
-        StoryViewFragment fragment = new StoryViewFragment();
-        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();
-
+        }
     }
 
     public void onAddImageClick() {

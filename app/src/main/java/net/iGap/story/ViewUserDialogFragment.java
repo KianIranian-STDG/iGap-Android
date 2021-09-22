@@ -68,7 +68,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
     private AppCompatTextView toolbarTitleTextView;
     private Typeface tfMain;
     private List<StoryViewInfoObject> userIdList;
-    private List<List<String>> displayNameList;
+    private List<String> displayNameList;
     private List<Long> userId;
     public AvatarHandler avatarHandler;
     private List<Long> createdAtList;
@@ -160,12 +160,13 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_INFO, this);
         userId = new ArrayList<>();
         createdAtList = new ArrayList<>();
+        displayNameList = new ArrayList<>();
         for (int i = userIdList.size() - 1; i >= 0; i--) {
             userId.add(userIdList.get(i).userId);
             createdAtList.add(userIdList.get(i).createdTime);
+            displayNameList.add(userIdList.get(i).displayName);
         }
 
-        displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
         G.onUserInfoResponse = new OnUserInfoResponse() {
 
             @Override
@@ -210,12 +211,13 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         if (id == EventManager.STORY_USER_INFO) {
             userId = new ArrayList<>();
             createdAtList = new ArrayList<>();
+            displayNameList = new ArrayList<>();
             for (int i = userIdList.size() - 1; i >= 0; i--) {
                 userId.add(userIdList.get(i).userId);
                 createdAtList.add(userIdList.get(i).createdTime);
+                displayNameList.add(userIdList.get(i).displayName);
             }
 
-            displayNameList = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(userId);
             G.runOnUiThread(() -> {
                 listAdapter = new ListAdapter();
                 listAdapter.setContext(getContext());
@@ -260,8 +262,8 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             storyCell.initView(context, (position + 1) != userIdList.size(), StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
             storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
             if (position < displayNameList.size()) {
-                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position).get(0) : "", HelperCalander.getTimeForMainRoom(createdAtList.get(position) * 1000L));
-                storyCell.setUserColorId(displayNameList.get(position) != null ? displayNameList.get(position).get(1) : "#4aca69", displayNameList.get(position).get(0));
+                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position) : "", HelperCalander.getTimeForMainRoom(createdAtList.get(position) * 1000L));
+                storyCell.setUserColorId("#4aca69", displayNameList.get(position) != null ? displayNameList.get(position) : "");
                 storyCell.setImage(avatarHandler, userId.get(position));
             }
 

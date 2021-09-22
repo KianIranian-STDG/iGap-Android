@@ -1,5 +1,6 @@
 package net.iGap.story;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.realm.RealmStory;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class MainStoryObject {
     public boolean isSentAll;
     public boolean isUploadedAll;
     public int indexOfSeen;
+    public String displayName;
     public List<StoryObject> storyObjects = new ArrayList<>();
 
     public MainStoryObject() {
@@ -37,6 +39,7 @@ public class MainStoryObject {
         mainStoryObject.isSentAll = realmStory.isSentAll();
         mainStoryObject.isUploadedAll = realmStory.isUploadedAll();
         mainStoryObject.indexOfSeen = realmStory.getIndexOfSeen();
+        mainStoryObject.displayName = mainStoryObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : realmStory.getDisplayName();
 
         for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {
             mainStoryObject.storyObjects.add(StoryObject.create(realmStory.getRealmStoryProtos().get(i)));
