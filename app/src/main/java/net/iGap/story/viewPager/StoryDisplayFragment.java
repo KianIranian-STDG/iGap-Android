@@ -1153,8 +1153,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onSwipeBottom() {
-                new HelperFragment(getActivity().getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
-
+                requireActivity().onBackPressed();
             }
 
             @Override

@@ -248,8 +248,9 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 HelperLog.getInstance().setErrorLog(e);
             }
         } else {
-            if (!clickable)
-                new HelperFragment(getActivity().getSupportFragmentManager(), StoryViewFragment.this).popBackStack();
+            if (!clickable) {
+                requireActivity().onBackPressed();
+            }
         }
     }
 }
