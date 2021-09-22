@@ -1538,7 +1538,7 @@ public class MessageDataStorage extends BaseController {
 
                 if (userId == 0) {
                     myRealmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst();
-                    realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
+                    realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).sort("lastCreatedAt", Sort.DESCENDING).findAll();
 
                 } else {
                     realmStory = database.where(RealmStory.class).equalTo("userId", userId).findAll();
