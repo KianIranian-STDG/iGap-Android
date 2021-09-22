@@ -259,7 +259,8 @@ public class AttachFile {
             if (FileProvider.getUriForFile(G.context, G.context.getApplicationContext().getPackageName() + ".provider", new File(destinationPath)).equals(uri)) {
                 // shared from igap to igap
             } else {
-                AndroidUtils.copyFile(new File(uri.getPath()), new File(destinationPath));
+                InputStream input = G.context.getContentResolver().openInputStream(uri);
+                AndroidUtils.copyFile(input, new File(destinationPath));
             }
 
             return destinationPath;
@@ -268,8 +269,6 @@ public class AttachFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         return null;
     }
 
