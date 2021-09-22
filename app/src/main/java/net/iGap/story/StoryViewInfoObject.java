@@ -10,6 +10,7 @@ public class StoryViewInfoObject {
     public long id;
     public long userId;
     public long createdTime;
+    public String displayName;
 
 
     public static StoryViewInfoObject create(RealmStoryViewInfo realmStoryViewInfo) {
@@ -19,6 +20,7 @@ public class StoryViewInfoObject {
         storyViewInfoObject.createdTime = realmStoryViewInfo.getCreatedTime();
         storyViewInfoObject.id = realmStoryViewInfo.getId();
         storyViewInfoObject.userId = realmStoryViewInfo.getUserId();
+        storyViewInfoObject.displayName=realmStoryViewInfo.getDisplayName();
 
 
 

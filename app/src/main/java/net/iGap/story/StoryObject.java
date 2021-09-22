@@ -1,5 +1,6 @@
 package net.iGap.story;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStoryProto;
@@ -43,7 +44,7 @@ public class StoryObject {
         storyObject.storyId = igapStory.getId();
         storyObject.isSeen = igapStory.getSeen();
         storyObject.index = index;
-        storyObject.displayName = displayName;
+        storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : displayName;
 
         return storyObject;
     }
@@ -58,7 +59,7 @@ public class StoryObject {
         builder.setName(igapStory.getFile().name);
         builder.setSize(igapStory.getFile().size);
         storyObject.attachmentObject = AttachmentObject.create(igapStory.getFile());
-        storyObject.status =igapStory.getStatus();
+        storyObject.status = igapStory.getStatus();
         storyObject.createdAt = igapStory.getCreatedAt();
         storyObject.userId = igapStory.getUserId();
         storyObject.storyId = igapStory.getStoryId();
@@ -66,6 +67,8 @@ public class StoryObject {
         storyObject.id = igapStory.getId();
         storyObject.index = igapStory.getIndex();
         storyObject.viewCount = igapStory.getViewCount();
+        storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : igapStory.getDisplayName();
+        ;
 
         for (int i = 0; i < igapStory.getRealmStoryViewInfos().size(); i++) {
             storyObject.storyViewInfoObjects.add(StoryViewInfoObject.create(igapStory.getRealmStoryViewInfos().get(i)));

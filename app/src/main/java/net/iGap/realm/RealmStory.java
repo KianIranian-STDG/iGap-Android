@@ -24,6 +24,7 @@ public class RealmStory extends RealmObject {
     private boolean isUploadedAll;
     private int indexOfSeen;
     private long sessionId;
+    private String displayName;
     private RealmList<RealmStoryProto> realmStoryProtos;
 
 
@@ -43,6 +44,7 @@ public class RealmStory extends RealmObject {
         realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
         realmStory.setUserId(userId);
         realmStory.setSeenAll(isSeenAll);
+        realmStory.setDisplayName(stories.get(0).displayName);
         realmStory.setRealmStoryProtos(realm, stories);
         return realmStory;
     }
@@ -108,6 +110,14 @@ public class RealmStory extends RealmObject {
         this.sessionId = sessionId;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public boolean isUploadedAll() {
         return isUploadedAll;
     }
@@ -162,6 +172,7 @@ public class RealmStory extends RealmObject {
             storyProto.setStatus(igapStory.status);
             storyProto.setId(igapStory.id);
             storyProto.setForReply(false);
+            storyProto.setDisplayName(igapStory.displayName);
             if (isExist) {
                 storyProto.setIndex(storyProto.getIndex());
             } else {

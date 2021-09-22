@@ -26,6 +26,7 @@ public class RealmStoryProto extends RealmObject {
     private int status;
     private int index;
     private boolean isForReply;
+    private String displayName;
     private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
@@ -148,6 +149,14 @@ public class RealmStoryProto extends RealmObject {
 
     public void setForReply(boolean forReply) {
         isForReply = forReply;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public RealmList<RealmStoryViewInfo> getRealmStoryViewInfos() {
