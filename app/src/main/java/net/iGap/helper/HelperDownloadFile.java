@@ -10,10 +10,8 @@
 
 package net.iGap.helper;
 
-import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -29,7 +27,6 @@ import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.api.beepTunes.DownloadSong;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnFileDownloadResponse;
 import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.proto.ProtoFileDownload;
@@ -42,8 +39,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 
 public class HelperDownloadFile {
@@ -486,17 +481,7 @@ public class HelperDownloadFile {
                 if (file.exists()) {
 
                     if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
-                        ProgressDialog progressDialog = createProgressDialog(G.fragmentActivity);
-                        HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false, new OnFileCopyComplete() {
-                            @Override
-                            public void complete(int successMessage,int completePercent) {
-                                progressDialog.setProgress(completePercent);
-                                if (completePercent == 100) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                        HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
                     }
                 }
             }

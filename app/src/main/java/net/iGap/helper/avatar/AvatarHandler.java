@@ -471,9 +471,7 @@ public class AvatarHandler {
              * G.DIR_IMAGE_USER use for all avatars , user or room
              */
             String avatarPath = AndroidUtils.getFilePathWithCashId(avatar.getFile().getCacheId(), avatar.getFile().getName(), G.DIR_IMAGE_USER, false);
-
-            AndroidUtils.copyFile(new File(src), new File(avatarPath),0,null);
-
+            AndroidUtils.copyFile(new File(src), new File(avatarPath));
             return avatarPath;
         } catch (IOException e) {
             e.printStackTrace();

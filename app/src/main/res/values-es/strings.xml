@@ -1133,6 +1133,7 @@
     <string name="farvardin">Farvardin</string>
     <string name="image_selected_for_send">Imagen seleccionada</string>
     <string name="igasht_empty_history_message">No hay boletos comprados todavía.</string>
+    <string name="bill_title">Pago de la factura</string>
     <string name="who_is_allowed_to_video_call">¿Quién puede videollamarme?</string>
     <string name="st_bio">Bio</string>
     <string name="billing_id">ID de facturación</string>
@@ -2071,5 +2072,31 @@
     <string name="the_amount_can_not_be_less_than_1000_rials">La cantidad no puede ser inferior a 1000 riales.</string>
     <string name="code_length_is_10_digit">¡La longitud del código es de 10 dígitos!</string>
 
+    <string name="Loading">Cargando</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">Detener carga</string>
+    <string name="WaitMore">Espera mas</string>
+    <string name="Stop">Parada</string>
 
+
+
+    <string name="my_status">Mi momento</string>
+    <string name="status">Momentos</string>
+    <string name="status_title">Momento</string>
+    <string name="tap_to_add_status_update">Toca para agregar un momento</string>
+    <string name="viewed_updates">Actualizaciones vistas</string>
+    <string name="recent_updates">Actualizaciones recientes</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Tus momentos se eliminarán después de 24 horas.</string>
+    <string name="your_device_does_not_have_a_camera">¡Tu dispositivo no tiene cámara!</string>
+    <string name="delete_status_update">¿Eliminar este momento? También se eliminará para todos los que lo recibieron.</string>
+    <string name="story_views">puntos de vista</string>
+    <string name="story_uploading">Subiendo ...</string>
+    <string name="story_sending">Enviando...</string>
+    <string name="story_could_not_sent">¡No se pudo enviar!</string>
+    <string name="story_you_can_not_share_more_than_items">¡No puede compartir más de 6 elementos multimedia!</string>
+    <string name="story_viewed_by">Visto por</string>
+    <string name="story_person">persona</string>
+    <string name="type_a_moment">Escribe un momento</string>
+    <string name="your_status_characters">Tu actualización de estado no puede superar los 500 caracteres</string>
+    <string name="moments_string">Momentos</string>
 </resources>

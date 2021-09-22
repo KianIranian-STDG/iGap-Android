@@ -13,8 +13,10 @@ import net.iGap.fragments.MainFragment;
 import net.iGap.helper.FileLog;
 import net.iGap.model.AccountUser;
 import net.iGap.network.RequestManager;
+import net.iGap.proto.ProtoUserLogin;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
+import net.iGap.response.UserLoginResponse;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -178,6 +180,7 @@ public class AccountManager {
         newUser.setName("Account " + selectedAccount);
         newUser.setLoginTime(System.currentTimeMillis());
         setCurrentUserInSharedPreferences();
+        UserLoginResponse.isFetched = false;
     }
 
     public boolean isExistThisAccount(long userId) {
@@ -213,6 +216,7 @@ public class AccountManager {
         if (t != -1) {
             selectedAccount = t;
             setCurrentUserInSharedPreferences();
+            UserLoginResponse.isFetched = false;
         } else {
             throw new IllegalArgumentException("not exist this user");
         }
@@ -246,6 +250,7 @@ public class AccountManager {
 
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
+                UserLoginResponse.isFetched = false;
                 return userAccountList.get(selectedAccount).isAssigned();
             } else {
                 return false;

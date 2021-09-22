@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,7 +44,6 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnGroupAvatarDelete;
 import net.iGap.observers.interfaces.OnUserAvatarDelete;
 import net.iGap.proto.ProtoFileDownload;
@@ -72,7 +70,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.R.string.array_Delete_photo;
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 
 public class FragmentShowAvatars extends BaseFragment {
 
@@ -400,14 +397,7 @@ public class FragmentShowAvatars extends BaseFragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
-                    HelperSaveFile.savePicToGallery(media, true, new OnFileCopyComplete() {
-                        @Override
-                        public void complete(int successMessage, int completePercent) {
-                            if (completePercent == 100) {
-                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    HelperSaveFile.savePicToGallery(media, true);
                 }
             } else {
                 if (getContext() != null)
@@ -628,8 +618,9 @@ public class FragmentShowAvatars extends BaseFragment {
             progress.setOnClickListener(view -> {
 
                 String _cashId = avatarList.get(position).getFile().getCacheId();
-                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
-                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
+
+                if (getDownloader().isDownloading(_cashId)) {
+                    getDownloader().cancelDownload(_cashId);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView);

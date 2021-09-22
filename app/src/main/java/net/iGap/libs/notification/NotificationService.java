@@ -1,6 +1,8 @@
 package net.iGap.libs.notification;
 
 
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -73,7 +75,6 @@ public class NotificationService extends FirebaseMessagingService {
             new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
                     try {
-
                         if (RealmNotificationRoomMessage.canShowNotif(realm1, messageId, roomId)) {
 
                             String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
@@ -88,12 +89,26 @@ public class NotificationService extends FirebaseMessagingService {
                             }
 
                             JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
-                            String text = loc_args.getString(1);
+                            String text = "";
+                            if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                                text = loc_args.getString(2);
+                            } else {
+                                text = loc_args.getString(1);
+                            }
 
+                            if (roomType == ProtoGlobal.Room.Type.CHANNEL || roomType == ProtoGlobal.Room.Type.CHAT) {
+                                if (loc_args.length() == 2) {
+                                    text = loc_args.getString(1);
+                                }
+                            } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                                if (loc_args.length() == 3) {
+                                    text = loc_args.getString(2);
+                                }
+                            }
                             RealmNotificationRoomMessage.putToDataBase(realm1, messageId, roomId);
-
                             ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
                                     .setMessage(text)
+                                    .setMessageType(getMessageType(loc_key, roomType))
                                     .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
                                     .build();
                             HelperNotification.getInstance().addMessage(realm1, roomId, roomMessage, roomType, accountUser);
@@ -106,5 +121,37 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-
+    private ProtoGlobal.RoomMessageType getMessageType(String messageType, ProtoGlobal.Room.Type roomType) {
+        if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            messageType = messageType.replace("GROUP_", "");
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            messageType = messageType.replace("CHANNEL_", "");
+        }
+        switch (messageType) {
+            case "MESSAGE_TEXT":
+                return ProtoGlobal.RoomMessageType.TEXT;
+            case "MESSAGE_IMAGE":
+                return ProtoGlobal.RoomMessageType.IMAGE;
+            case "MESSAGE_VIDEO":
+                return ProtoGlobal.RoomMessageType.VIDEO;
+            case "MESSAGE_AUDIO":
+                return ProtoGlobal.RoomMessageType.AUDIO;
+            case "MESSAGE_VOICE":
+                return ProtoGlobal.RoomMessageType.VOICE;
+            case "MESSAGE_GIF":
+                return ProtoGlobal.RoomMessageType.GIF;
+            case "MESSAGE_FILE":
+                return ProtoGlobal.RoomMessageType.FILE;
+            case "MESSAGE_STICKER":
+                return ProtoGlobal.RoomMessageType.STICKER;
+            case "MESSAGE_LOCATION":
+                return ProtoGlobal.RoomMessageType.LOCATION;
+            case "MESSAGE_CONTACT":
+                return ProtoGlobal.RoomMessageType.CONTACT;
+//            case "MESSAGE_NOTEXT":
+//                return
+            default:
+                return ProtoGlobal.RoomMessageType.TEXT;
+        }
+    }
 }

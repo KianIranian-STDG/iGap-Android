@@ -898,6 +898,55 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 50) {
+            RealmObjectSchema realmAttachmentSchema = schema.get(RealmAttachment.class.getSimpleName());
+
+            RealmObjectSchema realmStoryViewInfo = schema.create(RealmStoryViewInfo.class.getSimpleName())
+                    .addField("id", long.class)
+                    .addField("userId", long.class)
+                    .addField("createdTime", long.class);
+
+            RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
+                    .addField("caption", String.class)
+                    .addField("fileToken", String.class)
+                    .addField("imagePath", String.class)
+                    .addRealmObjectField("file", realmAttachmentSchema)
+                    .addField("createdAt", long.class)
+                    .addField("userId", long.class)
+                    .addField("storyId", long.class)
+                    .addField("id", long.class)
+                    .addField("isSeen", boolean.class)
+                    .addField("viewCount", int.class)
+                    .addField("index", int.class)
+                    .addField("isForReply", boolean.class)
+                    .addRealmListField("realmStoryViewInfos", realmStoryViewInfo)
+                    .addField("status", int.class);
+
+
+            RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
+                    .addField("id", long.class)
+                    .addField("userId", long.class)
+                    .addField("isSeenAll", boolean.class)
+                    .addField("isSentAll", boolean.class)
+                    .addField("isUploadedAll", boolean.class)
+                    .addField("indexOfSeen", int.class)
+                    .addField("sessionId", long.class)
+                    .addRealmListField("realmStoryProtos", realmStoryProto);
+
+            realmStorySchema.addPrimaryKey("id");
+            realmStorySchema.addIndex("userId");
+
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("storyStatus", int.class);
+                realmRoomMessageSchema.addRealmObjectField("storyReplyMessage", realmStoryProto);
+            }
+
+            oldVersion++;
+        }
+
     }
 
     @Override

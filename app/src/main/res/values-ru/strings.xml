@@ -15,6 +15,7 @@
     <string name="pu_desc_profileUser">Введите свое имя и выберите свою фотографию пользователя</string>
     <string name="pu_nikname_profileUser">Имя</string>
     <string name="pu_Lets_Go">Продолжение</string>
+    <string name="stories">рассказы</string>
     <string name="kuknos_receipt_bill">"Квитанция о возмещении"</string>
     <string name="kuknos_edit_info_sending_info">"Отправка информации ..."</string>
     <string name="kuknos_edit_info_saved_successfully">"Информация успешно сохранена"</string>
@@ -254,6 +255,7 @@
     <string name="confirm_email_text">Код подтверждения был отправлен на ваш адрес электронной почты, чтобы идентифицировать и подтвердить адрес электронной почты.</string>
     <string name="chats">Диалог</string>
     <string name="contacts">Контакты</string>
+    <string name="bottom_navigation_my_story">Моменты</string>
     <string name="messages">Сообщения</string>
     <string name="show_message_count">Отображаемые сообщения</string>
     <string name="count_of_show_message">Количество отображаемых сообщений</string>
@@ -1534,6 +1536,7 @@
     <string name="rrn">Ссылочный номер</string>
     <string name="bill_id">ID счета</string>
     <string name="topUp_title">Купить зарядку</string>
+    <string name="bill_title">Оплатить счет</string>
     <string name="topUp_message">Пополнить сообщение о покупке</string>
     <string name="bill_message">Сообщение об оплате счета</string>
     <string name="soon">скоро...</string>
@@ -1573,17 +1576,17 @@
     <string name="mobile_bank_balance_passwordLengthError">Ваш пароль должен содержать не менее 6 символов.</string>
     <string name="mobile_bank_balance_CVVError">пожалуйста, введите ваш номер CVV2.</string>
     <string name="mobile_bank_balance_CVVLengthError">Ваш номер CVV2 должен быть не менее 3 цифр.</string>
-    <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
+    <string name="mobile_bank_balance_dateError">введите дату истечения срока действия.</string>
     <string name="mobile_bank_balance_message">Ваш баланс %1$s.</string>
     <string name="mobile_bank_hotCard">Заблокировать карту</string>
     <string name="delete_recent_emoji">Удалить последние Emoji</string>
     <string name="mobile_bank_balance_error_no_price">Нет цены.</string>
-    <string name="usable">قابل استفاده</string>
-    <string name="activated">فعال شده</string>
-    <string name="posted">Posted</string>
-    <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
+    <string name="usable">годный к употреблению</string>
+    <string name="activated">активирован</string>
+    <string name="posted">Опубликовано</string>
+    <string name="gift_sticker_inquiry_and_activated">Запрос и активация</string>
     <string name="kuknos_send_token_error">Не могу отправить этот токен.</string>
-    <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="active_gift_card_note">Вы уверены, что хотите активировать подарочную карту ?! Обратите внимание, что после активации его нельзя будет отправить другому, а информация о подарочной карте будет видна только вашей учетной записи.</string>
     <string name="inter_cheque_amount">Введите сумму</string>
     <string name="take_turn">Принять поворот</string>
     <string name="secondary_password">Второй пароль</string>
@@ -1645,7 +1648,14 @@
     <string name="location_list_tile">Поиск развлекательных центров</string>
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
+    <string name="remind_me_later">Напомни мне позже</string>
+    <string name="score_request_text">Хотите оценить приложение?</string>
+    <string name="please_try_later">Пожалуйста, попробуйте позднее</string>
+    <string name="access_folder">Неавторизованная папка</string>
+    <string name="restrict_folder">Доступ к этой папке ограничен.</string>
     <string name="to">To</string>
     <string name="apply">подать заявление</string>
     <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
@@ -1665,4 +1675,46 @@
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
 
+    <string name="name_error">Имя не подтверждено</string>
+    <string name="user_name_error">Имя пользователя не подтверждено</string>
+    <string name="email_error">Электронная почта не подтверждена</string>
+    <string name="gender_error">Пол не подтвержден</string>
+    <string name="seted_name">Имя подтверждено</string>
+    <string name="user_name_added">Имя пользователя подтверждено</string>
+    <string name="bio_added">Биография подтверждена</string>
+    <string name="bio_error">Биография не подтверждена</string>
+    <string name="email_added">добавлен адрес электронной почты</string>
+    <string name="seted_gender">Пол подтвержден</string>
+    <string name="AccessBan">Доступ закрыт для просмотра участников</string>
+
+    <string name="how_to_get_points">Как заработать баллы</string>
+    <string name="Loading">Загрузка</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">Остановить загрузку</string>
+    <string name="WaitMore">Подождите еще</string>
+    <string name="Stop">Стоп</string>
+
+
+
+
+
+    <string name="my_status">Мой момент</string>
+    <string name="status">Моменты</string>
+    <string name="status_title">Момент</string>
+    <string name="tap_to_add_status_update">Нажмите, чтобы добавить момент</string>
+    <string name="viewed_updates">Просмотренные обновления</string>
+    <string name="recent_updates">Недавние обновления</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Ваши моменты будут удалены через 24 часа.</string>
+    <string name="your_device_does_not_have_a_camera">В вашем устройстве нет камеры!</string>
+    <string name="delete_status_update">Удалить этот момент? Он также будет удален у всех, кто его получил.</string>
+    <string name="story_views">Просмотры</string>
+    <string name="story_uploading">Загрузка ...</string>
+    <string name="story_sending">Отправка ...</string>
+    <string name="story_could_not_sent">CoНе удалось отправить!</string>
+    <string name="story_you_can_not_share_more_than_items">Вы не можете делиться более чем 6 объектами мультимедиа!</string>
+    <string name="story_viewed_by">Просмотрено</string>
+    <string name="story_person">человек</string>
+    <string name="type_a_moment">Введите момент</string>
+    <string name="your_status_characters">Ваше обновление статуса не может превышать 500 символов.</string>
+    <string name="moments_string">Моменты</string>
 </resources>

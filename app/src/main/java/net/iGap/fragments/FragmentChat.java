@@ -239,7 +239,6 @@ import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
 import net.iGap.observers.interfaces.OnDeleteChatFinishActivity;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnForwardBottomSheet;
 import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -294,6 +293,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -332,7 +332,6 @@ import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
-import static net.iGap.module.AndroidUtils.createProgressDialog;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -361,6 +360,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STORY_REPLY_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
@@ -3950,7 +3950,7 @@ public class FragmentChat extends BaseFragment
 
                 }
 
-            }, KeyboardView.MODE_KEYBOARD);
+            }, KeyboardView.MODE_KEYBOARD, true);
 
             keyboardView.setVisibility(View.GONE);
 
@@ -3976,26 +3976,32 @@ public class FragmentChat extends BaseFragment
         }
 
         if (mode == KeyboardView.MODE_EMOJI) {
-
-            if (keyboardView == null)
+            if (keyboardView == null) {
                 createKeyboardView();
+            }
 
             if (keyboardView.getParent() == null)
                 keyboardContainer.addView(keyboardView);
 
-            if (keyboardHeight <= 0)
-                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-
-            if (keyboardHeightLand <= 0)
-                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-
             keyboardVisible = false;
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+            }
+
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+            }
+
             int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
             keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
             layoutParams.height = currentHeight;
             keyboardView.setLayoutParams(layoutParams);
+
             keyboardView.setCurrentMode(KeyboardView.MODE_EMOJI, EmojiView.STICKER);
+
             keyboardView.setVisibility(View.VISIBLE);
 
         } else if (mode == KeyboardView.MODE_ATTACHMENT) {
@@ -4007,19 +4013,25 @@ public class FragmentChat extends BaseFragment
 
             if (keyboardView != null) {
 
-                if (keyboardHeight <= 0)
-                    keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
-
-                if (keyboardHeightLand <= 0)
-                    keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
-
                 keyboardView.setCurrentMode(KeyboardView.MODE_KEYBOARD, -1);
+
+                if (keyboardHeight <= 0) {
+                    keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, 0);
+                }
+
+                if (keyboardHeightLand <= 0) {
+                    keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, 0);
+                }
+
                 int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
                 keyboardView.setKeyboardHeight(keyboardHeightLand, keyboardHeight);
+
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) keyboardView.getLayoutParams();
                 layoutParams.height = currentHeight;
                 keyboardView.setLayoutParams(layoutParams);
+
                 keyboardView.setVisibility(View.VISIBLE);
+
                 keyboardVisible = true;
             }
         } else {
@@ -4027,6 +4039,7 @@ public class FragmentChat extends BaseFragment
                 keyboardView.setCurrentMode(mode, -1);
 
             showKeyboardOnResume = false;
+
             closeKeyboard();
             G.handler.postDelayed(this::hideKeyboardView, 100);
         }
@@ -4144,6 +4157,7 @@ public class FragmentChat extends BaseFragment
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
+                .setFragmentActivity(getActivity())
                 .setSharedPref(sharedPreferences)
                 .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
@@ -4505,73 +4519,74 @@ public class FragmentChat extends BaseFragment
         if (!AndroidUtils.canOpenDialog()) {
             return;
         }
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.st_Abuse));
-        items.add(getString(R.string.st_Spam));
-        items.add(getString(R.string.st_Violence));
-        items.add(getString(R.string.st_Pornography));
-        items.add(getString(R.string.st_Other));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.st_Abuse);
+        items.add(R.string.st_Spam);
+        items.add(R.string.st_Violence);
+        items.add(R.string.st_Pornography);
+        items.add(R.string.st_Other);
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.st_Abuse))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Spam))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Violence))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Pornography))) {
-                if (isMessage) {
-                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
-                } else {
-                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
-                }
-            } else if (items.get(position).equals(getString(R.string.st_Other))) {
-                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
-                        if (input.length() > 0) {
-
-                            report = input.toString();
-                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                            positive.setEnabled(true);
-
-                        } else {
-                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                            positive.setEnabled(false);
-                        }
-                    }
-                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment()
+                .setListDataWithResourceId(getContext(), items, -1, position -> {
+                    if (items.get(position) == R.string.st_Abuse) {
                         if (isMessage) {
-                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
                         } else {
-                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
                         }
+                    } else if (items.get(position) == R.string.st_Spam) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Violence) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Pornography) {
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                        } else {
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                        }
+                    } else if (items.get(position) == R.string.st_Other) {
+                        final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                // Do something
+                                if (input.length() > 0) {
+
+                                    report = input.toString();
+                                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                                    positive.setEnabled(true);
+
+                                } else {
+                                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                                    positive.setEnabled(false);
+                                }
+                            }
+                        }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                if (isMessage) {
+                                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                                } else {
+                                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                                }
+                            }
+                        }).negativeText(R.string.cancel).build();
+
+                        View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
+                        positive.setEnabled(false);
+
+                        DialogAnimation.animationDown(dialogReport);
+                        dialogReport.show();
                     }
-                }).negativeText(R.string.cancel).build();
-
-                View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
-                positive.setEnabled(false);
-
-                DialogAnimation.animationDown(dialogReport);
-                dialogReport.show();
-            }
-        });
+                });
         bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
 
         G.onReport = () -> error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
@@ -5260,7 +5275,7 @@ public class FragmentChat extends BaseFragment
         //check and remove share base on type and download state
         if (roomMessageType == LOCATION_VALUE) {
             items.remove(Integer.valueOf(R.string.share_item_dialog));
-        } else if (roomMessageType != TEXT_VALUE && roomMessageType != CONTACT_VALUE) {
+        } else if (roomMessageType != TEXT_VALUE && roomMessageType != STORY_REPLY_VALUE && roomMessageType != CONTACT_VALUE) {
             String filepath_;
             if (messageObject.forwardedMessage != null) {
                 filepath_ = messageObject.forwardedMessage.getAttachment().filePath != null ? messageObject.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.forwardedMessage.getAttachment().cacheId, messageObject.forwardedMessage.getAttachment().name, roomMessageType);
@@ -5433,33 +5448,11 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
-
-                    @Override
-                    public void complete(int successMessage, int completePercent) {
-                        progressDialog.setProgress(completePercent);
-                        if (completePercent == 100) {
-                            progressDialog.dismiss();
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                saveSelectedMessageToGallery(message, adapterPosition);
                 break;
 
             case R.string.save_to_Music:
-                saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
-                    ProgressDialog progressDialog = createProgressDialog(getActivity());
-
-                    @Override
-                    public void complete(int successMessage, int completePercent) {
-                        progressDialog.setProgress(completePercent);
-                        if (completePercent == 100) {
-                            progressDialog.dismiss();
-                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                saveSelectedMessageToMusic(message, adapterPosition);
                 break;
 
             case R.string.saveToDownload_item_dialog:
@@ -5573,7 +5566,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToMusic(MessageObject message, int pos, OnFileCopyComplete onFileCopyComplete) {
+    private void saveSelectedMessageToMusic(MessageObject message, int pos) {
         String filename;
         String filepath;
 
@@ -5585,7 +5578,7 @@ public class FragmentChat extends BaseFragment
             filepath = message.getAttachment().filePath != null ? message.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cacheId, message.getAttachment().name, message.messageType);
         }
         if (new File(filepath).exists()) {
-            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
+            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music);
         } else {
             final int _messageType = message.forwardedMessage != null ? message.forwardedMessage.messageType : message.messageType;
             String cacheId = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().cacheId : message.getAttachment().cacheId;
@@ -5608,7 +5601,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(() -> {
                             if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
                                 if (arg.data != null && arg.data.getProgress() == 100) {
-                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music);
                                 }
                             }
                         });
@@ -5620,7 +5613,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos, OnFileCopyComplete onFileCopyComplete) {
+    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos) {
         String filename;
         String filepath;
         int messageType;
@@ -5636,11 +5629,11 @@ public class FragmentChat extends BaseFragment
         }
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video);
             } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif);
             } else if (messageType == IMAGE_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image);
             }
         } else {
             final int _messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
@@ -5670,11 +5663,11 @@ public class FragmentChat extends BaseFragment
                                         return;
                                     if (arg.data.getProgress() == 100) {
                                         if (_messageType == VIDEO_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video);
                                         } else if (_messageType == GIF_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif);
                                         } else if (_messageType == IMAGE_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image);
                                         }
                                     }
                                     break;
@@ -5695,7 +5688,7 @@ public class FragmentChat extends BaseFragment
             edtChat.setText(EmojiManager.getInstance().replaceEmoji(message.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
             edtChat.setSelection(edtChat.getText().toString().length());
         }
-        if (!(message.messageType == TEXT_VALUE)) {
+        if(!(message.messageType == TEXT_VALUE)) {
             edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         }
         // put message object to edtChat's tag to obtain it later and
@@ -5915,8 +5908,14 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onReplyClick(MessageObject replyMessage) {// TODO: 12/29/20 MESSAGE_REFACTOR
-        if (!goToPositionWithAnimation(replyMessage.id, 1000)) {
-            long replayMessageId = Math.abs(replyMessage.id);
+        if (replyMessage.messageType == STORY_REPLY_VALUE && replyMessage.replayToMessage == null) {
+            if (replyMessage.storyObject != null && replyMessage.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(replyMessage.storyObject.userId, true, true,true, replyMessage.storyObject.storyId)).setReplace(false).load();
+            } else {
+                Toast.makeText(getContext(), R.string.moment_not_available , Toast.LENGTH_SHORT).show();
+            }
+        } else if (!goToPositionWithAnimation(replyMessage.replayToMessage.id, 1000)) {
+            long replayMessageId = Math.abs(replyMessage.replayToMessage.id);
             if (!goToPositionWithAnimation(replayMessageId, 1000)) {
                 if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
                     resetMessagingValue();
@@ -7166,6 +7165,7 @@ public class FragmentChat extends BaseFragment
             switch (type) {
 
                 case TEXT_VALUE:
+                case STORY_REPLY_VALUE:
                     intent.setType("text/plain");
                     String message = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.message : messageObject.message;
                     intent.putExtra(Intent.EXTRA_TEXT, message);
@@ -7190,23 +7190,23 @@ public class FragmentChat extends BaseFragment
                 case VOICE_VALUE:
                 case AUDIO_VALUE:
                 case AUDIO_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("audio/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.share_audio_file);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case GIF_VALUE:
                 case GIF_TEXT_VALUE:
                 case IMAGE_VALUE:
                 case IMAGE_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.shared_images);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
+                    AppUtils.shareItem(intent, messageObject);
                     intent.setType("video/*");
                     chooserDialogText = getActivity().getResources().getString(R.string.shared_videos_file);
-                    AppUtils.shareItem(intent, messageObject);
                     break;
                 case FILE_VALUE:
                 case FILE_TEXT_VALUE:
@@ -8326,6 +8326,7 @@ public class FragmentChat extends BaseFragment
 
                 switch (messageType) {
                     case TEXT_VALUE:
+                    case STORY_REPLY_VALUE:
                         if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.CARD_TO_CARD_MESSAGE)
                             if (!addTop) {
                                 mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject).withIdentifier(identifier));

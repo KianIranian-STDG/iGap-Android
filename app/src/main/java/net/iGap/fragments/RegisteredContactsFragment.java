@@ -97,6 +97,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.Case;
 
@@ -219,7 +220,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         ToolbarItems toolbarItems = contactsToolbar.createToolbarItems();
 
 
-        contactsToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
+        contactsToolbar.setTitle(getString(R.string.contacts));
+        contactsToolbar.setBackIcon(new BackDrawable(false));
         if (isContact) {
             ToolbarItem moreItem = toolbarItems.addItemWithWidth(moreItemTag, R.string.icon_other_vertical_dots, 54);
             addItem = moreItem.addSubItem(addUserTag, R.string.icon_add, getResources().getString(R.string.menu_add_contact));
@@ -234,7 +236,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             public void onSearchExpand() {
                 isSearchEnabled = true;
                 inSearchMode = true;
-                contactsToolbar.setBackIcon(new BackDrawable(true));
             }
 
             @Override
@@ -242,11 +243,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 isSearchEnabled = false;
                 inSearchMode = false;
                 loadContacts();
-                if (isContact) {
-                    contactsToolbar.setBackIcon(null);
-                } else {
-                    contactsToolbar.setBackIcon(new BackDrawable(false));
-                }
             }
 
             @Override
@@ -287,6 +283,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                             contactsToolbar.hideActionToolbar();
                             contactsToolbar.setBackIcon(null);
                             setMultiSelectState(isMultiSelect);
+                        } else {
+                            if (!isSearchEnabled) {
+                                requireActivity().onBackPressed();
+                            }
                         }
                     }
                     break;
@@ -779,14 +779,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
     @Override
     public boolean isAllowToBackPressed() {
-        if (isMultiSelect) {
-            setMultiSelectState(true);
-            contactsToolbar.setBackIcon(null);
-            contactsToolbar.hideActionToolbar();
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 
     @Override

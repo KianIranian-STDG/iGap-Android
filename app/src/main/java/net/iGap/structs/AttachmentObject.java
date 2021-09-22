@@ -2,10 +2,13 @@ package net.iGap.structs;
 
 import net.iGap.helper.HelperMimeType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoGlobal.RoomMessageType;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmThumbnail;
 
 import java.io.File;
+
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.*;
 
 public class AttachmentObject {
     public String mime;

@@ -11,12 +11,14 @@
 package net.iGap.fragments.filterImage;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.story.PhotoViewer;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.ImageHelper;
@@ -140,9 +143,28 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     if (getActivity() != null) {
-                                        final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                                        if (FragmentEditImage.updateImage != null && path != null) {
-                                            FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                                        ContentValues values = new ContentValues();
+                                        values.put(MediaStore.Images.Media.TITLE, System.currentTimeMillis() + "_profile.jpg");
+                                        values.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis() + "_profile.jpg");
+                                        values.put(MediaStore.Images.Media.DESCRIPTION, "");
+                                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                                        // Add the date meta data to ensure the image is added at the front of the gallery
+                                        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
+                                        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+
+                                        Uri path = null;
+                                        String stringUrl = null;    /* value to be returned */
+
+                                        path = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                                        if (FragmentEditImage.updateImage != null) {
+                                            final String finalPath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                                            if (finalPath != null) {
+                                                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(finalPath)));
+                                            }
+                                        }
+                                        if (PhotoViewer.updateImage != null && path != null) {
+                                            PhotoViewer.updateImage.result(finalImage);
                                         }
                                     }
                                     popBackStackFragment();
@@ -165,9 +187,27 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
         view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
-                if (FragmentEditImage.updateImage != null && path != null) {
-                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, System.currentTimeMillis() + "_profile.jpg");
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis() + "_profile.jpg");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "");
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                // Add the date meta data to ensure the image is added at the front of the gallery
+                values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
+                values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+
+                Uri path = null;
+                String stringUrl = null;    /* value to be returned */
+
+                path = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                if (FragmentEditImage.updateImage != null) {
+                    final String finalPath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                    if (finalPath != null) {
+                        FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(finalPath)));
+                    }
+                }
+                if (PhotoViewer.updateImage != null && path != null) {
+                    PhotoViewer.updateImage.result(finalImage);
                 }
 
                 popBackStackFragment();

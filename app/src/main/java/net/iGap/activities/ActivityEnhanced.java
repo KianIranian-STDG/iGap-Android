@@ -44,6 +44,7 @@ import java.io.IOException;
 
 import io.realm.Realm;
 
+import static com.caspian.otpsdk.context.ApplicationContext.b;
 import static net.iGap.G.updateResources;
 
 
@@ -142,6 +143,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         }
 
         /*Log.wtf("ActivityEnhanced","onCreate end");*/
+        updateResources(getBaseContext());
 
     }
 

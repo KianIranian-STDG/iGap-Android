@@ -109,6 +109,7 @@
 
 
     <color name="colorEditImageBlack">#87000000</color>
+    <color name="colorEditImageBlack2">#6F000000</color>
     <color name="launch_app_color">#f4f0e8</color>
 
     <color name="color_default_discovery_cards">#84ffffff</color>
@@ -200,4 +201,56 @@
     <color name="wallet_lighter_background_dark">#262626</color>
     <color name="wallet_lighter_background_light">#FFFFFF</color>
 
+    <array name="default_colors">
+        <item>#1d1d1d</item>
+        <item>#F2F3F4</item>
+        <item>#ba1c30</item>
+        <item>#db6917</item>
+        <item>#ebce2b</item>
+        <item>#5fa641</item>
+        <item>#96cde6</item>
+        <item>#463397</item>
+        <item>#91218c</item>
+        <item>#d32b1e</item>
+    </array>
+
+    <array name="default_status_color">
+        <item>#1d1d1d</item>
+        <item>#ba1c30</item>
+        <item>#db6917</item>
+        <item>#ebce2b</item>
+        <item>#5fa641</item>
+        <item>#463397</item>
+        <item>#91218c</item>
+        <item>#d32b1e</item>
+        <item>#c0bd7f</item>
+        <item>#e1a11a</item>
+        <item>#4277b6</item>
+        <item>#d485b2</item>
+        <item>#92ae31</item>
+    </array>
+
+    <!--Kelly's 22 contrast colors-->
+    <color name="kelly_1">#F2F3F4</color>
+    <color name="kelly_2">#1d1d1d</color>
+    <color name="kelly_3">#ebce2b</color>
+    <color name="kelly_4">#702c8c</color>
+    <color name="kelly_5">#db6917</color>
+    <color name="kelly_6">#96cde6</color>
+    <color name="kelly_7">#ba1c30</color>
+    <color name="kelly_8">#c0bd7f</color>
+    <color name="kelly_9">#7f7e80</color>
+    <color name="kelly_10">#5fa641</color>
+    <color name="kelly_11">#d485b2</color>
+    <color name="kelly_12">#4277b6</color>
+    <color name="kelly_13">#df8461</color>
+    <color name="kelly_14">#463397</color>
+    <color name="kelly_15">#e1a11a</color>
+    <color name="kelly_16">#91218c</color>
+    <color name="kelly_17">#e8e948</color>
+    <color name="kelly_18">#7e1510</color>
+    <color name="kelly_19">#92ae31</color>
+    <color name="kelly_20">#6f340d</color>
+    <color name="kelly_21">#d32b1e</color>
+    <color name="kelly_22">#2b3514</color>
 </resources>

@@ -15,6 +15,7 @@
     <string name="pu_desc_profileUser">Entrez votre nom d’utilisateur et choisissiez une photo de profil , si vous voulez. </string>
     <string name="pu_nikname_profileUser">Prénom</string>
     <string name="pu_Lets_Go">Continuez</string>
+    <string name="stories">histoires</string>
     <string name="kuknos_edit_info_empty_sheba_and_birthdate">"La date de naissance et la nuit n'ont pas changé!"</string>
     <string name="kuknos_edit_info_sending_info">"Envoi d'informations ..."</string>
     <string name="kuknos_edit_info_empty_sheba">"Le champ de nuit ne peut pas être vide"</string>
@@ -255,6 +256,7 @@
     <string name="confirm_email_text">Un code de confirmation a été envoyé à votre adresse e-mail pour identifier et vérifier l\'e-mail.</string>
     <string name="chats">discussion</string>
     <string name="contacts">contact</string>
+    <string name="bottom_navigation_my_story">Des moments</string>
     <string name="messages">messages </string>
     <string name="show_message_count">messages affichables</string>
     <string name="count_of_show_message">nombre des messages affichables</string>
@@ -1716,6 +1718,7 @@
     <string name="rrn">Numéro de référence</string>
     <string name="bill_id">ID de facture</string>
     <string name="topUp_title">Acheter En Charge</string>
+    <string name="bill_title">Payer La Facture</string>
     <string name="topUp_message">Message de Acheter en charge</string>
     <string name="bill_message">Message de paiement de facture</string>
     <string name="soon">Bientôt disponible...</string>
@@ -1877,6 +1880,10 @@
     <string name="bio_error">Bio not verified</string>
     <string name="email_added">added Email Address</string>
     <string name="seted_gender">Gender confirmed</string>
+
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
+    <string name="sending_reply">"la réponse est envoyée..."</string>
     <string name="AccessBan">L\'accès est fermé pour voir les membres</string>
 
     <string name="how_to_get_points">Comment gagner des points</string>
@@ -1904,5 +1911,30 @@
     <string name="you_have_not_specified_the_amount">Vous n\'avez pas précisé le montant</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">Le montant ne peut pas être inférieur à 1000 Rials</string>
     <string name="code_length_is_10_digit">La longueur du code est de 10 chiffres !</string>
+    <string name="Loading">Chargement</string>
+    <string name="AppName">iGap</string>
+    <string name="StopLoading">Arrêter le chargement</string>
+    <string name="WaitMore">Attendez plus</string>
+    <string name="Stop">Arrêter</string>
 
+
+    <string name="my_status">Mon moment</string>
+    <string name="status">Des moments</string>
+    <string name="status_title">Moment</string>
+    <string name="tap_to_add_status_update">Appuyez pour ajouter un moment</string>
+    <string name="viewed_updates">Mises à jour consultées</string>
+    <string name="recent_updates">Mises à jour récentes</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Vos moments seront supprimés après 24 heures.</string>
+    <string name="your_device_does_not_have_a_camera">Votre appareil a pas d\'appareil photo !</string>
+    <string name="delete_status_update">Supprimer ce moment ? Il sera également supprimé pour tous ceux qui l\'ont reçu.</string>
+    <string name="story_views">vues</string>
+    <string name="story_uploading">Téléchargement...</string>
+    <string name="story_sending">Envoi en cours...</string>
+    <string name="story_could_not_sent">Impossible d\'envoyer !</string>
+    <string name="story_you_can_not_share_more_than_items">Vous ne pouvez pas partager plus de 6 éléments multimédias !</string>
+    <string name="story_viewed_by">Vu par</string>
+    <string name="story_person">personne</string>
+    <string name="type_a_moment">Tapez un instant</string>
+    <string name="your_status_characters">Votre mise à jour de statut ne peut pas dépasser 500 caractères</string>
+    <string name="moments_string">Des moments</string>
 </resources>

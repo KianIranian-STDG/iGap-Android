@@ -3,6 +3,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.filterImage.BitmapUtils;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.fragments.filterImage.FragmentPaintImage;
 import net.iGap.helper.HelperFragment;
@@ -108,6 +110,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     private AttachFile attachFile = new AttachFile(G.fragmentActivity);
 
     private SharedPreferences emojiSharedPreferences;
+    private String finalImagePath;
 
     private Boolean isTheFirstFocus;
 
@@ -210,6 +213,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         });
 
         updateImage = pathImageFilter -> {
+            this.finalImagePath = pathImageFilter;
             serCropAndFilterImage(pathImageFilter);
             G.handler.post(() -> mAdapter.notifyDataSetChanged());
         };
@@ -257,7 +261,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         });
 
         imvSendButton.setOnClickListener(v -> {
-
+            if (finalImagePath != null) {
+                finalImagePath = BitmapUtils.insertImage(getActivity().getContentResolver(), BitmapFactory.decodeFile(finalImagePath), System.currentTimeMillis() + "_profile.jpg", null);
+            }
             if (iconOk.isShown()) {
                 iconOk.performClick();
             }
@@ -407,6 +413,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     public void closeKeyboard() {
         edtChat.clearFocus();
         AndroidUtils.hideKeyboard(edtChat);
+        changeEmojiButtonImageResource(R.string.icon_emoji_smile);
+        isTheFirstFocus = true;
+
     }
 
     private boolean isKeyboardVisible() {

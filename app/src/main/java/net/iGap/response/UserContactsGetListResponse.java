@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.MessageController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
@@ -17,8 +19,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
-
-import io.realm.Realm;
 
 public class UserContactsGetListResponse extends MessageHandler {
 
@@ -55,7 +55,9 @@ public class UserContactsGetListResponse extends MessageHandler {
                     RealmContacts.putOrUpdate(realm, registerUser);
                 }
             });
-
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
+            });
             G.refreshRealmUi();
             G.handler.post(new Runnable() {
                 @Override

@@ -504,6 +504,8 @@
 
     <string name="contacts">"جهات الاتصال"</string>
 
+    <string name="bottom_navigation_my_story">لحظات</string>
+
     <string name="messages">"الرسائل"</string>
 
     <string name="show_message_count">"الرسائل القابلة للاظهار"</string>
@@ -2601,8 +2603,8 @@
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
-    <string name="mic">Mic</string>
-    <string name="hold">Hold</string>
+    <string name="mic">ميكروفون</string>
+    <string name="hold">معلق</string>
     <string name="payment_userScore">درجاتك</string>
     <string name="Increase_score">زيادة درجاتك الآن!</string>
     <string name="refund_token">رمز الاسترداد</string>
@@ -2626,18 +2628,28 @@
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
+    <string name="remind_me_later">ذكرني لاحقا</string>
+    <string name="score_request_text">هل ترغب في تقييم التطبيق؟</string>
+    <string name="please_try_later">يرجى المحاولة لاحقًا</string>
     <string name="name_error">لم يتم التحقق من الاسم</string>
     <string name="user_name_error">اسم المستخدم غير مؤكد</string>
     <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
     <string name="gender_error">لم يتم تأكيد الجنس</string>
+    <string name="access_folder">مجلد غير مصرح به</string>
+    <string name="restrict_folder">الوصول إلى هذا المجلد مقيد.</string>
+    <string name="bio_error">لم يتم التحقق من السيرة الذاتية</string>
+    <string name="bio_added">تم التحقق من السيرة الذاتية</string>
+    <string name="user_name_added">تم تأكيد اسم المستخدم</string>
     <string name="bio_error">Bio not verified</string>
     <string name="bio_added">Bio verified</string>
     <string name="user_name_added">Username confirmed</string>
     <string name="update_lock_error">"درخواست خارج از تعداد"</string>
-    <string name="seted_gender">Gender confirmed</string>
-    <string name="seted_name">Name confirmed</string>
-    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">تم تأكيد الجنس</string>
+    <string name="seted_name">تم تأكيد الاسم</string>
+    <string name="email_added">تمت إضافة عنوان البريد الإلكتروني</string>
     <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
 
     <string name="how_to_get_points">كيف تحصل على النقاط</string>
@@ -2690,5 +2702,32 @@
     <string name="you_have_not_specified_the_amount">لم تحدد المبلغ</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">لا يمكن أن يكون المبلغ أقل من 1000 ريال</string>
     <string name="code_length_is_10_digit">طول الكود 10 أرقام!</string>
+    <string name="Loading">تحميل</string>
+    <string name="AppName">آی گپ</string>
+    <string name="StopLoading">توقف عن التحميل</string>
+    <string name="WaitMore">انتظر المزيد</string>
+    <string name="Stop">قف</string>
+
+
+
+    <string name="my_status">لحظتي</string>
+    <string name="status">لحظات</string>
+    <string name="status_title">لحظه</string>
+    <string name="tap_to_add_status_update">انقر لإضافة لحظة</string>
+    <string name="viewed_updates">تم عرض التحديثات</string>
+    <string name="recent_updates">التحديثات الأخيرة</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">سيتم حذف لحظاتك بعد 24 ساعة.</string>
+    <string name="your_device_does_not_have_a_camera">جهازك ليس به كاميرا!</string>
+    <string name="delete_status_update">هل تريد حذف هذه اللحظة؟ سيتم حذفه أيضًا لكل من استلمه.</string>
+    <string name="story_views">الآراء</string>
+    <string name="story_uploading">جارٍ التحميل ...</string>
+    <string name="story_sending">إرسال...</string>
+    <string name="story_could_not_sent">لا يمكن الإرسال!</string>
+    <string name="story_you_can_not_share_more_than_items">لا يمكنك مشاركة أكثر من 6 عناصر وسائط!</string>
+    <string name="story_viewed_by">عرض بواسطة</string>
+    <string name="story_person">شخص</string>
+    <string name="type_a_moment">اكتب لحظة</string>
+    <string name="your_status_characters">لا يمكن أن يتجاوز تحديث حالتك 500 حرف</string>
+    <string name="moments_string">لحظات</string>
 
 </resources>

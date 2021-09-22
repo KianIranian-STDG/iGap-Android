@@ -19,8 +19,8 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -30,15 +30,13 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
 
 import java.util.Date;
-
-import io.realm.Realm;
 
 public class UserLoginResponse extends MessageHandler {
 
@@ -47,6 +45,8 @@ public class UserLoginResponse extends MessageHandler {
     public String identity;
     private boolean isDeprecated = false;
     private boolean isUpdateAvailable = false;
+    private int contactCount = 0;
+    public static boolean isFetched = false;
     SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
 
@@ -105,9 +105,9 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
 
-        TokenContainer.getInstance().updateToken(builder.getAccessToken(),false);
+        TokenContainer.getInstance().updateToken(builder.getAccessToken(), false);
 
-        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP , 0) == 0){
+        if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0) == 0) {
             sharedPreferences
                     .edit()
                     .putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime())
@@ -137,7 +137,7 @@ public class UserLoginResponse extends MessageHandler {
                     .findFirst().getPushNotificationToken();
         });
 
-        if(!FCMToken.isEmpty()) {
+        if (FCMToken != null && !FCMToken.isEmpty()) {
             RealmUserInfo.sendPushNotificationToServer();
         }
 
@@ -147,6 +147,7 @@ public class UserLoginResponse extends MessageHandler {
 
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            contactCount = realm.where(RealmContacts.class).findAll().size();
             if (realmUserInfo != null) {
                 realmUserInfo.setWalletActive(builder.getWalletActive());
                 realmUserInfo.setMplActive(builder.getMplActive());
@@ -154,6 +155,10 @@ public class UserLoginResponse extends MessageHandler {
                 realmUserInfo.setAccessToken(builder.getAccessToken());
             }
         });
+
+        if (!isFetched) {
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(contactCount);
+        }
     }
 
     @Override

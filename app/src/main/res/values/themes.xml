@@ -35,6 +35,7 @@
         <item name="iGapReceivedReplayColor">#494949</item>
 
         <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
+        <item name="iGapReplyContentBackground">#636363</item>
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
         <item name="iGapSendReplayColor">@color/green</item>
@@ -105,6 +106,7 @@
         <item name="iGapReceivedReplayColor">#e2e8de</item>
 
         <item name="iGapSendMessageBubbleColor">#f5ffec</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">@color/green</item>
@@ -172,6 +174,7 @@
         <item name="iGapReceivedReplayColor">#f5a2a2</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#720505</item>
@@ -237,6 +240,7 @@
         <item name="iGapReceivedReplayColor">#F2BEBD</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
         <item name="iGapSendReplayColor">#da6463</item>
@@ -300,6 +304,7 @@
         <item name="iGapReceivedReplayColor">#DBADDB</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#68265b</item>
@@ -366,6 +371,7 @@
         <item name="iGapReceivedReplayColor">#92C7F2</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#07439b</item>
@@ -429,6 +435,7 @@
         <item name="iGapReceivedReplayColor">#CFDDAA</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#8cb238</item>
@@ -493,6 +500,7 @@
         <item name="iGapReceivedReplayColor">#F2D585</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#dd9f07</item>
@@ -557,6 +565,7 @@
         <item name="iGapReceivedOtherTextColor">#eeeeee</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
         <item name="iGapSendReplayColor">#ff6700</item>
@@ -620,6 +629,7 @@
         <item name="iGapMediaStripColor">@color/media_strip_color_dark_gray</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapBottomNavigationIconStart">#7495b5</item>
         <item name="iGapBottomNavigationIconEnd">#4e698a</item>
         <item name="iGapReceivedMessageTextColor">@color/white</item>

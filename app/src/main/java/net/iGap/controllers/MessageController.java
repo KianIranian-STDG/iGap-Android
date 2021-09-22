@@ -1,27 +1,36 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperTimeOut;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.response.UserLoginResponse;
+import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
@@ -30,7 +39,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     private String lastUploadedAvatarId;
     private long lastUploadedAvatarRoomId;
-
+    public static boolean isSendingStory = false;
     private static volatile MessageController[] instance = new MessageController[AccountManager.MAX_ACCOUNT_COUNT];
     private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
 
@@ -91,6 +100,12 @@ public class MessageController extends BaseController implements EventManager.Ev
             onDeleteMessageResponse(res, true);
         } else if (object instanceof IG_RPC.Res_Chat_Update_Status || object instanceof IG_RPC.Res_Group_Update_Status) {
             onMessageStatusResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_User_Add_New) {
+            onUserAddStoryResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_Delete) {
+            onUserDeletedStoryResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_Add_View) {
+            onUserStoryAddViewResponse(object, true);
         }
     }
 
@@ -126,6 +141,63 @@ public class MessageController extends BaseController implements EventManager.Ev
                 onMessageStatusResponse(response, false);
             }
         });
+    }
+
+    public void addMyStory(List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects) {
+        isSendingStory = true;
+        HttpUploader.isMultiUpload = false;
+        AbstractObject request = null;
+        IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
+        story_user_addNew.storyAddRequests = storyObjects;
+        request = story_user_addNew;
+        getRequestManager().sendRequest(request, (response, error) -> {
+
+            if (error == null) {
+                IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+                getMessageDataStorage().updateUserAddedStory(res.stories);
+                MessageController.isSendingStory = false;
+
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                MessageController.isSendingStory = false;
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED));
+            }
+        });
+
+    }
+
+    public void getStories(int contactCount) {
+        AbstractObject req = null;
+        IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
+        get_stories.offset = 0;
+        get_stories.limit = contactCount;
+        req = get_stories;
+        RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
+                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateUserAddedStoryWithStoryObjects(res.stories);
+            } else {
+                Log.e("fdajhfjshf", "getRequestManager2: " + "/" + error);
+            }
+        });
+
+    }
+
+    private void onUserStoryAddViewResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_Add_View story_add_view = (IG_RPC.Res_Story_Add_View) response;
+        if (story_add_view.storyOwnerUserId == AccountManager.getInstance().getCurrentUser().getId()) {
+            getMessageDataStorage().userAddViewStory(story_add_view.storyId, story_add_view.viewAt, story_add_view.userId, story_add_view.storyOwnerUserId);
+        }
+    }
+
+    private void onUserDeletedStoryResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
+        getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
+    }
+
+    private void onUserAddStoryResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+        getMessageDataStorage().updateUserAddedStory(res.stories);
     }
 
     private void onMessageStatusResponse(AbstractObject response, boolean update) {
@@ -305,7 +377,7 @@ public class MessageController extends BaseController implements EventManager.Ev
         }
 
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
-        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage,isUpdate));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage, isUpdate));
 
     }
 

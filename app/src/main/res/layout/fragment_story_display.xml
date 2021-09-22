@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_display"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/storyDisplayVideo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:surface_type="texture_view" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/storyDisplayImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <ProgressBar
+        android:id="@+id/storyDisplayVideoProgress"
+        style="?android:attr/progressBarStyleInverse"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/previous"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <View
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+    </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/storyOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/view7"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/story_top_shadow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <net.iGap.story.viewPager.StoriesProgressView
+            android:id="@+id/storiesProgressView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="2dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/storyDisplayProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/storiesProgressView">
+
+            <net.iGap.module.CircleImageView
+                android:id="@+id/storyDisplayProfilePicture"
+                android:layout_width="@dimen/dp40"
+                android:layout_height="@dimen/dp40"
+                android:layout_margin="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/storyDisplayNick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="username" />
+
+                <TextView
+                    android:id="@+id/storyDisplayTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    tools:text="nm ago" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/caption_text_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <net.iGap.story.ExpandableTextView
+                android:id="@+id/caption_text_sub_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frame_story_replay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/icon_replay"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:text="@string/icon_chevron_Down"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp32"
+                app:layout_constraintBottom_toTopOf="@+id/tv_replay"
+                app:layout_constraintEnd_toEndOf="@id/tv_replay"
+                app:layout_constraintStart_toStartOf="@id/tv_replay"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_replay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="@dimen/dp8"
+                android:text="@string/replay"
+                android:textColor="@color/white"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/story_display_seen_views_root_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/ic_view_seen" />
+
+
+            <TextView
+                android:id="@+id/story_display_views_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="3dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/display_bottom_sheet_story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/storyDisplayImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <include layout="@layout/story_bottomsheet_layout" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/display_story_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:id="@+id/keyboardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:id="@+id/ll_replay_story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/rootBackgroundColor"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/layout_attach_story"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16">
+
+            <TextView
+                android:id="@+id/nameFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Name"
+                android:textColor="?attr/iGapSendReplayColor"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/descriptionFrom"
+                android:layout_width="327dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp4"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Description"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:textSize="@dimen/dp12" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/story_image"
+            style="@style/myIconTextViewStyleGray"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_gravity="top"
+            android:layout_marginRight="@dimen/dp4"
+            android:padding="@dimen/dp8"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_attach_story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/iGapChatSendMessageBackground"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/keyboardContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/tv_story_emoji"
+            style="@style/myIconTextViewStyleGray"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_gravity="bottom"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:text="@string/icon_emoji_smile" />
+
+        <net.iGap.module.customView.EventEditText
+            android:id="@+id/et_chatRoom_writeMessage"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/type_message"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textMultiLine"
+            android:maxLines="6"
+            android:minLines="1"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingTop="@dimen/dp4"
+            android:paddingRight="@dimen/dp8"
+            android:paddingBottom="@dimen/dp8"
+            android:textSize="@dimen/largeTextSize" />
+
+        <FrameLayout
+            android:id="@+id/chatRoom_send_container"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:layout_gravity="center"
+            android:padding="@dimen/dp8"
+            android:visibility="gone">
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/btn_chatRoom_send"
+                style="@style/primaryIconTextViewStyle"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp44"
+                android:layout_gravity="center"
+                android:padding="@dimen/dp8"
+                android:text="@string/icon_send"
+                android:visibility="visible" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

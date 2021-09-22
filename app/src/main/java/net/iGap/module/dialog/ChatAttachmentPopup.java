@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.AdapterPopupOpenGallery;
 import net.iGap.adapter.items.BottomSheetItem;
+import net.iGap.story.PhotoViewer;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;

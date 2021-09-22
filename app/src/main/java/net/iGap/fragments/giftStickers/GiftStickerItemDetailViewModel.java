@@ -1,5 +1,6 @@
 package net.iGap.fragments.giftStickers;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -39,6 +40,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
                     .subscribe(new IGSingleObserver<IssueDataModel>(mainThreadDisposable) {
                         @Override
                         public void onSuccess(IssueDataModel issueDataModel) {
+                            Log.e("jdhfjhfjsdhf", "onSuccess: "+issueDataModel.getToken() );
                             getPaymentLiveData.postValue(issueDataModel);
                             isShowLoading.set(View.GONE);
                             isEnabledButton.set(true);
@@ -47,6 +49,7 @@ public class GiftStickerItemDetailViewModel extends ObserverViewModel {
                         @Override
                         public void onError(Throwable e) {
                             super.onError(e);
+                            Log.e("jdhfjhfjsdhf", "onError: "+e );
                             isShowLoading.set(View.INVISIBLE);
                             isEnabledButton.set(false);
                             isShowRetry.set(View.VISIBLE);
