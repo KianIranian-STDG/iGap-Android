@@ -905,8 +905,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmStoryViewInfo = schema.create(RealmStoryViewInfo.class.getSimpleName())
                     .addField("id", long.class)
                     .addField("userId", long.class)
-                    .addField("createdTime", long.class)
-                    .addField("displayName", String.class);
+                    .addField("createdTime", long.class);
 
             RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
                     .addField("caption", String.class)
@@ -921,7 +920,6 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("viewCount", int.class)
                     .addField("index", int.class)
                     .addField("isForReply", boolean.class)
-                    .addField("displayName", String.class)
                     .addRealmListField("realmStoryViewInfos", realmStoryViewInfo)
                     .addField("status", int.class);
 
@@ -934,8 +932,6 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isUploadedAll", boolean.class)
                     .addField("indexOfSeen", int.class)
                     .addField("sessionId", long.class)
-                    .addField("lastCreatedAt", long.class)
-                    .addField("displayName", String.class)
                     .addRealmListField("realmStoryProtos", realmStoryProto);
 
             realmStorySchema.addPrimaryKey("id");
@@ -951,6 +947,28 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
+
+        if (oldVersion == 51) {
+
+            RealmObjectSchema realmStorySchema = schema.get(RealmStory.class.getSimpleName());
+            RealmObjectSchema realmStoryProtoSchema = schema.get(RealmStoryProto.class.getSimpleName());
+            RealmObjectSchema realmStoryViewInfoSchema = schema.get(RealmStoryViewInfo.class.getSimpleName());
+
+            if (realmStorySchema != null) {
+                realmStorySchema.addField("displayName", String.class);
+                realmStorySchema.addField("lastCreatedAt", long.class);
+            }
+
+            if (realmStoryProtoSchema != null) {
+                realmStoryProtoSchema.addField("displayName", String.class);
+            }
+
+            if (realmStoryViewInfoSchema != null) {
+                realmStoryViewInfoSchema.addField("displayName", String.class);
+            }
+
+            oldVersion++;
+        }
     }
 
     @Override
