@@ -1133,7 +1133,6 @@
     <string name="farvardin">Farvardin</string>
     <string name="image_selected_for_send">Imagen seleccionada</string>
     <string name="igasht_empty_history_message">No hay boletos comprados todavía.</string>
-    <string name="bill_title">Pago de la factura</string>
     <string name="who_is_allowed_to_video_call">¿Quién puede videollamarme?</string>
     <string name="st_bio">Bio</string>
     <string name="billing_id">ID de facturación</string>
@@ -1905,11 +1904,11 @@
     <string name="kuknos_send_walletAddress_Hint1">I.E. GAVYHKFTRGE ...</string>
     <string name="navigation_drawer_open">Abierto</string>
     <string name="kuknos_send_walletAddress_Hint2">I.E. PRUEBA * PDPCO.IR</string>
-    <string name="news_add_comment_comment">دیدگاه شما</string>
+    <string name="news_add_comment_comment">Tu punto de vista</string>
     <string name="kuknos_getSupport_dcp">Si tiene 10,000 contratos o más en su cuenta, envíe una solicitud de canje de esta sección y por cada 10,000 contratos, continúe con un paquete de respaldo de oro que no sea una barra de gramo de 24 quilates. La tarifa por cada paquete es de 1.50 contratos, que se le cobrará en el momento del registro de la cuenta de usuario.</string>
     <string name="RETURN">REGRESAR</string>
     <string name="dial_number">Marque el número</string>
-    <string name="news_add_comment_successToast">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_successToast">Tu comentario fue enviado exitosamente</string>
     <string name="default_deposit">Depósito por defecto</string>
     <string name="not_answer">Llamada sin respuesta</string>
     <string name="E_713_1">Mala carga útil: token no válido</string>
@@ -1965,10 +1964,10 @@
     <string name="array_Short">Pequeño</string>
     <string name="rabio_aval">Rabi awwal</string>
     <string name="kuknos_panel_Edit_and_change_account_information">Editar y cambiar la información de la cuenta</string>
-    <string name="igasht_addـexternal_visits">اضافه کردن بازدید خارجی</string>
+    <string name="igasht_addـexternal_visits">Agregar visitas externas</string>
     <string name="kuknos_tradePager_history">Historia</string>
     <string name="view_contact">Ver contacto</string>
-    <string name="news_share">اشتراک گذاری خبر</string>
+    <string name="news_share">Compartir noticias</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">¿Está seguro de que desea limpiar todos los datos en las salas de chat locales?</string>
     <string name="sign_message_title">Mensajes de signo</string>
     <string name="empty_text_dr_bot">¡Bienvenido a IGAP Smart Inteligente Assistente!</string>
@@ -2059,8 +2058,19 @@
     <string name="Auto_lock_description">La aplicación se bloqueará después de cada vez que elija y necesite desbloquearlo al principio.</string>
     <string name="kuknos_recieve_copyToast">Dirección de la billetera copiada en la memoria.</string>
     <string name="mobile_bank_load_detail_unpaidCount">Cuotas no pagadas: %1$s</string>
-
+    <string name="apply">solicitar</string>
     <string name="how_to_get_points">Cómo ganar puntos</string>
+    <string name="code_registration">Inserte el código</string>
+    <string name="scan_code">Escanea el codigo</string>
+    <string name="manually_enter_code">Ingrese el código manualmente</string>
+    <string name="acceptor_name">Nombre del Recipiente</string>
+    <string name="acceptor_code">Código de destinatario</string>
+    <string name="please_enter_desired_amount">Ingrese la cantidad deseada:</string>
+    <string name="confirm">confirmar</string>
+    <string name="you_have_not_specified_the_amount">No has especificado la cantidad</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">La cantidad no puede ser inferior a 1000 riales.</string>
+    <string name="code_length_is_10_digit">¡La longitud del código es de 10 dígitos!</string>
+
     <string name="Loading">Cargando</string>
     <string name="AppName">iGap</string>
     <string name="StopLoading">Detener carga</string>

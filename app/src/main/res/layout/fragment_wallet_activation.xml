@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/iGapWalletDarkerBackground">
+
+    <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp300"
+        android:background="@drawable/background_white_bottom_shadow"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/dp32" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/dp32" />
+
+
+    <TextView
+        android:id="@+id/title_introduction_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp60"
+        android:text="@string/dear_subscription"
+        android:textColor="?attr/iGapPrimaryTextColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+    <TextView
+        android:id="@+id/introduction_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp6"
+        android:text="@string/wallet_introduction"
+        android:textColor="?attr/iGapPrimaryTextColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/title_introduction_textView" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/activation_button"
+        style="@style/iGapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp60"
+        android:text="@string/wallet_activation"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/introduction_textView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

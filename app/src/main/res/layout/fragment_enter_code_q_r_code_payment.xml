@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.qrCodePayment.viewModels.EnterCodeQRPaymentViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/iGapWalletDarkerBackground"
+        tools:context=".fragments.qrCodePayment.fragments.EnterCodeQRCodePaymentFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/white_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/background_white_bottom_shadow"
+                app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+            <EditText
+                android:id="@+id/code_edit_text"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:background="@drawable/edit_text_square_background"
+                android:gravity="center"
+
+                android:hint="@string/enter_code"
+                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textColorHint="?attr/iGapHintTextColor"
+                app:layout_constraintBottom_toTopOf="@id/done_button"
+                app:layout_constraintEnd_toEndOf="@id/white_view"
+                app:layout_constraintStart_toStartOf="@id/white_view"
+                app:layout_constraintTop_toTopOf="@id/white_view" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/done_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/code_edit_text" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/done_button"
+                style="@style/iGapButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:onClick="@{() -> viewModel.onCodeRegistrationClick()}"
+                android:text="@string/code_registration"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/white_view"
+                app:layout_constraintEnd_toEndOf="@id/white_view"
+                app:layout_constraintStart_toStartOf="@id/white_view"
+                app:layout_constraintTop_toBottomOf="@id/code_edit_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

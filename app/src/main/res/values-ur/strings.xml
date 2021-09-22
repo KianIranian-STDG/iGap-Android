@@ -1750,7 +1750,6 @@
     <string name="rrn">شماره مرجع</string>
     <string name="bill_id">شناسه قبض</string>
     <string name="topUp_title">خرید شارژ</string>
-    <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">پیام خرید شارژ</string>
     <string name="bill_message">پیام پرداخت قبض</string>
     <string name="soon">بزودی...</string>
@@ -1965,4 +1964,16 @@
     <string name="your_status_characters">لحظه شما نمیتواند بیشتر از ۵۰۰ حرف باشد.</string>
     <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
     <string name="moments_string">لحظه ها</string>
+    <string name="to">To</string>
+    <string name="apply">Apply</string>
+    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
+    <string name="scan_code">Scan code</string>
+    <string name="manually_enter_code">Manually enter code</string>
+    <string name="acceptor_name">Acceptor name</string>
+    <string name="acceptor_code">Acceptor code</string>
+    <string name="please_enter_desired_amount">Please enter desire amount:</string>
+    <string name="confirm">Confirm</string>
+    <string name="you_have_not_specified_the_amount">You have not specified the amount</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">The amount can not be less than 1000 Rials</string>
+    <string name="code_length_is_10_digit">Code length is 10 digit!</string>
 </resources>

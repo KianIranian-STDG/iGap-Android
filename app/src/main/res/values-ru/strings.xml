@@ -1535,7 +1535,6 @@
     <string name="rrn">Ссылочный номер</string>
     <string name="bill_id">ID счета</string>
     <string name="topUp_title">Купить зарядку</string>
-    <string name="bill_title">Оплатить счет</string>
     <string name="topUp_message">Пополнить сообщение о покупке</string>
     <string name="bill_message">Сообщение об оплате счета</string>
     <string name="soon">скоро...</string>
@@ -1650,11 +1649,24 @@
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
-    <string name="remind_me_later">Напомни мне позже</string>
-    <string name="score_request_text">Хотите оценить приложение?</string>
-    <string name="please_try_later">Пожалуйста, попробуйте позднее</string>
-    <string name="access_folder">Неавторизованная папка</string>
-    <string name="restrict_folder">Доступ к этой папке ограничен.</string>
+    <string name="to">К</string>
+    <string name="apply">подать заявление</string>
+    <string name="withdrawal_dialog_message">Вы можете мгновенно перевести остаток наличных средств iGap на свой банковский счет в любое время. эта функция скоро будет включена</string>
+    <string name="scan_code">Отсканируйте код</string>
+    <string name="code_registration">регистрация кода</string>
+    <string name="manually_enter_code">Manually enter code</string>
+    <string name="acceptor_name">Имя получателя</string>
+    <string name="acceptor_code">Код получателя</string>
+    <string name="please_enter_desired_amount">Пожалуйста, введите желаемую сумму:</string>
+    <string name="confirm">подтверждать</string>
+    <string name="you_have_not_specified_the_amount">Вы не указали сумму</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">Сумма не может быть меньше 1000 риалов.</string>
+    <string name="code_length_is_10_digit">Длина кода 10 цифр!</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
 
     <string name="name_error">Имя не подтверждено</string>
     <string name="user_name_error">Имя пользователя не подтверждено</string>

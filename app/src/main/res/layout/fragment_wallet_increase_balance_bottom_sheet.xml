@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/iGapWalletDarkerBackground">
+
+    <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/dp24" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/dp24" />
+
+    <TextView
+        android:id="@+id/filter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:text="@string/increase_bank_balance"
+        android:textColor="?attr/colorAccent"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
+
+    <TextView
+        style="@style/myIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_close"
+        app:layout_constraintBottom_toBottomOf="@id/filter_title"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintTop_toTopOf="@id/filter_title" />
+
+    <View
+        android:id="@+id/white_view_1"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_marginTop="@dimen/dp4"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/filter_title"
+        android:background="@drawable/background_white_bottom_shadow"
+        />
+
+    <TextView
+        android:id="@+id/type_of_transaction_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/please_select_the_desired_amount_or_enter_it_manually"
+        android:textColor="?attr/iGapPrimaryTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toTopOf="@id/white_view_1"/>
+
+    <TextView
+        android:id="@+id/paying_the_bill_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="100,000"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/paying_QR_textView"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/type_of_transaction_textView" />
+
+    <TextView
+        android:id="@+id/paying_QR_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="250,000"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/buy_credit_textView"
+        app:layout_constraintStart_toEndOf="@id/paying_the_bill_textView"
+        app:layout_constraintTop_toBottomOf="@id/type_of_transaction_textView" />
+
+    <TextView
+        android:id="@+id/buy_credit_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="500,000"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toEndOf="@id/paying_QR_textView"
+        app:layout_constraintTop_toBottomOf="@id/type_of_transaction_textView" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="paying_the_bill_textView,paying_QR_textView,buy_credit_textView"
+        tools:layout_editor_absoluteY="85dp" />
+
+    <TextView
+        android:id="@+id/buy_internet_package_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp16"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="1,000,000"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/shopping_from_store_textView"
+        app:layout_constraintStart_toEndOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+    <TextView
+        android:id="@+id/shopping_from_store_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp16"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="2,000,000"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/offer_textView"
+        app:layout_constraintStart_toEndOf="@id/buy_internet_package_textView"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+    <TextView
+        android:id="@+id/offer_textView"
+        android:layout_width="@dimen/dp110"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp16"
+        android:background="@drawable/edit_text_square_background"
+        android:gravity="center"
+        android:text="@string/OTHER"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toEndOf="@id/shopping_from_store_textView"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="buy_internet_package_textView,shopping_from_store_textView,offer_textView"
+        tools:layout_editor_absoluteY="141dp" />
+
+    <TextView
+        android:id="@+id/status_of_transaction_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/the_amount_is_in_rials"
+        android:textColor="?attr/iGapHintTextColor"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/barrier2" />
+
+    <Button
+        style="@style/iGapButton"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        android:gravity="center"
+        android:text="@string/increase_bank_balance"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/status_of_transaction_textView" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

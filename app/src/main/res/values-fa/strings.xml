@@ -286,7 +286,7 @@
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
     <string name="count_of_show_message">"تعداد پیام‌های قابل نمایش"</string>
     <string name="new_messages_from">"پیام‌های جدید از"</string>
-    <string name="from">"از"</string>
+    <string name="from">از</string>
     <string name="new_message">"پیام جدید"</string>
     <string name="new_messages">"پیام‌ جدید"</string>
     <string name="unknown_artist">"هنرمند نامشخص"</string>
@@ -1008,7 +1008,7 @@
     <string name="barcode_reader">بار کد خوان</string>
     <string name="billing_id">شناسه قبض</string>
     <string name="payment_code">شناسه پرداخت</string>
-    <string name="amount">مبلغ(ریال)</string>
+    <string name="amount">مبلغ</string>
     <string name="hamrahe_aval">همراه اول</string>
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
@@ -1403,7 +1403,7 @@
     <string name="wallet_card">کیف پول</string>
     <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
     <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
-    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول</string>
     <string name="total_amount">مبلغ کل (ریال) :</string>
     <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
@@ -2057,7 +2057,6 @@
     <string name="rrn">شماره مرجع</string>
     <string name="bill_id">شناسه قبض</string>
     <string name="topUp_title">خرید شارژ</string>
-    <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">پیام خرید شارژ</string>
     <string name="bill_message">پیام پرداخت قبض</string>
     <string name="mobile_bank_hotCard">باطل کردن کارت</string>
@@ -2082,7 +2081,7 @@
     <string name="kuknos_RecoverySK_languageTitle">زبان کلمات بازیابی</string>
     <string name="kuknos_RecoverySK_lengthTitle">تعداد کلمات بازیابی</string>
     <string name="activate_or_send_as_message">فعالسازی یا ارسال به عنوان پیام</string>
-    <string name="soon">بزودی...</string>
+    <string name="soon">بزودی</string>
     <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
     <string name="delete_recent_emoji">حذف اموجی های اخیر</string>
     <string name="usable">قابل استفاده</string>
@@ -2106,6 +2105,7 @@
     <string name="mobile_bank_activeNotification">فعال کردن اعلان</string>
     <string name="mobile_bank_deActiveNotification">غیر فعال کردن اعلان</string>
     <string name="secondary_password">رمز دوم</string>
+    <string name="bill_payment">پرداخت قبض</string>
     <string name="default_deposit">حساب پیش فرض</string>
     <string name="custom_deposit">حساب دلخواه</string>
     <string name="mobile_bank_login_hint">برای ورود به سیستم لطفا نام کاربری و‌ رمز عبور موبایل بانک پارسیان ‌خود ‌را وارد نمایید</string>
@@ -2189,7 +2189,7 @@
     <string name="kuknos_submit_count">مقدار</string>
     <string name="kuknos_dialog_refund_fixed_fee">کارمزد بازخرید</string>
     <string name="refund_amount">مبلغ واریزی</string>
-    <string name="submit">قبول</string>
+    <string name="submit">تأیید</string>
     <string name="refund_history">سابقه بازخرید</string>
     <string name="history">سابقه تراکنش</string>
     <string name="Submitـomment">برای مشاهده نتیجه نظرسنجی لطفا ابتدا رای خود را ثبت نمایید !</string>
@@ -2257,6 +2257,31 @@
     <string name="leave_confirm">آیا مطمئن هستید که می خواهید %s را ترک کنید؟</string>
     <string name="clear_selected_history"> آیا از پاک کردن تاریخچه %s اطمینان دارید؟</string>
     <string name="waiting_dialog_reason_text">تلاش بیش از حد</string>
+    <string name="dear_subscription">آیگپی عزیز</string>
+    <string name="wallet_introduction">به بخش کیف پول خوش آمدید، شما می توانید با فعال سازی این بخش از خدمات پرداخت و خرید شارژ و بسته اینترنتی در آیگپ بهره مند شوید</string>
+    <string name="wallet_activation">فعال سازی کیف پول</string>
+    <string name="enter_to_wallet">ورود به کیف پول</string>
+    <string name="Rials">ریال</string>
+    <string name="management">مدیریت کیف پول</string>
+    <string name="send_money">ارسال وجه</string>
+    <string name="Withdrawal">برداشت وجه</string>
+    <string name="increase_bank_balance">افزایش موجودی</string>
+    <string name="enter_information_for_send_money">شماره موبایل مقصد و مبلغ را به درستی وارد کنید</string>
+    <string name="amount_in_words">مبلغ به حروف</string>
+    <string name="immediate_withdrawal">برداشت فوری</string>
+    <string name="normal_withdrawal">برداشت عادی</string>
+    <string name="removable_bank_balance">موجودی قابل برداشت</string>
+    <string name="know_bank_account_number">نحوه اطلاع از شماره شبا</string>
+    <string name="please_enter_your_card_number">لطفا شماره کارت خود را وارد نمایید‌</string>
+    <string name="please_specify_the_desired_amount">لطفا مبلغ دلخواه را مشخص نمایید</string>
+    <string name="please_enter_the_sheba_bank_number">لطفا شماره شبای خود را وارد نمایید</string>
+    <string name="sheba_24_digit_number">شماره ۲۴ رقمی شبا</string>
+    <string name="card_16_digit_number">شماره ۱۶ رقمی کارت</string>
+    <string name="cash_pocket">جیب نقدی</string>
+    <string name="credit_pocket">جیب اعتباری</string>
+    <string name="cards_pocket">جیب کارت ها</string>
+    <string name="currency_pocket">جیب ارزی</string>
+    <string name="faq">پرسش های متداول</string>
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
     <string name="please_try_later">لطفا بعدا تلاش کنید</string>
@@ -2287,4 +2312,28 @@
     <string name="WaitMore">بیشتر منتظر باشید</string>
     <string name="Stop">متوقف کردن</string>
 
+    <string name="you_have_not_added_any_cards_yet">هنوز هیچ کارتی اضافه نکرده اید</string>
+    <string name="please_select_the_desired_amount_or_enter_it_manually">لطفا مبلغ مورد نظر را انتخاب کرده و یا به صورت دستی وارد کنید</string>
+    <string name="the_amount_is_in_rials">مبلغ به ریال می باشد</string>
+    <string name="type_of_transaction">نوع تراکنش</string>
+    <string name="paying_qr">پرداخت QR</string>
+    <string name="shopping_from_store">خرید از فروشگاه</string>
+    <string name="offer">پیشکش</string>
+    <string name="successful">موفق</string>
+    <string name="unknown2">نامشخص</string>
+    <string name="status_of_transaction">وضعیت تراکنش</string>
+    <string name="time_of_transaction">زمان تراکنش</string>
+    <string name="to">تا</string>
+    <string name="apply">اعمال</string>
+    <string name="withdrawal_dialog_message">شما می توانید در هر زمان که بخواهید موجودی کیف نقدی را به صورت آنی به حساب بانکی خود منتقل کنید. این ویژگی به زودی فعال می شود</string>
+    <string name="code_registration">ثبت کد</string>
+    <string name="scan_code"> اسکن کنید!</string>
+    <string name="manually_enter_code">ورود دستی کد پذیرنده</string>
+    <string name="acceptor_name">نام پذیرنده</string>
+    <string name="acceptor_code">کد پذیرنده</string>
+    <string name="please_enter_desired_amount"> لطفا مبلغ دلخواه را وارد نمایید:</string>
+    <string name="confirm">تأیید</string>
+    <string name="you_have_not_specified_the_amount">مبلغ را مشخص نکرده اید</string>
+    <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>
+    <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
 </resources>

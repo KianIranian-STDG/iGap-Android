@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;

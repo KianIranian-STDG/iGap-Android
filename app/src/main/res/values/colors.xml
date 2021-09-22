@@ -130,7 +130,6 @@
 
     <!-- New Color-->
     <color name="buttonColor">#57BA26</color>
-    <color name="buttonTextColor">#FFFFFF</color>
     <color name="circleIndicatorSelected">#42B120</color>
     <color name="ivand_green_text_color">#45B321</color>
 
@@ -165,7 +164,7 @@
     <color name="receive_message_text_light">#5F5F5F</color>
 
     <color name="shared_media_music_list_icon_color">#468DA7</color>
-    <color name="players_dark_background">#242424</color>
+    <color name="players_dark_background">#333333</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
     <color name="round_buttons_enabled_bg">#7B7B7B</color>
     <color name="tick_background_color">#66000000</color>
@@ -197,6 +196,10 @@
     <color name="grayTheme">#4e698a</color>
     <color name="greenThem">#b5e663</color>
     <color name="redTheme">#c82121</color>
+    <color name="wallet_darker_background_dark">#1c1c1c</color>
+    <color name="wallet_darker_background_light">#EDEDED</color>
+    <color name="wallet_lighter_background_dark">#262626</color>
+    <color name="wallet_lighter_background_light">#FFFFFF</color>
 
     <array name="default_colors">
         <item>#1d1d1d</item>

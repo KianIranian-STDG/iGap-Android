@@ -27,7 +27,7 @@
             android:background="@color/pink"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
-            android:text="@string/bill_title"
+            android:text="@string/bill_payment"
             android:paddingBottom="@dimen/dp6"
             android:textColor="@color/white"
             android:textSize="@dimen/dp15" />
