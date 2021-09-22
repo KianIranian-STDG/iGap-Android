@@ -1193,6 +1193,7 @@ public class MessageDataStorage extends BaseController {
                 }
             }
 
+            realmStory.setLastCreatedAt(stories.get(stories.size() - 1).createdAt);
             realmStory.setDisplayName(displayName);
             realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
             realmStory.setUserId(userId);
@@ -1245,7 +1246,7 @@ public class MessageDataStorage extends BaseController {
                         storyObjects.add(StoryObject.create(stories.get(i), i, realmRegisteredInfo.getDisplayName()));
                     }
 
-
+                    realmStory.setLastCreatedAt(storyObjects.get(storyObjects.size() - 1).createdAt);
                     realmStory.setDisplayName(realmRegisteredInfo.getDisplayName());
                     realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
                     realmStory.setUserId(stories.get(0).getUserId());
@@ -1641,7 +1642,7 @@ public class MessageDataStorage extends BaseController {
             try {
 
 
-                stories.addAll(database.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll());
+                stories.addAll(database.where(RealmStory.class).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).sort("lastCreatedAt", Sort.DESCENDING).findAll());
 
                 for (int i = 0; i < stories.size(); i++) {
                     List<StoryObject> storyObjects = new ArrayList<>();

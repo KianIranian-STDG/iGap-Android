@@ -934,6 +934,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isUploadedAll", boolean.class)
                     .addField("indexOfSeen", int.class)
                     .addField("sessionId", long.class)
+                    .addField("lastCreatedAt", long.class)
                     .addField("displayName", String.class)
                     .addRealmListField("realmStoryProtos", realmStoryProto);
 

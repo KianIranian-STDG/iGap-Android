@@ -22,6 +22,7 @@ public class RealmStory extends RealmObject {
     private boolean isSeenAll;
     private boolean isSentAll;
     private boolean isUploadedAll;
+    private long lastCreatedAt;
     private int indexOfSeen;
     private long sessionId;
     private String displayName;
@@ -116,6 +117,14 @@ public class RealmStory extends RealmObject {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public long getLastCreatedAt() {
+        return lastCreatedAt;
+    }
+
+    public void setLastCreatedAt(long lastCreatedAt) {
+        this.lastCreatedAt = lastCreatedAt;
     }
 
     public boolean isUploadedAll() {
