@@ -728,12 +728,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCreditClick() {
-        Toast.makeText(G.context, "Coming soon", Toast.LENGTH_SHORT).show();
-//        if (!userInfo.isWalletRegister()) {
-//            goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
-//        } else {
-//            goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
-//        }
+        if (!userInfo.isWalletRegister()) {
+            goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
+        } else {
+            goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
+        }
     }
 
     public void onScoreClick() {
