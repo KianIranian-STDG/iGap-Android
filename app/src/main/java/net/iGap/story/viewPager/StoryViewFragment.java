@@ -18,7 +18,6 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.realm.RealmStoryProto;
@@ -28,7 +27,6 @@ import net.iGap.story.StoryObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.RealmResults;
 import io.realm.Sort;
 
 public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
@@ -155,7 +153,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         }
 
 
-        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this, myStory);
+        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this, myStory, isForReply);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
         viewPager.setPageTransformer(true, new PageTransformer());

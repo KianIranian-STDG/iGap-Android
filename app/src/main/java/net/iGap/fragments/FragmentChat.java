@@ -3950,7 +3950,7 @@ public class FragmentChat extends BaseFragment
 
                 }
 
-            }, KeyboardView.MODE_KEYBOARD);
+            }, KeyboardView.MODE_KEYBOARD, true);
 
             keyboardView.setVisibility(View.GONE);
 

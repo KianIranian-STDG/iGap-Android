@@ -29,7 +29,6 @@ import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
-import net.iGap.story.StoryObject;
 import net.iGap.story.viewPager.Story;
 import net.iGap.structs.AdditionalObject;
 import net.iGap.structs.MessageObject;
@@ -147,7 +146,7 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
-    public ChatSendMessageUtil buildStoryReply(int roomType, long roomId, Story storyObject, String message) {
+    public ChatSendMessageUtil buildStoryReply(int roomType, long roomId, Story storyObject, MessageObject messageObject, String message) {
         ChatSendMessageUtil builder = newBuilder(roomType, ProtoGlobal.RoomMessageType.STORY_REPLY.getNumber(), roomId);
 
         if (message != null && !message.isEmpty()) {
@@ -159,6 +158,16 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
             replyBuilder.setStoryId(storyObject.getStoryId());
             replyBuilder.setCaption(storyObject.getTxt());
             builder.storyReply(replyBuilder.build());
+
+            if (messageObject != null) {
+                if (messageObject.attachment != null) {
+                    builder.attachment(messageObject.attachment.token);
+                }
+
+                if (messageObject.additional != null) {
+                    builder.additional(messageObject.additional);
+                }
+            }
         }
         builder.sendMessage(Long.toString(AppUtils.makeRandomId()));
         return this;

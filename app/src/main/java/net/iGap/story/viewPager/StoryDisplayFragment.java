@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -96,6 +95,7 @@ import net.iGap.story.ViewUserDialogFragment;
 import net.iGap.story.liststories.ImageLoadingView;
 import net.iGap.story.storyviews.StoryCell;
 import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.List;
@@ -111,6 +111,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
     private static final String EXTRA_IS_MY_STORY = "EXTRA_IS_MY_STORY";
+    private static final String EXTRA_IS_FOR_REPLY = "EXTRA_IS_FOR_REPLY";
     private int position;
     private StoryUser storyUser;
     private List<Story> stories;
@@ -172,14 +173,16 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private FrameLayout replyContainer, rootLayout, storyOverlay;
     private NotifyFrameLayout notifyFrameLayout;
     private int keyboardViewHeight;
+    private boolean isFormChat;
 
-    public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory) {
+    public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory, boolean isForReply) {
 
         Bundle args = new Bundle();
         StoryDisplayFragment fragment = new StoryDisplayFragment();
         args.putInt(EXTRA_POSITION, position);
         args.putSerializable(EXTRA_STORY_USER, storyModel);
         args.putBoolean(EXTRA_IS_MY_STORY, isMyStory);
+        args.putBoolean(EXTRA_IS_FOR_REPLY, isForReply);
         fragment.setArguments(args);
 
         return fragment;
@@ -195,7 +198,19 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         fragmentView = new FrameLayout(context);
         rootLayout = (FrameLayout) fragmentView;
 
-        notifyFrameLayout = new NotifyFrameLayout(context);
+        notifyFrameLayout = new NotifyFrameLayout(context) {
+            @Override
+            public boolean dispatchKeyEventPreIme(KeyEvent event) {
+                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                    if (keyboardViewVisible) {
+                        hideStoryReply();
+                        return true;
+                    }
+                    return false;
+                }
+                return super.dispatchKeyEventPreIme(event);
+            }
+        };
         notifyFrameLayout.setListener(this::onScreenSizeChanged);
         rootLayout.addView(notifyFrameLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -245,7 +260,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
         profileImage = new CircleImageView(context);
         profileImage.setContentDescription("profileImage");
-        storyOverlay.addView(profileImage, LayoutCreator.createFrame(40, 40, Gravity.LEFT, 8, 8, 8, 8));
+        storyOverlay.addView(profileImage, LayoutCreator.createFrame(40, 40, Gravity.LEFT, 8, 10, 8, 8));
 
         LinearLayout profileContainer = new LinearLayout(context);
         profileContainer.setContentDescription("profileContainer");
@@ -273,6 +288,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         captionRootView.setContentDescription("captionRootView");
         captionRootView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         captionRootView.setTextColor(Color.WHITE);
+        captionRootView.setPadding(8, 8, 8, 8);
         rootLayout.addView(captionRootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 80));
 
         storySeenContainer = new LinearLayout(context);
@@ -284,6 +300,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         eyeIcon.setContentDescription("eyeIcon");
         eyeIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         eyeIcon.setTextColor(Color.WHITE);
+        eyeIcon.setGravity(Gravity.CENTER_VERTICAL);
         eyeIcon.setText(R.string.icon_eye);
         eyeIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
@@ -291,11 +308,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         seenCount = new TextView(context);
         seenCount.setContentDescription("seenCount");
         seenCount.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        seenCount.setGravity(Gravity.CENTER_VERTICAL);
         seenCount.setTextColor(Color.WHITE);
-        seenCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        seenCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         storySeenContainer.addView(eyeIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.LEFT));
-        storySeenContainer.addView(seenCount, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.RIGHT));
+        storySeenContainer.addView(seenCount, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.RIGHT, 3, 0, 0, 0));
 
 
         storyProgress = new ProgressBar(context);
@@ -400,21 +418,22 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         replyIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         replyIcon.setTextColor(Color.WHITE);
         replyIcon.setText(R.string.icon_chevron_Down);
-        replyIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        replyIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
         replyText = new TextView(context);
         replyText.setContentDescription("replyText");
         replyText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         replyText.setTextColor(Color.WHITE);
         replyText.setText(R.string.replay);
-        replyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        replyText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
         storyReplyContainer.addView(replyIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
         storyReplyContainer.addView(replyText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
 
 
-        notifyFrameLayout.addView(storySeenContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 50));
-        notifyFrameLayout.addView(storyReplyContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 60));
+        notifyFrameLayout.addView(storySeenContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 20));
+        notifyFrameLayout.addView(storyReplyContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 30));
+
         return rootLayout;
     }
 
@@ -428,6 +447,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             position = getArguments().getInt(EXTRA_POSITION);
             storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
             stories = storyUser.getStories();
+            isFormChat = getArguments().getBoolean(EXTRA_IS_FOR_REPLY);
         }
 
         isMyStory = storyUser.getUserId() == AccountManager.getInstance().getCurrentUser().getId();
@@ -437,10 +457,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             storySeenContainer.setVisibility(View.VISIBLE);
             if (stories.get(counter).getViewCount() > 0) {
             }
-
         } else {
             storyReplyContainer.setVisibility(View.VISIBLE);
             storySeenContainer.setVisibility(View.INVISIBLE);
+        }
+
+        if (isFormChat) {
+            storyReplyContainer.setVisibility(View.INVISIBLE);
         }
 
         setUpUi();
@@ -470,13 +493,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 getRequestManager().sendRequest(chat_get_room, (response, error) -> {
                     if (response != null) {
                         IG_RPC.Res_chat_get_room res = (IG_RPC.Res_chat_get_room) response;
-                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(res.room.getTypeValue(), res.room.getId(), stories.get(counter), replyText);
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(res.room.getTypeValue(), res.room.getId(), stories.get(counter), null, replyText);
                         hideReplyViews();
                     }
                 });
 
             } else {
-                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), replyText);
+                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), null, replyText);
                 hideReplyViews();
                 Toast.makeText(context, getString(R.string.sending_reply), Toast.LENGTH_SHORT).show();
             }
@@ -570,17 +593,17 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
         keyboardVisible = height > 0;
 
-//        if (notifyFrameLayout != null) {
-//            notifyFrameLayout.requestLayout();
-//        }
-
-        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
-            if (keyboardViewVisible)
-                layoutParams.bottomMargin = keyboardHeight + LayoutCreator.dp(60);
-            else
-                layoutParams.bottomMargin = LayoutCreator.dp(60);
+        if (notifyFrameLayout != null) {
+            notifyFrameLayout.requestLayout();
         }
+
+//        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+//            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
+//            if (keyboardViewVisible)
+//                layoutParams.bottomMargin = keyboardHeight + LayoutCreator.dp(60);
+//            else
+//                layoutParams.bottomMargin = LayoutCreator.dp(60);
+//        }
     }
 
     private void showPopup(int mode) {
@@ -671,10 +694,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (keyboardView == null)
             return;
 
-        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
-            layoutParams.bottomMargin = LayoutCreator.dp(60);
-        }
+//        if (suggestedLayout != null && suggestedLayout.getVisibility() == View.VISIBLE) {
+//            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) suggestedLayout.getLayoutParams();
+//            layoutParams.bottomMargin = LayoutCreator.dp(60);
+//        }
 
         keyboardViewVisible = false;
         keyboardView.setVisibility(View.GONE);
@@ -724,7 +747,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
                 @Override
                 public void onSendStickerAsMessage(StructIGSticker structIGSticker) {
-                    Log.e("mmd", "onSendStickerAsMessage: ");
                     sendStickerAsMessage(structIGSticker);
                 }
 
@@ -763,7 +785,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     }
                 }
 
-            }, KeyboardView.MODE_KEYBOARD);
+            }, KeyboardView.MODE_KEYBOARD, false);
 
             keyboardView.setVisibility(View.GONE);
 
@@ -819,7 +841,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 });
 
                 suggestedLayout.addView(suggestedRecyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-//                rootView.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
+//                rootLayout.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
             }
 
             suggestedRecyclerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), getContext(), R.attr.iGapEditTxtColor));
@@ -847,7 +869,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         int[] imageSize = AndroidUtils.getImageDimens(structIGSticker.getPath());
         RealmRoomMessage roomMessage = new RealmRoomMessage();
         roomMessage.setMessageId(identity);
-        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STICKER);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.STORY_REPLY);
         if (realmRoom != null) {
             roomMessage.setRoomId(realmRoom.getId());
         }
@@ -890,6 +912,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 stickerItem.setRecent();
             }
         })).start();
+
+        MessageObject messageObject = MessageObject.create(roomMessage);
+        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), messageObject, null);
     }
 
     @Override
@@ -1121,7 +1146,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onSwipeTop() {
-                if (!isMyStory) {
+                if (!isMyStory && !isFormChat) {
                     setupReply();
                 }
             }
@@ -1135,10 +1160,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             @Override
             public void onClick(View view) {
                 if (keyboardViewVisible) {
-                    showPopup(-1);
-                    replyContainer.setVisibility(View.GONE);
-                    storyReplyContainer.setVisibility(View.VISIBLE);
-                    updateStory();
+                    hideStoryReply();
                     return;
                 }
                 if (!clickable) {
@@ -1172,9 +1194,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             return false;
                         case MotionEvent.ACTION_UP:
                             showStoryOverlay();
-                            if (isPopupShowing()) {
-                                showPopup(-1);
-                                replyContainer.setVisibility(View.GONE);
+                            if (keyboardViewVisible) {
                                 return false;
                             }
                             updateStory();
@@ -1205,29 +1225,44 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storiesProgressView.setProgressListener(this);
     }
 
+    private void hideStoryReply() {
+        showPopup(-1);
+        replyContainer.setVisibility(View.GONE);
+        storyReplyContainer.setVisibility(View.VISIBLE);
+        updateStory();
+    }
+
     public void showStoryOverlay() {
         if (storyOverlay == null || storyOverlay.getAlpha() != 0F)
             return;
-        storyOverlay.animate()
-                .setDuration(100)
-                .alpha(1F)
-                .start();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(100);
+        animatorSet.playTogether(
+                ObjectAnimator.ofFloat(storyOverlay, View.ALPHA, 0, 1f),
+                ObjectAnimator.ofFloat(storySeenContainer, View.ALPHA, 0, 1f),
+                ObjectAnimator.ofFloat(captionRootView, View.ALPHA, 0, 1f),
+                ObjectAnimator.ofFloat(storyReplyContainer, View.ALPHA, 0, 1f)
+        );
+        animatorSet.start();
     }
 
     public void hideStoryOverlay() {
         if (storyOverlay == null || storyOverlay.getAlpha() != 1F)
             return;
-        storyOverlay.animate()
-                .setDuration(200)
-                .alpha(0F)
-                .start();
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setDuration(200);
+        animatorSet.playTogether(
+                ObjectAnimator.ofFloat(storyOverlay, View.ALPHA, 1f, 0),
+                ObjectAnimator.ofFloat(storySeenContainer, View.ALPHA, 1f, 0),
+                ObjectAnimator.ofFloat(captionRootView, View.ALPHA, 1f, 0),
+                ObjectAnimator.ofFloat(storyReplyContainer, View.ALPHA, 1f, 0)
+        );
+        animatorSet.start();
 
     }
 
     private void setupReply() {
-//        openKeyBoard();
-//        getKeyboardState();
-//        replyEditText.requestFocus();
         chatMotionEvent(null);
         pauseCurrentStory();
         replyContentContainer.setVisibility(View.VISIBLE);
@@ -1328,6 +1363,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             showStoryOverlay();
             storiesProgressView.resume();
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (keyboardViewVisible) {
+            hideStoryReply();
+            return false;
+        }
+        return true;
     }
 
     @Override

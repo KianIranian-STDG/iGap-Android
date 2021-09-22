@@ -22,14 +22,16 @@ public class KeyboardView extends FrameLayout {
     private EmojiView emojiView;
     private int currentMode;
     private Listener listener;
+    private boolean needSticker;
 
     private int keyboardHeight;
     private int keyboardHeightLand;
 
-    public KeyboardView(@NonNull Context context, Listener listener, int mode) {
+    public KeyboardView(@NonNull Context context, Listener listener, int mode, boolean needSticker) {
         super(context);
         this.listener = listener;
         currentMode = mode;
+        this.needSticker = needSticker;
 
         if (emojiView == null)
             createEmojiView();
@@ -63,7 +65,7 @@ public class KeyboardView extends FrameLayout {
         if (emojiView != null)
             return;
 
-        emojiView = new EmojiView(getContext(), true, true);
+        emojiView = new EmojiView(getContext(), needSticker, true);
         emojiView.setListener(new EmojiView.Listener() {
             @Override
             public void onBackSpace() {
