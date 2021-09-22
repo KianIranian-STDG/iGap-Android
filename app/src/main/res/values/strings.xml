@@ -45,7 +45,7 @@
 
     <!--Reagent-->
     <string name="ra_enter_reagent_code">enter referral code(Optional)</string>
-    <string name="ra_confirm">"Confirm"</string>
+    <string name="ra_confirm">Confirm</string>
     <string name="reagent_error_message">The number entered is incorrect for the referral.</string>
 
 
@@ -2241,12 +2241,17 @@ Want to get it?</string>
     <string name="histroy_fee">Fee</string>
     <string name="history_count">Count</string>
     <string name="refund_done">Refund is done successfully</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please try later</string>
     <string name="payman_token_not_enough">The Token is not enough</string>
     <string name="payman_refund_limitation_error">You have not complied with the token limit.</string>
     <string name="enter_pmn_count">please enter the token count</string>
     <string name="refund_error">Refund progress error</string>
     <string name="token_not_selected">Token not selected</string>
     <string name="refund_is_not_available">Refund for this Token is not available</string>
+    <string name="access_folder">Unauthorized folder</string>
+    <string name="restrict_folder">Access to this folder is limited</string>
     <string name="error_resume_file_expired">Resuming file is expired! please try again.</string>
     <string name="Submitـomment">To view the poll results, please register your vote first!</string>
     <string name="location_list_tile">Search entertainment centers</string>

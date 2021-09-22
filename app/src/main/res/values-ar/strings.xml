@@ -2627,15 +2627,10 @@
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
-    <string name="remind_me_later">Remind me later</string>
-    <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please Try later</string>
     <string name="name_error">لم يتم التحقق من الاسم</string>
     <string name="user_name_error">اسم المستخدم غير مؤكد</string>
     <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
     <string name="gender_error">لم يتم تأكيد الجنس</string>
-    <string name="access_folder">Unauthorized Folder</string>
-    <string name="restrict_folder">Access to this folder is restricted.</string>
     <string name="bio_error">Bio not verified</string>
     <string name="bio_added">Bio verified</string>
     <string name="user_name_added">Username confirmed</string>
@@ -2695,6 +2690,5 @@
     <string name="you_have_not_specified_the_amount">لم تحدد المبلغ</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">لا يمكن أن يكون المبلغ أقل من 1000 ريال</string>
     <string name="code_length_is_10_digit">طول الكود 10 أرقام!</string>
-
 
 </resources>

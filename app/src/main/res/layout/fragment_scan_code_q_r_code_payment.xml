@@ -44,7 +44,7 @@
                 app:frameThickness="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar_container"
-                app:maskColor="#80F5F8F5" />
+                app:maskColor="#80000000" />
 
             <TextView
                 android:id="@+id/scan_code_textView"

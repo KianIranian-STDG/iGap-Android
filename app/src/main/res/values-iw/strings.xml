@@ -1764,7 +1764,6 @@
     <string name="rrn">شماره مرجع</string>
     <string name="bill_id">شناسه قبض</string>
     <string name="topUp_title">خرید شارژ</string>
-    <string name="bill_title">پرداخت قبض</string>
     <string name="topUp_message">پیام خرید شارژ</string>
     <string name="bill_message">پیام پرداخت قبض</string>
     <string name="soon">بزودی...</string>

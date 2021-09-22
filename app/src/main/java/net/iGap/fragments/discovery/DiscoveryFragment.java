@@ -36,6 +36,7 @@ import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentWalletAgrement;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPreferences;

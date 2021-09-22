@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -49,6 +51,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.fragments.populaChannel.RatingDialog;
 import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
@@ -100,6 +103,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -382,7 +386,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
-        toolbarItems.addItemWithWidth(codeScannerTag,R.string.icon_QR_code,54);
+        toolbarItems.addItemWithWidth(codeScannerTag, R.string.icon_QR_code, 54);
         if (PassCode.getInstance().isPassCode()) {
             passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
@@ -730,14 +734,15 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 }
 
 
-            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                getMessageController().deleteChannel(item.getId());
-            } else {
-                getRoomController().channelLeft(item.getId());
+                if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                    getMessageController().deleteChannel(item.getId());
+                } else {
+                    getRoomController().channelLeft(item.getId());
+                }
             }
+            if (exit)
+                disableMultiSelect();
         }
-        if (exit)
-            disableMultiSelect();
     }
 
     private void deleteChatWithRealm(RealmRoom item, boolean exit) {
@@ -876,7 +881,8 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     @Override
-    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+    public void onSetAction(final long roomId, final long userId,
+                            final ProtoGlobal.ClientAction clientAction) {
         RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, userId, RealmRoom.detectType(roomId), clientAction));
     }
 
@@ -914,37 +920,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
     }
+
     private void onCodeScannerClickListener() {
         new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
                 .setAddToBackStack(true)
                 .setReplace(false)
                 .load();
-//        DbManager.getInstance().doRealmTask(realm -> {
-//            String phoneNumber = "";
-//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-//            try {
-//                if (userInfo != null) {
-//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-//                } else {
-//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-//                }
-//            } catch (Exception e) {
-//                //maybe exception was for realm substring
-//                try {
-//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-//                } catch (Exception ex) {
-//                    //nothing
-//                }
-//            }
-//
-//            if (userInfo == null || !userInfo.isWalletRegister()) {
-//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-//            } else {
-//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-//            }
-//
-//        });
     }
+
     private void onConnectionStateChange(final ConnectionState connectionState) {
         if (connectionState == null) {
             return;
@@ -1343,3 +1326,4 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         }
     }
 }
+
