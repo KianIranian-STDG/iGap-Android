@@ -520,11 +520,11 @@ public class FragmentGallery extends BaseFragment {
     private void showSortDialog() {
         if (getContext() == null) return;
 
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.date));
-        items.add(getString(R.string.name));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.date);
+        items.add(R.string.name);
 
-        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
             switch (position) {
                 case 0:
                     if (!isMusicSortedByDate) {

@@ -410,9 +410,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     private void showPopUp() {
         if (getActivity() != null) {
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.add_to_home_screen));
-            new TopSheetDialog(getActivity()).setListData(items, -1, position -> {
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.add_to_home_screen);
+            new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, position -> {
                 //ToDo: add code for add to home screen
             }).show();
         }

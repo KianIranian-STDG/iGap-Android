@@ -210,10 +210,10 @@ public class FragmentSetting extends BaseFragment {
 
     public void showMenu() {
         if (getContext() != null) {
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.delete_account));
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.delete_account);
 
-            new TopSheetDialog(getContext()).setListData(items, -1, position -> viewModel.onDeleteAccountClick()).show();
+            new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> viewModel.onDeleteAccountClick()).show();
         }
     }
 

@@ -160,14 +160,14 @@ public class FragmentMediaPlayerViewModel {
 
     private void popUpMusicMenu() {
 
-        List<String> items = new ArrayList<>();
-        items.add(G.fragmentActivity.getString(R.string.save_to_Music));
-        items.add(G.fragmentActivity.getString(R.string.share_item_dialog));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.save_to_Music);
+        items.add(R.string.share_item_dialog);
 
-        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
-            if (items.get(position).equals(G.fragmentActivity.getString(R.string.save_to_Music))) {
+        new TopSheetDialog(G.fragmentActivity).setListDataWithResourceId(items, -1, position -> {
+            if (items.get(position)==R.string.save_to_Music) {
                 saveToMusic();
-            } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.share_item_dialog))) {
+            } else if (items.get(position)==R.string.share_item_dialog) {
                 shareMusic();
             }
         }).show();
