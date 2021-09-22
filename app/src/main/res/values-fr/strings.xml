@@ -1718,7 +1718,6 @@
     <string name="rrn">Numéro de référence</string>
     <string name="bill_id">ID de facture</string>
     <string name="topUp_title">Acheter En Charge</string>
-    <string name="bill_title">Payer La Facture</string>
     <string name="topUp_message">Message de Acheter en charge</string>
     <string name="bill_message">Message de paiement de facture</string>
     <string name="soon">Bientôt disponible...</string>

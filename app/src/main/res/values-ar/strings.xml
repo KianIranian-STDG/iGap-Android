@@ -2640,12 +2640,6 @@
     <string name="gender_error">لم يتم تأكيد الجنس</string>
     <string name="access_folder">مجلد غير مصرح به</string>
     <string name="restrict_folder">الوصول إلى هذا المجلد مقيد.</string>
-    <string name="bio_error">لم يتم التحقق من السيرة الذاتية</string>
-    <string name="bio_added">تم التحقق من السيرة الذاتية</string>
-    <string name="user_name_added">تم تأكيد اسم المستخدم</string>
-    <string name="bio_error">Bio not verified</string>
-    <string name="bio_added">Bio verified</string>
-    <string name="user_name_added">Username confirmed</string>
     <string name="update_lock_error">"درخواست خارج از تعداد"</string>
     <string name="seted_gender">تم تأكيد الجنس</string>
     <string name="seted_name">تم تأكيد الاسم</string>

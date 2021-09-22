@@ -29,7 +29,6 @@
     <string name="kunos_receipt_hash">"Хеш"</string>
     <string name="kunos_receipt_date_apply">"Дата подачи заявки"</string>
     <string name="kuknos_receipt_Return_to_digital_token_bag">"Вернуться в сумку с цифровыми жетонами"</string>
-    <string name="kuknos_setting_dialog">Подтверждение выкупа токена</string>
     <string name="kuknos_rial_max_buy">"Максимально допустимый"</string>
     <string name="kuknos_rial_min_buy">"Минимально допустимый"</string>
     <string name="kuknos_rial_price_of_day">"Цена дня"</string>
@@ -1536,7 +1535,6 @@
     <string name="rrn">Ссылочный номер</string>
     <string name="bill_id">ID счета</string>
     <string name="topUp_title">Купить зарядку</string>
-    <string name="bill_title">Оплатить счет</string>
     <string name="topUp_message">Пополнить сообщение о покупке</string>
     <string name="bill_message">Сообщение об оплате счета</string>
     <string name="soon">скоро...</string>
@@ -1651,11 +1649,6 @@
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
-    <string name="remind_me_later">Напомни мне позже</string>
-    <string name="score_request_text">Хотите оценить приложение?</string>
-    <string name="please_try_later">Пожалуйста, попробуйте позднее</string>
-    <string name="access_folder">Неавторизованная папка</string>
-    <string name="restrict_folder">Доступ к этой папке ограничен.</string>
     <string name="to">To</string>
     <string name="apply">подать заявление</string>
     <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
