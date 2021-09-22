@@ -1904,11 +1904,11 @@
     <string name="kuknos_send_walletAddress_Hint1">I.E. GAVYHKFTRGE ...</string>
     <string name="navigation_drawer_open">Abierto</string>
     <string name="kuknos_send_walletAddress_Hint2">I.E. PRUEBA * PDPCO.IR</string>
-    <string name="news_add_comment_comment">دیدگاه شما</string>
+    <string name="news_add_comment_comment">Tu punto de vista</string>
     <string name="kuknos_getSupport_dcp">Si tiene 10,000 contratos o más en su cuenta, envíe una solicitud de canje de esta sección y por cada 10,000 contratos, continúe con un paquete de respaldo de oro que no sea una barra de gramo de 24 quilates. La tarifa por cada paquete es de 1.50 contratos, que se le cobrará en el momento del registro de la cuenta de usuario.</string>
     <string name="RETURN">REGRESAR</string>
     <string name="dial_number">Marque el número</string>
-    <string name="news_add_comment_successToast">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_successToast">Tu comentario fue enviado exitosamente</string>
     <string name="default_deposit">Depósito por defecto</string>
     <string name="not_answer">Llamada sin respuesta</string>
     <string name="E_713_1">Mala carga útil: token no válido</string>
@@ -1964,10 +1964,10 @@
     <string name="array_Short">Pequeño</string>
     <string name="rabio_aval">Rabi awwal</string>
     <string name="kuknos_panel_Edit_and_change_account_information">Editar y cambiar la información de la cuenta</string>
-    <string name="igasht_addـexternal_visits">اضافه کردن بازدید خارجی</string>
+    <string name="igasht_addـexternal_visits">Agregar visitas externas</string>
     <string name="kuknos_tradePager_history">Historia</string>
     <string name="view_contact">Ver contacto</string>
-    <string name="news_share">اشتراک گذاری خبر</string>
+    <string name="news_share">Compartir noticias</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">¿Está seguro de que desea limpiar todos los datos en las salas de chat locales?</string>
     <string name="sign_message_title">Mensajes de signo</string>
     <string name="empty_text_dr_bot">¡Bienvenido a IGAP Smart Inteligente Assistente!</string>

@@ -1649,9 +1649,9 @@
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
-    <string name="to">To</string>
+    <string name="to">К</string>
     <string name="apply">подать заявление</string>
-    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
+    <string name="withdrawal_dialog_message">Вы можете мгновенно перевести остаток наличных средств iGap на свой банковский счет в любое время. эта функция скоро будет включена</string>
     <string name="scan_code">Отсканируйте код</string>
     <string name="code_registration">регистрация кода</string>
     <string name="manually_enter_code">Manually enter code</string>

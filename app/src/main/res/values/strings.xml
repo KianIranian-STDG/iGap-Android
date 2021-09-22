@@ -2281,7 +2281,7 @@ Want to get it?</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please Try later</string>
+    <string name="please_try_later">Please try later</string>
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
     <string name="remove_follower">Remove Follower</string>
@@ -2775,7 +2775,7 @@ Want to get it?</string>
     <string name="seted_name">Name confirmed</string>
     <string name="name_error">Name not verified</string>
     <string name="email_error">Wrong Email Address</string>
-    <string name="email_added">added Email Address</string>
+    <string name="email_added">Added Email Address</string>
     <string name="AccessBan">Access is closed to view members</string>
 
     <string name="Loading">Loading</string>
