@@ -771,8 +771,7 @@ public final class AndroidUtils {
         return dir;
     }
 
-    public static void copyFile(File src,File dst) throws IOException{
-        InputStream in = new FileInputStream(src);
+    public static void copyFile(InputStream in, File dst) throws IOException {
         OutputStream out = new FileOutputStream(dst);
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -781,21 +780,23 @@ public final class AndroidUtils {
                     // Transfer bytes from in to out
                     byte[] buf = new byte[1024];
                     int len = 0;
-                    long total = 0;
                     while (true) {
                         if (!((len = in.read(buf)) > 0)) break;
                         out.write(buf, 0, len);
                     }
-
                     in.close();
                     out.close();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
         thread.start();
+    }
+
+    public static void copyFile(File src,File dst) throws IOException{
+        InputStream in = new FileInputStream(src);
+        copyFile(in,dst);
     }
 
     public static boolean deleteFile(File src) {
