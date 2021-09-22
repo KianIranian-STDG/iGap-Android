@@ -123,7 +123,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             List<StoryObject> realmStoryProtos = storyResults.get(i).storyObjects;
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
-            storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(storyResults.get(i).userId));
+            storyUser.setUserName(storyResults.get(i).displayName);
             storyUser.setUserId(storyResults.get(i).userId);
             for (int j = 0; j < realmStoryProtos.size(); j++) {
                 StoryObject storyObject = realmStoryProtos.get(j);
@@ -142,6 +142,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                                 storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
                         stories.add(story);
                         storyUser.setStories(stories);
+                        break;
                     }
                 } else {
                     Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,

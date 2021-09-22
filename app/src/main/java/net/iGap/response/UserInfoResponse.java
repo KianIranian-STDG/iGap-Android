@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
@@ -24,9 +25,13 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmStoryViewInfo;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.story.ViewUserDialogFragment;
+import net.iGap.structs.MessageObject;
 
 public class UserInfoResponse extends MessageHandler {
 
@@ -54,8 +59,26 @@ public class UserInfoResponse extends MessageHandler {
 
             RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
             RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
-        });
 
+            RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", builder.getUser().getId()).findFirst();
+            if (realmStory != null) {
+                realmStory.setDisplayName(builder.getUser().getDisplayName());
+                if (realmStory.getRealmStoryProtos() != null && realmStory.getRealmStoryProtos().size() > 0) {
+                    for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {
+                        if (realmStory.getRealmStoryProtos().get(i) != null) {
+                            realmStory.getRealmStoryProtos().get(i).setDisplayName(builder.getUser().getDisplayName());
+                        }
+                    }
+                }
+            }
+
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, builder.getUser()));
+
+            RealmStoryViewInfo realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", builder.getUser().getId()).findFirst();
+            if (realmStoryViewInfo != null) {
+                realmStoryViewInfo.setDisplayName(builder.getUser().getDisplayName());
+            }
+        });
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -63,10 +86,6 @@ public class UserInfoResponse extends MessageHandler {
             }
         }, RequestUserInfo.CLEAR_ARRAY_TIME);
 
-        if (ViewUserDialogFragment.isInShowViewUser) {
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO);
-            ViewUserDialogFragment.isInShowViewUser = false;
-        }
 
         if (identity != null) {
             if (identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
