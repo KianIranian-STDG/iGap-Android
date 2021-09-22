@@ -22,6 +22,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
@@ -137,7 +138,7 @@ public class StoryCell extends FrameLayout {
         this.userId = storyObject.userId;
         this.isFromMyStatus = true;
 
-        String name = HelperImageBackColor.getFirstAlphabetName(displayName);
+        String name = HelperImageBackColor.getFirstAlphabetName(storyObject.displayName != null ? storyObject.displayName : "");
 
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             deleteIcon.setVisibility(VISIBLE);
@@ -211,16 +212,16 @@ public class StoryCell extends FrameLayout {
 
     }
 
-    public void setData(MainStoryObject mainStoryObject, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
+    public void setData(MainStoryObject mainStoryObject, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
         initView(context, needDivider, status, imageLoadingStatus, iconClicked, mainStoryObject.storyObjects.get(0).createdAt);
         this.userId = mainStoryObject.userId;
         circleImageLoading.setStatus(imageLoadingStatus);
         if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             topText.setText(context.getString(R.string.my_status));
         } else {
-            topText.setText(displayName);
+            topText.setText(mainStoryObject.displayName != null ? mainStoryObject.displayName : "");
         }
-        String name = HelperImageBackColor.getFirstAlphabetName(displayName);
+        String name = HelperImageBackColor.getFirstAlphabetName(mainStoryObject.displayName != null ? mainStoryObject.displayName : "");
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             bottomText.setText(context.getString(R.string.story_could_not_sent));
             bottomText.setTextColor(Color.RED);
@@ -374,31 +375,28 @@ public class StoryCell extends FrameLayout {
                     middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
                     middleText.setText(context.getString(R.string.story_sending));
                     circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
-                    DbManager.getInstance().doRealmTransaction(realm -> {
-                        RealmStoryProto realmStoryProto;
-                        if (fileToken != null) {
-                            realmStoryProto = realm.where(RealmStoryProto.class).equalTo("fileToken", fileToken).findFirst();
-                        } else {
-                            realmStoryProto = realm.where(RealmStoryProto.class).equalTo("id", uploadId).findFirst();
-                        }
+                    StoryObject realmStoryProto;
+                    if (fileToken != null) {
+                        realmStoryProto = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryWithFileToken(fileToken);
+                    } else {
+                        realmStoryProto = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryWithUploadId(uploadId);
+                    }
 
-                        if (realmStoryProto != null && realmStoryProto.getFileToken() != null) {
-                            realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
-                            List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests = new ArrayList<>();
-                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                            storyAddRequest.setToken(realmStoryProto.getFileToken());
-                            storyAddRequest.setCaption(realmStoryProto.getCaption());
-                            storyAddRequests.add(storyAddRequest.build());
+                    if (realmStoryProto != null && realmStoryProto.fileToken != null) {
+                        MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(realmStoryProto.id, MessageObject.STATUS_SENDING);
+                        List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests = new ArrayList<>();
+                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                        storyAddRequest.setToken(realmStoryProto.fileToken);
+                        storyAddRequest.setCaption(realmStoryProto.caption);
+                        storyAddRequests.add(storyAddRequest.build());
 
-                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyAddRequests);
-                        } else if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
-                            realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
-                            HttpUploader.isStoryUploading = true;
-                            Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getFile().getLocalFilePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.STORY));
-                        }
-                        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_SENDING);
-                    });
-
+                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyAddRequests);
+                    } else if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.id))) {
+                        MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(realmStoryProto.id, MessageObject.STATUS_SENDING);
+                        HttpUploader.isStoryUploading = true;
+                        Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.id, realmStoryProto.attachmentObject.filePath, null, realmStoryProto.caption, ProtoGlobal.RoomMessageType.STORY));
+                    }
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_SENDING);
 
                 } else {
                     deleteStory.deleteStory(storyId);
