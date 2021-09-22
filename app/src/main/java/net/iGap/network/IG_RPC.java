@@ -2181,6 +2181,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChatGetRoom.ChatGetRoomResponse response = ProtoChatGetRoom.ChatGetRoomResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             room = response.getRoom();
         }
 
