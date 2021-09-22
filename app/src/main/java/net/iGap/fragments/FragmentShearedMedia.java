@@ -658,12 +658,12 @@ public class FragmentShearedMedia extends BaseFragment {
 
     public void popUpMenuSharedMedia() {
 
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.name));
-        items.add(getString(R.string.date));
-        items.add(getString(R.string.size));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.name);
+        items.add(R.string.date);
+        items.add(R.string.size);
 
-        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
 
         }).show();
     }
