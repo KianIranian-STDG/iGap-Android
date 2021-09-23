@@ -122,7 +122,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        colors = context.getResources().getIntArray(R.array.default_colors);
+        colors = context.getResources().getIntArray(R.array.default_status_color);
         if (getActivity() != null) {
             emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
         }
