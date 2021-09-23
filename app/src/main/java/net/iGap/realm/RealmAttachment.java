@@ -172,46 +172,8 @@ public class RealmAttachment extends RealmObject {
                 realmAttachment.setMimeType(file.getMime());
             }
 
-            String _filePath = realmAttachment.getLocalFilePath();
-
-            String _Dir = "";
-
-            if (_filePath != null && _filePath.length() > 0) {
-                String _defaultFilePAth = "";
-                switch (attachmentFor) {
-                    case MESSAGE_ATTACHMENT:
-                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
-                        _Dir = AndroidUtils.suitableAppFilePath(messageType);
-                        break;
-                    case AVATAR:
-                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
-
-                        if (realmAttachment.getLocalThumbnailPath() == null) {
-                            realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
-                        }
-                        _Dir = G.DIR_IMAGE_USER;
-
-                        break;
-                }
-
-                if (!_filePath.equals(_defaultFilePAth)) {
-                    try {
-                        File _File1 = new File(_filePath);
-                        if (_File1.exists()) {
-
-                            if (_filePath.contains(_Dir)) {
-                                _File1.renameTo(new File(_defaultFilePAth));
-                                realmAttachment.setLocalFilePath(_defaultFilePAth);
-                            } else {
-                                AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
-                                realmAttachment.setLocalFilePath(_defaultFilePAth);
-
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            if (realmAttachment.getLocalThumbnailPath() == null) {
+                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
             }
         }
 

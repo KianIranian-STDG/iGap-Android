@@ -301,7 +301,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         eyeIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         eyeIcon.setTextColor(Color.WHITE);
         eyeIcon.setGravity(Gravity.CENTER_VERTICAL);
-        eyeIcon.setText(R.string.icon_eye);
+        eyeIcon.setBackground(context.getResources().getDrawable(R.drawable.ic_view_seen));
         eyeIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
 
@@ -545,9 +545,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             public void onAnimationEnd(Animator animation) {
                 replyContainer.setVisibility(View.GONE);
                 replyContainer.setTranslationX(0);
-                showPopup(-1);
                 storyReplyContainer.setVisibility(View.VISIBLE);
-                updateStory();
+                showPopup(-1);
+                G.handler.postDelayed(() -> updateStory(), 200);
+
             }
 
             @Override
@@ -686,7 +687,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             showKeyboardOnResume = false;
 
             closeKeyboard(replyEditText);
-            G.handler.postDelayed(this::hideKeyboardView, 100);
+            G.handler.post(this::hideKeyboardView);
         }
     }
 
@@ -984,15 +985,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         nickName.setText(storyUser.getUserName());
         replyTo.setText(EmojiManager.getInstance().replaceEmoji(storyUser.getUserName(), replyTo.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
         replyCaption.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
-        AttachmentObject ra = stories.get(counter).getAttachment();
-        String path = ra.filePath != null ? ra.filePath : ra.thumbnailPath;
+        AttachmentObject attachmentObject = stories.get(counter).getAttachment();
+        String path = attachmentObject.filePath != null ? attachmentObject.filePath : attachmentObject.thumbnailPath;
 
         File file = new File(path != null ? path : "");
         storyDisplayImage.setImageBitmap(null);
         if (file.exists()) {
             loadImage(path);
         } else {
-            path = ra.thumbnailPath != null ? ra.thumbnailPath : "";
+            path = attachmentObject.thumbnailPath != null ? attachmentObject.thumbnailPath : "";
             file = new File(path);
             if (file.exists()) {
                 Story story = stories.get(counter);
@@ -1004,9 +1005,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             } else {
                 ProtoFileDownload.FileDownload.Selector selector;
-                if (ra.largeThumbnail != null) {
+                if (attachmentObject.largeThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-                    path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
+                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         Story story = stories.get(counter);
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
@@ -1016,7 +1017,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         storyDisplayImage.setImageBitmap(bitmap);
 
                     } else {
-                        DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        DownloadObject downloadObject = DownloadObject.createForThumb(attachmentObject, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
                             downloadObject.downloadId = stories.get(counter).getStoryId();
                             getDownloader().download(downloadObject, selector, arg -> {
@@ -1036,9 +1037,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             });
                         }
                     }
-                } else if (ra.smallThumbnail != null) {
+                } else if (attachmentObject.smallThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                    path = AndroidUtils.getFilePathWithCashId(ra.smallThumbnail.cacheId, ra.name, G.DIR_IMAGES, true);
+                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.DIR_IMAGES, true);
                     if (new File(path).exists()) {
                         Story story = stories.get(counter);
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
@@ -1047,7 +1048,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         Bitmap bitmap = AndroidUtils.blurImage(BitmapFactory.decodeFile(path));
                         storyDisplayImage.setImageBitmap(bitmap);
                     } else {
-                        DownloadObject downloadObject = DownloadObject.createForThumb(ra, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
+                        DownloadObject downloadObject = DownloadObject.createForThumb(attachmentObject, ProtoGlobal.RoomMessageType.STORY.getNumber(), false);
                         if (downloadObject != null) {
                             downloadObject.downloadId = stories.get(counter).getStoryId();
                             getDownloader().download(downloadObject, selector, arg -> {
@@ -1070,7 +1071,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 }
             }
 
-            DownloadObject object = DownloadObject.createForStory(ra, stories.get(counter).getStoryId(), true);
+            DownloadObject object = DownloadObject.createForStory(attachmentObject, stories.get(counter).getStoryId(), true);
             if (object != null) {
                 ProtoFileDownload.FileDownload.Selector imageSelector = ProtoFileDownload.FileDownload.Selector.FILE;
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, imageSelector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
