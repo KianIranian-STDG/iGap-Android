@@ -68,7 +68,7 @@ public class StoryObject {
         storyObject.index = igapStory.getIndex();
         storyObject.viewCount = igapStory.getViewCount();
         storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : igapStory.getDisplayName();
-        ;
+
 
         for (int i = 0; i < igapStory.getRealmStoryViewInfos().size(); i++) {
             storyObject.storyViewInfoObjects.add(StoryViewInfoObject.create(igapStory.getRealmStoryViewInfos().get(i)));
