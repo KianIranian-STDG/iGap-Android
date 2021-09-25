@@ -956,15 +956,18 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             if (realmStorySchema != null) {
                 realmStorySchema.addField("displayName", String.class);
+                realmStorySchema.addField("profileColor", String.class);
                 realmStorySchema.addField("lastCreatedAt", long.class);
             }
 
             if (realmStoryProtoSchema != null) {
                 realmStoryProtoSchema.addField("displayName", String.class);
+                realmStoryProtoSchema.addField("profileColor", String.class);
             }
 
             if (realmStoryViewInfoSchema != null) {
                 realmStoryViewInfoSchema.addField("displayName", String.class);
+                realmStoryViewInfoSchema.addField("profileColor", String.class);
             }
 
             oldVersion++;
