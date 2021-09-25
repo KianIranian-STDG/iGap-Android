@@ -333,7 +333,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         currentOperator = operator;
         radioGroup.removeAllViewsInLayout();
         int index = 0;
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.main_font);
+        Typeface typeface = ResourcesCompat.getFont(requireContext(), R.font.main_font);
         int textColor = Theme.getInstance().getTitleTextColor(getContext());
         String operatorName = currentOperator.name();
         switch (operatorName) {
