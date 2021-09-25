@@ -70,7 +70,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private ListAdapter adapter;
     List<StoryObject> storyProto;
     private FrameLayout floatActionLayout;
-    private List<List<String>> displayNameList;
     private FrameLayout customStatusActionLayout;
     private LinearLayout actionButtonsRootView;
     private int firstVisibleItemPosition;
@@ -177,7 +176,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getEventManager().addObserver(EventManager.STORY_USER_INFO, this);
         getEventManager().addObserver(EventManager.STORY_STATUS_UPLOAD, this);
         progressBar.setVisibility(View.VISIBLE);
-        displayNameList = new ArrayList<>();
         loadStories();
         AbstractObject req = null;
         IG_RPC.Story_Get_Own_Story_Views story_get_own_story_views = new IG_RPC.Story_Get_Own_Story_Views();
@@ -281,7 +279,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(AccountManager.getInstance().getCurrentUser().getId());
-        displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
+
         if (storyProto != null && storyProto.size() > 0) {
             progressBar.setVisibility(View.GONE);
             adapter = new ListAdapter();
