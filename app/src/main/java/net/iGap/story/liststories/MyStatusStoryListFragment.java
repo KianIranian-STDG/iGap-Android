@@ -475,7 +475,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
                             if (storyProto.get(position).status == MessageObject.STATUS_FAILED) {
                                 actionButtonsRootView.setVisibility(View.VISIBLE);
-                                storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
+                                storyCell.setData(storyProto.get(position), storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                             } else if (storyProto.get(position).status == MessageObject.STATUS_SENDING) {
                                 if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).id)) && !MessageController.isSendingStory && !HttpUploader.isStoryUploading) {
@@ -485,17 +485,17 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
                                     getMessageDataStorage().updateStoryStatus(failedStoryId, MessageObject.STATUS_FAILED);
 
-                                    storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
+                                    storyCell.setData(storyProto.get(position), storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                 } else {
                                     actionButtonsRootView.setVisibility(View.GONE);
-                                    storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
+                                    storyCell.setData(storyProto.get(position), storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
 
                                 }
 
                             } else {
-                                storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
+                                storyCell.setData(storyProto.get(position), storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                 storyCell.deleteIconVisibility(true, R.string.icon_delete);
                             }

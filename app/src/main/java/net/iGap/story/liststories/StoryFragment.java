@@ -474,43 +474,43 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 HttpUploader.isMultiUpload = true;
             }
 
-                for (int i = 0; i < paths.size(); i++) {
-                    long storyId = SUID.id().get();
-                    long lastUploadedStoryId = storyId + 1L;
-                    int[] imageDimens = {0, 0};
-                    long attachementId = SUID.id().get();
-                    imageDimens = AndroidUtils.getImageDimens(paths.get(i));
+            for (int i = 0; i < paths.size(); i++) {
+                long storyId = SUID.id().get();
+                long lastUploadedStoryId = storyId + 1L;
+                int[] imageDimens = {0, 0};
+                long attachementId = SUID.id().get();
+                imageDimens = AndroidUtils.getImageDimens(paths.get(i));
 
-                    RealmAttachment realmAttachment = getMessageDataStorage().createRealmObject(paths.get(i), imageDimens, attachementId);
+                RealmAttachment realmAttachment = getMessageDataStorage().createRealmObject(paths.get(i), imageDimens, attachementId);
 
-                    StoryObject storyObject = new StoryObject();
-                    storyObject.isSeen = false;
-                    storyObject.realmAttachment = realmAttachment;
-                    storyObject.userId = AccountManager.getInstance().getCurrentUser().getId();
-                    storyObject.displayName = AccountManager.getInstance().getCurrentUser().getName();
-                    storyObject.createdAt = System.currentTimeMillis();
-                    storyObject.caption = itemGalleryList.get(objectsCounter).getText();
-                    storyObject.status = MessageObject.STATUS_SENDING;
-                    storyObject.id = lastUploadedStoryId;
-                    List<StoryObject> realmStories = getMessageDataStorage().getStoryWithIndexSort(storyObject.userId);
-                    if (realmStories != null && realmStories.size() > 0) {
-                        storyObject.index = realmStories.get(0).index + 1;
-                    } else {
-                        storyObject.index = i;
-                    }
-                    storyInLocal.add(storyObject);
-                    getMessageDataStorage().putStoriesToDatabaseOffline(false, storyObject.userId, storyInLocal, storyObject.displayName);
-                    storyInLocal.remove(0);
-                    HttpUploader.isStoryUploading = true;
-                    Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, paths.get(i), null, itemGalleryList.get(objectsCounter).getText(), ProtoGlobal.RoomMessageType.STORY));
-
-                    objectsCounter++;
-                    if (objectsCounter == itemGalleryList.size()) {
-                        G.runOnUiThread(() -> loadStories());
-                        storyInLocal = new ArrayList<>();
-                    }
-
+                StoryObject storyObject = new StoryObject();
+                storyObject.isSeen = false;
+                storyObject.realmAttachment = realmAttachment;
+                storyObject.userId = AccountManager.getInstance().getCurrentUser().getId();
+                storyObject.displayName = AccountManager.getInstance().getCurrentUser().getName();
+                storyObject.createdAt = System.currentTimeMillis();
+                storyObject.caption = itemGalleryList.get(objectsCounter).getText();
+                storyObject.status = MessageObject.STATUS_SENDING;
+                storyObject.id = lastUploadedStoryId;
+                List<StoryObject> realmStories = getMessageDataStorage().getStoryWithIndexSort(storyObject.userId);
+                if (realmStories != null && realmStories.size() > 0) {
+                    storyObject.index = realmStories.get(0).index + 1;
+                } else {
+                    storyObject.index = i;
                 }
+                storyInLocal.add(storyObject);
+                getMessageDataStorage().putStoriesToDatabaseOffline(false, storyObject.userId, storyInLocal, storyObject.displayName);
+                storyInLocal.remove(0);
+                HttpUploader.isStoryUploading = true;
+                Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, paths.get(i), null, itemGalleryList.get(objectsCounter).getText(), ProtoGlobal.RoomMessageType.STORY));
+
+                objectsCounter++;
+                if (objectsCounter == itemGalleryList.size()) {
+                    G.runOnUiThread(() -> loadStories());
+                    storyInLocal = new ArrayList<>();
+                }
+
+            }
 
         } else if (id == EventManager.STORY_STATUS_UPLOAD) {
 
@@ -641,7 +641,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 G.runOnUiThread(() -> {
                                     actionButtonsRootView.setVisibility(View.VISIBLE);
                                 });
-                                storyCell.setData(mainStoryObject, "#4aca69", context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
+                                storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                 storyCell.deleteIconVisibility(true);
                                 storyCell.addIconVisibility(false);
@@ -668,7 +668,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 if (isHaveFailedUpload) {
                                     G.runOnUiThread(() -> {
                                         actionButtonsRootView.setVisibility(View.VISIBLE);
-                                        storyCell.setData(mainStoryObject, "#4aca69", context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
+                                        storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                         storyCell.deleteIconVisibility(true);
                                         storyCell.addIconVisibility(true);
@@ -677,7 +677,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 } else {
                                     G.runOnUiThread(() -> {
                                         actionButtonsRootView.setVisibility(View.GONE);
-                                        storyCell.setData(mainStoryObject, "#4aca69", context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
+                                        storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                         storyCell.deleteIconVisibility(true);
                                         storyCell.addIconVisibility(false);
@@ -705,7 +705,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size() && otherUserRealmStory.get(recentStoryCounter).storyObjects.size() > 0) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), "#4aca69", context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), otherUserRealmStory.get(recentStoryCounter).profileColor, context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
