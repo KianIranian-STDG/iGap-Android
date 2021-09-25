@@ -211,7 +211,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
         actionButtonsRootView = new LinearLayout(context);
         actionButtonsRootView.setOrientation(LinearLayout.VERTICAL);
-        actionButtonsRootView.setVisibility(View.GONE);
         rootView.addView(actionButtonsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 
 
