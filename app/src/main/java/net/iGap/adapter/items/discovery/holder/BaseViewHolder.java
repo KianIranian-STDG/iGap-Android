@@ -41,6 +41,7 @@ import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.kuknos.Fragment.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
@@ -411,6 +412,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
+            case QRPAY:
+                new HelperFragment(activity.getSupportFragmentManager(), new ScanCodeQRCodePaymentFragment()).setReplace(false).setAddToBackStack(true).load();
                 break;
             default:
                 new MaterialDialog.Builder(activity).content(R.string.install_latest_version).positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss()).show();

@@ -42,7 +42,7 @@
                 android:gravity="center"
 
                 android:hint="@string/enter_code"
-                android:textColor="?attr/iGapPrimaryTextColor"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textColorHint="?attr/iGapHintTextColor"
                 app:layout_constraintBottom_toTopOf="@id/done_button"
                 app:layout_constraintEnd_toEndOf="@id/white_view"

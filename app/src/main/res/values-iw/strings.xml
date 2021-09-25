@@ -1961,7 +1961,7 @@
     <string name="to">تا</string>
     <string name="apply">اعمال</string>
     <string name="withdrawal_dialog_message">شما می توانید در هر زمان که بخواهید موجودی کیف نقدی را به صورت آنی به حساب بانکی خود منتقل کنید. این ویژگی به زودی فعال می شود</string>
-    <string name="please_enter_desired_amount">لطفا مبلغ دلخواه را وارد نمایید:</string>
+    <string name="please_enter_desired_amount">لطفا مبلغ دلخواه را به ریال وارد نمایید:</string>
     <string name="confirm">تایید</string>
     <string name="you_have_not_specified_the_amount">مبلغ را مشخص نکرده اید</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>
@@ -1993,4 +1993,5 @@
     <string name="your_status_characters">لحظه شما نمیتواند بیشتر از ۵۰۰ حرف باشد.</string>
     <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
     <string name="moments_string">لحظه ها</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
 </resources>

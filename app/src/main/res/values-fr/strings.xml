@@ -1905,7 +1905,7 @@
     <string name="manually_enter_code">Entrer manuellement le code</string>
     <string name="acceptor_name">nom de l\'accepteur</string>
     <string name="acceptor_code">Code destinataire</string>
-    <string name="please_enter_desired_amount">Veuillez saisir le montant souhaité:</string>
+    <string name="please_enter_desired_amount">Veuillez saisir le montant souhaité en Rials:</string>
     <string name="confirm">confirmer</string>
     <string name="you_have_not_specified_the_amount">Vous n\'avez pas précisé le montant</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">Le montant ne peut pas être inférieur à 1000 Rials</string>
@@ -1936,4 +1936,5 @@
     <string name="type_a_moment">Tapez un instant</string>
     <string name="your_status_characters">Votre mise à jour de statut ne peut pas dépasser 500 caractères</string>
     <string name="moments_string">Des moments</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">Le montant ne peut pas dépasser 500 millions de rials</string>
 </resources>

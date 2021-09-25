@@ -1657,7 +1657,7 @@
     <string name="manually_enter_code">Manually enter code</string>
     <string name="acceptor_name">Имя получателя</string>
     <string name="acceptor_code">Код получателя</string>
-    <string name="please_enter_desired_amount">Пожалуйста, введите желаемую сумму:</string>
+    <string name="please_enter_desired_amount">Пожалуйста, введите желаемую сумму в риалах:</string>
     <string name="confirm">подтверждать</string>
     <string name="you_have_not_specified_the_amount">Вы не указали сумму</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">Сумма не может быть меньше 1000 риалов.</string>
@@ -1710,4 +1710,5 @@
     <string name="type_a_moment">Введите момент</string>
     <string name="your_status_characters">Ваше обновление статуса не может превышать 500 символов.</string>
     <string name="moments_string">Моменты</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">Сумма не может быть больше 500 миллионов риалов.</string>
 </resources>
