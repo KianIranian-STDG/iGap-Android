@@ -700,11 +700,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
     private void showDialog() {
         if (getFragmentManager() != null) {
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.sync_contact));
-            items.add(getString(R.string.mark_as_several));
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.sync_contact);
+            items.add(R.string.mark_as_several);
 
-            new BottomSheetFragment().setData(items, -1, position -> {
+            new BottomSheetFragment().setListDataWithResourceId(getContext(),items, -1, position -> {
                 if (position == 0) {
                     if (isMultiSelect) setMultiSelectState(true);
                     ContactUtils.syncContacts();

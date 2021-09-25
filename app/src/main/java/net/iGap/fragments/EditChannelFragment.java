@@ -365,13 +365,13 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }
 
     private void showPopUp(boolean isPrivate) {
-        List<String> items = new ArrayList<>();
+        List<Integer> items = new ArrayList<>();
         if (isPrivate) {
-            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_public));
+            items.add(R.string.channel_title_convert_to_public);
         } else {
-            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_private));
+            items.add(R.string.channel_title_convert_to_private);
         }
-        new BottomSheetFragment().setData(items, -1, position -> {
+        new BottomSheetFragment().setListDataWithResourceId(getContext(),items, -1, position -> {
             if (isPrivate) {
                 convertToPublic();
             } else {
