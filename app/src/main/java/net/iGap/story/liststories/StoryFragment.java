@@ -2,7 +2,6 @@ package net.iGap.story.liststories;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -28,11 +27,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseMainFragments;
-import net.iGap.fragments.FragmentWalletAgrement;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
@@ -54,9 +51,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmStory;
-import net.iGap.realm.RealmStoryProto;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.story.MainStoryObject;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
@@ -66,16 +60,10 @@ import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.MessageObject;
 
-import org.paygear.WalletActivity;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Sort;
-
 import static net.iGap.G.isAppRtl;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class StoryFragment extends BaseMainFragments implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
 
@@ -113,7 +101,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     boolean isHaveFailedUpload = false;
     private int myStoryCount = 0;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private final int qrWalletTag = 1;
+    private final int codeScannerTag = 1;
 
 
     @Override
@@ -181,12 +169,12 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         Toolbar storyToolbar = new Toolbar(getContext());
         storyToolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         ToolbarItems toolbarItems = storyToolbar.createToolbarItems();
-        toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
+        toolbarItems.addItemWithWidth(codeScannerTag, R.string.icon_QR_code, 54);
 
         storyToolbar.setListener(i -> {
             switch (i) {
-                case qrWalletTag:
-                    onScannerClickListener();
+                case codeScannerTag:
+                    onCodeScannerClickListener();
                     break;
             }
         });
@@ -236,32 +224,36 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         return rootView;
     }
 
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
+    private void onCodeScannerClickListener() {
+        new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
+                .setAddToBackStack(true)
+                .setReplace(false)
+                .load();
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            String phoneNumber = "";
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            try {
+//                if (userInfo != null) {
+//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+//                } else {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                }
+//            } catch (Exception e) {
+//                //maybe exception was for realm substring
+//                try {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                } catch (Exception ex) {
+//                    //nothing
+//                }
+//            }
+//
+//            if (userInfo == null || !userInfo.isWalletRegister()) {
+//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+//            } else {
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+//            }
+//
+//        });
     }
 
     @Override

@@ -2691,7 +2691,7 @@
     <string name="manually_enter_code">أدخل الرمز يدويًا</string>
     <string name="acceptor_name">اسم المستلم</string>
     <string name="acceptor_code">رمز المستلم</string>
-    <string name="please_enter_desired_amount">الرجاء إدخال المبلغ المطلوب:</string>
+    <string name="please_enter_desired_amount">الرجاء إدخال المبلغ المطلوب بالريال:</string>
     <string name="confirm">تؤكد</string>
     <string name="you_have_not_specified_the_amount">لم تحدد المبلغ</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">لا يمكن أن يكون المبلغ أقل من 1000 ريال</string>
@@ -2723,5 +2723,6 @@
     <string name="type_a_moment">اكتب لحظة</string>
     <string name="your_status_characters">لا يمكن أن يتجاوز تحديث حالتك 500 حرف</string>
     <string name="moments_string">لحظات</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
 
 </resources>

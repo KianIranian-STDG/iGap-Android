@@ -2065,7 +2065,7 @@
     <string name="manually_enter_code">Ingrese el código manualmente</string>
     <string name="acceptor_name">Nombre del Recipiente</string>
     <string name="acceptor_code">Código de destinatario</string>
-    <string name="please_enter_desired_amount">Ingrese la cantidad deseada:</string>
+    <string name="please_enter_desired_amount">Ingrese la cantidad deseada en riales:</string>
     <string name="confirm">confirmar</string>
     <string name="you_have_not_specified_the_amount">No has especificado la cantidad</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">La cantidad no puede ser inferior a 1000 riales.</string>
@@ -2098,4 +2098,5 @@
     <string name="type_a_moment">Escribe un momento</string>
     <string name="your_status_characters">Tu actualización de estado no puede superar los 500 caracteres</string>
     <string name="moments_string">Momentos</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
 </resources>
