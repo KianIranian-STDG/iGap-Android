@@ -1936,5 +1936,5 @@
     <string name="type_a_moment">Tapez un instant</string>
     <string name="your_status_characters">Votre mise à jour de statut ne peut pas dépasser 500 caractères</string>
     <string name="moments_string">Des moments</string>
-    <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">Le montant ne peut pas dépasser 500 millions de rials</string>
 </resources>

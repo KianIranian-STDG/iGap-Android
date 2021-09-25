@@ -1993,4 +1993,5 @@
     <string name="your_status_characters">لحظه شما نمیتواند بیشتر از ۵۰۰ حرف باشد.</string>
     <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
     <string name="moments_string">لحظه ها</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
 </resources>
