@@ -332,7 +332,7 @@ public class HelperCalander {
             if ('0' <= c && c <= '9') {
                 int number = Integer.parseInt(String.valueOf(c));
                 out += persianNumbers[number];
-            } else if (c == '٫') {
+            } else if (c == '٫' || c==',') {
                 out += '،';
             } else {
                 out += c;

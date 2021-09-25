@@ -1971,7 +1971,7 @@
     <string name="manually_enter_code">ورود دستی کد پذیرنده</string>
     <string name="acceptor_name">نام پذیرنده</string>
     <string name="acceptor_code">کد پذیرنده</string>
-    <string name="please_enter_desired_amount">لطفا مبلغ دلخواه را وارد نمایید:</string>
+    <string name="please_enter_desired_amount">لطفا مبلغ دلخواه را به ریال وارد نمایید:</string>
     <string name="confirm">تایید</string>
     <string name="you_have_not_specified_the_amount">مبلغ را مشخص نکرده اید</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>

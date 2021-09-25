@@ -33,6 +33,7 @@ import net.iGap.databinding.FragmentQRCodePaymentBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.qrCodePayment.viewModels.QRCodePaymentViewModel;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
@@ -135,6 +136,29 @@ public class QRCodePaymentFragment extends BaseFragment {
             mBinding.desireAmount.setVisibility(View.GONE);
             mBinding.desireAmountTextView.setVisibility(View.GONE);
         }
+        mBinding.desireAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    String amount = "";
+                    String modifiedAmount = "";
+                    amount = mBinding.desireAmount.getText().toString();
+                    mBinding.desireAmount.removeTextChangedListener(this);
+                    modifiedAmount = splitDigits(amount);
+                    mBinding.desireAmount.setText(modifiedAmount);
+                    mBinding.desireAmount.setSelection(mBinding.desireAmount.getText().toString().length());
+                    mBinding.desireAmount.addTextChangedListener(this);
+                }
+            }
+        });
     }
 
     private void setObservers() {
@@ -142,19 +166,21 @@ public class QRCodePaymentFragment extends BaseFragment {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
-                    if (!mMerchantPcqr && mBinding.desireAmount == null || !mMerchantPcqr && mBinding.desireAmount.getText().toString().length() == 0) {
+                    if (!mMerchantPcqr && mBinding.desireAmount == null || !mMerchantPcqr && mBinding.desireAmount.getText().toString().replaceAll("\\D", "").length() == 0) {
                         Toast.makeText(getActivity(), R.string.you_have_not_specified_the_amount, Toast.LENGTH_SHORT).show();
-                    } else if (!mMerchantPcqr && mBinding.desireAmount.getText().toString().length() != 0 &&Integer.parseInt(mBinding.desireAmount.getText().toString()) < 1000) {
-                        Toast.makeText(getActivity(), R.string.the_amount_can_not_be_less_than_1000_rials, Toast.LENGTH_LONG).show();
+                    } else if (!mMerchantPcqr && mBinding.desireAmount.getText().toString().replaceAll("\\D", "").length() != 0 && Integer.parseInt(mBinding.desireAmount.getText().toString().replaceAll("\\D", "")) < 1000) {
+                        Toast.makeText(getActivity(), R.string.the_amount_can_not_be_less_than_1000_rials, Toast.LENGTH_SHORT).show();
+                    }  else if (!mMerchantPcqr && mBinding.desireAmount.getText().toString().replaceAll("\\D", "").length() != 0 && Integer.parseInt(mBinding.desireAmount.getText().toString().replaceAll("\\D", "")) > 500000000) {
+                        Toast.makeText(getActivity(), R.string.the_amount_can_not_be_more_than_500_million_rials, Toast.LENGTH_SHORT).show();
                     } else {
                         mBinding.progressBar.setVisibility(View.VISIBLE);
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("qr_code", mMerchantCode);
                         if (mMerchantPcqr) {
-                            /**1000 is a default amount for pcqr true state. true pcqr means that the amount fill automatic and do not need to get amount from customer*/
+                            /**1000 is a default amount for pcqr true state. true pcqr means that The amount is filled automatically and do not need to get amount from customer*/
                             jsonObject.addProperty("amount", 1000);
                         } else {
-                            jsonObject.addProperty("amount", Integer.parseInt(mBinding.desireAmount.getText().toString()));
+                            jsonObject.addProperty("amount", Integer.parseInt(mBinding.desireAmount.getText().toString().replaceAll("\\D", "")));
                         }
                         Call<Token> call = new RetrofitFactory().getPecQrRetrofit().getPaymentToken(jsonObject);
                         call.enqueue(new Callback<Token>() {
@@ -190,5 +216,14 @@ public class QRCodePaymentFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    public static String splitDigits(String number) {
+        /** This line remove all non-digits characters */
+        String stringNumber = number.replaceAll("\\D", "");
+
+        long separatedNumber = Long.parseLong(stringNumber);
+        return new DecimalFormat("###,###,###,###,###,###").format(separatedNumber);
+
     }
 }

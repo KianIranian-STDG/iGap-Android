@@ -2756,7 +2756,7 @@ Want to get it?</string>
     <string name="manually_enter_code">Manually enter code</string>
     <string name="acceptor_name">Acceptor name</string>
     <string name="acceptor_code">Acceptor code</string>
-    <string name="please_enter_desired_amount">Please enter desired amount:</string>
+    <string name="please_enter_desired_amount">Please enter desired amount in Rials:</string>
     <string name="confirm">Confirm</string>
     <string name="you_have_not_specified_the_amount">You have not specified the amount</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">The amount can not be less than 1000 Rials</string>
@@ -2788,4 +2788,5 @@ Want to get it?</string>
     <string name="moment_not_available">Moment is not available</string>
     <string name="mement_is_no_longer_available">Moment is no longer available</string>
     <string name="unavailable_moment">Unavailable Moment</string>
+    <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
 </resources>
