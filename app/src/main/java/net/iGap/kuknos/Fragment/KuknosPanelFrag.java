@@ -251,14 +251,14 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     }
 
     private void initialSettingBS() {
-        List<String> items = new ArrayList<>();
+        List<Integer> items = new ArrayList<>();
 //        items.add(getString(R.string.kuknos_setting_changePin));
-        items.add(getString(R.string.kuknos_panel_Edit_and_change_account_information));
-        items.add(getString(R.string.kuknos_setting_copySeedKey));
-        items.add(getString(R.string.kuknos_setting_sepid));
-        items.add(getString(R.string.kuknos_setting_logout));
+        items.add(R.string.kuknos_panel_Edit_and_change_account_information);
+        items.add(R.string.kuknos_setting_copySeedKey);
+        items.add(R.string.kuknos_setting_sepid);
+        items.add(R.string.kuknos_setting_logout);
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setData(items, -1, position -> {
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment().setListDataWithResourceId(getContext(),items, -1, position -> {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = null;
