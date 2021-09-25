@@ -16,7 +16,7 @@
                     android:color="?attr/iGapBottomNavigationIconStart"
                     android:offset="0" />
                 <item
-                    android:color="#FF72BF4D"
+                    android:color="?attr/iGapBottomNavigationIconEnd"
                     android:offset="0.28" />
                 <item
                     android:color="?attr/iGapBottomNavigationIconEnd"
