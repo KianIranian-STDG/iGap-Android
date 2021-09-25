@@ -22,7 +22,7 @@ public class RequestClientGetDiscovery {
 
         ProtoClientGetDiscovery.ClientGetDiscovery.Builder builder = ProtoClientGetDiscovery.ClientGetDiscovery.newBuilder();
         builder.setPageId(pageId);
-        builder.setProjectId(BuildConfig.APP_ID);
+        builder.setProjectId(BuildConfig.ILAND_APP_ID);
 
         RequestWrapper requestWrapper = new RequestWrapper(620, builder, discoveryListener);
         try {

@@ -44,6 +44,7 @@ android {
         buildConfigField("String", "TOS", TOS)
         buildConfigField("String", "WALLET_AGREEMENT", WALLET_AGREEMENT)
         buildConfigField("Integer", "APP_ID", APP_ID)
+        buildConfigField("Integer", "ILAND_APP_ID", ILAND_APP_ID)
         buildConfigField("String", "APP_NAME", APP_NAME)
         buildConfigField("String", "INVITE_FRIEND_LINK", INVITE_FRIEND_LINK)
         buildConfigField("String", "FAQ_LINK", FAQ_LINK)
