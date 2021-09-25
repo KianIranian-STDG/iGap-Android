@@ -27,10 +27,11 @@ public class StoryObject {
     public String displayName;
     public int index;
     public int viewCount;
+    public String profileColor;
     public List<StoryViewInfoObject> storyViewInfoObjects = new ArrayList<>();
 
 
-    public static StoryObject create(ProtoGlobal.Story igapStory, int index, String displayName) {
+    public static StoryObject create(ProtoGlobal.Story igapStory, int index, String displayName, String profileColor) {
         StoryObject storyObject = new StoryObject();
 
         storyObject.caption = igapStory.getCaption();
@@ -44,6 +45,7 @@ public class StoryObject {
         storyObject.storyId = igapStory.getId();
         storyObject.isSeen = igapStory.getSeen();
         storyObject.index = index;
+        storyObject.profileColor = profileColor;
         storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : displayName;
 
         return storyObject;

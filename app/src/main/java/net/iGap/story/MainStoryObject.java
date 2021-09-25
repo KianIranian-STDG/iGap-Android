@@ -15,6 +15,7 @@ public class MainStoryObject {
     public boolean isUploadedAll;
     public int indexOfSeen;
     public String displayName;
+    public String profileColor;
     public List<StoryObject> storyObjects = new ArrayList<>();
 
     public MainStoryObject() {
@@ -39,6 +40,7 @@ public class MainStoryObject {
         mainStoryObject.isSentAll = realmStory.isSentAll();
         mainStoryObject.isUploadedAll = realmStory.isUploadedAll();
         mainStoryObject.indexOfSeen = realmStory.getIndexOfSeen();
+        mainStoryObject.profileColor = realmStory.getProfileColor();
         mainStoryObject.displayName = mainStoryObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : realmStory.getDisplayName();
 
         for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {

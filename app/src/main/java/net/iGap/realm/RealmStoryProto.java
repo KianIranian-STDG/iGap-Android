@@ -27,6 +27,7 @@ public class RealmStoryProto extends RealmObject {
     private int index;
     private boolean isForReply;
     private String displayName;
+    private String profileColor;
     private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
@@ -157,6 +158,14 @@ public class RealmStoryProto extends RealmObject {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getProfileColor() {
+        return profileColor;
+    }
+
+    public void setProfileColor(String profileColor) {
+        this.profileColor = profileColor;
     }
 
     public RealmList<RealmStoryViewInfo> getRealmStoryViewInfos() {

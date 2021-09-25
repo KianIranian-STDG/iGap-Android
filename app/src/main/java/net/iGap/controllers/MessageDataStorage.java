@@ -925,6 +925,7 @@ public class MessageDataStorage extends BaseController {
                                     new RequestUserInfo().userInfo(groupedViews.get(i).getStoryViewsList().get(j).getUserId());
                                 } else {
                                     realmStoryViewInfo.setDisplayName(realmRegisteredInfo.getDisplayName());
+                                    realmStoryViewInfo.setProfileColor(realmRegisteredInfo.getColor());
                                 }
 
                                 realmStoryViewInfo.setId(groupedViews.get(i).getStoryId());
@@ -962,13 +963,15 @@ public class MessageDataStorage extends BaseController {
             try {
                 database.beginTransaction();
                 List<StoryObject> storyObjects = new ArrayList<>();
+
                 if (stories.size() > 0 && stories.size() >= database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll().size()) {
                     for (int i = 0; i < stories.size(); i++) {
                         if (stories.get(i).getStoriesList().size() > 0) {
+                            RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(i).getOriginatorId()).findFirst();
                             for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
-                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
                             }
-                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName());
+                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69");
                             storyObjects.removeAll(storyObjects);
                         } else {
                             RealmStory realmStory = database.where(RealmStory.class).equalTo("userId", stories.get(i).getOriginatorId()).findFirst();
@@ -1006,10 +1009,11 @@ public class MessageDataStorage extends BaseController {
                     for (int i = 0; i < stories.size(); i++) {
 
                         if (stories.get(i).getStoriesList().size() > 0) {
+                            RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(i).getOriginatorId()).findFirst();
                             for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
-                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName()));
+                                storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
                             }
-                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName());
+                            putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69");
                             storyObjects.removeAll(storyObjects);
                         } else {
                             RealmStory realmStory = database.where(RealmStory.class).equalTo("userId", stories.get(i).getOriginatorId()).findFirst();
@@ -1167,7 +1171,7 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-    private void putStoriesToDatabase(Realm database, boolean isSeenAll, long userId, List<StoryObject> stories, String displayName) {
+    private void putStoriesToDatabase(Realm database, boolean isSeenAll, long userId, List<StoryObject> stories, String displayName, String profileColor) {
         try {
             RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
             if (realmStory == null) {
@@ -1193,6 +1197,7 @@ public class MessageDataStorage extends BaseController {
                 }
             }
 
+            realmStory.setProfileColor(profileColor);
             realmStory.setLastCreatedAt(stories.get(stories.size() - 1).createdAt);
             realmStory.setDisplayName(displayName);
             realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
@@ -1243,11 +1248,12 @@ public class MessageDataStorage extends BaseController {
                     }
                     List<StoryObject> storyObjects = new ArrayList<>();
                     for (int i = 0; i < stories.size(); i++) {
-                        storyObjects.add(StoryObject.create(stories.get(i), i, realmRegisteredInfo.getDisplayName()));
+                        storyObjects.add(StoryObject.create(stories.get(i), i, realmRegisteredInfo.getDisplayName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
                     }
 
                     realmStory.setLastCreatedAt(storyObjects.get(storyObjects.size() - 1).createdAt);
                     realmStory.setDisplayName(realmRegisteredInfo.getDisplayName());
+                    realmStory.setProfileColor(realmRegisteredInfo.getColor());
                     realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
                     realmStory.setUserId(stories.get(0).getUserId());
                     realmStory.setSeenAll(false);
@@ -1421,6 +1427,7 @@ public class MessageDataStorage extends BaseController {
                         realmStoryViewInfo.setDisplayName("");
                         new RequestUserInfo().userInfo(viewdUserId);
                     } else {
+                        realmStoryViewInfo.setProfileColor(realmRegisteredInfo.getColor());
                         realmStoryViewInfo.setDisplayName(realmRegisteredInfo.getDisplayName());
                     }
                     realmStoryViewInfo.setId(storyId);

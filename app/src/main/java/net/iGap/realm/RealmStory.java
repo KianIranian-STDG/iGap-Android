@@ -26,6 +26,7 @@ public class RealmStory extends RealmObject {
     private int indexOfSeen;
     private long sessionId;
     private String displayName;
+    private String profileColor;
     private RealmList<RealmStoryProto> realmStoryProtos;
 
 
@@ -135,6 +136,14 @@ public class RealmStory extends RealmObject {
         isUploadedAll = uploadedAll;
     }
 
+    public String getProfileColor() {
+        return profileColor;
+    }
+
+    public void setProfileColor(String profileColor) {
+        this.profileColor = profileColor;
+    }
+
     public void setRealmStoryProtos(Realm realm, List<StoryObject> stories) {
         boolean isExist = false;
         for (StoryObject igapStory : stories) {
@@ -182,6 +191,7 @@ public class RealmStory extends RealmObject {
             storyProto.setId(igapStory.id);
             storyProto.setForReply(false);
             storyProto.setDisplayName(igapStory.displayName);
+            storyProto.setProfileColor(igapStory.profileColor);
             if (isExist) {
                 storyProto.setIndex(storyProto.getIndex());
             } else {

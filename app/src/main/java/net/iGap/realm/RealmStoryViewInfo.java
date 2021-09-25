@@ -2,11 +2,12 @@ package net.iGap.realm;
 
 import io.realm.RealmObject;
 
-public class RealmStoryViewInfo  extends RealmObject {
+public class RealmStoryViewInfo extends RealmObject {
     private long id;
     private long userId;
     private long createdTime;
     private String displayName;
+    private String profileColor;
 
     public long getUserId() {
         return userId;
@@ -34,6 +35,14 @@ public class RealmStoryViewInfo  extends RealmObject {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getProfileColor() {
+        return profileColor;
+    }
+
+    public void setProfileColor(String profileColor) {
+        this.profileColor = profileColor;
     }
 
     public void setDisplayName(String displayName) {

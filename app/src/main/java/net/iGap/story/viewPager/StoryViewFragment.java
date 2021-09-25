@@ -96,6 +96,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                         mainStoryObject.userId = realmStoryProto.getUserId();
                         storyObjects.add(StoryObject.create(realmStoryProto));
                         mainStoryObject.displayName = realmStoryProto.getDisplayName();
+                        mainStoryObject.profileColor = realmStoryProto.getProfileColor();
                         mainStoryObject.storyObjects = storyObjects;
                         storyResults.add(mainStoryObject);
                     }
