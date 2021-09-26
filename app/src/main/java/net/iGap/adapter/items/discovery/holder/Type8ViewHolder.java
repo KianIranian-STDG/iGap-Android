@@ -41,13 +41,15 @@ public class Type8ViewHolder extends BaseViewHolder {
 
         adContainer = itemView.findViewById(R.id.adContainer);
 
-        switch (addModel) {
-            case 8:
-                adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_8);
-                break;
-            case 9:
-                adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_9);
-                break;
+        if (adContainer != null && activity != null) {
+            switch (addModel) {
+                case 8:
+                    adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_8);
+                    break;
+                case 9:
+                    adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_9);
+                    break;
+            }
         }
 
         View tapCellWrapper = itemView.findViewById(R.id.tapCellWrapper);
@@ -60,37 +62,41 @@ public class Type8ViewHolder extends BaseViewHolder {
         });
 
         if (!BottomNavigationFragment.isShowedAdd) {
-            TapsellPlus.requestNativeAd(
-                    activity,
-                    addId,
-                    new AdRequestCallback() {
-                        @Override
-                        public void response(TapsellPlusAdModel tapsellPlusAdModel) {
-                            super.response(tapsellPlusAdModel);
-                            showAdd(tapsellPlusAdModel.getResponseId());
-                        }
+            if (activity != null && addId != null) {
+                TapsellPlus.requestNativeAd(
+                        activity,
+                        addId,
+                        new AdRequestCallback() {
+                            @Override
+                            public void response(TapsellPlusAdModel tapsellPlusAdModel) {
+                                super.response(tapsellPlusAdModel);
+                                showAdd(tapsellPlusAdModel.getResponseId());
+                            }
 
-                        @Override
-                        public void error(@NonNull String message) {
-                        }
-                    });
+                            @Override
+                            public void error(@NonNull String message) {
+                            }
+                        });
+            }
         }
     }
 
     private void showAdd(String nativeAdResponseId) {
-        TapsellPlus.showNativeAd(activity, nativeAdResponseId, adHolder,
-                new AdShowListener() {
-                    @Override
-                    public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
-                        adContainer.setVisibility(View.VISIBLE);
-                        BottomNavigationFragment.isShowedAdd = true;
-                    }
+        if (activity != null && adHolder != null && nativeAdResponseId != null) {
+            TapsellPlus.showNativeAd(activity, nativeAdResponseId, adHolder,
+                    new AdShowListener() {
+                        @Override
+                        public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
+                            adContainer.setVisibility(View.VISIBLE);
+                            BottomNavigationFragment.isShowedAdd = true;
+                        }
 
-                    @Override
-                    public void onError(TapsellPlusErrorModel tapsellPlusErrorModel) {
-                        FileLog.e(tapsellPlusErrorModel.getErrorMessage());
-                    }
-                });
+                        @Override
+                        public void onError(TapsellPlusErrorModel tapsellPlusErrorModel) {
+                            FileLog.e(tapsellPlusErrorModel.getErrorMessage());
+                        }
+                    });
+        }
     }
 
 }
