@@ -1711,4 +1711,5 @@
     <string name="your_status_characters">Ваше обновление статуса не может превышать 500 символов.</string>
     <string name="moments_string">Моменты</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">Сумма не может быть больше 500 миллионов риалов.</string>
+    <string name="invalid_qr_code">Недействительный штрих-код</string>
 </resources>

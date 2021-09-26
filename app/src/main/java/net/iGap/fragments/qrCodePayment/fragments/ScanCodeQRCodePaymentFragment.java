@@ -163,29 +163,38 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
                 G.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mBinding.progressBar.setVisibility(View.VISIBLE);
-                        String[] rawResult = result.getText().split("=");
-                        String qrCode = rawResult[1];
-                        Call<MerchantInfo> call = new RetrofitFactory().getPecQrRetrofit().getMerchantInfo(qrCode);
-                        call.enqueue(new Callback<MerchantInfo>() {
-                            @Override
-                            public void onResponse(Call<MerchantInfo> call, Response<MerchantInfo> response) {
-                                MerchantInfo merchantInfo = response.body();
-                                assert merchantInfo != null;
-                                new HelperFragment(
-                                        getActivity().getSupportFragmentManager(),
-                                        QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
-                                        .setReplace(true)
-                                        .setAddToBackStack(true)
-                                        .load();
-                                mBinding.progressBar.setVisibility(View.GONE);
-                            }
+                        if (result.getText().contains("https://qr.top.ir/?qrcode")) {
+                            mBinding.progressBar.setVisibility(View.VISIBLE);
+                            String[] rawResult = result.getText().split("=");
+                            String qrCode = rawResult[1];
+                            Call<MerchantInfo> call = new RetrofitFactory().getPecQrRetrofit().getMerchantInfo(qrCode);
+                            call.enqueue(new Callback<MerchantInfo>() {
+                                @Override
+                                public void onResponse(Call<MerchantInfo> call, Response<MerchantInfo> response) {
+                                    MerchantInfo merchantInfo = response.body();
+                                    assert merchantInfo != null;
+                                    new HelperFragment(
+                                            getActivity().getSupportFragmentManager(),
+                                            QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
+                                            .setReplace(true)
+                                            .setAddToBackStack(true)
+                                            .load();
+                                    mBinding.progressBar.setVisibility(View.GONE);
+                                }
 
-                            @Override
-                            public void onFailure(Call<MerchantInfo> call, Throwable t) {
-                                Log.e("onFailure", "onFailure: " + t.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<MerchantInfo> call, Throwable t) {
+                                    Log.e("onFailure", "onFailure: " + t.getMessage());
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), R.string.invalid_qr_code, Toast.LENGTH_LONG).show();
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .detach(ScanCodeQRCodePaymentFragment.this)
+                                    .attach(ScanCodeQRCodePaymentFragment.this)
+                                    .commit();
+                        }
                     }
                 });
             }

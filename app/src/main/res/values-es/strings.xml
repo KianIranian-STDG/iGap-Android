@@ -2099,4 +2099,5 @@
     <string name="your_status_characters">Tu actualización de estado no puede superar los 500 caracteres</string>
     <string name="moments_string">Momentos</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">La cantidad no puede superar los 500 millones de riales</string>
+    <string name="invalid_qr_code">Código de barras inválido</string>
 </resources>
