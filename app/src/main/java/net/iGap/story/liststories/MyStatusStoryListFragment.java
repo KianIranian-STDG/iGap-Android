@@ -155,7 +155,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.icon_add);
+        addButton.setIcon(R.string.icon_camera);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
         actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
