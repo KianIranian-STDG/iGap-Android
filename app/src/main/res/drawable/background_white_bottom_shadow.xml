@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item android:bottom="1dp">
         <shape>
             <solid android:color="@color/light_gray" />
@@ -10,7 +9,7 @@
 
     <item android:bottom="2dp">
         <shape>
-            <solid android:color="#A3A2A2" />
+            <solid android:color="#E6A3A2A2" />
         </shape>
     </item>
 
@@ -19,7 +18,6 @@
             <solid android:color="?attr/iGapWalletLighterBackground" />
         </shape>
     </item>
-
 
 </layer-list>
 
