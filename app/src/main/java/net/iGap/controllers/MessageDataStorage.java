@@ -1942,6 +1942,52 @@ public class MessageDataStorage extends BaseController {
     }
 
 
+    public void storySetDisplayName(long userId, String displayName) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
+                    RealmResults<RealmStoryViewInfo> realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", userId).findAll();
+                    if (realmStoryViewInfo != null && realmStoryViewInfo.size()>0) {
+                        for (int i = 0; i < realmStoryViewInfo.size(); i++) {
+                            realmStoryViewInfo.get(i).setDisplayName(displayName);
+                        }
+                    }
+
+                    if (realmStory != null) {
+                        realmStory.setDisplayName(displayName);
+                        if (realmStory.getRealmStoryProtos() != null && realmStory.getRealmStoryProtos().size() > 0) {
+                            for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {
+                                if (realmStory.getRealmStoryProtos().get(i) != null) {
+                                    realmStory.getRealmStoryProtos().get(i).setDisplayName(displayName);
+                                }
+                            }
+                        }
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, userId));
+                    }
+
+
+
+                });
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void storySetIndexOfSeen(long userId, int position) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 

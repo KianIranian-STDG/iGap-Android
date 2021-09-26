@@ -59,25 +59,8 @@ public class UserInfoResponse extends MessageHandler {
 
             RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
             RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
-
-            RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", builder.getUser().getId()).findFirst();
-            RealmStoryViewInfo realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", builder.getUser().getId()).findFirst();
-            if (realmStory != null) {
-                realmStory.setDisplayName(builder.getUser().getDisplayName());
-                if (realmStory.getRealmStoryProtos() != null && realmStory.getRealmStoryProtos().size() > 0) {
-                    for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {
-                        if (realmStory.getRealmStoryProtos().get(i) != null) {
-                            realmStory.getRealmStoryProtos().get(i).setDisplayName(builder.getUser().getDisplayName());
-                        }
-                    }
-                }
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, builder.getUser()));
-            }
-
-            if (realmStoryViewInfo != null) {
-                realmStoryViewInfo.setDisplayName(builder.getUser().getDisplayName());
-            }
         });
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).storySetDisplayName(builder.getUser().getId(), builder.getUser().getDisplayName());
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {

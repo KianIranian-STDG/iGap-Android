@@ -556,8 +556,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             G.runOnUiThread(() -> loadStories());
 
         } else if (id == EventManager.STORY_USER_INFO) {
-            ProtoGlobal.RegisteredUser user = (ProtoGlobal.RegisteredUser) args[0];
-            Integer position = adapter.getFailedMessages(user.getId());
+            long userId = (long) args[0];
+            Integer position = adapter.getFailedMessages(userId);
             if (position != null) {
                 adapter.addRow();
             }
