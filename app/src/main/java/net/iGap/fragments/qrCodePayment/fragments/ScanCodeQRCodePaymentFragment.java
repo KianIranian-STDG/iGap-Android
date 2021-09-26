@@ -110,6 +110,7 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
         PackageManager packageManager = context.getPackageManager();
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
+            getActivity().onBackPressed();
             return;
         }
         try {

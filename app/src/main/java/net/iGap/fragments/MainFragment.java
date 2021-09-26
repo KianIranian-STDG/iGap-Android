@@ -922,10 +922,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     private void onCodeScannerClickListener() {
-        new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
-                .setAddToBackStack(true)
-                .setReplace(false)
-                .load();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.mainFrame, ScanCodeQRCodePaymentFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void onConnectionStateChange(final ConnectionState connectionState) {
