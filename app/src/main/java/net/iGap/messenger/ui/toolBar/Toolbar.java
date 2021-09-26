@@ -8,7 +8,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -385,7 +384,7 @@ public class Toolbar extends FrameLayout {
             }
             int titleRight = titleLeft + titleTextView.getMeasuredWidth();
             if (titleLeft + titleTextView.getMeasuredWidth() > getWidth() - (items != null ? items.getMeasuredWidth() : 0)) {
-                titleRight -= items.getMeasuredWidth();
+                titleRight -= items != null ? items.getMeasuredWidth() : 0;
             }
             titleTextView.layout(titleLeft, titleTop, titleRight, titleTop + titleTextHeight);
             verifyLeft = titleRight + LayoutCreator.dp(5);

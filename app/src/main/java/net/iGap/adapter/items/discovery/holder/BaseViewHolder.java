@@ -41,8 +41,6 @@ import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
-import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
-import net.iGap.kuknos.Fragment.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -52,6 +50,7 @@ import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperError;
@@ -59,6 +58,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
+import net.iGap.kuknos.Fragment.KuknosEntryOptionFrag;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
@@ -414,7 +414,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case QRPAY:
-                new HelperFragment(activity.getSupportFragmentManager(), new ScanCodeQRCodePaymentFragment()).setReplace(false).setAddToBackStack(true).load();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .add(R.id.mainFrame, ScanCodeQRCodePaymentFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
                 break;
             default:
                 new MaterialDialog.Builder(activity).content(R.string.install_latest_version).positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss()).show();
