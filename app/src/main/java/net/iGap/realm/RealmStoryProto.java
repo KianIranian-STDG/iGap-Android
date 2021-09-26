@@ -4,9 +4,6 @@ import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryGetOwnStoryViews;
 
-import java.util.HashMap;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -31,7 +28,7 @@ public class RealmStoryProto extends RealmObject {
     private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
-        RealmStoryProto realmStory = realm.where(RealmStoryProto.class).equalTo("storyId", roomMessage.getStory().getStory().getId()).findFirst();
+        RealmStoryProto realmStory = realm.where(RealmStoryProto.class).equalTo("isForReply", true).equalTo("storyId", roomMessage.getStory().getStory().getId()).findFirst();
         ProtoGlobal.Story story = roomMessage.getStory().getStory();
         if (realmStory == null) {
             realmStory = realm.createObject(RealmStoryProto.class);

@@ -1242,7 +1242,7 @@ public class MessageDataStorage extends BaseController {
                 database.beginTransaction();
                 RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(0).getUserId()).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-                    RealmStory realmStory = database.where(RealmStory.class).equalTo("userId", stories.get(0).getUserId()).findFirst();
+                    RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", stories.get(0).getUserId()).findFirst();
                     if (realmStory == null) {
                         realmStory = database.createObject(RealmStory.class, SUID.id().get());
                     }
