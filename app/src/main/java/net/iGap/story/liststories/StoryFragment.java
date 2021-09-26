@@ -217,7 +217,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.icon_add);
+        addButton.setIcon(R.string.icon_camera);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
         actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
@@ -631,6 +631,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 G.runOnUiThread(() -> {
                                     actionButtonsRootView.setVisibility(View.VISIBLE);
                                 });
+                                storyCell.setStoryId(mainStoryObject.storyObjects.get(0).storyId);
                                 storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                 storyCell.deleteIconVisibility(true);
@@ -658,6 +659,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 if (isHaveFailedUpload) {
                                     G.runOnUiThread(() -> {
                                         actionButtonsRootView.setVisibility(View.VISIBLE);
+                                        storyCell.setStoryId(mainStoryObject.storyObjects.get(0).storyId);
                                         storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                         storyCell.deleteIconVisibility(true);
@@ -667,6 +669,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 } else {
                                     G.runOnUiThread(() -> {
                                         actionButtonsRootView.setVisibility(View.GONE);
+                                        storyCell.setStoryId(mainStoryObject.storyObjects.get(0).storyId);
                                         storyCell.setData(mainStoryObject, mainStoryObject.profileColor, context, false, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                         storyCell.deleteIconVisibility(true);
@@ -694,7 +697,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size() && otherUserRealmStory.get(recentStoryCounter).storyObjects.size() > 0) {
-
+                            storyCell.setStoryId(otherUserRealmStory.get(recentStoryCounter).storyObjects.get(0).storyId);
                             storyCell.setData(otherUserRealmStory.get(recentStoryCounter), otherUserRealmStory.get(recentStoryCounter).profileColor, context, (recentStoryCounter + 1) != otherUserRealmStory.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
@@ -704,7 +707,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                             storyCell.deleteIconVisibility(false);
                             storyCell.addIconVisibility(false);
                             recentStoryCounter++;
-
                         }
                     }
                     storyCell.setDeleteStory(StoryFragment.this);

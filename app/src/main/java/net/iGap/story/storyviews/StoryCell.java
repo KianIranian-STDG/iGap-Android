@@ -198,9 +198,9 @@ public class StoryCell extends FrameLayout {
                                 realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                             }
                         });
-
-                        G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
-
+                        if (arg.data.getDownloadObject().downloadId == storyId) {
+                            G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
+                        }
 
                     }
 
@@ -268,9 +268,9 @@ public class StoryCell extends FrameLayout {
                                     realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                                 }
                             });
-
-                            G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
-
+                            if (arg.data.getDownloadObject().downloadId == storyId) {
+                                G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
+                            }
 
                         }
 
