@@ -61,6 +61,7 @@ public class UserInfoResponse extends MessageHandler {
             RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
 
             RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", builder.getUser().getId()).findFirst();
+            RealmStoryViewInfo realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", builder.getUser().getId()).findFirst();
             if (realmStory != null) {
                 realmStory.setDisplayName(builder.getUser().getDisplayName());
                 if (realmStory.getRealmStoryProtos() != null && realmStory.getRealmStoryProtos().size() > 0) {
@@ -70,11 +71,9 @@ public class UserInfoResponse extends MessageHandler {
                         }
                     }
                 }
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, builder.getUser()));
             }
 
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, builder.getUser()));
-
-            RealmStoryViewInfo realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", builder.getUser().getId()).findFirst();
             if (realmStoryViewInfo != null) {
                 realmStoryViewInfo.setDisplayName(builder.getUser().getDisplayName());
             }

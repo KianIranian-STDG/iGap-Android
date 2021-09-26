@@ -559,9 +559,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             ProtoGlobal.RegisteredUser user = (ProtoGlobal.RegisteredUser) args[0];
             Integer position = adapter.getFailedMessages(user.getId());
             if (position != null) {
-                adapter.notifyItemChanged(position);
+                adapter.addRow();
             }
-
         }
     }
 
