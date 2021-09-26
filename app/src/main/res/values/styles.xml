@@ -151,9 +151,9 @@
     </style>
 
     <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
-        <item name="android:textColor">?attr/iGapButtonTextColor</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
         <item name="android:textAllCaps">false</item>
-        <item name="cornerRadius">@dimen/dp12</item>
+        <item name="cornerRadius">@dimen/dp18</item>
         <item name="android:textSize">@dimen/dp16</item>
     </style>
 
@@ -168,7 +168,7 @@
     <style name="iGapButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
-z
+    z
     <style name="mobileBankButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">@color/brown</item>
     </style>
@@ -184,7 +184,7 @@ z
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonTextColor</item>
-        
+
     </style>
 
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">

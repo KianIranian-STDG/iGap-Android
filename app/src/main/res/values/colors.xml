@@ -130,6 +130,7 @@
 
     <!-- New Color-->
     <color name="buttonColor">#57BA26</color>
+    <color name="buttonTextColor">#FFFFFF</color>
     <color name="circleIndicatorSelected">#42B120</color>
     <color name="ivand_green_text_color">#45B321</color>
 
@@ -164,7 +165,7 @@
     <color name="receive_message_text_light">#5F5F5F</color>
 
     <color name="shared_media_music_list_icon_color">#468DA7</color>
-    <color name="players_dark_background">#333333</color>
+    <color name="players_dark_background">#242424</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
     <color name="round_buttons_enabled_bg">#7B7B7B</color>
     <color name="tick_background_color">#66000000</color>

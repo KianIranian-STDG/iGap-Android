@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="iGapReplyContentBackground" format="reference|color" />
     <declare-styleable name="VerticalSlideColorPicker">
         <attr name="borderColor" format="color" />
         <attr name="defaultColor" format="color" />
@@ -114,7 +115,6 @@
     <attr name="iGapSendMessageTextColor" format="reference|color" />
     <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
     <attr name="iGapSendMessageBubbleColor" format="reference|color" />
-    <attr name="iGapReplyContentBackground" format="reference|color" />
     <attr name="iGapSendReplayColor" format="reference|color" />
     <attr name="iGapLinkColor" format="reference|color" />
     <attr name="iGapDefaultChatBackground" format="reference|color" />
@@ -244,6 +244,7 @@
     </declare-styleable>
     <attr name="numberPickerTheme" format="reference" />
 
+
     <!--Wallet item color-->
     <attr name="iGapWalletDarkerBackground" format="color"/>
     <attr name="iGapWalletLighterBackground" format="color"/>
@@ -262,6 +263,7 @@
         <attr format="float" name="frameAspectRatioHeight"/>
         <attr format="float" name="frameSize"/>
     </declare-styleable>
+
 
     <declare-styleable name="StoriesProgressView">
         <attr name="progressCount" format="integer|reference" />
