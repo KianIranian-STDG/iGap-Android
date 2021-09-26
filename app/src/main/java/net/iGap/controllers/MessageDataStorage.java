@@ -914,7 +914,7 @@ public class MessageDataStorage extends BaseController {
                             for (int j = 0; j < groupedViews.get(i).getStoryViewsList().size(); j++) {
                                 RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", groupedViews.get(i).getStoryViewsList().get(j).getUserId()).findFirst();
                                 RealmStoryViewInfo realmStoryViewInfo;
-                                realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", groupedViews.get(i).getStoryViewsList().get(j).getUserId()).findFirst();
+                                realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("id", groupedViews.get(i).getStoryId()).equalTo("userId", groupedViews.get(i).getStoryViewsList().get(j).getUserId()).findFirst();
                                 if (realmStoryViewInfo == null) {
                                     realmStoryViewInfo = realm.createObject(RealmStoryViewInfo.class);
                                 } else {
@@ -1417,7 +1417,7 @@ public class MessageDataStorage extends BaseController {
 
                     boolean isExist = false;
                     RealmStoryViewInfo realmStoryViewInfo;
-                    realmStoryViewInfo = database.where(RealmStoryViewInfo.class).equalTo("userId", viewdUserId).findFirst();
+                    realmStoryViewInfo = database.where(RealmStoryViewInfo.class).equalTo("id", storyId).equalTo("userId", viewdUserId).findFirst();
                     if (realmStoryViewInfo == null) {
                         realmStoryViewInfo = database.createObject(RealmStoryViewInfo.class);
                     } else {
