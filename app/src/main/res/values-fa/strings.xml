@@ -2337,4 +2337,5 @@
     <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>
     <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
+    <string name="invalid_qr_code">بارکد نامعتبر است</string>
 </resources>

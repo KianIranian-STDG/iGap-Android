@@ -40,8 +40,8 @@
                 android:layout_height="50dp"
                 android:background="@drawable/edit_text_square_background"
                 android:gravity="center"
-
                 android:hint="@string/enter_code"
+                android:inputType="number"
                 android:textColor="?attr/iGapTitleTextColor"
                 android:textColorHint="?attr/iGapHintTextColor"
                 app:layout_constraintBottom_toTopOf="@id/done_button"

@@ -270,10 +270,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     }
     private void onCodeScannerClickListener() {
 
-        new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance())
-                .setAddToBackStack(true)
-                .setReplace(false)
-                .load();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.mainFrame, ScanCodeQRCodePaymentFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
 
 //        DbManager.getInstance().doRealmTask(realm -> {
 //            String phoneNumber = "";

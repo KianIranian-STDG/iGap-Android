@@ -2724,5 +2724,6 @@
     <string name="your_status_characters">لا يمكن أن يتجاوز تحديث حالتك 500 حرف</string>
     <string name="moments_string">لحظات</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">لا يمكن أن يزيد المبلغ عن 500 مليون ريال</string>
+    <string name="invalid_qr_code">رمز شريطي غير صالح</string>
 
 </resources>
