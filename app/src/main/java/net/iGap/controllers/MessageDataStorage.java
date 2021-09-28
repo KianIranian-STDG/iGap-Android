@@ -1912,6 +1912,68 @@ public class MessageDataStorage extends BaseController {
     }
 
 
+    public boolean isStorySeen(long storyId) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        boolean[] result = new boolean[1];
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                    if (realmStoryProto != null) {
+                        result[0] = realmStoryProto.isSeen();
+                    }
+                });
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return result[0];
+    }
+
+
+    public boolean isAllStorySeen(long userId) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        boolean[] result = new boolean[1];
+        storageQueue.postRunnable(() -> {
+            try {
+
+                database.executeTransaction(realm -> {
+                    RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
+                    if (realmStory != null) {
+                        result[0] = realmStory.isSeenAll();
+                    }
+                });
+
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return result[0];
+    }
+
+
     public void storySetSeenAll(long userId, boolean seen) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
@@ -1951,7 +2013,7 @@ public class MessageDataStorage extends BaseController {
                 database.executeTransaction(realm -> {
                     RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
                     RealmResults<RealmStoryViewInfo> realmStoryViewInfo = realm.where(RealmStoryViewInfo.class).equalTo("userId", userId).findAll();
-                    if (realmStoryViewInfo != null && realmStoryViewInfo.size()>0) {
+                    if (realmStoryViewInfo != null && realmStoryViewInfo.size() > 0) {
                         for (int i = 0; i < realmStoryViewInfo.size(); i++) {
                             realmStoryViewInfo.get(i).setDisplayName(displayName);
                         }
@@ -1968,7 +2030,6 @@ public class MessageDataStorage extends BaseController {
                         }
                         G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_INFO, userId));
                     }
-
 
 
                 });
