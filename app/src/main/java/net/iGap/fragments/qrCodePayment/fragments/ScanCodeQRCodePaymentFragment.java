@@ -173,12 +173,10 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
                                 public void onResponse(Call<MerchantInfo> call, Response<MerchantInfo> response) {
                                     MerchantInfo merchantInfo = response.body();
                                     assert merchantInfo != null;
-                                    new HelperFragment(
-                                            getActivity().getSupportFragmentManager(),
-                                            QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
-                                            .setReplace(true)
-                                            .setAddToBackStack(true)
-                                            .load();
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(),merchantInfo.getQrCode(),merchantInfo.isPcqr()))
+                                            .addToBackStack(null)
+                                            .commit();
                                     mBinding.progressBar.setVisibility(View.GONE);
                                 }
 
@@ -214,10 +212,10 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
-                    new HelperFragment(getParentFragmentManager(), EnterCodeQRCodePaymentFragment.newInstance())
-                            .setAddToBackStack(true)
-                            .setReplace(false)
-                            .load();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(R.id.mainFrame, EnterCodeQRCodePaymentFragment.newInstance())
+                            .addToBackStack(null)
+                            .commit();
                 }
             }
         });
