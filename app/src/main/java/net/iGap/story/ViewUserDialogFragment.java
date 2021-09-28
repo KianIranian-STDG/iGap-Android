@@ -52,6 +52,8 @@ import net.iGap.story.viewPager.StoryDisplayFragment;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -161,7 +163,10 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         userId = new ArrayList<>();
         createdAtList = new ArrayList<>();
         displayNameList = new ArrayList<>();
-        for (int i = userIdList.size() - 1; i >= 0; i--) {
+
+        Collections.sort(userIdList);
+
+        for (int i = 0; i < userIdList.size(); i++) {
             userId.add(userIdList.get(i).userId);
             createdAtList.add(userIdList.get(i).createdTime);
             displayNameList.add(userIdList.get(i).displayName);
@@ -212,7 +217,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             userId = new ArrayList<>();
             createdAtList = new ArrayList<>();
             displayNameList = new ArrayList<>();
-            for (int i = userIdList.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < userIdList.size(); i++) {
                 userId.add(userIdList.get(i).userId);
                 createdAtList.add(userIdList.get(i).createdTime);
                 displayNameList.add(userIdList.get(i).displayName);

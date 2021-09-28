@@ -5,7 +5,7 @@ import net.iGap.realm.RealmStoryViewInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoryViewInfoObject {
+public class StoryViewInfoObject implements Comparable<StoryViewInfoObject> {
 
     public long id;
     public long userId;
@@ -20,13 +20,15 @@ public class StoryViewInfoObject {
         storyViewInfoObject.createdTime = realmStoryViewInfo.getCreatedTime();
         storyViewInfoObject.id = realmStoryViewInfo.getId();
         storyViewInfoObject.userId = realmStoryViewInfo.getUserId();
-        storyViewInfoObject.displayName=realmStoryViewInfo.getDisplayName();
-
-
+        storyViewInfoObject.displayName = realmStoryViewInfo.getDisplayName();
 
 
         return storyViewInfoObject;
     }
 
 
+    @Override
+    public int compareTo(StoryViewInfoObject storyViewInfoObject) {
+        return (Long.compare(storyViewInfoObject.createdTime, this.createdTime));
+    }
 }
