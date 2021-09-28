@@ -1036,11 +1036,22 @@ public class MessageDataStorage extends BaseController {
                     }
 
                 }
+
+                int[] storyUnReadCount = new int[1];
+                RealmResults<RealmStory> otherStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isSeenAll", false).findAll();
+                if (otherStories != null && otherStories.size() > 0) {
+                    storyUnReadCount[0] = otherStories.size();
+                } else {
+                    storyUnReadCount[0] = 0;
+                }
                 database.commitTransaction();
 
                 UserLoginResponse.isFetched = true;
 
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED));
+                G.runOnUiThread(() -> {
+                    G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    getEventManager().postEvent(EventManager.STORY_LIST_FETCHED);
+                });
 
             } catch (Exception e) {
                 Log.e("Fskhfjksdhjkshdf", "updateUserAddedStoryWithStoryObjects: " + "/" + e.getMessage());
