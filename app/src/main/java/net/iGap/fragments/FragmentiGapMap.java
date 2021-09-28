@@ -514,12 +514,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 if (changeState) {
                     deleteMapFileCash();
                     getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", false).apply();
-
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
-
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
+                    }
                 }
-
             }
             if (fabStateSwitcher.isMenuOpened()) {
                 fabStateSwitcher.toggleMenu();
