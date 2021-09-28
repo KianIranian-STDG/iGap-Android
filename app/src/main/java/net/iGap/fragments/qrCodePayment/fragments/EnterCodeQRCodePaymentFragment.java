@@ -114,12 +114,10 @@ public class EnterCodeQRCodePaymentFragment extends BaseFragment {
                             if(response.isSuccessful()) {
                                 MerchantInfo merchantInfo = response.body();
                                 assert merchantInfo != null;
-                                new HelperFragment(
-                                        getActivity().getSupportFragmentManager(),
-                                        QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
-                                        .setReplace(true)
-                                        .setAddToBackStack(true)
-                                        .load();
+                                getActivity().getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(),merchantInfo.getQrCode(),merchantInfo.isPcqr()))
+                                        .addToBackStack(null)
+                                        .commit();
                                 mBinding.progressBar.setVisibility(View.GONE);
                             } else {
                                 try {
