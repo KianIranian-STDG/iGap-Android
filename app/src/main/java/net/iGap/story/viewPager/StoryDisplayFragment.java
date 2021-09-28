@@ -988,6 +988,33 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         AttachmentObject attachmentObject = stories.get(counter).getAttachment();
         String path = attachmentObject.filePath != null ? attachmentObject.filePath : attachmentObject.thumbnailPath;
 
+
+        if (stories.get(counter).getStoryId() != 0 && !getMessageDataStorage().isStorySeen(stories.get(counter).getStoryId())) {
+            AbstractObject req = null;
+            IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
+            story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
+            req = story_add_view;
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
+                    getMessageDataStorage().storySetSeen(res.storyId);
+                } else {
+                    storyVideoProgress.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        if (counter == (stories.size() - 1) && !getMessageDataStorage().isAllStorySeen(stories.get(counter).getUserId())) {
+            getMessageDataStorage().storySetSeenAll(stories.get(counter).getUserId(), true);
+            int storyUnSeenCount = getMessageDataStorage().getUnSeenStoryCount();
+            if (storyUnSeenCount > 0) {
+                G.onUnreadChange.onChange(storyUnSeenCount, true);
+            } else {
+                G.onUnreadChange.onChange(0, true);
+            }
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
+        }
+
         File file = new File(path != null ? path : "");
         storyDisplayImage.setImageBitmap(null);
         if (file.exists()) {
@@ -1114,30 +1141,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 seenCount.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(stories.get(counter).getViewCount())));
             }
         }
-
-        if (stories.get(counter).getStoryId() != 0) {
-            AbstractObject req = null;
-            IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
-            story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
-            req = story_add_view;
-            getRequestManager().sendRequest(req, (response, error) -> {
-                if (error == null) {
-                    IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
-                    getMessageDataStorage().storySetSeen(res.storyId);
-                } else {
-                    storyVideoProgress.setVisibility(View.GONE);
-                }
-            });
-        }
-
-
         downloadCounter++;
 
-        if (counter == (stories.size() - 1)) {
-            getMessageDataStorage().storySetSeenAll(stories.get(counter).getUserId(), true);
-
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
-        }
     }
 
 

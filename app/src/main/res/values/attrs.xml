@@ -157,6 +157,7 @@
         <attr name="item_text_size" format="dimension" />
         <attr name="haveAvatarImage" format="boolean" />
         <attr name="hasUnreadBadge" format="boolean" />
+        <attr name="hasUnreadStory" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">
