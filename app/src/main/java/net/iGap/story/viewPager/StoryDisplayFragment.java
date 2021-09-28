@@ -1006,7 +1006,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
         if (counter == (stories.size() - 1) && !getMessageDataStorage().isAllStorySeen(stories.get(counter).getUserId())) {
             getMessageDataStorage().storySetSeenAll(stories.get(counter).getUserId(), true);
-
+            int storyUnSeenCount = getMessageDataStorage().getUnSeenStoryCount();
+            if (storyUnSeenCount > 0) {
+                G.onUnreadChange.onChange(storyUnSeenCount, true);
+            } else {
+                G.onUnreadChange.onChange(0, true);
+            }
             EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
         }
 

@@ -108,10 +108,21 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         this.onItemChangeListener = onItemChangeListener;
     }
 
-    public void setOnBottomNavigationBadge(int unreadCount) {
+    public void setOnBottomNavigationBadge(int unreadCount, boolean isForStoryFragment) {
+
         for (int i = 0; i < getChildCount(); i++) {
-            TabItem tabItem = (TabItem) getChildAt(i);
-            tabItem.updateBadge(unreadCount);
+            TabItem tabItem;
+            if (isForStoryFragment) {
+                tabItem = (TabItem) getChildAt(BottomNavigationFragment.CONTACT_FRAGMENT);
+                tabItem.updateBadge(unreadCount, false);
+            } else {
+                if (i != BottomNavigationFragment.CONTACT_FRAGMENT) {
+                    tabItem = (TabItem) getChildAt(i);
+                    tabItem.updateBadge(unreadCount, true);
+                }
+            }
+
+
         }
     }
 

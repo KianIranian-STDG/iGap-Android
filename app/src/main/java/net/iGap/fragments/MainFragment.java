@@ -174,7 +174,11 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         super.onCreate(savedInstanceState);
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         isNeedResume = true;
-
+        if (getMessageDataStorage().isHaveUnSeenStory()) {
+            G.onUnreadChange.onChange(getMessageDataStorage().getUnSeenStoryCount(), true);
+        } else {
+            G.onUnreadChange.onChange(0, true);
+        }
     }
 
 
