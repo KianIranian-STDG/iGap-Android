@@ -46,13 +46,13 @@ public class ChooseMoneyTransferActionFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.transferMoney).setVisibility((isWalletActive && isWalletRegister) ? View.VISIBLE : View.GONE);
-
-        view.findViewById(R.id.transferMoney).setOnClickListener(v -> {
-            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
-                ((ParentChatMoneyTransferFragment) getParentFragment()).loadTransferMoneyPage();
-            }
-        });
+        //view.findViewById(R.id.transferMoney).setVisibility((isWalletActive && isWalletRegister) ? View.VISIBLE : View.GONE);
+//
+//        view.findViewById(R.id.transferMoney).setOnClickListener(v -> {
+//            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+//                ((ParentChatMoneyTransferFragment) getParentFragment()).loadTransferMoneyPage();
+//            }
+//        });
 
         view.findViewById(R.id.stickerGift).setOnClickListener(v -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {

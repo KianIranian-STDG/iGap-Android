@@ -93,8 +93,8 @@ import net.iGap.story.storyviews.FragmentStoryViews;
 import net.iGap.story.viewPager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.model.Card;
-import org.paygear.web.Web;
+//import org.paygear.model.Card;
+//import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -102,8 +102,8 @@ import java.util.Collections;
 import java.util.Locale;
 
 import io.realm.Realm;
-import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.web.WebBase;
+//import ir.radsense.raadcore.model.Auth;
+//import ir.radsense.raadcore.web.WebBase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -854,7 +854,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getUserCredit() {
-        WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
+     /*   WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                 @Override
@@ -894,7 +894,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     }
                 }
             });
-        }
+        }*/
     }
 
     @Override

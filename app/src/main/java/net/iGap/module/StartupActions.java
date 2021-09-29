@@ -48,7 +48,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import ir.radsense.raadcore.Raad;
+//import ir.radsense.raadcore.Raad;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
@@ -460,43 +460,43 @@ public final class StartupActions {
                 selectedLanguage = "fa";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
-                Raad.language = selectedLanguage;
-                Raad.isFA = true;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = true;
                 break;
             case "English":
                 selectedLanguage = "en";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
-                Raad.language = selectedLanguage;
-                Raad.isFA = false;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = false;
                 break;
             case "Français":
                 selectedLanguage = "fr";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
-                Raad.language = selectedLanguage;
-                Raad.isFA = false;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = false;
                 break;
             case "Español":
                 selectedLanguage = "es";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
-                Raad.language = selectedLanguage;
-                Raad.isFA = false;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = false;
                 break;
             case "Russian":
                 selectedLanguage = "ru";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
-                Raad.language = selectedLanguage;
-                Raad.isFA = false;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = false;
                 break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
-                Raad.language = selectedLanguage;
-                Raad.isFA = true;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = true;
                 break;
 
             //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
@@ -504,16 +504,16 @@ public final class StartupActions {
                 selectedLanguage = "ur";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
-                Raad.language = selectedLanguage;
-                Raad.isFA = true;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = true;
                 break;
 
             case "آذری":
                 selectedLanguage = "iw";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
-                Raad.language = selectedLanguage;
-                Raad.isFA = true;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = true;
                 break;
         }
         updateResources(context);

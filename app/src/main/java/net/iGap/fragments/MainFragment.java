@@ -61,7 +61,6 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -97,7 +96,6 @@ import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.Date;

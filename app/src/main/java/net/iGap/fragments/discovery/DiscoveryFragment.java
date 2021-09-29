@@ -35,14 +35,11 @@ import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
@@ -51,18 +48,12 @@ import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetDiscovery;
-
-import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -268,6 +259,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             BottomNavigationFragment.isShowedAdd = false;
         }
     }
+
     private void onCodeScannerClickListener() {
 
         getActivity().getSupportFragmentManager().beginTransaction()

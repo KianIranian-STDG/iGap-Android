@@ -40,7 +40,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
@@ -55,7 +54,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.controllers.CallManager;
 
-import org.paygear.WalletActivity;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -148,7 +146,6 @@ public class HelperToolbar {
     }
 
 
-
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
         return this;
@@ -173,10 +170,12 @@ public class HelperToolbar {
         System.arraycopy(drawables, 0, mRightIcons, 0, drawables.length);
         return this;
     }
+
     public HelperToolbar setStaticToolbar(boolean staticToolbar) {
         this.isStaticToolbar = staticToolbar;
         return this;
     }
+
     //icons used and set from right side : contain : add , edit , search
     public HelperToolbar setTabletIcons(@StringRes int... icons) {
         System.arraycopy(icons, 0, mTabletIcons, 0, icons.length);
@@ -1038,13 +1037,6 @@ public class HelperToolbar {
                     //nothing
                 }
             }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext, new Intent(mFragmentActivity, WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
         });
     }
 

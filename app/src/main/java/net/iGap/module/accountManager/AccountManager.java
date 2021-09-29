@@ -269,7 +269,6 @@ public class AccountManager {
         RequestClientGetRoomList.isPendingGetRoomList = false;
         MainFragment.mOffset = 0;
         G.serverHashContact = null;
-        G.selectedCard = null;
         G.nationalCode = null;
         RequestManager.getInstance(AccountManager.selectedAccount).setPullRequestQueueRunned(false);
     }

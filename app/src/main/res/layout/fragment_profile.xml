@@ -140,6 +140,7 @@
             android:layout_marginTop="@dimen/dp8"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onCreditClick()}"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/fup_splitter_2"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
@@ -188,9 +189,10 @@
 
         <View
             android:id="@+id/fup_splitter_2"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
+            android:layout_width="2dp"
+            android:layout_height="46dp"
             android:background="?iGapDividerLine"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit"
             app:layout_constraintEnd_toStartOf="@id/fup_btn_score"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -203,6 +205,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onScoreClick()}"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/dp8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@id/fup_splitter_2"
@@ -253,12 +257,11 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp16"
             android:background="?iGapDividerLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fup_btn_credit" />
+            app:layout_constraintTop_toBottomOf="@+id/fup_btn_score" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
