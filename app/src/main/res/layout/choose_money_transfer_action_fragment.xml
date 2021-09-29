@@ -71,7 +71,8 @@
         android:id="@+id/transferMoney"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
-        android:background="?attr/selectableItemBackgroundBorderless">
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/transferMoneyIcon"

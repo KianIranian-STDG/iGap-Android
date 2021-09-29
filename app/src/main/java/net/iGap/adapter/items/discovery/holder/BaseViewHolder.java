@@ -30,7 +30,6 @@ import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
 import net.iGap.fragments.FragmentUserScore;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.LocalContactFragment;
@@ -57,7 +56,6 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.HelperWallet;
 import net.iGap.kuknos.Fragment.KuknosEntryOptionFrag;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
@@ -75,7 +73,7 @@ import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.WalletActivity;
+//import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
@@ -206,18 +204,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case FINANCIAL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
-                break;
-            case WALLET_MENU:/** tested **/
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    if (!userInfo.isWalletRegister()) {
-                        new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
-                    } else {
-                        boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
-                        activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
-                    }
-                });
                 break;
             case NEARBY_MENU:/** tested **/
                 try {

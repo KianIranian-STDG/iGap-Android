@@ -53,9 +53,6 @@ import net.iGap.observers.interfaces.*;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 
-import org.paygear.RaadApp;
-import org.paygear.model.Card;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +63,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
-import ir.radsense.raadcore.web.WebBase;
 import ir.tapsell.plus.TapsellPlus;
 import ir.tapsell.plus.TapsellPlusInitListener;
 import ir.tapsell.plus.model.AdNetworkError;
@@ -275,7 +271,6 @@ public class G extends ApplicationContext {
     public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme
     public static boolean isTimeWhole = false;
     public static Account iGapAccount;
-    public static Card selectedCard = null;
     public static RefreshWalletBalance refreshWalletBalance;
     public static boolean isDepricatedApp = false;
     public static int rotationState;
@@ -393,16 +388,6 @@ public class G extends ApplicationContext {
         updateResources(context);
 
         handler = new Handler();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                RaadApp.onCreate(getApplicationContext());
-                /*Raad.init(getApplicationContext());*/
-                WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
-            }
-        }).start();
-
         try {
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mainRingerMode = am.getRingerMode();
@@ -411,13 +396,6 @@ public class G extends ApplicationContext {
         }
         new StartupActions();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-     /*   try {
-            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
-            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
-        } catch (Exception e) {
-        }*/
-
         downloadDirectoryPath = context.getFilesDir().getAbsolutePath() + "/stickers";
 
         if (!new File(downloadDirectoryPath).exists())
@@ -442,7 +420,7 @@ public class G extends ApplicationContext {
                     @Override
                     public void onInitializeFailed(AdNetworks adNetworks,
                                                    AdNetworkError adNetworkError) {
-                        Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " +	adNetworkError.getErrorMessage());
+                        Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
                     }
                 });
     }

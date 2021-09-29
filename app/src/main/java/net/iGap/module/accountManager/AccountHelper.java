@@ -11,7 +11,6 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLogout;
 
-import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountHelper {
 
@@ -45,7 +44,6 @@ public class AccountHelper {
         clearCookies(G.context);
         WebSocketClient.getInstance().disconnectSocket(false);
         G.handler.removeCallbacksAndMessages(null);
-        signOutWallet();
         AccountManager.getInstance().clearSomeStaticValue();
         //close realm ui
         DbManager.getInstance().closeUiRealm();

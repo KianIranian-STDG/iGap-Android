@@ -412,6 +412,9 @@ public final class AndroidUtils {
 
     public static void cutFromTemp(String pathTmp, String newPath) throws IOException {
         File cutTo = new File(newPath);
+        if (!cutTo.exists()) {
+            cutTo.createNewFile();
+        }
         File cutFrom = new File(pathTmp);
         copyFile(cutFrom, cutTo);
         deleteFile(cutFrom);
@@ -439,7 +442,7 @@ public final class AndroidUtils {
         }
 
         final File sourceFile = file;
-        final boolean[] cancelled = new boolean[] {false};
+        final boolean[] cancelled = new boolean[]{false};
         if (sourceFile.exists()) {
             AlertDialog progressDialog = null;
             final boolean[] finished = new boolean[1];
@@ -454,7 +457,7 @@ public final class AndroidUtils {
                         if (!finished[0]) {
                             dialog.show();
                         }
-                    },250);
+                    }, 250);
                     progressDialog = dialog;
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -726,6 +729,7 @@ public final class AndroidUtils {
     }
 
     public native static String readlink(String path);
+
     public native static String readlinkFd(int fd);
 
     private static File getAlbumDir(boolean secretChat) {
@@ -737,8 +741,8 @@ public final class AndroidUtils {
             storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "iGap");
             if (!storageDir.mkdirs()) {
                 if (!storageDir.exists()) {
-                  FileLog.e("failed to create directory");
-                  return null;
+                    FileLog.e("failed to create directory");
+                    return null;
                 }
             }
         } else {
@@ -794,9 +798,9 @@ public final class AndroidUtils {
         thread.start();
     }
 
-    public static void copyFile(File src,File dst) throws IOException{
+    public static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
-        copyFile(in,dst);
+        copyFile(in, dst);
     }
 
     public static boolean deleteFile(File src) {

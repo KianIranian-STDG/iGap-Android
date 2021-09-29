@@ -29,9 +29,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
@@ -56,7 +54,6 @@ import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.MessageObject;
 
-import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;

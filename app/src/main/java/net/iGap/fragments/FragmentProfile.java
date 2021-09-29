@@ -31,13 +31,10 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.HelperWallet;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.UserProfileViewModel;
-
-import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
@@ -84,7 +81,7 @@ public class FragmentProfile extends BaseFragment {
 
         viewModel.getGoToWalletPage().observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null) {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), phoneNumber, false), WALLET_REQUEST_CODE);
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), phoneNumber, false), WALLET_REQUEST_CODE);
             }
         });
 
@@ -102,12 +99,6 @@ public class FragmentProfile extends BaseFragment {
         viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
-            }
-        });
-
-        viewModel.getGoToWalletAgreementPage().observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getActivity() != null && phoneNumber != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             }
         });
 
@@ -167,7 +158,7 @@ public class FragmentProfile extends BaseFragment {
 
         viewModel.goToContactsPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(),  RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS)).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS)).setReplace(false).load();
             }
         });
 

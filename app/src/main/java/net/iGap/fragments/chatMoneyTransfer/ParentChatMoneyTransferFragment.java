@@ -21,15 +21,9 @@ import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragme
 import net.iGap.fragments.payment.FragmentPaymentInternet;
 import net.iGap.fragments.payment.PaymentChargeFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperWallet;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
-import org.paygear.WalletActivity;
-import org.paygear.model.Card;
-import org.paygear.model.Payment;
-import org.paygear.model.PaymentAuth;
 
 public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
 
@@ -104,19 +98,6 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadTransferMoneyPage() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        bundle.putLong("peerId", peerId);
-        if (!(fragment instanceof TransferMoneyFragment)) {
-            fragment = new TransferMoneyFragment();
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }
-        fragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
-    }
 
     public void loadGiftSticker() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
@@ -134,53 +115,6 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
 //                       cardToCardCallBack.onClick("6221-0612-1741-0739","10,000","سلام من ابوالفضلم بهممممممم پول بزن :)");
     }
 
-    public void showPasswordFragment(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse, Card selectedCard) {
-        PaymentAuth paymentAuth = new PaymentAuth();
-        paymentAuth.publicKey = initPayResponse.getPublicKey();
-        paymentAuth.token = initPayResponse.getToken();
-
-        WalletPasswordFragment passwordFragment = new WalletPasswordFragment();
-        passwordFragment.setPaymentAuth(paymentAuth);
-        passwordFragment.setSelectedCard(selectedCard);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        bundle.putLong("peerId", peerId);
-        passwordFragment.setArguments(bundle);
-
-        getChildFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                .replace(R.id.transferMoneyContainer, passwordFragment, "passwordFragment")
-                .addToBackStack(passwordFragment.getClass().getName())
-                .commit();
-    }
-
-    public void showWalletActivity(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse, long price) {
-        Payment payment = new Payment();
-        PaymentAuth paymentAuth = new PaymentAuth();
-        paymentAuth.token = initPayResponse.getToken();
-        paymentAuth.publicKey = initPayResponse.getPublicKey();
-        payment.account = null;
-        payment.paymentAuth = paymentAuth;
-        payment.isCredit = false;
-        payment.orderId = null;
-        payment.price = price;
-        startActivityForResult(new HelperWallet().goToWallet(payment, getContext(), new Intent(getActivity(), WalletActivity.class), "0" + AccountManager.getInstance().getCurrentUser().getId(), false), 66);
-        dismiss();
-    }
-
-    public void setWalletPassword() {
-        WalletConfirmPasswordFragment confirmPasswordFragment = new WalletConfirmPasswordFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        bundle.putLong("peerId", peerId);
-        confirmPasswordFragment.setArguments(bundle);
-        getChildFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                .replace(R.id.transferMoneyContainer, confirmPasswordFragment, "confirmPasswordFragment")
-                .addToBackStack(confirmPasswordFragment.getClass().getName())
-                .commit();
-    }
 
     public void loadStickerPackagePage() {
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
