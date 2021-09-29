@@ -16,6 +16,8 @@ import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -201,9 +203,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
-            notifyObservers(Resource.success(new Progress(fileObject, fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
-            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
-
         } catch (Exception e) {
             onError(e);
         }
@@ -227,12 +226,44 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         MessageDataStorage storage = MessageDataStorage.getInstance(currentAccount);
         switch (selector) {
             case Selector.FILE_VALUE:
-                AndroidUtils.cutFromTemp(fileObject.tempFile.getAbsolutePath(), fileObject.destFile.getAbsolutePath());
+                AndroidUtils.globalQueue.postRunnable(() -> {
+                    File cutTo = new File(fileObject.destFile.getAbsolutePath());
+                    if (!cutTo.exists()) {
+                        try {
+                            cutTo.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    File cutForm = new File(fileObject.tempFile.getAbsolutePath());
+
+                    try (
+                            InputStream in = new FileInputStream(cutForm);
+                            OutputStream out = new FileOutputStream(cutTo);
+                    ) {
+                        // Transfer bytes from in to out
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        AndroidUtils.deleteFile(cutForm);
+                        G.runOnUiThread(() -> {
+                            notifyObservers(Resource.success(new Progress(fileObject, fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
+                            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
                 storage.setAttachmentFilePath(fileObject.mainCacheId, fileObject.destFile.getAbsolutePath(), false);
                 break;
             case Selector.SMALL_THUMBNAIL_VALUE:
             case Selector.LARGE_THUMBNAIL_VALUE:
                 storage.setAttachmentFilePath(fileObject.mainCacheId, fileObject.tempFile.getAbsolutePath(), true);
+                notifyObservers(Resource.success(new Progress(fileObject, fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
+                notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
                 break;
         }
     }
