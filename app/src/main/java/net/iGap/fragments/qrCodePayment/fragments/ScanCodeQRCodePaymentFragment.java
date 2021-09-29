@@ -1,6 +1,5 @@
 package net.iGap.fragments.qrCodePayment.fragments;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -27,10 +25,8 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.databinding.FragmentScanCodeQRCodePaymentBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.qrCodePayment.viewModels.ScanCodeQRCodePaymentViewModel;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.helper.PermissionHelper;
 import net.iGap.libs.codescanner.AutoFocusMode;
 import net.iGap.libs.codescanner.CodeScanner;
 import net.iGap.libs.codescanner.DecodeCallback;
@@ -94,13 +90,14 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (mCodeScanner != null) {
-            mCodeScanner.startPreview();
+            initCodeScanner();
         }
     }
 
     @Override
     public void onPause() {
         if (mCodeScanner != null) {
+            mCodeScanner.stopPreview();
             mCodeScanner.releaseResources();
         }
         super.onPause();
@@ -117,6 +114,7 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
             HelperPermission.getCameraPermission(context, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
+                    mCodeScanner = new CodeScanner(getActivity(), mBinding.codeScanner);
                     initCodeScanner();
                 }
 
@@ -148,7 +146,6 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
     }
 
     private void initCodeScanner() {
-        mCodeScanner = new CodeScanner(getActivity(), mBinding.codeScanner);
         mCodeScanner.setCamera(CodeScanner.CAMERA_BACK);
         mCodeScanner.setFormats(CodeScanner.ALL_FORMATS);
         mCodeScanner.setAutoFocusMode(AutoFocusMode.SAFE);
@@ -174,10 +171,11 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
                                     MerchantInfo merchantInfo = response.body();
                                     assert merchantInfo != null;
                                     getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(),merchantInfo.getQrCode(),merchantInfo.isPcqr()))
+                                            .add(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
                                             .addToBackStack(null)
                                             .commit();
                                     mBinding.progressBar.setVisibility(View.GONE);
+                                    initCodeScanner();
                                 }
 
                                 @Override
@@ -187,11 +185,9 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
                             });
                         } else {
                             Toast.makeText(getActivity(), R.string.invalid_qr_code, Toast.LENGTH_LONG).show();
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .detach(ScanCodeQRCodePaymentFragment.this)
-                                    .attach(ScanCodeQRCodePaymentFragment.this)
-                                    .commit();
+                            mCodeScanner.stopPreview();
+                            mCodeScanner.releaseResources();
+                            initCodeScanner();
                         }
                     }
                 });
