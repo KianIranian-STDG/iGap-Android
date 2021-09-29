@@ -1301,6 +1301,7 @@ public class MessageDataStorage extends BaseController {
             FileLog.i(TAG, "deleteUserStoryId " + storyId);
             try {
                 database.beginTransaction();
+                int counter = 0;
                 RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", storyId).findFirst();
 
                 if (realmStoryProto != null) {
@@ -1310,11 +1311,35 @@ public class MessageDataStorage extends BaseController {
                 if (userStory != null && userStory.getRealmStoryProtos() != null &&
                         userStory.getRealmStoryProtos().size() == 0) {
                     userStory.deleteFromRealm();
+                } else if (userStory != null && userStory.getRealmStoryProtos() != null && userStory.getRealmStoryProtos().size() > 0) {
+                    userStory.setLastCreatedAt(userStory.getRealmStoryProtos().get(userStory.getRealmStoryProtos().size() - 1).getCreatedAt() / 1000L);
+                    for (int i = 0; i < userStory.getRealmStoryProtos().size(); i++) {
+                        if (userStory.getRealmStoryProtos().get(i).isSeen()) {
+                            counter++;
+                        }
+                    }
+
+                    if (counter == userStory.getRealmStoryProtos().size()) {
+                        userStory.setSeenAll(true);
+                    }
+                    counter=0;
                 }
 
+
+                int[] storyUnReadCount = new int[1];
+                RealmResults<RealmStory> otherStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isSeenAll", false).findAll();
+                if (otherStories != null && otherStories.size() > 0) {
+                    storyUnReadCount[0] = otherStories.size();
+                } else {
+                    storyUnReadCount[0] = 0;
+                }
                 database.commitTransaction();
 
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED, storyId, userId));
+                G.runOnUiThread(() -> {
+                    G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    getEventManager().postEvent(EventManager.STORY_DELETED);
+                });
+
             } catch (Exception e) {
                 FileLog.e(e);
             }
