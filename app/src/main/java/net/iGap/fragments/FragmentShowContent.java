@@ -309,9 +309,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         }
         new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
-            if (items.get(position)==R.string.save_to_gallery) {
+            if (items.get(position) == R.string.save_to_gallery) {
                 saveToGallery(messageObject);
-            } else if (items.get(position)==R.string.share_file_link) {
+            } else if (items.get(position) == R.string.share_file_link) {
                 shareMediaLink(messageObject);
             } else {
                 shareContent(messageObject);
@@ -331,7 +331,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private void saveToGallery(MessageObject messageObject) {
         if (messageObject != null) {
             String path = getFilePath(messageObject);
-            String extension = path.substring(path.lastIndexOf("."));
+            String extension = "";
+            if (path.contains(".")) {
+                extension = path.substring(path.lastIndexOf("."));
+            }
             int messageType;
             if (messageObject.forwardedMessage != null) {
                 messageType = messageObject.forwardedMessage.messageType;
