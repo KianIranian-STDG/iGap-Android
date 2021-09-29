@@ -98,7 +98,9 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         Request.Builder builder = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", jwtToken);
-        builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
+        if (fileStruct.offset > 0) {
+            builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
+        }
 
 
         FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: " + fileStruct.mainCacheId);
