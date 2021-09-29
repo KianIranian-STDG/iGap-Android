@@ -137,12 +137,16 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             }
         }
 
-        int storyUnreadCount=0;
         RealmResults<RealmStory> realmStories = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStory.class).findAll();
         });
 
         onChange(unreadCount, false);
+        if (getMessageDataStorage().isHaveUnSeenStory()) {
+            onChange(getMessageDataStorage().getUnSeenStoryCount(), true);
+        } else {
+            onChange(0, true);
+        }
     }
 
     public void setCrawlerMap(String crawlerMap) {
