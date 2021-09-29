@@ -1302,7 +1302,7 @@ public class MessageDataStorage extends BaseController {
             try {
                 database.beginTransaction();
                 int counter = 0;
-                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", storyId).findFirst();
+                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
 
                 if (realmStoryProto != null) {
                     realmStoryProto.deleteFromRealm();
@@ -1322,7 +1322,7 @@ public class MessageDataStorage extends BaseController {
                     if (counter == userStory.getRealmStoryProtos().size()) {
                         userStory.setSeenAll(true);
                     }
-                    counter=0;
+                    counter = 0;
                 }
 
 
