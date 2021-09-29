@@ -98,10 +98,8 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         Request.Builder builder = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", jwtToken);
+        builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
 
-        if (fileStruct.offset > 0) {
-            builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
-        }
 
         FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: " + fileStruct.mainCacheId);
 
@@ -125,6 +123,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
                 long downloaded = fileStruct.offset;
                 while ((count = cipherInputStream.read(data)) != -1) {
                     downloaded += count;
+                    fileStruct.offset = downloaded;
                     int t = (int) ((downloaded * 100) / fileStruct.fileSize);
                     if (fileStruct.progress < t) {
                         fileStruct.progress = t;
@@ -135,6 +134,16 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
                         safelyCancelDownload();
                         return;
                     }
+                }
+                if (downloaded < fileStruct.fileSize) { // This is for any reason that connection have problem and stream returned -1 and the file downloaded incompletely.
+                    FileLog.e("HttpRequest", "Download " + fileStruct.fileToken + " with offset: " + fileStruct.offset + " retried");
+                    inputStream.close();
+                    cipherInputStream.close();
+                    os.close();
+                    if (response.body() != null) {
+                        response.body().close();
+                    }
+                    download(jwtToken, fileStruct);
                 }
                 onDownloadCompleted();
                 cipherInputStream.close();
