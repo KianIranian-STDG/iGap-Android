@@ -963,6 +963,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmStoryProtoSchema != null) {
                 realmStoryProtoSchema.addField("displayName", String.class);
                 realmStoryProtoSchema.addField("profileColor", String.class);
+                realmStoryProtoSchema.addField("sessionId", long.class);
             }
 
             if (realmStoryViewInfoSchema != null) {

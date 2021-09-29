@@ -966,14 +966,14 @@ public class MessageDataStorage extends BaseController {
 
                 if (stories.size() > 0 && stories.size() >= database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll().size()) {
                     for (int i = 0; i < stories.size(); i++) {
-                        if (stories.get(i).getStoriesList().size() > 0) {
+                        if (stories.get(i).getStoriesList().size() > 0 && stories.get(i).getOriginatorValue() == 0) {
                             RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(i).getOriginatorId()).findFirst();
                             for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
                                 storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
                             }
                             putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69");
                             storyObjects.removeAll(storyObjects);
-                        } else {
+                        } else if (stories.get(i).getOriginatorValue() == 0) {
                             RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", stories.get(i).getOriginatorId()).findFirst();
                             if (realmStory != null) {
                                 realmStory.deleteFromRealm();
@@ -998,7 +998,7 @@ public class MessageDataStorage extends BaseController {
                                 if (realmStory != null && realmStory.isSentAll()) {
                                     realmStory.deleteFromRealm();
                                 }
-                                RealmResults<RealmStoryProto> realmStoryProtos = database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", MessageObject.STATUS_SENT).findAll();
+                                RealmResults<RealmStoryProto> realmStoryProtos = database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("userId", userId).equalTo("status", MessageObject.STATUS_SENT).findAll();
                                 if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
                                     realmStoryProtos.deleteAllFromRealm();
                                 }
@@ -1008,14 +1008,14 @@ public class MessageDataStorage extends BaseController {
                     }
                     for (int i = 0; i < stories.size(); i++) {
 
-                        if (stories.get(i).getStoriesList().size() > 0) {
+                        if (stories.get(i).getStoriesList().size() > 0 && stories.get(i).getOriginatorValue() == 0) {
                             RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(i).getOriginatorId()).findFirst();
                             for (int j = 0; j < stories.get(i).getStoriesList().size(); j++) {
                                 storyObjects.add(StoryObject.create(stories.get(i).getStoriesList().get(j), j, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
                             }
                             putStoriesToDatabase(database, stories.get(i).getSeenAllGroupStories(), stories.get(i).getOriginatorId(), storyObjects, stories.get(i).getOriginatorName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69");
                             storyObjects.removeAll(storyObjects);
-                        } else {
+                        } else if (stories.get(i).getOriginatorValue() == 0) {
                             RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", stories.get(i).getOriginatorId()).findFirst();
                             if (realmStory != null) {
                                 realmStory.deleteFromRealm();
@@ -1025,7 +1025,7 @@ public class MessageDataStorage extends BaseController {
                     }
 
                 } else if (stories.size() == 0) {
-                    database.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
+                    database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
                     List<RealmStory> realmStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).findAll();
                     if (realmStories != null && realmStories.size() > 0) {
                         for (int i = 0; i < realmStories.size(); i++) {
@@ -1090,7 +1090,7 @@ public class MessageDataStorage extends BaseController {
         List<StoryObject> storyObjects = new ArrayList<>();
         storageQueue.postRunnable(() -> {
             try {
-                List<RealmStoryProto> realmStories = database.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("userId", userId).findAll().sort("index", Sort.DESCENDING);
+                List<RealmStoryProto> realmStories = database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("userId", userId).findAll().sort("index", Sort.DESCENDING);
 
                 if (realmStories != null && realmStories.size() > 0) {
                     for (int i = 0; i < realmStories.size(); i++) {
@@ -1198,7 +1198,7 @@ public class MessageDataStorage extends BaseController {
                         }
                     }
                     if (!isExist && realmStory.getRealmStoryProtos().get(i).getStoryId() != 0) {
-                        database.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENT).equalTo("storyId", realmStory.getRealmStoryProtos().get(i).getStoryId()).findAll().deleteAllFromRealm();
+                        database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENT).equalTo("storyId", realmStory.getRealmStoryProtos().get(i).getStoryId()).findAll().deleteAllFromRealm();
                         RealmStory userStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
                         if (userStory != null && userStory.getRealmStoryProtos().size() == 0) {
                             userStory.deleteFromRealm();
@@ -1220,29 +1220,6 @@ public class MessageDataStorage extends BaseController {
         }
     }
 
-    public void storyUpdateStatusWithFailedTokens(ProtocolStringList failedTokens) {
-        storageQueue.postRunnable(() -> {
-            try {
-                database.beginTransaction();
-
-                for (int i = 0; i < failedTokens.size(); i++) {
-                    RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("fileToken", failedTokens.get(i)).findFirst();
-                    if (realmStoryProto != null) {
-                        realmStoryProto.setStatus(MessageObject.STATUS_SENT);
-                    }
-                }
-                if (database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() == 0 &&
-                        database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() == 0) {
-                    database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
-                }
-                database.commitTransaction();
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW));
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        });
-
-    }
 
     public void updateUserAddedStory(final List<ProtoGlobal.Story> stories) {
 
@@ -1250,43 +1227,46 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "updateUserAddedStory userId " + stories.get(0).getUserId() + " storiesId " + stories.get(0).getId());
             try {
-                database.beginTransaction();
-                RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(0).getUserId()).findFirst();
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-                    RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", stories.get(0).getUserId()).findFirst();
-                    if (realmStory == null) {
-                        realmStory = database.createObject(RealmStory.class, SUID.id().get());
-                    }
-                    List<StoryObject> storyObjects = new ArrayList<>();
-                    for (int i = 0; i < stories.size(); i++) {
-                        storyObjects.add(StoryObject.create(stories.get(i), i, realmRegisteredInfo.getDisplayName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
-                    }
+                if (stories.get(0).getTypeValue()==0){
+                    database.beginTransaction();
+                    RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(0).getUserId()).findFirst();
+                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+                        RealmStory realmStory = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", stories.get(0).getUserId()).findFirst();
+                        if (realmStory == null) {
+                            realmStory = database.createObject(RealmStory.class, SUID.id().get());
+                        }
+                        List<StoryObject> storyObjects = new ArrayList<>();
+                        for (int i = 0; i < stories.size(); i++) {
+                            if (stories.get(i).getTypeValue() == 0) {
+                                storyObjects.add(StoryObject.create(stories.get(i), i, realmRegisteredInfo.getDisplayName(), realmRegisteredInfo != null ? realmRegisteredInfo.getColor() : "#4aca69"));
+                            }
+                        }
 
-                    realmStory.setLastCreatedAt(storyObjects.get(storyObjects.size() - 1).createdAt);
-                    realmStory.setDisplayName(realmRegisteredInfo.getDisplayName());
-                    realmStory.setProfileColor(realmRegisteredInfo.getColor());
-                    realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
-                    realmStory.setUserId(stories.get(0).getUserId());
-                    realmStory.setSeenAll(false);
-                    realmStory.setRealmStoryProtos(database, storyObjects);
+                        realmStory.setLastCreatedAt(storyObjects.get(storyObjects.size() - 1).createdAt);
+                        realmStory.setDisplayName(realmRegisteredInfo.getDisplayName());
+                        realmStory.setProfileColor(realmRegisteredInfo.getColor());
+                        realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
+                        realmStory.setUserId(stories.get(0).getUserId());
+                        realmStory.setSeenAll(false);
+                        realmStory.setRealmStoryProtos(database, storyObjects);
 
-                    int[] storyUnReadCount = new int[1];
-                    RealmResults<RealmStory> otherStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isSeenAll", false).findAll();
-                    if (otherStories != null && otherStories.size() > 0) {
-                        storyUnReadCount[0] = otherStories.size();
+                        int[] storyUnReadCount = new int[1];
+                        RealmResults<RealmStory> otherStories = database.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isSeenAll", false).findAll();
+                        if (otherStories != null && otherStories.size() > 0) {
+                            storyUnReadCount[0] = otherStories.size();
+                        } else {
+                            storyUnReadCount[0] = 0;
+                        }
+                        database.commitTransaction();
+
+                        G.runOnUiThread(() -> {
+                            G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                            getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW);
+                        });
                     } else {
-                        storyUnReadCount[0] = 0;
+                        new RequestUserInfo().userInfo(stories.get(0).getUserId());
                     }
-                    database.commitTransaction();
-
-                    G.runOnUiThread(() -> {
-                        G.onUnreadChange.onChange(storyUnReadCount[0], true);
-                        getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW);
-                    });
-                } else {
-                    new RequestUserInfo().userInfo(stories.get(0).getUserId());
                 }
-
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -1355,7 +1335,7 @@ public class MessageDataStorage extends BaseController {
             FileLog.i(TAG, "deleteUserStoryId " + uploadId);
             try {
                 database.beginTransaction();
-                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("id", uploadId).findFirst();
+                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("isForReply", false).equalTo("id", uploadId).findFirst();
 
                 if (realmStoryProto != null) {
                     realmStoryProto.deleteFromRealm();
@@ -1364,8 +1344,8 @@ public class MessageDataStorage extends BaseController {
                 if (userStory.getRealmStoryProtos().size() == 0) {
                     userStory.deleteFromRealm();
                 } else {
-                    if (database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
-                            database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
+                    if (database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
+                            database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
                         userStory.setSentAll(false);
                     } else {
                         userStory.setSentAll(true);
@@ -1389,7 +1369,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
 
-                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("id", uploadId).findFirst();
+                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("id", uploadId).findFirst();
                 if (realmStoryProto != null) {
                     storyObjects[0] = StoryObject.create(realmStoryProto);
                 }
@@ -1420,7 +1400,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
 
-                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("fileToken", fileToken).findFirst();
+                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("fileToken", fileToken).findFirst();
                 if (realmStoryProto != null) {
                     storyObjects[0] = StoryObject.create(realmStoryProto);
                 }
@@ -1454,7 +1434,7 @@ public class MessageDataStorage extends BaseController {
 
                 RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", viewdUserId).findFirst();
 
-                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
 
                 if (realmStoryProto != null) {
                     realmStoryProto.setSeen(true);
@@ -1557,7 +1537,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
 
-                RealmResults<RealmStoryProto> realmStoryProto = database.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
+                RealmResults<RealmStoryProto> realmStoryProto = database.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).findAll().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING});
 
                 for (int i = 0; i < realmStoryProto.size(); i++) {
                     stories.add(StoryObject.create(realmStoryProto.get(i)));
@@ -1743,13 +1723,13 @@ public class MessageDataStorage extends BaseController {
 
                 if (isNotNullToken) {
                     if (fieldSort == null) {
-                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", status).isNotNull("fileToken").findAll());
+                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", status).isNotNull("fileToken").findAll());
                     } else {
-                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", status).isNotNull("fileToken").findAll().sort(fieldSort, new Sort[]{Sort.ASCENDING}));
+                        stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", status).isNotNull("fileToken").findAll().sort(fieldSort, new Sort[]{Sort.ASCENDING}));
                     }
 
                 } else {
-                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("isForReply", false).equalTo("status", status).findAll());
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("status", status).findAll());
                 }
 
 
@@ -1785,9 +1765,9 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 if (status == 0) {
-                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).isNotNull("fileToken").findAll());
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("userId", userId).isNotNull("fileToken").findAll());
                 } else {
-                    stories.addAll(database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", status).isNotNull("fileToken").findAll());
+                    stories.addAll(database.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("userId", userId).equalTo("status", status).isNotNull("fileToken").findAll());
                 }
 
 

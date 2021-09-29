@@ -1,5 +1,6 @@
 package net.iGap.realm;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryGetOwnStoryViews;
@@ -18,6 +19,7 @@ public class RealmStoryProto extends RealmObject {
     private long userId;
     private long storyId;
     private long id;
+    private long sessionId;
     private boolean isSeen;
     private int viewCount;
     private int status;
@@ -41,6 +43,7 @@ public class RealmStoryProto extends RealmObject {
         realmStory.setFileToken(story.getFileToken());
         realmStory.setStoryId(story.getId());
         realmStory.setUserId(story.getUserId());
+        realmStory.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
         realmStory.setForReply(true);
         return realmStory;
     }
@@ -167,6 +170,14 @@ public class RealmStoryProto extends RealmObject {
 
     public RealmList<RealmStoryViewInfo> getRealmStoryViewInfos() {
         return realmStoryViewInfos;
+    }
+
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 
     public void setRealmStoryViewInfos(Realm realm, ProtoStoryGetOwnStoryViews.GroupedViews groupedViews) {

@@ -150,9 +150,9 @@ public class RealmStory extends RealmObject {
             RealmAttachment realmAttachment;
             RealmStoryProto storyProto;
             if (igapStory.fileToken != null) {
-                storyProto = realm.where(RealmStoryProto.class).equalTo("fileToken", igapStory.fileToken).findFirst();
+                storyProto = realm.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("fileToken", igapStory.fileToken).findFirst();
             } else {
-                storyProto = realm.where(RealmStoryProto.class).equalTo("id", igapStory.id).findFirst();
+                storyProto = realm.where(RealmStoryProto.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("isForReply", false).equalTo("isForReply", false).equalTo("id", igapStory.id).findFirst();
             }
             if (storyProto == null) {
                 storyProto = realm.createObject(RealmStoryProto.class);
@@ -192,6 +192,7 @@ public class RealmStory extends RealmObject {
             storyProto.setForReply(false);
             storyProto.setDisplayName(igapStory.displayName);
             storyProto.setProfileColor(igapStory.profileColor);
+            storyProto.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
             if (isExist) {
                 storyProto.setIndex(storyProto.getIndex());
             } else {

@@ -478,6 +478,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 storyObject.isSeen = false;
                 storyObject.realmAttachment = realmAttachment;
                 storyObject.userId = AccountManager.getInstance().getCurrentUser().getId();
+                storyObject.sessionId = AccountManager.getInstance().getCurrentUser().getId();
                 storyObject.displayName = AccountManager.getInstance().getCurrentUser().getName();
                 storyObject.createdAt = System.currentTimeMillis();
                 storyObject.caption = itemGalleryList.get(objectsCounter).getText();
@@ -519,6 +520,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             storyObject.isSeen = false;
             storyObject.realmAttachment = realmAttachment;
             storyObject.userId = AccountManager.getInstance().getCurrentUser().getId();
+            storyObject.sessionId = AccountManager.getInstance().getCurrentUser().getId();
             storyObject.displayName = AccountManager.getInstance().getCurrentUser().getName();
             storyObject.createdAt = System.currentTimeMillis();
             storyObject.caption = "";
