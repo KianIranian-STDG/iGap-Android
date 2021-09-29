@@ -182,6 +182,7 @@ public class StoryCell extends FrameLayout {
         } else if (attachment != null) {
             Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
+            Log.e("skfjskjfsd", "setData2: " + storyId + "/" + object.downloadId);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                     if (arg.status == Status.SUCCESS && arg.data != null) {
@@ -198,7 +199,9 @@ public class StoryCell extends FrameLayout {
                                 realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                             }
                         });
+                        Log.e("skfjskjfsd", "setData3: " + storyId + "/" + arg.data.getDownloadObject().downloadId);
                         if (arg.data.getDownloadObject().downloadId == storyId) {
+                            Log.e("skfjskjfsd", "setData4: " + storyId + "/" + arg.data.getDownloadObject().downloadId);
                             G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
                         }
 

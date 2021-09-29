@@ -19,6 +19,7 @@ public class StoryObject {
     public long createdAt;
     public long userId;
     public long storyId;
+    public long sessionId;
     public boolean isSeen;
     public String imagePath;
     public RealmAttachment realmAttachment;
