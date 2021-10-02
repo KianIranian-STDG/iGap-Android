@@ -181,7 +181,7 @@ public class StoryCell extends FrameLayout {
 
         } else if (attachment != null) {
             Glide.with(G.context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
-            DownloadObject object = DownloadObject.createForStory(attachment, storyId, true);
+            DownloadObject object = DownloadObject.createForStory(attachment, storyObject.storyId, true);
             Log.e("skfjskjfsd", "setData2: " + storyId + "/" + object.downloadId);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {

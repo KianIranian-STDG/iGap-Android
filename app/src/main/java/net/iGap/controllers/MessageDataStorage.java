@@ -2,8 +2,6 @@ package net.iGap.controllers;
 
 import android.util.Log;
 
-import com.google.protobuf.ProtocolStringList;
-
 import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
@@ -18,7 +16,6 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryGetOwnStoryViews;
 import net.iGap.proto.ProtoStoryGetStories;
-import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmChannelExtra;
@@ -39,7 +36,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.response.UserLoginResponse;
 import net.iGap.story.MainStoryObject;
 import net.iGap.story.StoryObject;
-import net.iGap.story.ViewUserDialogFragment;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.structs.RoomContactObject;
@@ -907,7 +903,7 @@ public class MessageDataStorage extends BaseController {
                             }
                         }
 
-                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", groupedViews.get(i).getStoryId()).findFirst();
+                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("storyId", groupedViews.get(i).getStoryId()).findFirst();
                         if (realmStoryProto != null) {
                             realmStoryProto.setViewCount(counter);
                             boolean isExist = false;
@@ -1227,7 +1223,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "updateUserAddedStory userId " + stories.get(0).getUserId() + " storiesId " + stories.get(0).getId());
             try {
-                if (stories.get(0).getTypeValue()==0){
+                if (stories.get(0).getTypeValue() == 0) {
                     database.beginTransaction();
                     RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(0).getUserId()).findFirst();
                     if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
@@ -1801,7 +1797,7 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 database.executeTransaction(realm -> {
-                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("id", id).findFirst();
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("id", id).findFirst();
                     if (realmStoryProto != null) {
                         realmStoryProto.setStatus(status);
                     }
@@ -1830,7 +1826,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             try {
                 database.executeTransaction(realm -> {
-                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("id", messageId).findFirst();
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("id", messageId).findFirst();
                     if (realmStoryProto != null) {
                         realmStoryProto.setFileToken(fileToken);
                     }
@@ -1916,7 +1912,7 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 database.executeTransaction(realm -> {
-                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
                     if (realmStoryProto != null) {
                         realmStoryProto.setSeen(true);
                     }
@@ -1945,7 +1941,7 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 database.executeTransaction(realm -> {
-                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                    RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
                     if (realmStoryProto != null) {
                         result[0] = realmStoryProto.isSeen();
                     }
