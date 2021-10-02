@@ -175,9 +175,9 @@ public class MessageController extends BaseController implements EventManager.Ev
         RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(req, (response, error) -> {
             if (error == null) {
                 IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
-                MessageDataStorage.getInstance(AccountManager.selectedAccount).updateUserAddedStoryWithStoryObjects(res.stories);
+                getMessageDataStorage().updateUserAddedStoryWithStoryObjects(res.stories);
             } else {
-                Log.e("fdajhfjshf", "getRequestManager2: " + "/" + error);
+
             }
         });
 
