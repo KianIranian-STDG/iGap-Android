@@ -1049,7 +1049,9 @@ public class MessageDataStorage extends BaseController {
                 UserLoginResponse.isFetched = true;
 
                 G.runOnUiThread(() -> {
-                    G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    if (G.onUnreadChange != null) {
+                        G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    }
                     getEventManager().postEvent(EventManager.STORY_LIST_FETCHED);
                 });
 
@@ -1227,7 +1229,7 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "updateUserAddedStory userId " + stories.get(0).getUserId() + " storiesId " + stories.get(0).getId());
             try {
-                if (stories.get(0).getTypeValue()==0){
+                if (stories.get(0).getTypeValue() == 0) {
                     database.beginTransaction();
                     RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", stories.get(0).getUserId()).findFirst();
                     if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
@@ -1260,7 +1262,9 @@ public class MessageDataStorage extends BaseController {
                         database.commitTransaction();
 
                         G.runOnUiThread(() -> {
-                            G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                            if (G.onUnreadChange != null) {
+                                G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                            }
                             getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW);
                         });
                     } else {
@@ -1316,7 +1320,9 @@ public class MessageDataStorage extends BaseController {
                 database.commitTransaction();
 
                 G.runOnUiThread(() -> {
-                    G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    if (G.onUnreadChange != null) {
+                        G.onUnreadChange.onChange(storyUnReadCount[0], true);
+                    }
                     getEventManager().postEvent(EventManager.STORY_DELETED);
                 });
 
