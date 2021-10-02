@@ -1712,4 +1712,5 @@
     <string name="moments_string">Моменты</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">Сумма не может быть больше 500 миллионов риалов.</string>
     <string name="invalid_qr_code">Недействительный штрих-код</string>
+    <string name="bazaar_app_is_not_installed_in_your_phone">В вашем телефоне не установлено приложение Bazaar!</string>
 </resources>

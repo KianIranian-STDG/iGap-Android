@@ -2790,4 +2790,5 @@ Want to get it?</string>
     <string name="unavailable_moment">Unavailable Moment</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
     <string name="invalid_qr_code">Invalid QR code</string>
+    <string name="bazaar_app_is_not_installed_in_your_phone">Bazaar app is not installed in your phone!</string>
 </resources>

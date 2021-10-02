@@ -2338,4 +2338,6 @@
     <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
     <string name="invalid_qr_code">بارکد نامعتبر است</string>
+    <string name="bazaar_app_is_not_installed_in_your_phone">کافه بازار روی گوشی شما نصب نیست!</string>
+
 </resources>

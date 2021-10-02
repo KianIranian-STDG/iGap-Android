@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.Context.RECEIVER_VISIBLE_TO_INSTANT_APPS;
 import static net.iGap.G.context;
 
 public class RatingDialog {
@@ -54,12 +56,16 @@ public class RatingDialog {
                         boolean isPhoneHms = ((HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context)) == ConnectionResult.SUCCESS);
 
                         if (isFromCafeBazaar(activity) || isPhoneHms) {
-                            Intent intent = new Intent(Intent.ACTION_EDIT);
-                            intent.setData(Uri.parse("bazaar://details?id=" + context.getPackageName()));
-                            intent.setPackage("com.farsitel.bazaar");
-                            activity.startActivity(intent);
-                            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
-                            dialog.dismiss();
+                            if (isPackageInstalled("com.farsitel.bazaar", context.getPackageManager())) {
+                                Intent intent = new Intent(Intent.ACTION_EDIT);
+                                intent.setData(Uri.parse("bazaar://details?id=" + context.getPackageName()));
+                                intent.setPackage("com.farsitel.bazaar");
+                                activity.startActivity(intent);
+                                sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
+                                dialog.dismiss();
+                            } else {
+                                Toast.makeText(activity, R.string.bazaar_app_is_not_installed_in_your_phone, Toast.LENGTH_LONG).show();
+                            }
                         } else if (isFromPlayStore(activity)) {
                             ReviewManager manager = ReviewManagerFactory.create(activity);
                             Task<ReviewInfo> request = manager.requestReviewFlow();
@@ -98,9 +104,7 @@ public class RatingDialog {
                 });
         MaterialDialog dialog = builder.build();
         dialog.show();
-
     }
-
 
     private static boolean isFromPlayStore(Activity activity) {
         List<String> validInstallers = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
@@ -112,5 +116,14 @@ public class RatingDialog {
         List<String> validInstallers = new ArrayList<>(Arrays.asList("com.farsitel.bazaar"));
         final String installer = activity.getPackageManager().getInstallerPackageName(activity.getPackageName());
         return installer != null && validInstallers.contains(installer);
+    }
+
+    private static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }
