@@ -5,6 +5,7 @@ import android.util.Log;
 import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
@@ -1065,9 +1066,22 @@ public class MessageDataStorage extends BaseController {
             try {
 
                 database.executeTransaction(realm -> {
-                    realm.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
-                });
+                    RealmResults<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).lessThan("createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).equalTo("status", MessageObject.STATUS_SENT).findAll();
+                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                        for (int i = 0; i < realmStoryProtos.size(); i++) {
+                            if (realmStoryProtos.get(i).getFile() != null) {
+                                String filepath = realmStoryProtos.get(i).getFile().getLocalFilePath() != null ? realmStoryProtos.get(i).getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProtos.get(i).getFile().getCacheId(), realmStoryProtos.get(i).getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
+                                if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                                    File file = new File(filepath);
+                                    if (file.exists()) file.delete();
+                                }
+                            }
+                        }
 
+                        realmStoryProtos.deleteAllFromRealm();
+                    }
+
+                });
                 countDownLatch.countDown();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -1635,6 +1649,7 @@ public class MessageDataStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         List<MainStoryObject> stories = new ArrayList<>();
         storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "getStoryById: " + "userId: " + userId + " needSort: " + needSort);
             try {
                 List<StoryObject> storyObjects = new ArrayList<>();
                 MainStoryObject mainStoryObject;
@@ -1860,6 +1875,7 @@ public class MessageDataStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
         storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updateStorySentStatus: " + "userId: " + userId + " status: " + status);
             try {
                 database.executeTransaction(realm -> {
                     RealmStory realmStory = realm.where(RealmStory.class).equalTo("sessionId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("userId", userId).findFirst();
@@ -2006,6 +2022,7 @@ public class MessageDataStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
         storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "storySetSeenAll: " + "userId: " + userId + " seen: " + seen);
             try {
 
                 database.executeTransaction(realm -> {
