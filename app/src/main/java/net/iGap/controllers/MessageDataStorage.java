@@ -1001,7 +1001,7 @@ public class MessageDataStorage extends BaseController {
                                     for (int y = 0; y < realmStoryProtos.size(); y++) {
                                         if (realmStoryProtos.get(y).getFile() != null) {
                                             String filepath = realmStoryProtos.get(y).getFile().getLocalFilePath() != null ? realmStoryProtos.get(y).getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProtos.get(y).getFile().getCacheId(), realmStoryProtos.get(y).getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
-                                            if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                                            if (filepath != null) {
                                                 File file = new File(filepath);
                                                 if (file.exists()) file.delete();
                                             }
@@ -1041,7 +1041,7 @@ public class MessageDataStorage extends BaseController {
                         for (int y = 0; y < realmStoryProtos.size(); y++) {
                             if (realmStoryProtos.get(y).getFile() != null) {
                                 String filepath = realmStoryProtos.get(y).getFile().getLocalFilePath() != null ? realmStoryProtos.get(y).getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProtos.get(y).getFile().getCacheId(), realmStoryProtos.get(y).getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
-                                if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                                if (filepath != null) {
                                     File file = new File(filepath);
                                     if (file.exists()) file.delete();
                                 }
@@ -1101,7 +1101,7 @@ public class MessageDataStorage extends BaseController {
                         for (int i = 0; i < realmStoryProtos.size(); i++) {
                             if (realmStoryProtos.get(i).getFile() != null) {
                                 String filepath = realmStoryProtos.get(i).getFile().getLocalFilePath() != null ? realmStoryProtos.get(i).getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProtos.get(i).getFile().getCacheId(), realmStoryProtos.get(i).getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
-                                if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                                if (filepath != null) {
                                     File file = new File(filepath);
                                     if (file.exists()) file.delete();
                                 }
@@ -1331,7 +1331,7 @@ public class MessageDataStorage extends BaseController {
                 if (realmStoryProto != null) {
                     if (realmStoryProto.getFile() != null) {
                         String filepath = realmStoryProto.getFile().getLocalFilePath() != null ? realmStoryProto.getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProto.getFile().getCacheId(), realmStoryProto.getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
-                        if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                        if (filepath != null) {
                             File file = new File(filepath);
                             if (file.exists()) file.delete();
                         }
@@ -1394,7 +1394,7 @@ public class MessageDataStorage extends BaseController {
 
                     if (realmStoryProto.getFile() != null) {
                         String filepath = realmStoryProto.getFile().getLocalFilePath() != null ? realmStoryProto.getFile().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(realmStoryProto.getFile().getCacheId(), realmStoryProto.getFile().getName(), ProtoGlobal.RoomMessageType.STORY);
-                        if (filepath != null && !filepath.contains(G.IGAP + "/") && !filepath.contains("/net.iGap/")) {
+                        if (filepath != null) {
                             File file = new File(filepath);
                             if (file.exists()) file.delete();
                         }
