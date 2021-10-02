@@ -2100,5 +2100,4 @@
     <string name="moments_string">Momentos</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">La cantidad no puede superar los 500 millones de riales</string>
     <string name="invalid_qr_code">Código de barras inválido</string>
-    <string name="bazaar_app_is_not_installed_in_your_phone">¡La aplicación Bazaar no está instalada en tu teléfono!</string>
 </resources>

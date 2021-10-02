@@ -2,6 +2,7 @@ package net.iGap.fragments.populaChannel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -64,7 +65,7 @@ public class RatingDialog {
                                 sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
                                 dialog.dismiss();
                             } else {
-                                Toast.makeText(activity, R.string.bazaar_app_is_not_installed_in_your_phone, Toast.LENGTH_LONG).show();
+                                openChooseMarketDialog(activity, dialog);
                             }
                         } else if (isFromPlayStore(activity)) {
                             ReviewManager manager = ReviewManagerFactory.create(activity);
@@ -82,14 +83,7 @@ public class RatingDialog {
                                 }
                             });
                         } else {
-                            try {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
-                            } catch (android.content.ActivityNotFoundException anfe) {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                            } finally {
-                                sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
-                                dialog.dismiss();
-                            }
+                            openChooseMarketDialog(activity, dialog);
                         }
                     }
                 })
@@ -126,4 +120,16 @@ public class RatingDialog {
             return false;
         }
     }
+
+    private static void openChooseMarketDialog(Activity activity, Dialog dialog){
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
+        } finally {
+            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
+            dialog.dismiss();
+        }
+    }
+
 }

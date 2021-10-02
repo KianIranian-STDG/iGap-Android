@@ -1938,6 +1938,5 @@
     <string name="moments_string">Des moments</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">Le montant ne peut pas dépasser 500 millions de rials</string>
     <string name="invalid_qr_code">Code-barres invalide</string>
-    <string name="bazaar_app_is_not_installed_in_your_phone">L\'application Bazaar n\'est pas installée sur votre téléphone!</string>
 
 </resources>
