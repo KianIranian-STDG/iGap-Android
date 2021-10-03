@@ -1969,7 +1969,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (attachment == null || args[2] == null || args[3] == null) {
                         return;
                     }
-                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) args[2], attachment.name, messageType.getNumber());
                     attachment.token = (String) args[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
                     loadImageOrThumbnail(messageType);
