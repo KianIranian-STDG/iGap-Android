@@ -293,24 +293,12 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if (typingState > charSequence.length()) {
-                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
-                        addTextEditTExt.setTextSize(editTextSize++);
-                    }
-                    if (charSequence.length() == 0) {
-                        editTextSize = 40;
-                        addTextEditTExt.setTextSize(editTextSize);
-                    }
+                if (charSequence.length() == 0) {
+                    editTextSize = 40;
                 } else {
-                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
-                        addTextEditTExt.setTextSize(editTextSize--);
-                    }
-                    if (charSequence.length() == 0) {
-                        editTextSize = 40;
-                        addTextEditTExt.setTextSize(editTextSize);
-                    }
+                    editTextSize = 27;
                 }
-                typingState = charSequence.length();
+                addTextEditTExt.setTextSize(editTextSize);
                 if (charSequence.length() > 500) {
                     showPopUPView(-1);
                     new MaterialDialog.Builder(getContext()).title(getString(R.string.your_status_characters))
