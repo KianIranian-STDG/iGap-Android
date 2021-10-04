@@ -32,6 +32,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
@@ -167,7 +168,7 @@ public class StoryCell extends FrameLayout {
             } else {
                 topText.setText(storyObject.viewCount + " " + context.getString(R.string.story_views));
             }
-            bottomText.setText(HelperCalander.getTimeForMainRoom(storyObject.createdAt));
+            bottomText.setText(LastSeenTimeUtil.computeTime(context, storyObject.userId, storyObject.createdAt / 1000L, false, false));
         }
 
         AttachmentObject attachment = storyObject.attachmentObject;
@@ -235,7 +236,7 @@ public class StoryCell extends FrameLayout {
             bottomText.setText(context.getString(R.string.story_sending));
             deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
         } else {
-            bottomText.setText(HelperCalander.getTimeForMainRoom(mainStoryObject.storyObjects.get(0).createdAt));
+            bottomText.setText(LastSeenTimeUtil.computeTime(context, mainStoryObject.userId, mainStoryObject.storyObjects.get(0).createdAt / 1000L, false, false));
         }
 
 
