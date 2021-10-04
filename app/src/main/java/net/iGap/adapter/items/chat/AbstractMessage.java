@@ -131,7 +131,6 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
-import static net.iGap.proto.ProtoGlobal.RoomMessageType.STORY_REPLY_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
@@ -1532,7 +1531,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     public void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType) {
-
+        onProgressFinish(holder, attachment, messageObject.messageType);
     }
 
     private void downLoadThumbnail(final VH holder) {
