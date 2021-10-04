@@ -34,6 +34,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
@@ -267,7 +268,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             storyCell.initView(context, (position + 1) != userIdList.size(), StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
             storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
             if (position < displayNameList.size()) {
-                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position) : "", HelperCalander.getTimeForMainRoom(createdAtList.get(position) * 1000L));
+                storyCell.setText(displayNameList.get(position) != null ? displayNameList.get(position) : "", LastSeenTimeUtil.computeTime(context, userId.get(position), createdAtList.get(position), false, false));
                 storyCell.setUserColorId("#4aca69", displayNameList.get(position) != null ? displayNameList.get(position) : "");
                 storyCell.setImage(avatarHandler, userId.get(position));
             }

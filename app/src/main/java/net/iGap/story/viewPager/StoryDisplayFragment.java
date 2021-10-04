@@ -65,6 +65,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
@@ -981,7 +982,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             captionRootView.setText(stories.get(counter).getTxt());
         }
 
-        storyTime.setText(HelperCalander.getTimeForMainRoom(stories.get(counter).getStoryData()));
+        storyTime.setText(LastSeenTimeUtil.computeTime(context, stories.get(counter).getUserId(), stories.get(counter).getStoryData() / 1000L, false, false));
         nickName.setText(storyUser.getUserName());
         replyTo.setText(EmojiManager.getInstance().replaceEmoji(storyUser.getUserName(), replyTo.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
         replyCaption.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
