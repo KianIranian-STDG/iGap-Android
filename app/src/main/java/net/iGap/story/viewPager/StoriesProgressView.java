@@ -46,6 +46,9 @@ public class StoriesProgressView extends LinearLayout {
     }
 
     public StoryProgress getCurrentProgressBar() {
+        if (current == -1) {
+            current = 0;
+        }
         return progressBars.get(current);
     }
 
