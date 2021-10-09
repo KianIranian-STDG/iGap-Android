@@ -239,6 +239,8 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        addTextEditTExt.setFocusable(true);
+        showPopUPView(KeyboardView.MODE_KEYBOARD);
         palletTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -318,7 +320,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
 
             }
         });
-
+        addTextEditTExt.requestFocus();
         floatActionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -424,11 +426,15 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
                     if (i < 0) i = 0;
 
                     try {
-                        CharSequence sequence = EmojiManager.getInstance().replaceEmoji(unicode, addTextEditTExt.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
-                        if (addTextEditTExt.getText() != null)
+
+                        if (addTextEditTExt.getText() != null) {
+                            editTextSize = 27;
+                            addTextEditTExt.setTextSize(editTextSize);
+                            CharSequence sequence = EmojiManager.getInstance().replaceEmoji(unicode, addTextEditTExt.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
                             addTextEditTExt.setText(addTextEditTExt.getText().insert(i, sequence));
-                        int j = i + sequence.length();
-                        addTextEditTExt.setSelection(j, j);
+                            int j = i + sequence.length();
+                            addTextEditTExt.setSelection(j, j);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
