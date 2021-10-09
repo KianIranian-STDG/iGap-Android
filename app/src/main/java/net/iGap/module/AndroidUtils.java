@@ -146,7 +146,7 @@ public final class AndroidUtils {
     public static String getAudioArtistName(String filePath) throws IllegalArgumentException {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
 
-        if (filePath != null || filePath.length() > 0) {
+        if (filePath != null && !filePath.isEmpty()) {
             Uri uri;
             File file = new File(filePath);
 
