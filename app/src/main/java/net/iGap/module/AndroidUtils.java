@@ -146,20 +146,21 @@ public final class AndroidUtils {
     public static String getAudioArtistName(String filePath) throws IllegalArgumentException {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
 
-        Uri uri;
-        File file = new File(filePath);
+        if (filePath != null || filePath.length() > 0) {
+            Uri uri;
+            File file = new File(filePath);
 
-        if (file.exists()) {
-            uri = Uri.fromFile(file);
+            if (file.exists()) {
+                uri = Uri.fromFile(file);
 
-            try {
-                metaRetriever.setDataSource(G.context, uri);
-                return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            } catch (Exception e) {
+                try {
+                    metaRetriever.setDataSource(G.context, uri);
+                    return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                } catch (Exception e) {
 
+                }
             }
         }
-
         return "";
     }
 
