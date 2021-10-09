@@ -1531,7 +1531,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     public void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType) {
-        onProgressFinish(holder, attachment, messageObject.messageType);
+        onProgressFinish(holder, attachment, messageObject.forwardedMessage == null ? messageObject.messageType : messageObject.forwardedMessage.messageType);
     }
 
     private void downLoadThumbnail(final VH holder) {
