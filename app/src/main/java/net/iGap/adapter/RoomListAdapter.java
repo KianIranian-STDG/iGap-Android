@@ -58,7 +58,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
                         unreadCount += room.getUnreadCount();
                     }
                 }
-                G.onUnreadChange.onChange(unreadCount);
+                G.onUnreadChange.onChange(unreadCount,false);
             }
 
             callBack.needShowEmptyView(getData() == null || getData().size() <= 0);

@@ -824,7 +824,9 @@ public class HelperNotification {
     }
 
     public void cancelNotification() {
-        showNotification.notificationManager.cancelAll();
+        if (showNotification != null && showNotification.notificationManager != null) {
+            showNotification.notificationManager.cancelAll();
+        }
     }
 
     public void cancelNotification(long roomId) {

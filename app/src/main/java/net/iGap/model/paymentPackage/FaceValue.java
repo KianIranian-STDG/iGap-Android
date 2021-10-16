@@ -1,40 +1,40 @@
+
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class FaceValue {
+
     @SerializedName("key")
-    @Expose
-    private Integer key;
-    @SerializedName("title")
-    @Expose
-    private String title;
+    private Long mKey;
     @SerializedName("selected")
-    @Expose
-    private Boolean selected;
+    private Boolean mSelected;
+    @SerializedName("title")
+    private String mTitle;
 
-    public Integer getKey() {
-        return key;
+    public Long getKey() {
+        return mKey;
     }
 
-    public void setKey(Integer key) {
-        this.key = key;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setKey(Long key) {
+        mKey = key;
     }
 
     public Boolean getSelected() {
-        return selected;
+        return mSelected;
     }
 
     public void setSelected(Boolean selected) {
-        this.selected = selected;
+        mSelected = selected;
     }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
 }

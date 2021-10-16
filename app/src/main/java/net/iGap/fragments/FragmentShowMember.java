@@ -305,7 +305,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(getString(R.string.AccessBan), false);
+                    HelperError.showSnackMessage(requireActivity().getString(R.string.AccessBan), false);
                 });
             }
 
@@ -314,7 +314,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(getString(R.string.time_out), false);
+                    HelperError.showSnackMessage(requireActivity().getString(R.string.time_out), false);
                 });
             }
         };
@@ -348,7 +348,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null) {
                         progressBar.setVisibility(View.GONE);
-                        HelperError.showSnackMessage(getString(R.string.AccessBan), false);
+                        HelperError.showSnackMessage(requireActivity().getString(R.string.AccessBan), false);
 
                     }
                 });
@@ -359,7 +359,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(getString(R.string.time_out), false);
+                    HelperError.showSnackMessage(requireActivity().getString(R.string.time_out), false);
                 });
             }
         };

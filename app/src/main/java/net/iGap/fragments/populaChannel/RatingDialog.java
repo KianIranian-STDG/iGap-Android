@@ -2,6 +2,7 @@ package net.iGap.fragments.populaChannel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +18,6 @@ import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
 import com.google.android.play.core.tasks.Task;
-import com.huawei.hms.api.ConnectionResult;
-import com.huawei.hms.api.HuaweiApiAvailability;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -33,7 +32,6 @@ import static net.iGap.G.context;
 public class RatingDialog {
 
     private static SharedPreferences sharedPreferences;
-
 
     @SuppressLint("ResourceType")
     public static void show(Activity activity, long currentTimeStamp) {
@@ -51,16 +49,7 @@ public class RatingDialog {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        boolean isPhoneHms = ((HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context)) == ConnectionResult.SUCCESS);
-
-                        if (isFromCafeBazaar(activity) || isPhoneHms) {
-                            Intent intent = new Intent(Intent.ACTION_EDIT);
-                            intent.setData(Uri.parse("bazaar://details?id=" + context.getPackageName()));
-                            intent.setPackage("com.farsitel.bazaar");
-                            activity.startActivity(intent);
-                            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
-                            dialog.dismiss();
-                        } else if (isFromPlayStore(activity)) {
+                        if (isFromPlayStore(activity)) {
                             ReviewManager manager = ReviewManagerFactory.create(activity);
                             Task<ReviewInfo> request = manager.requestReviewFlow();
                             request.addOnCompleteListener(task -> {
@@ -73,17 +62,19 @@ public class RatingDialog {
                                     });
                                 } else {
                                     Toast.makeText(activity, R.string.please_try_later, Toast.LENGTH_LONG).show();
+                                    sharedPreferences.edit().putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, currentTimeStamp).apply();
+                                    dialog.dismiss();
                                 }
                             });
+                        } else if (isFromCafeBazaar(activity)) {
+                            Intent intent = new Intent(Intent.ACTION_EDIT);
+                            intent.setData(Uri.parse("bazaar://details?id=" + context.getPackageName()));
+                            intent.setPackage("com.farsitel.bazaar");
+                            activity.startActivity(intent);
+                            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
+                            dialog.dismiss();
                         } else {
-                            try {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
-                            } catch (android.content.ActivityNotFoundException anfe) {
-                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                            } finally {
-                                sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
-                                dialog.dismiss();
-                            }
+                            openChooseMarketDialog(activity, dialog);
                         }
                     }
                 })
@@ -98,9 +89,7 @@ public class RatingDialog {
                 });
         MaterialDialog dialog = builder.build();
         dialog.show();
-
     }
-
 
     private static boolean isFromPlayStore(Activity activity) {
         List<String> validInstallers = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
@@ -113,4 +102,16 @@ public class RatingDialog {
         final String installer = activity.getPackageManager().getInstallerPackageName(activity.getPackageName());
         return installer != null && validInstallers.contains(installer);
     }
+
+    private static void openChooseMarketDialog(Activity activity, Dialog dialog) {
+        try {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
+        } finally {
+            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
+            dialog.dismiss();
+        }
+    }
+
 }

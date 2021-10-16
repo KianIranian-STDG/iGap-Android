@@ -1,6 +1,7 @@
 package net.iGap.network;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -218,30 +219,37 @@ public class RequestManager extends BaseController {
         try {
             RequestWrapper requestWrapper = requestQueueMap.remove(key);
             if (requestWrapper != null) {
-                int actionId = requestWrapper.getActionId();
-                String className = G.lookupMap.get(actionId + net.iGap.Config.LOOKUP_MAP_RESPONSE_OFFSET);
-                String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
+                if (requestWrapper.onResponse != null) {
+                    IG_RPC.TimeOut_error error = new IG_RPC.TimeOut_error();
+                    requestWrapper.onResponse.onReceived(null, error);
+                } else {
+                    int actionId = requestWrapper.getActionId();
+                    String className = G.lookupMap.get(actionId + net.iGap.Config.LOOKUP_MAP_RESPONSE_OFFSET);
+                    String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
 
-                ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
-                responseBuilder.setTimestamp((int) System.currentTimeMillis());
-                responseBuilder.setId(key);
-                responseBuilder.build();
 
-                ProtoError.ErrorResponse.Builder errorBuilder = ProtoError.ErrorResponse.newBuilder();
-                errorBuilder.setResponse(responseBuilder);
-                errorBuilder.setMajorCode(5);
-                errorBuilder.setMinorCode(1);
-                errorBuilder.build();
+                    ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
+                    responseBuilder.setTimestamp((int) System.currentTimeMillis());
+                    responseBuilder.setId(key);
+                    responseBuilder.build();
 
-                Class<?> c = Class.forName(responseClassName);
-                Object object;
-                try {
-                    object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
-                } catch (NoSuchMethodException e) {
-                    object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+                    ProtoError.ErrorResponse.Builder errorBuilder = ProtoError.ErrorResponse.newBuilder();
+                    errorBuilder.setResponse(responseBuilder);
+                    errorBuilder.setMajorCode(5);
+                    errorBuilder.setMinorCode(1);
+                    errorBuilder.build();
+
+                    Class<?> c = Class.forName(responseClassName);
+                    Object object;
+                    try {
+                        object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+                    } catch (NoSuchMethodException e) {
+                        object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+                    }
+                    Method setTimeoutMethod = object.getClass().getMethod("timeOut");
+                    setTimeoutMethod.invoke(object);
                 }
-                Method setTimeoutMethod = object.getClass().getMethod("timeOut");
-                setTimeoutMethod.invoke(object);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,7 +283,7 @@ public class RequestManager extends BaseController {
         int actionId = getId(message);
         byte[] payload = getProtoInfo(message);
         String className = getClassName(actionId);
-
+        Log.e("dfjshfjshfjsdhf", "unpack1: " + actionId);
 
         if (!isSecure && !G.unSecureResponseActionId.contains(Integer.toString(actionId))) {
             return;

@@ -86,9 +86,9 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        List<String> items = new ArrayList<>();
-                        items.add(getString(R.string.elecBill_cell_deleteAccount));
-                        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                        List<Integer> items = new ArrayList<>();
+                        items.add(R.string.elecBill_cell_deleteAccount);
+                        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
                             if (position == 0) {
                                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                                         .title(R.string.elecBill_deleteAccount_title)

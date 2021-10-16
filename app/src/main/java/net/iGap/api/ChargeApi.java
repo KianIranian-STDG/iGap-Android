@@ -30,7 +30,8 @@ public interface ChargeApi {
     @POST("{operator}/topup/purchase")
     Single<MciPurchaseResponse> topUpPurchase(@Path("operator") String operator,
                                               @Field("type") String type,
-                                              @Field("tel_num") String phoneNumber,
+                                              @Field("tel_num") String rechargeableNumber,
+                                              @Field("tel_charger") String chargerNumber,
                                               @Field("cost") int cost);
 
     @POST("{operator}/topup/set-favorite")
@@ -58,7 +59,8 @@ public interface ChargeApi {
     @FormUrlEncoded
     @POST("{operator}/internet-package/purchase")
     Call<MciPurchaseResponse> internetPackagePurchase(@Path("operator") String operator,
-                                                      @Field("tel_num") String phoneNumber,
+                                                      @Field("tel_num") String rechargeableNumber,
+                                                      @Field("tel_charger") String chargerNumber,
                                                       @Field("type") String internetPackageType);
 
     @GET("configs")

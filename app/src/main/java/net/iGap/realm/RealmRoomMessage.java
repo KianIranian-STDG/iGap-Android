@@ -39,6 +39,8 @@ import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.structs.MessageObject;
 
+import org.parceler.Parcel;
+
 import java.io.File;
 import java.util.Calendar;
 
@@ -75,6 +77,7 @@ public class RealmRoomMessage extends RealmObject {
     public boolean deleted = false;
     public RealmRoomMessage forwardMessage;
     public RealmRoomMessage replyTo;
+    public RealmStoryProto storyReplyMessage;
     public boolean showMessage = true;
     public String authorHash;
     public boolean hasEmojiInText;
@@ -87,6 +90,7 @@ public class RealmRoomMessage extends RealmObject {
     public long futureMessageId;
     public String linkInfo;
     public byte[] Logs;
+    private int storyStatus;
 
     /**
      * if has forward return that otherwise return enter value
@@ -367,6 +371,11 @@ public class RealmRoomMessage extends RealmObject {
             message.channelExtra = RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
         }
 
+        if (input.hasStory()) {
+            message.storyReplyMessage = RealmStoryProto.putOrUpdate(realm, input);
+            ProtoGlobal.RoomMessageStory.Status status = input.getStory().getStatus();
+            message.storyStatus = status.getNumber();
+        }
 //        addTimeIfNeed(message, realm);
 //
 //        isEmojiInText(message, input.getMessage());
@@ -1040,6 +1049,11 @@ public class RealmRoomMessage extends RealmObject {
         }
     }
 
+    public RealmStoryProto getStoryReplyMessage() {
+        return storyReplyMessage;
+    }
+
+
     public boolean getHasMessageLink() {
         return hasMessageLink;
     }
@@ -1202,6 +1216,10 @@ public class RealmRoomMessage extends RealmObject {
 
     public boolean isSenderMe() {
         return getUserId() == AccountManager.getInstance().getCurrentUser().getId();
+    }
+
+    public int getStoryStatus() {
+        return storyStatus;
     }
 
     public boolean isAuthorMe() {

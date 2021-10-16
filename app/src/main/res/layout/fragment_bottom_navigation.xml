@@ -28,11 +28,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
-            app:item_text="@string/contacts"
-            app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
-            app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_my_story_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_my_story_off_darmode"
+            app:item_text="@string/bottom_navigation_my_story"
+            app:hasUnreadBadge="true"
+            app:selected_icon="@drawable/ic_bottomnavigation_my_story_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_my_story_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
             android:layout_width="0dp"

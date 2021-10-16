@@ -10,16 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.model.paymentPackage.TopupChargeType;
 
 import java.util.List;
 
 public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.ChargeTypeViewHolder> {
 
-    private List<ChargeType> chargeTypes;
+    private List<TopupChargeType> chargeTypes;
     private int selectedPosition;
 
-    public AdapterChargeType(List<ChargeType> chargeTypes) {
+    public AdapterChargeType(List<TopupChargeType> chargeTypes, int selectedPosition) {
         this.chargeTypes = chargeTypes;
+        this.selectedPosition = selectedPosition;
     }
 
     @NonNull
@@ -49,19 +51,16 @@ public class AdapterChargeType extends RecyclerView.Adapter<AdapterChargeType.Ch
             radioButton = itemView.findViewById(R.id.radio_amount);
         }
 
-        void bindChargeType(ChargeType chargeType, int position) {
-            radioButton.setChecked(selectedPosition == position);
+        void bindChargeType(TopupChargeType chargeType, int position) {
             radioButton.setOnClickListener(v -> itemView.performClick());
-            textView.setText(chargeType.getChargeType());
-
             itemView.setOnClickListener(v -> {
-                notifyItemChanged(selectedPosition);
                 selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
+                notifyDataSetChanged();
             });
+            radioButton.setChecked(selectedPosition == position);
+            textView.setText(chargeType.getTitle());
 
         }
-
     }
 
     public int getSelectedPosition() {

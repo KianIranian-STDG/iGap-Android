@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.realm.RealmStory;
+import net.iGap.story.StoryPagerFragment;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -33,6 +35,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
 import net.iGap.realm.RealmRoom;
+import net.iGap.story.liststories.StoryFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,7 @@ import io.realm.RealmResults;
 
 public class BottomNavigationFragment extends BaseFragment implements OnUnreadChange {
 
-    private static final int CONTACT_FRAGMENT = 0;
+    public static final int CONTACT_FRAGMENT = 0;
     private static final int CALL_FRAGMENT = 1;
     public static final int CHAT_FRAGMENT = 2;
     public static final int DISCOVERY_FRAGMENT = 3;
@@ -127,13 +130,23 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             return realm.where(RealmRoom.class).findAll();
         });
         int unreadCount = 0;
-        if (realmRooms !=null && realmRooms.size()> 0){
+        if (realmRooms != null && realmRooms.size() > 0) {
             for (RealmRoom room : realmRooms) {
                 if (!room.getMute() && !room.isDeleted() && room.getUnreadCount() > 0)
                     unreadCount += room.getUnreadCount();
             }
         }
-        onChange(unreadCount);
+
+        RealmResults<RealmStory> realmStories = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmStory.class).findAll();
+        });
+
+        onChange(unreadCount, false);
+        if (getMessageDataStorage().isHaveUnSeenStory()) {
+            onChange(getMessageDataStorage().getUnSeenStoryCount(), true);
+        } else {
+            onChange(0, true);
+        }
     }
 
     public void setCrawlerMap(String crawlerMap) {
@@ -157,9 +170,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         Fragment fragment;
         switch (position) {
             case CONTACT_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
                 if (fragment == null) {
-                    fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                    fragment = new StoryFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
@@ -213,8 +226,8 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     }
 
     @Override
-    public void onChange(int unreadTotal) {
-        bottomNavigation.setOnBottomNavigationBadge(unreadTotal);
+    public void onChange(int unreadTotal, boolean isForStory) {
+        bottomNavigation.setOnBottomNavigationBadge(unreadTotal, isForStory);
     }
 
     public void goToUserProfile() {

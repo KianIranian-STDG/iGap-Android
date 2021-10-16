@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
@@ -26,6 +27,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
@@ -87,10 +89,12 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.story.storyviews.FragmentStoryViews;
+import net.iGap.story.viewPager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.model.Card;
-import org.paygear.web.Web;
+//import org.paygear.model.Card;
+//import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -98,8 +102,8 @@ import java.util.Collections;
 import java.util.Locale;
 
 import io.realm.Realm;
-import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.web.WebBase;
+//import ir.radsense.raadcore.model.Auth;
+//import ir.radsense.raadcore.web.WebBase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -148,6 +152,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToIGapMapPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToContactsPage = new SingleLiveEvent<>();
     public SingleLiveEvent<String> goToFAQPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
@@ -741,6 +746,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
     }
 
+    public void onContactsClick() {
+        goToContactsPage.setValue(true);
+    }
+
     public void onQRCodeScannerClick() {
         goToScannerPage.setValue(true);
     }
@@ -845,7 +854,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getUserCredit() {
-        WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
+     /*   WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                 @Override
@@ -885,7 +894,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     }
                 }
             });
-        }
+        }*/
     }
 
     @Override

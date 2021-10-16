@@ -8,6 +8,7 @@ public class GalleryVideoModel {
     private String id;
     private String caption = "";
     private String path;
+    private String mediaType;
 
     public GalleryVideoModel() {
     }
@@ -16,6 +17,13 @@ public class GalleryVideoModel {
         this.id = id;
         this.caption = caption;
         this.path = path;
+    }
+
+    public GalleryVideoModel(String id, String caption, String path, String mediaType) {
+        this.id = id;
+        this.caption = caption;
+        this.path = path;
+        this.mediaType = mediaType;
     }
 
     public String getId() {
@@ -40,6 +48,14 @@ public class GalleryVideoModel {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
     @Override

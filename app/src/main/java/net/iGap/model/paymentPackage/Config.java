@@ -1,16 +1,14 @@
 
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.Expose;
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
+@SuppressWarnings("unused")
 public class Config {
 
     @SerializedName("data")
-    @Expose
-    private List<ConfigData> mData = null;
+    private List<ConfigData> mData;
 
     public List<ConfigData> getData() {
         return mData;

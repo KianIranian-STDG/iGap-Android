@@ -1,30 +1,30 @@
 
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class Service {
+
     @SerializedName("key")
-    @Expose
-    private String key;
+    private String mKey;
     @SerializedName("title")
-    @Expose
-    private String title;
+    private String mTitle;
 
     public String getKey() {
-        return key;
+        return mKey;
     }
 
     public void setKey(String key) {
-        this.key = key;
+        mKey = key;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        mTitle = title;
     }
+
 }

@@ -49,6 +49,7 @@ import java.util.List;
 public class TopSheetDialog extends AppCompatDialog {
 
     private List<String> itemList;
+    private List<Integer> itemListInt;
     private int range;
     private BottomSheetItemClickCallback bottomSheetItemClickCallback;
 
@@ -99,10 +100,9 @@ public class TopSheetDialog extends AppCompatDialog {
     }
 
     public TopSheetDialog setListDataWithResourceId(List<Integer> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
-        itemList = new ArrayList<>();
-        for (int i = 0; i < listItem.size(); i++) {
-            this.itemList.add(getContext().getString(listItem.get(i)));
-        }
+        itemListInt = new ArrayList<>();
+            this.itemListInt.addAll(listItem);
+
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         super.setContentView(wrapInTopSheet());
@@ -115,7 +115,7 @@ public class TopSheetDialog extends AppCompatDialog {
         TopSheetBehavior<FrameLayout> topSheetBehavior = TopSheetBehavior.from(topSheet);
         topSheetBehavior.setTopSheetCallback(mTopSheetCallback);
         RecyclerView recyclerView = topSheet.findViewById(R.id.bottomSheetList);
-        recyclerView.setAdapter(new BottomSheetListAdapter(itemList, range, position -> {
+        recyclerView.setAdapter(new BottomSheetListAdapter(range,itemListInt,  position -> {
             dismiss();
             bottomSheetItemClickCallback.onClick(position);
         }));

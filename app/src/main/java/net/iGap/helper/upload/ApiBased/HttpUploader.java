@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
@@ -21,12 +23,19 @@ import net.iGap.module.upload.UploadObject;
 import net.iGap.network.NetworkUtility;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
+import net.iGap.story.StoryObject;
+import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -46,7 +55,8 @@ public class HttpUploader implements IUpload {
     private ArrayMap<String, CompressTask> pendingCompressTasks = new ArrayMap<>();
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private ThreadPoolExecutor mThreadPoolExecutor;
-
+    public static boolean isMultiUpload = false;
+    public static boolean isStoryUploading = false;
     private FileIOExecutor fileExecutors;
 
     private final int MAX_UPLOAD;
@@ -244,6 +254,44 @@ public class HttpUploader implements IUpload {
                             DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
                             sendMessage(fileObject);
                         }
+                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
+
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryFileToken(fileObject.messageId, fileObject.fileToken);
+
+
+                            if (isMultiUpload) {
+                                if (MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryById(AccountManager.getInstance().getCurrentUser().getId(), false).storyObjects.size() ==
+                                        MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), 0).size()) {
+                                    List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING, true, new String[]{"createdAt"});
+                                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                        List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                        for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                            storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                                            storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
+                                            storyObjects.add(storyAddRequest.build());
+                                        }
+                                        isStoryUploading = false;
+                                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                    }
+
+                                }
+                            } else {
+                                List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING);
+                                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                    for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                        storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                                        storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
+                                        storyObjects.add(storyAddRequest.build());
+                                    }
+                                    isStoryUploading = false;
+                                    MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                }
+                            }
+
+                        }
                         if (fileObject.onUploadListener != null) {
                             fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
                         }
@@ -267,6 +315,11 @@ public class HttpUploader implements IUpload {
                             HelperSetAction.sendCancel(fileObject.messageId);
 
                         makeFailed(fileObject.messageId);
+                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(), false);
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId, MessageObject.STATUS_FAILED);
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
+                        }
                         if (fileObject.onUploadListener != null) {
                             fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
                         }

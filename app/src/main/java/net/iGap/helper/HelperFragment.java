@@ -28,7 +28,6 @@ import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
-import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.observers.interfaces.PaymentCallBack;
 
 /**

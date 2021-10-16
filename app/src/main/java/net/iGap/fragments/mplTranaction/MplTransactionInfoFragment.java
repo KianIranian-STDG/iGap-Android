@@ -41,7 +41,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import ir.radsense.raadcore.utils.RaadCommonUtils;
 
 public class MplTransactionInfoFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "abbasiMpl";
@@ -322,16 +321,6 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
                 return;
             }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US).format(new Date());
-        String fileName = "receipt_" + timeStamp + ".jpg";
-        File savedFile = RaadCommonUtils.saveBitmap(rootView.getDrawingCache(), new File(mediaStorageDir, fileName));
-        if (savedFile != null) {
-            MediaScannerConnection.scanFile(G.context, new String[]{savedFile.getPath()}, null, null);
-            Toast.makeText(getActivity(), R.string.receipt_saved, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
         }
     }
 

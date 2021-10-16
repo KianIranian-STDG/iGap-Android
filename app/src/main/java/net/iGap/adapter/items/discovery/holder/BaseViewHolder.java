@@ -30,7 +30,6 @@ import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
 import net.iGap.fragments.FragmentUserScore;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.LocalContactFragment;
@@ -42,19 +41,19 @@ import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;
-import net.iGap.fragments.payment.FragmentPaymentInternet;
-import net.iGap.fragments.payment.PaymentChargeFragment;
+import net.iGap.fragments.payment.ChargeFragment;
+import net.iGap.fragments.payment.InternetFragment;
 import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.HelperWallet;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
@@ -71,7 +70,7 @@ import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.WalletActivity;
+//import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
@@ -148,7 +147,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case TOPUP_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), PaymentChargeFragment.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), ChargeFragment.newInstance()).setReplace(false).load();
                 break;
 
             case BILL_MENU:/** tested **/
@@ -176,17 +175,20 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 //                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case PARSLAND:
+               // new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case FUN_SERVICE:
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
 //                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+             //   new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
 //                } else {
 //                    HelperError.showSnackMessage("", true);
 //                }
                 break;
             case VIRTUAL_GIFT_CARD:
+               // new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();
@@ -199,18 +201,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case FINANCIAL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
-                break;
-            case WALLET_MENU:/** tested **/
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    if (!userInfo.isWalletRegister()) {
-                        new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
-                    } else {
-                        boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
-                        activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
-                    }
-                });
                 break;
             case NEARBY_MENU:/** tested **/
                 try {
@@ -349,7 +339,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
                 break;
             case INTERNET_PACKAGE_MENU:
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInternet.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), InternetFragment.newInstance()).setReplace(false).load();
                 break;
             case CHARITY:
                 try {
@@ -405,6 +395,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
+            case QRPAY:
+                new HelperFragment(activity.getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance()).setReplace(false).load();
                 break;
             default:
                 new MaterialDialog.Builder(activity).content(R.string.install_latest_version).positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss()).show();

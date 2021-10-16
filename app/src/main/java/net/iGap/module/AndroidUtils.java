@@ -10,10 +10,13 @@
 
 package net.iGap.module;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,9 +30,15 @@ import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.SparseArray;
 import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Display;
@@ -44,10 +53,11 @@ import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
-import net.iGap.observers.interfaces.OnFileCopyComplete;
+import net.iGap.messenger.ui.toolBar.AlertDialog;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -56,20 +66,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.webrtc.ContextUtils.getApplicationContext;
+
 public final class AndroidUtils {
+    private static SparseArray<File> mediaDirs = null;
+    public static final int MEDIA_DIR_CACHE = 4;
     public static Pattern hashTagLink = Pattern.compile("[#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b");
     public static Pattern atSignLink = Pattern.compile("[@]+[A-za-z0-9]+\\b");
     public static Pattern igapLink = Pattern.compile("(https?\\:\\/\\/)?(?i)(igap.net)/(.*)");
@@ -130,20 +146,21 @@ public final class AndroidUtils {
     public static String getAudioArtistName(String filePath) throws IllegalArgumentException {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
 
-        Uri uri;
-        File file = new File(filePath);
+        if (filePath != null && !filePath.isEmpty()) {
+            Uri uri;
+            File file = new File(filePath);
 
-        if (file.exists()) {
-            uri = Uri.fromFile(file);
+            if (file.exists()) {
+                uri = Uri.fromFile(file);
 
-            try {
-                metaRetriever.setDataSource(G.context, uri);
-                return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            } catch (Exception e) {
+                try {
+                    metaRetriever.setDataSource(G.context, uri);
+                    return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                } catch (Exception e) {
 
+                }
             }
         }
-
         return "";
     }
 
@@ -220,6 +237,13 @@ public final class AndroidUtils {
             }
         }
         return null;
+    }
+
+    public static int dp(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return (int) Math.ceil(density * value);
     }
 
     public static String saveBitmap(Bitmap bmp) {
@@ -389,23 +413,370 @@ public final class AndroidUtils {
 
     public static void cutFromTemp(String pathTmp, String newPath) throws IOException {
         File cutTo = new File(newPath);
+        if (!cutTo.exists()) {
+            cutTo.createNewFile();
+        }
         File cutFrom = new File(pathTmp);
-
-        copyFile(cutFrom, cutTo,0,null);
+        copyFile(cutFrom, cutTo);
         deleteFile(cutFrom);
     }
 
-    public static void copyFile(File src, File dst, int successMessage, OnFileCopyComplete onFileCopyComplete) throws IOException {
-        InputStream in = new FileInputStream(src);
-        copyFile(in, dst, src.length(), successMessage, onFileCopyComplete);
+    public static void saveFile(String fullPath, Context context, final int type, final String name, final String mime) {
+        saveFile(fullPath, context, type, name, mime, null);
     }
 
-    public static void copyFile(InputStream in, File dst)throws IOException{
-        copyFile(in, dst, 0, 0,null);
+    public static void saveFile(String fullPath, Context context, final int type, final String name, final String mime, final Runnable onSaved) {
+        if (fullPath == null) {
+            return;
+        }
+
+        File file = null;
+        if (!TextUtils.isEmpty(fullPath)) {
+            file = new File(fullPath);
+            if (!file.exists() /*|| isInternalUri(Uri.fromFile(file))*/) {
+                file = null;
+            }
+        }
+
+        if (file == null) {
+            return;
+        }
+
+        final File sourceFile = file;
+        final boolean[] cancelled = new boolean[]{false};
+        if (sourceFile.exists()) {
+            AlertDialog progressDialog = null;
+            final boolean[] finished = new boolean[1];
+            if (context != null && type != 0) {
+                try {
+                    final AlertDialog dialog = new AlertDialog(G.currentActivity, 2);
+                    dialog.setMessage(context.getString(R.string.Loading));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(true);
+                    dialog.setOnCancelListener(d -> cancelled[0] = true);
+                    G.runOnUiThread(() -> {
+                        if (!finished[0]) {
+                            dialog.show();
+                        }
+                    }, 250);
+                    progressDialog = dialog;
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+
+            final AlertDialog finalProgress = progressDialog;
+
+            new Thread(() -> {
+                try {
+                    File destFile;
+                    if (type == 0) {
+                        destFile = generatePicturePath(false, getFileExtension(sourceFile));
+                    } else if (type == 1) {
+                        destFile = generateVideoPath();
+                    } else {
+                        File dir;
+                        if (type == 2) {
+                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                        } else {
+                            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+                        }
+                        dir.mkdir();
+                        destFile = new File(dir, name);
+                        if (destFile.exists()) {
+                            int idx = name.lastIndexOf('.');
+                            for (int a = 0; a < 10; a++) {
+                                String newName;
+                                if (idx != -1) {
+                                    newName = name.substring(0, idx) + "(" + (a + 1) + ")" + name.substring(idx);
+                                } else {
+                                    newName = name + "(" + (a + 1) + ")";
+                                }
+                                destFile = new File(dir, newName);
+                                if (!destFile.exists()) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!destFile.exists()) {
+                        destFile.createNewFile();
+                    }
+                    boolean result = true;
+                    long lastProgress = System.currentTimeMillis() - 500;
+                    try (FileInputStream inputStream = new FileInputStream(sourceFile); FileChannel source = inputStream.getChannel(); FileChannel destination = new FileOutputStream(destFile).getChannel()) {
+                        long size = source.size();
+                        try {
+                            @SuppressLint("DiscouragedPrivateApi") Method getInt = FileDescriptor.class.getDeclaredMethod("getInt$");
+                            int fdint = (Integer) getInt.invoke(inputStream.getFD());
+                            /*if (isInternalUri(fdint)) {
+                                if (finalProgress != null) {
+                                    G.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                finalProgress.dismiss();
+                                            } catch (Exception e) {
+                                                FileLog.e(e);
+                                            }
+                                        }
+                                    });
+                                }
+                                return;
+                            }*/
+                        } catch (Throwable e) {
+                            FileLog.e(e);
+                        }
+                        for (long a = 0; a < size; a += 4096) {
+                            if (cancelled[0]) {
+                                break;
+                            }
+                            destination.transferFrom(source, a, Math.min(4096, size - a));
+                            if (finalProgress != null) {
+                                if (lastProgress <= System.currentTimeMillis() - 500) {
+                                    lastProgress = System.currentTimeMillis();
+                                    final int progress = (int) ((float) a / (float) size * 100);
+                                    G.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                finalProgress.setProgress(progress);
+                                            } catch (Exception e) {
+                                                FileLog.e(e);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        result = false;
+                    }
+                    if (cancelled[0]) {
+                        destFile.delete();
+                        result = false;
+                    }
+
+                    if (result) {
+                        if (type == 2) {
+                            DownloadManager downloadManager = (DownloadManager) G.context.getSystemService(Context.DOWNLOAD_SERVICE);
+                            downloadManager.addCompletedDownload(destFile.getName(), destFile.getName(), false, mime, destFile.getAbsolutePath(), destFile.length(), true);
+                        } else {
+                            addMediaToGallery(Uri.fromFile(destFile));
+                        }
+                        if (onSaved != null) {
+                            G.runOnUiThread(onSaved);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                if (finalProgress != null) {
+                    G.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (finalProgress.isShowing()) {
+                                    finalProgress.dismiss();
+                                } else {
+                                    finished[0] = true;
+                                }
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 
-    public static void copyFile(InputStream in, File dst, long fileLength, int successMessage,OnFileCopyComplete onFileCopyComplete) throws IOException {
+    public static void addMediaToGallery(Uri uri) {
+        if (uri == null) {
+            return;
+        }
+        try {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(uri);
+            G.context.sendBroadcast(mediaScanIntent);
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
 
+    public static boolean isInternalUri(Uri uri) {
+        return isInternalUri(uri, 0);
+    }
+
+    public static boolean isInternalUri(int fd) {
+        return isInternalUri(null, fd);
+    }
+
+    private static boolean isInternalUri(Uri uri, int fd) {
+        String pathString;
+        if (uri != null) {
+            pathString = uri.getPath();
+            if (pathString == null) {
+                return false;
+            }
+            // Allow sending VoIP logs from cache/voip_logs
+            if (pathString.matches(Pattern.quote(new File(G.context.getCacheDir(), "voip_logs").getAbsolutePath()) + "/\\d+\\.log")) {
+                return false;
+            }
+            int tries = 0;
+            while (true) {
+                if (pathString != null && pathString.length() > 4096) {
+                    return true;
+                }
+                String newPath;
+                try {
+                    newPath = readlink(pathString);
+                } catch (Throwable e) {
+                    return true;
+                }
+                if (newPath == null || newPath.equals(pathString)) {
+                    break;
+                }
+                pathString = newPath;
+                tries++;
+                if (tries >= 10) {
+                    return true;
+                }
+            }
+        } else {
+            pathString = "";
+            int tries = 0;
+            while (true) {
+                if (pathString != null && pathString.length() > 4096) {
+                    return true;
+                }
+                String newPath;
+                try {
+                    newPath = readlinkFd(fd);
+                } catch (Throwable e) {
+                    return true;
+                }
+                if (newPath == null || newPath.equals(pathString)) {
+                    break;
+                }
+                pathString = newPath;
+                tries++;
+                if (tries >= 10) {
+                    return true;
+                }
+            }
+        }
+        if (pathString != null) {
+            try {
+                String path = new File(pathString).getCanonicalPath();
+                if (path != null) {
+                    pathString = path;
+                }
+            } catch (Exception e) {
+                pathString.replace("/./", "/");
+                //igonre
+            }
+        }
+        if (pathString.endsWith(".attheme")) {
+            return false;
+        }
+        return pathString != null && pathString.toLowerCase().contains("/data/data/" + G.context.getPackageName());
+    }
+
+    public static File generatePicturePath() {
+        return generatePicturePath(false, null);
+    }
+
+    public static File generatePicturePath(boolean secretChat, String ext) {
+        try {
+            File storageDir = getAlbumDir(secretChat);
+            Date date = new Date();
+            date.setTime(System.currentTimeMillis() + random.nextInt(1000) + 1);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            return new File(storageDir, "IMG_" + timeStamp + "." + (TextUtils.isEmpty(ext) ? "jpg" : ext));
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
+    public static SecureRandom random = new SecureRandom();
+
+    public static File generateVideoPath() {
+        return generateVideoPath(false);
+    }
+
+    public static File generateVideoPath(boolean secretChat) {
+        try {
+            File storageDir = getAlbumDir(secretChat);
+            Date date = new Date();
+            date.setTime(System.currentTimeMillis() + random.nextInt(1000) + 1);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+            return new File(storageDir, "VID_" + timeStamp + ".mp4");
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
+    public static String getFileExtension(File file) {
+        String name = file.getName();
+        try {
+            return name.substring(name.lastIndexOf('.') + 1);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public native static String readlink(String path);
+
+    public native static String readlinkFd(int fd);
+
+    private static File getAlbumDir(boolean secretChat) {
+        if (secretChat || Build.VERSION.SDK_INT >= 23 && G.context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            return getDirectory(MEDIA_DIR_CACHE);
+        }
+        File storageDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "iGap");
+            if (!storageDir.mkdirs()) {
+                if (!storageDir.exists()) {
+                    FileLog.e("failed to create directory");
+                    return null;
+                }
+            }
+        } else {
+            FileLog.e("External storage is not mounted READ/WRITE.");
+        }
+
+        return storageDir;
+    }
+
+    public static void setMediaDirs(SparseArray<File> dirs) {
+        mediaDirs = dirs;
+    }
+
+    public static File checkDirectory(int type) {
+        return mediaDirs.get(type);
+    }
+
+    public static File getDirectory(int type) {
+        File dir = mediaDirs.get(type);
+        if (dir == null && type != MEDIA_DIR_CACHE) {
+            dir = mediaDirs.get(MEDIA_DIR_CACHE);
+        }
+        try {
+            if (dir != null && !dir.isDirectory()) {
+                dir.mkdirs();
+            }
+        } catch (Exception e) {
+            //don't promt
+        }
+        return dir;
+    }
+
+    public static void copyFile(InputStream in, File dst) throws IOException {
         OutputStream out = new FileOutputStream(dst);
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -414,25 +785,12 @@ public final class AndroidUtils {
                     // Transfer bytes from in to out
                     byte[] buf = new byte[1024];
                     int len = 0;
-                    long total = 0;
                     while (true) {
                         if (!((len = in.read(buf)) > 0)) break;
                         out.write(buf, 0, len);
-                        total += len;
-                        long finalTotal = total;
-                        if (successMessage != 0 && fileLength != 0 && onFileCopyComplete != null) {
-                            G.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onFileCopyComplete.complete(successMessage, (int) ((finalTotal * 100) / fileLength));
-                                }
-                            });
-                        }
                     }
-
                     in.close();
                     out.close();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -441,14 +799,9 @@ public final class AndroidUtils {
         thread.start();
     }
 
-    public static ProgressDialog createProgressDialog(Activity activity){
-        ProgressDialog progressDialog = new ProgressDialog(activity);
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMax(100);
-        progressDialog.show();
-        return progressDialog;
+    public static void copyFile(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        copyFile(in, dst);
     }
 
     public static boolean deleteFile(File src) {
@@ -469,6 +822,7 @@ public final class AndroidUtils {
             case STICKER:
             case GIF:
             case GIF_TEXT:
+            case STORY:
                 return G.DIR_IMAGES;
             case VIDEO:
             case VIDEO_TEXT:
@@ -965,6 +1319,30 @@ public final class AndroidUtils {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static Bitmap blurImage(Bitmap input) {
+        try {
+            RenderScript rsScript = RenderScript.create(getApplicationContext());
+            Allocation alloc = Allocation.createFromBitmap(rsScript, input);
+
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rsScript, Element.U8_4(rsScript));
+            blur.setRadius(21);
+            blur.setInput(alloc);
+
+            Bitmap result = Bitmap.createBitmap(input.getWidth(), input.getHeight(), Bitmap.Config.ARGB_8888);
+            Allocation outAlloc = Allocation.createFromBitmap(rsScript, result);
+
+            blur.forEach(outAlloc);
+            outAlloc.copyTo(result);
+
+            rsScript.destroy();
+            return result;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return input;
+        }
+
     }
 
     public interface CopyFileCompleted {

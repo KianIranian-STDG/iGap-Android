@@ -168,7 +168,7 @@
     <style name="iGapButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
-z
+    z
     <style name="mobileBankButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">@color/brown</item>
     </style>
@@ -184,7 +184,7 @@ z
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonTextColor</item>
-        
+
     </style>
 
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">
@@ -195,5 +195,52 @@ z
     <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
     </style>
+    <declare-styleable name="ImageLoadingViewAttr">
+        <attr name="rotate_duration" format="integer" />
+        <attr name="circle_duration" format="integer" />
+        <attr name="start_color" format="color" />
+        <attr name="end_color" format="color" />
+        <attr name="status" >
+            <enum name="loading" value="0" />
+            <enum name="clicked" value="1" />
+            <enum name="unclicked" value="2" />
+        </attr>
+    </declare-styleable>
 
+    <declare-styleable name="ExpandableTextView">
+        <attr name="trimLength" format="integer"/>
+    </declare-styleable>
+    <style name="ExoMediaButton.Play">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Pause">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Previous">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Next">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.FastForward">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Rewind">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="TransparentDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
 </resources>

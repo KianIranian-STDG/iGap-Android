@@ -226,12 +226,12 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     private void showSortDialog() {
         if (getContext() == null) return;
 
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.default_theme_title));
-        items.add(getString(R.string.name));
-        items.add(getString(R.string.date));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.default_theme_title);
+        items.add(R.string.name);
+        items.add(R.string.date);
 
-        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
             switch (position) {
                 case 0:
                     if (isSortByDate == null) return;

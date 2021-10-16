@@ -1,65 +1,71 @@
 
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.Expose;
+import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
+@SuppressWarnings("unused")
 public class ConfigData {
-    @SerializedName("topup_charge_types")
-    @Expose
-    private List<TopupChargeType> topupChargeTypes = null;
-    @SerializedName("package_charge_types")
-    @Expose
-    private List<PackageChargeType> packageChargeTypes = null;
-    @SerializedName("services")
-    @Expose
-    private List<Service> services = null;
+
     @SerializedName("face_values")
-    @Expose
-    private List<FaceValue> faceValues = null;
+    private List<FaceValue> mFaceValues;
     @SerializedName("operator")
-    @Expose
-    private Operator operator;
-
-    public List<TopupChargeType> getTopupChargeTypes() {
-        return topupChargeTypes;
-    }
-
-    public void setTopupChargeTypes(List<TopupChargeType> topupChargeTypes) {
-        this.topupChargeTypes = topupChargeTypes;
-    }
-
-    public List<PackageChargeType> getPackageChargeTypes() {
-        return packageChargeTypes;
-    }
-
-    public void setPackageChargeTypes(List<PackageChargeType> packageChargeTypes) {
-        this.packageChargeTypes = packageChargeTypes;
-    }
-
-    public List<Service> getServices() {
-        return services;
-    }
-
-    public void setServices(List<Service> services) {
-        this.services = services;
-    }
+    private Operator mOperator;
+    @SerializedName("package_charge_types")
+    private List<PackageChargeType> mPackageChargeTypes;
+    @SerializedName("pre_numbers")
+    private List<String> mPreNumbers;
+    @SerializedName("services")
+    private List<Service> mServices;
+    @SerializedName("topup_charge_types")
+    private List<TopupChargeType> mTopupChargeTypes;
 
     public List<FaceValue> getFaceValues() {
-        return faceValues;
+        return mFaceValues;
     }
 
     public void setFaceValues(List<FaceValue> faceValues) {
-        this.faceValues = faceValues;
+        mFaceValues = faceValues;
     }
 
     public Operator getOperator() {
-        return operator;
+        return mOperator;
     }
 
     public void setOperator(Operator operator) {
-        this.operator = operator;
+        mOperator = operator;
     }
+
+    public List<PackageChargeType> getPackageChargeTypes() {
+        return mPackageChargeTypes;
+    }
+
+    public void setPackageChargeTypes(List<PackageChargeType> packageChargeTypes) {
+        mPackageChargeTypes = packageChargeTypes;
+    }
+
+    public List<String> getPreNumbers() {
+        return mPreNumbers;
+    }
+
+    public void setPreNumbers(List<String> preNumbers) {
+        mPreNumbers = preNumbers;
+    }
+
+    public List<Service> getServices() {
+        return mServices;
+    }
+
+    public void setServices(List<Service> services) {
+        mServices = services;
+    }
+
+    public List<TopupChargeType> getTopupChargeTypes() {
+        return mTopupChargeTypes;
+    }
+
+    public void setTopupChargeTypes(List<TopupChargeType> topupChargeTypes) {
+        mTopupChargeTypes = topupChargeTypes;
+    }
+
 }

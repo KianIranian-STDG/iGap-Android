@@ -36,11 +36,6 @@ public class PhoneContactProvider {
         return localInstance;
     }
 
-
-    public PhoneContactProvider() {
-
-    }
-
     public void getAllPhoneContactForPayment(Contacts.Delegate delegate) {
         if (!HelperPermission.grantedContactPermission()) {
             return;

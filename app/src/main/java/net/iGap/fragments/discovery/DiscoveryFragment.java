@@ -35,13 +35,12 @@ import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
-import net.iGap.fragments.FragmentWalletAgrement;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
@@ -50,18 +49,12 @@ import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetDiscovery;
-
-import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -76,7 +69,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private boolean needToReload = false;
     private MaterialDialog materialDialog;
     private ArrayList<DiscoveryItem> discoveryArrayList;
-    private final int walletTag = 1;
+    private final int codeScannerTag = 1;
     private final int passCodeTag = 2;
     private Toolbar discoveryToolbar;
     private ToolbarItem passCodeItem;
@@ -153,7 +146,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             discoveryToolbar.setBackIcon(new BackDrawable(false));
 
         } else {
-            discoveryToolbar.addItem(walletTag, R.string.icon_QR_code, Color.WHITE);
+            discoveryToolbar.addItem(codeScannerTag, R.string.icon_QR_code, Color.WHITE);
             passCodeItem = discoveryToolbar.addItem(passCodeTag, R.string.icon_lock, Color.WHITE);
         }
         checkPassCodeVisibility();
@@ -162,8 +155,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 case -1:
                     popBackStackFragment();
                     break;
-                case walletTag:
-                    onScannerClickListener();
+                case codeScannerTag:
+                    onCodeScannerClickListener();
                     break;
                 case passCodeTag:
                     if (passCodeItem == null) {
@@ -268,32 +261,36 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
     }
 
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
+    private void onCodeScannerClickListener() {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance()).setReplace(false).load();
+        }
 
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            String phoneNumber = "";
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            try {
+//                if (userInfo != null) {
+//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+//                } else {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                }
+//            } catch (Exception e) {
+//                //maybe exception was for realm substring
+//                try {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                } catch (Exception ex) {
+//                    //nothing
+//                }
+//            }
+//
+//            if (userInfo == null || !userInfo.isWalletRegister()) {
+//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+//            } else {
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+//            }
+//
+//        });
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
@@ -317,7 +314,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     public void checkPassCodeVisibility() {
         if (PassCode.getInstance().isPassCode()) {
             if (passCodeItem == null) {
-                passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
+                passCodeItem = discoveryToolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
             }
 
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);

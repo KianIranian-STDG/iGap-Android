@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <attr name="iGapReplyContentBackground" format="reference|color" />
+    <declare-styleable name="VerticalSlideColorPicker">
+        <attr name="borderColor" format="color" />
+        <attr name="defaultColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="colors" format="reference" />
+    </declare-styleable>
     <declare-styleable name="CollapsingImageBehavior">
         <attr name="collapsedTarget" format="reference" />
     </declare-styleable>
@@ -151,6 +157,7 @@
         <attr name="item_text_size" format="dimension" />
         <attr name="haveAvatarImage" format="boolean" />
         <attr name="hasUnreadBadge" format="boolean" />
+        <attr name="hasUnreadStory" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">
@@ -237,5 +244,30 @@
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
     <attr name="numberPickerTheme" format="reference" />
+
+
+    <!--Wallet item color-->
+    <attr name="iGapWalletDarkerBackground" format="color"/>
+    <attr name="iGapWalletLighterBackground" format="color"/>
+
+    <declare-styleable name="CodeScannerView">
+        <attr format="color" name="maskColor"/>
+        <attr format="color" name="frameColor"/>
+        <attr format="color" name="autoFocusButtonColor"/>
+        <attr format="color" name="flashButtonColor"/>
+        <attr format="boolean" name="autoFocusButtonVisible"/>
+        <attr format="boolean" name="flashButtonVisible"/>
+        <attr format="dimension" name="frameThickness"/>
+        <attr format="dimension" name="frameCornersSize"/>
+        <attr format="dimension" name="frameCornersRadius"/>
+        <attr format="float" name="frameAspectRatioWidth"/>
+        <attr format="float" name="frameAspectRatioHeight"/>
+        <attr format="float" name="frameSize"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="StoriesProgressView">
+        <attr name="progressCount" format="integer|reference" />
+    </declare-styleable>
 
 </resources>

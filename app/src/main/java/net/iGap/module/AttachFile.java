@@ -18,6 +18,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -52,6 +53,8 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
+import net.iGap.module.dialog.ChatAttachmentPopup;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -61,6 +64,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,6 +91,7 @@ public class AttachFile {
     public static Uri imageUri;
     public static String mCurrentPhotoPath;
     public static String videoPath = "";
+    public SecureRandom random = new SecureRandom();
     OnComplete complete;
     private PopupWindow popupWindow;
     private FragmentActivity context;
@@ -255,7 +260,6 @@ public class AttachFile {
                 // shared from igap to igap
             } else {
                 InputStream input = G.context.getContentResolver().openInputStream(uri);
-
                 AndroidUtils.copyFile(input, new File(destinationPath));
             }
 
@@ -265,8 +269,6 @@ public class AttachFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         return null;
     }
 
@@ -311,6 +313,52 @@ public class AttachFile {
 
     public void dispatchTakePictureIntent() throws IOException {
         dispatchTakePictureIntent(null);
+    }
+
+    //*************************************************************************************************************
+
+    /**
+     * open page paint
+     *
+     * @throws IOException
+     */
+
+    public static void getAllShownImagesPath(Activity activity, int count, ChatAttachmentPopup.OnImagesGalleryPrepared onImagesGalleryPrepared) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+                Uri uri;
+                Cursor cursor;
+                int column_index_data;
+                String absolutePathOfImage;
+                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+                String[] projection = {
+                        MediaStore.MediaColumns.DATA
+                };
+
+                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+
+                if (cursor != null) {
+                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+
+                    while (cursor.moveToNext()) {
+                        absolutePathOfImage = cursor.getString(column_index_data);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setId(listOfAllImages.size());
+                        item.setPath(absolutePathOfImage);
+                        item.isSelected = true;
+                        listOfAllImages.add(item);
+                        if (listOfAllImages.size() >= count) break;
+                    }
+                    cursor.close();
+                    onImagesGalleryPrepared.imagesList(listOfAllImages);
+
+                }
+            }
+        }).start();
     }
 
     //*************************************************************************************************************
@@ -885,9 +933,11 @@ public class AttachFile {
         }).negativeText(R.string.B_cancel).show();
     }
 
-    private File createImageFile() throws IOException {
+    public File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis() + random.nextInt(1000) + 1);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
         String imageFileName = "JPEG_" + timeStamp + "_";
 
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");

@@ -53,7 +53,6 @@ public class RequestChannelSendMessage {
         channelSendMessage.setReplyTo(messageId);
         return this;
     }
-
     public RequestChannelSendMessage additionalData(AdditionalObject additionalObject) {
         channelSendMessage.setAdditionalData(additionalObject.data);
         channelSendMessage.setAdditionalType(additionalObject.type);

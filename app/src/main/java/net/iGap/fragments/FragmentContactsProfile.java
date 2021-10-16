@@ -854,24 +854,24 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
     }
 
     private void showPopUp() {
-        new TopSheetDialog(getContext()).setListData(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
+        new TopSheetDialog(getContext()).setListDataWithResourceId(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
     }
 
     private void openDialogReport() {
         //todo: fixed on click and handle in viewModel get list menu from viewModel
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.st_Spam));
-        items.add(getString(R.string.st_Abuse));
-        items.add(getString(R.string.st_FakeAccount));
-        items.add(getString(R.string.st_Other));
-        new BottomSheetFragment().setData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.st_Spam))) {
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.st_Spam);
+        items.add(R.string.st_Abuse);
+        items.add(R.string.st_FakeAccount);
+        items.add(R.string.st_Other);
+        new BottomSheetFragment().setListDataWithResourceId(getContext(),items, -1, position -> {
+            if (items.get(position)==R.string.st_Spam) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
-            } else if (items.get(position).equals(getString(R.string.st_Abuse))) {
+            } else if (items.get(position)==R.string.st_Abuse) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
-            } else if (items.get(position).equals(getString(R.string.st_FakeAccount))) {
+            } else if (items.get(position)==R.string.st_FakeAccount) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
-            } else if (items.get(position).equals(getString(R.string.st_Other))) {
+            } else if (items.get(position)==R.string.st_Other) {
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {

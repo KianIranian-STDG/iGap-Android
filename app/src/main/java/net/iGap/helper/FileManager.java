@@ -1,9 +1,13 @@
 package net.iGap.helper;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+
+import androidx.core.content.ContextCompat;
 
 import net.iGap.R;
 import net.iGap.model.GalleryAlbumModel;
@@ -79,51 +83,112 @@ public class FileManager {
     }
 
     public static void getFolderPhotosById(Context context, String folderId, FetchListener<List<GalleryItemModel>> callback) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            new Thread(() -> {
+                List<GalleryItemModel> photos = new ArrayList<>();
+                if (context == null) {
+                    callback.onFetch(photos);
+                    return;
+                }
+
+                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                String[] projection = {
+                        MediaStore.MediaColumns.DATA
+                };
+
+                boolean isAllPhoto = folderId.equals("-1");
+
+                Cursor cursor = context.getContentResolver().query(
+                        uri,
+                        projection,
+                        isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
+                        isAllPhoto ? null : new String[]{folderId},
+                        MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC"
+                );
+
+                if (cursor != null) {
+
+                    final int COLUMN_DATA = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+
+                    while (cursor.moveToNext()) {
+                        try {
+                            GalleryItemModel photo = new GalleryItemModel();
+                            photo.setId(photos.size());
+                            photo.setAddress(cursor.getString(COLUMN_DATA));
+                            if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {
+                                photos.add(photo);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    cursor.close();
+                }
+                callback.onFetch(photos);
+
+            }).start();
+        }
+    }
+
+    public static void getAllMedia(Context context, String folderId, FetchListener<List<GalleryItemModel>> callback) {
 
         new Thread(() -> {
 
-            List<GalleryItemModel> photos = new ArrayList<>();
+            List<GalleryItemModel> videos = new ArrayList<>();
             if (context == null) {
-                callback.onFetch(photos);
+                callback.onFetch(videos);
                 return;
             }
 
-            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = MediaStore.Files.getContentUri("external");
+            ;
             String[] projection = {
-                    MediaStore.MediaColumns.DATA
+                    MediaStore.Files.FileColumns._ID,
+                    MediaStore.Files.FileColumns.DATA,
+                    MediaStore.Files.FileColumns.DATE_ADDED,
+                    MediaStore.Files.FileColumns.MEDIA_TYPE,
+                    MediaStore.Files.FileColumns.MIME_TYPE,
+                    MediaStore.Files.FileColumns.TITLE
             };
+
+// Return only video and image metadata.
+            String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                    + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+                    + " OR "
+                    + MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                    + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
             boolean isAllPhoto = folderId.equals("-1");
 
             Cursor cursor = context.getContentResolver().query(
                     uri,
                     projection,
-                    isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
-                    isAllPhoto ? null : new String[]{folderId},
-                    MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC"
+                    selection,
+                    null,
+                    MediaStore.Files.FileColumns.DATE_MODIFIED + " DESC"
             );
 
             if (cursor != null) {
 
-                final int COLUMN_DATA = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-
+                final int COLUMN_DATA = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+                final int COLUMN_MEDIA_TYPE = cursor.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE);
                 while (cursor.moveToNext()) {
                     try {
-                        GalleryItemModel photo = new GalleryItemModel();
-                        photo.setId(photos.size());
-                        photo.setAddress(cursor.getString(COLUMN_DATA));
-                        if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {
-                            photos.add(photo);
-                        }
+                        GalleryItemModel video = new GalleryItemModel();
+                        video.setId(videos.size());
+                        video.setAddress(cursor.getString(COLUMN_DATA));
+                        video.setMediaType(cursor.getString(COLUMN_MEDIA_TYPE));
+                        videos.add(video);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 cursor.close();
             }
-            callback.onFetch(photos);
+            callback.onFetch(videos);
 
         }).start();
+
     }
 
     public static void getFolderVideosById(Context context, String folderId, FetchListener<List<GalleryVideoModel>> callback) {
@@ -231,7 +296,7 @@ public class FileManager {
         }).start();
     }
 
-    public static void getDeviceMusics(Context context , boolean sortByDate , FetchListener<List<GalleryMusicModel>> callback){
+    public static void getDeviceMusics(Context context, boolean sortByDate, FetchListener<List<GalleryMusicModel>> callback) {
 
         new Thread(() -> {
 
@@ -243,12 +308,12 @@ public class FileManager {
 
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             String[] projection = {
-                    MediaStore.Audio.Media.DATA ,
-                    MediaStore.Audio.Media.ARTIST ,
+                    MediaStore.Audio.Media.DATA,
+                    MediaStore.Audio.Media.ARTIST,
                     MediaStore.Audio.Media.TITLE
             };
 
-            String sortType ;
+            String sortType;
             if (sortByDate) sortType = MediaStore.Audio.Media.DATE_ADDED + " DESC";
             else sortType = MediaStore.Audio.Media.TITLE + " ASC";
 
@@ -272,8 +337,9 @@ public class FileManager {
                         music.setId(musics.size());
                         music.setPath(cursor.getString(COLUMN_DATA));
                         music.setTitle(cursor.getString(COLUMN_TITLE));
-                        String artist = cursor.getString(COLUMN_ARTIST) ;
-                        if (artist.contains("unknown")) artist = context.getString(R.string.unknown);
+                        String artist = cursor.getString(COLUMN_ARTIST);
+                        if (artist.contains("unknown"))
+                            artist = context.getString(R.string.unknown);
                         music.setArtist(artist);
                         musics.add(music);
                     } catch (Exception e) {
@@ -321,7 +387,7 @@ public class FileManager {
     public static class SortFileName implements Comparator<StructFileManager> {
         @Override
         public int compare(StructFileManager f1, StructFileManager f2) {
-            if(f1.nameStr == null)
+            if (f1.nameStr == null)
                 return 1;
             else
                 return f1.nameStr.compareTo(f2.nameStr);
@@ -336,9 +402,9 @@ public class FileManager {
         public int compare(StructFileManager obj1, StructFileManager obj2) {
             File f1 = new File(obj1.path);
             File f2 = new File(obj2.path);
-            if((f1.lastModified() == f2.lastModified()) )
-                return 0 ;
-            else if(f1.lastModified() > f2.lastModified())
+            if ((f1.lastModified() == f2.lastModified()))
+                return 0;
+            else if (f1.lastModified() > f2.lastModified())
                 return -1;
             else
                 return 1;

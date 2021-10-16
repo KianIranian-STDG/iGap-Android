@@ -30,11 +30,11 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -58,12 +58,10 @@ import net.iGap.module.customView.CheckBox;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +72,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.isAppRtl;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
 public class FragmentCall extends BaseMainFragments {
@@ -102,7 +99,7 @@ public class FragmentCall extends BaseMainFragments {
     private ToolbarItem deleteItem;
     private ToolbarItem deleteAllItem;
     private final int createCallTag = 1;
-    private final int qrWalletTag = 2;
+    private final int codeScannerTag = 2;
     private final int deleteTag = 4;
     private final int deleteAllTag = 5;
     private FragmentMediaContainer mediaContainer;
@@ -143,7 +140,7 @@ public class FragmentCall extends BaseMainFragments {
         callToolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         ToolbarItems toolbarItems = callToolbar.createToolbarItems();
         toolbarItems.addItemWithWidth(createCallTag, R.string.icon_add, 54);
-        toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
+        toolbarItems.addItemWithWidth(codeScannerTag, R.string.icon_QR_code, 54);
         callToolbar.setListener(i -> {
             switch (i) {
                 case -1:
@@ -154,8 +151,8 @@ public class FragmentCall extends BaseMainFragments {
                 case createCallTag:
                     showContactListForCall();
                     break;
-                case qrWalletTag:
-                    onScannerClickListener();
+                case codeScannerTag:
+                    onCodeScannerClickListener();
                     break;
                 case deleteAllTag:
                     if (getRequestManager().isUserLogin()) {
@@ -560,32 +557,36 @@ public class FragmentCall extends BaseMainFragments {
         if (mRecyclerView != null) mRecyclerView.smoothScrollToPosition(0);
     }
 
-    private void onScannerClickListener() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            String phoneNumber = "";
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            try {
-                if (userInfo != null) {
-                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-                } else {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                }
-            } catch (Exception e) {
-                //maybe exception was for realm substring
-                try {
-                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
-                } catch (Exception ex) {
-                    //nothing
-                }
-            }
+    private void onCodeScannerClickListener() {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), ScanCodeQRCodePaymentFragment.newInstance()).setReplace(false).load();
+        }
 
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
-        });
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            String phoneNumber = "";
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            try {
+//                if (userInfo != null) {
+//                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+//                } else {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                }
+//            } catch (Exception e) {
+//                //maybe exception was for realm substring
+//                try {
+//                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+//                } catch (Exception ex) {
+//                    //nothing
+//                }
+//            }
+//
+//            if (userInfo == null || !userInfo.isWalletRegister()) {
+//                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+//            } else {
+//                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+//            }
+//
+//        });
     }
 
     /**

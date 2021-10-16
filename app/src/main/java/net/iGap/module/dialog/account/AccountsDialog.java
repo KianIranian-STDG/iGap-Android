@@ -29,8 +29,6 @@ import net.iGap.module.enums.CallState;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.viewmodel.controllers.CallManager;
 
-import org.paygear.RaadApp;
-
 public class AccountsDialog extends BaseBottomSheet implements EventManager.EventDelegate {
 
     private AccountDialogListener mListener;
@@ -93,15 +91,13 @@ public class AccountsDialog extends BaseBottomSheet implements EventManager.Even
             if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
                 new AccountHelper().changeAccount(id);
                 ((ActivityMain) getActivity()).updateUiForChangeAccount();
-                RaadApp.onCreate(getContext());
             }
             dismiss();
         } else {
             if (getActivity() != null) {
                 HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_NEW_ACCOUNT);
                 new AccountHelper().addAccount();
-                RaadApp.onCreate(getContext());
-                // WebSocketClient.connectNewAccount();
+                // WebSocketClient.GGFconnectNewAccount();
                 Intent intent = new Intent(getActivity(), ActivityRegistration.class);
                 intent.putExtra("add account", true);
                 getActivity().startActivity(intent);

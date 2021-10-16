@@ -631,17 +631,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 38) { // REALM_LATEST_MIGRATION_VERSION = 38
 
-/*            RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
-                    .addField("kuknosSeedKey", String.class)
-                    .addField("kuknosPublicKey", String.class)
-                    .addField("kuknosPIN", String.class)
-                    .addField("kuknosMnemonic", String.class);
-
-            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
-            if (realmUserInfo != null) {
-                realmUserInfo.addRealmObjectField("kuknosM", realmKuknos);
-            }*/
-
             oldVersion++;
         }
 
@@ -724,14 +713,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 43) {
 
-/*            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
-                    .addField("cardName", String.class)
-                    .addField("cardNumber", String.class)
-                    .addField("bankName", String.class)
-                    .addField("expireDate", String.class)
-                    .addField("isOrigin", boolean.class, FieldAttribute.REQUIRED);
-
-            realmMB.addPrimaryKey("cardNumber");*/
 
             oldVersion++;
         }
@@ -786,62 +767,11 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 45) {
-/*
-            RealmObjectSchema realmMB = schema.create(RealmMobileBankAccounts.class.getSimpleName())
-                    .addField("accountNumber", String.class)
-                    .addField("accountName", String.class);
-            realmMB.addPrimaryKey("accountNumber");*/
-
-            RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
-            if (realmUser != null) {
-                realmUser.addField("nationalCode", String.class);
-            }
-
-            if (schema.contains("RealmStickers")) {
-                schema.remove("RealmStickers");
-            }
-
-            if (schema.contains("RealmStickersDetails")) {
-                schema.remove("RealmStickersDetails");
-            }
-
-            RealmObjectSchema realmStickerItem = schema.create(RealmStickerItem.class.getSimpleName())
-                    .addField("id", String.class)
-                    .addField("fileName", String.class)
-                    .addField("groupId", String.class)
-                    .addField("name", String.class)
-                    .addField("token", String.class)
-                    .addField("isFavorite", boolean.class)
-                    .addField("recentTime", long.class)
-                    .addField("fileSize", long.class);
-
-            schema.create(RealmStickerGroup.class.getSimpleName())
-                    .addField("id", String.class)
-                    .addField("name", String.class)
-                    .addField("type", String.class)
-                    .addField("avatarName", String.class)
-                    .addField("avatarToken", String.class)
-                    .addField("categoryId", String.class)
-                    .addField("isGiftable", boolean.class)
-                    .addField("avatarSize", long.class)
-                    .addRealmListField("stickerItems", realmStickerItem);
 
             oldVersion++;
         }
 
         if (oldVersion == 46) {
-
-   /*         RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
-            if (realmMbCards != null) {
-                realmMbCards.addField("status", String.class);
-            }
-
-
-            RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
-            if (realmMbDeposits != null) {
-                realmMbDeposits.addField("status", String.class);
-            }
-*/
 
             oldVersion++;
         }
@@ -893,11 +823,83 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 49) {
-  /*          RealmObjectSchema realmMbCards = schema.get(RealmKuknos.class.getSimpleName());
-            if (realmMbCards != null) {
-                realmMbCards.addField("iban", String.class);
+
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 50) {
+            RealmObjectSchema realmAttachmentSchema = schema.get(RealmAttachment.class.getSimpleName());
+
+            RealmObjectSchema realmStoryViewInfo = schema.create(RealmStoryViewInfo.class.getSimpleName())
+                    .addField("id", long.class)
+                    .addField("userId", long.class)
+                    .addField("createdTime", long.class);
+
+            RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
+                    .addField("caption", String.class)
+                    .addField("fileToken", String.class)
+                    .addField("imagePath", String.class)
+                    .addRealmObjectField("file", realmAttachmentSchema)
+                    .addField("createdAt", long.class)
+                    .addField("userId", long.class)
+                    .addField("storyId", long.class)
+                    .addField("id", long.class)
+                    .addField("isSeen", boolean.class)
+                    .addField("viewCount", int.class)
+                    .addField("index", int.class)
+                    .addField("isForReply", boolean.class)
+                    .addRealmListField("realmStoryViewInfos", realmStoryViewInfo)
+                    .addField("status", int.class);
+
+
+            RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
+                    .addField("id", long.class)
+                    .addField("userId", long.class)
+                    .addField("isSeenAll", boolean.class)
+                    .addField("isSentAll", boolean.class)
+                    .addField("isUploadedAll", boolean.class)
+                    .addField("indexOfSeen", int.class)
+                    .addField("sessionId", long.class)
+                    .addRealmListField("realmStoryProtos", realmStoryProto);
+
+            realmStorySchema.addPrimaryKey("id");
+            realmStorySchema.addIndex("userId");
+
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("storyStatus", int.class);
+                realmRoomMessageSchema.addRealmObjectField("storyReplyMessage", realmStoryProto);
             }
-*/
+
+            oldVersion++;
+        }
+
+
+        if (oldVersion == 51) {
+
+            RealmObjectSchema realmStorySchema = schema.get(RealmStory.class.getSimpleName());
+            RealmObjectSchema realmStoryProtoSchema = schema.get(RealmStoryProto.class.getSimpleName());
+            RealmObjectSchema realmStoryViewInfoSchema = schema.get(RealmStoryViewInfo.class.getSimpleName());
+
+            if (realmStorySchema != null) {
+                realmStorySchema.addField("displayName", String.class);
+                realmStorySchema.addField("profileColor", String.class);
+                realmStorySchema.addField("lastCreatedAt", long.class);
+            }
+
+            if (realmStoryProtoSchema != null) {
+                realmStoryProtoSchema.addField("displayName", String.class);
+                realmStoryProtoSchema.addField("profileColor", String.class);
+                realmStoryProtoSchema.addField("sessionId", long.class);
+            }
+
+            if (realmStoryViewInfoSchema != null) {
+                realmStoryViewInfoSchema.addField("displayName", String.class);
+                realmStoryViewInfoSchema.addField("profileColor", String.class);
+            }
+
             oldVersion++;
         }
     }

@@ -92,9 +92,12 @@ public class AttachmentObject {
     }
 
     public boolean isFileExistsOnLocal(MessageObject messageObject) {
-        String finalPath = filePath != null ? filePath : messageObject.getCacheFile(false);
-        filePath = finalPath;
-        return finalPath != null && new File(finalPath).exists() && new File(finalPath).canRead();
+        if (filePath != null && new File(filePath).exists() && new File(filePath).canRead()) {
+            return true;
+        } else {
+            String filePath = messageObject.getCacheFile(false);
+            return filePath != null && new File(filePath).exists() && new File(filePath).canRead();
+        }
     }
 
     public boolean isFileExistsOnLocalAndIsImage(MessageObject messageObject) {

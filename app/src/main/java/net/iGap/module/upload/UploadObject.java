@@ -14,6 +14,8 @@ public class UploadObject {
     public String fileToken;
     public String mimeType;
     public String fileName;
+    public String type;
+    public String caption;
     public File file;
     public long messageId;
     public long fileSize;
@@ -98,6 +100,22 @@ public class UploadObject {
         object.messageId = avatarId;
         object.messageType = roomType;
         object.onUploadListener = onUploadListener;
+        return object;
+    }
+
+    public static UploadObject createForStory(long avatarId, String imagePath, String token, String caption, ProtoGlobal.RoomMessageType roomType) {
+        UploadObject object = new UploadObject();
+
+
+        object.path = imagePath;
+        object.file = new File(object.path);
+        object.fileName = object.file.getName();
+        object.fileSize = object.file.length();
+        object.fileToken = token;
+        object.key = String.valueOf(avatarId);
+        object.messageId = avatarId;
+        object.messageType = roomType;
+        object.caption = caption;
         return object;
     }
 

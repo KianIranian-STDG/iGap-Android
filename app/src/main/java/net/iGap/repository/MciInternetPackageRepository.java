@@ -45,7 +45,7 @@ public class MciInternetPackageRepository {
         new ApiInitializer<BaseIGashtResponse<InternetPackageFilter>>().initAPI(api.getInternetPackageFilters(), handShakeCallback, callback);
     }
 
-    public void purchaseInternetPackage(String operator, String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
-        new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(operator, phoneNumber, internetPackageType), handShakeCallback, callback);
+    public void purchaseInternetPackage(String operator, String rechargeableNumber,String chargerNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(operator, rechargeableNumber,chargerNumber, internetPackageType), handShakeCallback, callback);
     }
 }

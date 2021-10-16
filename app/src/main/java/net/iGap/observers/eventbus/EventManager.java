@@ -68,6 +68,20 @@ public class EventManager {
 
     public static final int NEXT_VOICE = eventId++;
 
+
+    public static final int STORY_LIST_FETCHED = eventId++;
+    public static final int STORY_DELETED = eventId++;
+    public static final int STORY_ALL_SEEN = eventId++;
+    public static final int STORY_USER_ADD_VIEW = eventId++;
+    public static final int STORY_USER_ADD_NEW = eventId++;
+    public static final int STORY_UPLOAD = eventId++;
+    public static final int STORY_SENDING = eventId++;
+    public static final int STORY_UPLOADED_FAILED = eventId++;
+    public static final int STORY_USER_INFO = eventId++;
+    public static final int STORY_STATUS_UPLOAD = eventId++;
+
+    public static final int ON_VOLUME_DOWN_KEY = eventId++;
+
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> addAfterBroadcast = new SparseArray<>();

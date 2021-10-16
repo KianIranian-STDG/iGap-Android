@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
@@ -17,14 +18,20 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmStoryViewInfo;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.ViewUserDialogFragment;
+import net.iGap.structs.MessageObject;
 
 public class UserInfoResponse extends MessageHandler {
 
@@ -53,13 +60,14 @@ public class UserInfoResponse extends MessageHandler {
             RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
             RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
         });
-
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).storySetDisplayName(builder.getUser().getId(), builder.getUser().getDisplayName());
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
             }
         }, RequestUserInfo.CLEAR_ARRAY_TIME);
+
 
         if (identity != null) {
             if (identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {

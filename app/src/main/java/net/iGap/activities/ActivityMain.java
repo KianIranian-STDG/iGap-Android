@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,10 +135,9 @@ import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
+import net.iGap.story.CameraStoryFragment;
 import net.iGap.viewmodel.UserScoreViewModel;
 
-import org.paygear.RaadApp;
-import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -185,6 +185,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
     private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_VOLUME_DOWN_KEY);
+            if (CameraStoryFragment.isInStoryFragment) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     public static void setMediaLayout() {
         try {
@@ -383,7 +397,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 long userId = extras.getLong(ActivityMain.userId);
                 if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
                     new AccountHelper().changeAccount(userId);
-                    RaadApp.onCreate(this);
                     updateUiForChangeAccount();
                 }
                 HelperUrl.goToActivityFromFCM(this, roomId, peerId);
@@ -417,7 +430,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
                 boolean haveOtherAccount = new AccountHelper().logoutAccount();
-                RaadApp.onCreate(this);
                 if (haveOtherAccount) {
                     updateUiForChangeAccount();
                 } else {
@@ -484,13 +496,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     isChinesPhone();
             }
 
-            RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
-                @Override
-                public void paygearId(String id) {
 
-                    new RequestWalletIdMapping().walletIdMapping(id);
-                }
-            };
 
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
@@ -958,6 +964,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             case kuknosRequestCodeQrCode:
                 IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (kuknosWID.getContents() != null) {
+            /*        KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    if (myFragment != null && myFragment.isVisible()) {
+                        myFragment.setWalletIDQrCode(kuknosWID.getContents());
+                    }*/
                 }
                 break;
             case WALLET_REQUEST_CODE:

@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.BuildConfig;
 import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.RequestManager;
@@ -21,6 +22,7 @@ public class RequestClientGetDiscovery {
 
         ProtoClientGetDiscovery.ClientGetDiscovery.Builder builder = ProtoClientGetDiscovery.ClientGetDiscovery.newBuilder();
         builder.setPageId(pageId);
+        builder.setProjectId(BuildConfig.ILAND_APP_ID);
 
         RequestWrapper requestWrapper = new RequestWrapper(620, builder, discoveryListener);
         try {

@@ -16,6 +16,8 @@ import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,10 +100,10 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         Request.Builder builder = new Request.Builder()
                 .url(url)
                 .addHeader("Authorization", jwtToken);
-
         if (fileStruct.offset > 0) {
             builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
         }
+
 
         FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: " + fileStruct.mainCacheId);
 
@@ -125,6 +127,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
                 long downloaded = fileStruct.offset;
                 while ((count = cipherInputStream.read(data)) != -1) {
                     downloaded += count;
+                    fileStruct.offset = downloaded;
                     int t = (int) ((downloaded * 100) / fileStruct.fileSize);
                     if (fileStruct.progress < t) {
                         fileStruct.progress = t;
@@ -135,6 +138,16 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
                         safelyCancelDownload();
                         return;
                     }
+                }
+                if (downloaded < fileStruct.fileSize) { // This is for any reason that connection have problem and stream returned -1 and the file downloaded incompletely.
+                    FileLog.e("HttpRequest", "Download " + fileStruct.fileToken + " with offset: " + fileStruct.offset + " retried");
+                    inputStream.close();
+                    cipherInputStream.close();
+                    os.close();
+                    if (response.body() != null) {
+                        response.body().close();
+                    }
+                    download(jwtToken, fileStruct);
                 }
                 onDownloadCompleted();
                 cipherInputStream.close();
@@ -190,9 +203,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
-            notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
-            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
-
         } catch (Exception e) {
             onError(e);
         }
@@ -200,9 +210,9 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onProgress(int progress) {
         if (selector == Selector.FILE_VALUE)
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.destFile.getAbsolutePath(), fileObject.fileToken, Selector.FILE_VALUE)));
+            notifyObservers(Resource.loading(new Progress(fileObject, progress, fileObject.destFile.getAbsolutePath(), fileObject.fileToken, Selector.FILE_VALUE)));
         else
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
+            notifyObservers(Resource.loading(new Progress(fileObject, progress, fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
     }
 
     public void onError(@NotNull Throwable throwable) {
@@ -216,12 +226,44 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         MessageDataStorage storage = MessageDataStorage.getInstance(currentAccount);
         switch (selector) {
             case Selector.FILE_VALUE:
-                AndroidUtils.cutFromTemp(fileObject.tempFile.getAbsolutePath(), fileObject.destFile.getAbsolutePath());
+                AndroidUtils.globalQueue.postRunnable(() -> {
+                    File cutTo = new File(fileObject.destFile.getAbsolutePath());
+                    if (!cutTo.exists()) {
+                        try {
+                            cutTo.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    File cutForm = new File(fileObject.tempFile.getAbsolutePath());
+
+                    try (
+                            InputStream in = new FileInputStream(cutForm);
+                            OutputStream out = new FileOutputStream(cutTo);
+                    ) {
+                        // Transfer bytes from in to out
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        AndroidUtils.deleteFile(cutForm);
+                        G.runOnUiThread(() -> {
+                            notifyObservers(Resource.success(new Progress(fileObject, fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
+                            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
                 storage.setAttachmentFilePath(fileObject.mainCacheId, fileObject.destFile.getAbsolutePath(), false);
                 break;
             case Selector.SMALL_THUMBNAIL_VALUE:
             case Selector.LARGE_THUMBNAIL_VALUE:
                 storage.setAttachmentFilePath(fileObject.mainCacheId, fileObject.tempFile.getAbsolutePath(), true);
+                notifyObservers(Resource.success(new Progress(fileObject, fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
+                notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
                 break;
         }
     }
@@ -253,12 +295,14 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         String filePath;
         String token;
         int selector;
+        DownloadObject downloadObject;
 
-        public Progress(int progress, String filePath, String fileToken, int selector) {
+        public Progress(DownloadObject downloadObject, int progress, String filePath, String fileToken, int selector) {
             this.progress = progress;
             this.filePath = filePath;
             this.token = fileToken;
             this.selector = selector;
+            this.downloadObject = downloadObject;
         }
 
         public int getProgress() {
@@ -275,6 +319,10 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
         public int getSelector() {
             return selector;
+        }
+
+        public DownloadObject getDownloadObject() {
+            return downloadObject;
         }
     }
 

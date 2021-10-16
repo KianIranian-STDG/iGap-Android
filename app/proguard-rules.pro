@@ -230,9 +230,6 @@
 -keepattributes Exceptions
 -keepattributes EnclosingMethod
 
--keep class org.paygear.** { *; }
--keep class ir.radsense.** { *; }
-
 -dontwarn com.alexvasilkov.gestures**
 
 -ignorewarnings

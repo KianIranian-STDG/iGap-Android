@@ -46,6 +46,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
     private MciInternetPackageRepository repository;
     private String operator;
     private String simType;
+    private String rechargeableNumber;
     private String phoneNumber;
     private int selectedPackageType = -10;
 
@@ -168,7 +169,7 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
         }
         loadingVisibility.setValue(true);
 
-        repository.purchaseInternetPackage(operator, phoneNumber.substring(1),
+        repository.purchaseInternetPackage(operator, rechargeableNumber, phoneNumber,
                 String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
                     @Override
                     public void onSuccess(MciPurchaseResponse data) {
@@ -251,14 +252,15 @@ public class PaymentInternetPackageViewModel extends BaseAPIViewModel {
         selectedPackageType = item.getType();
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneCharger(String rechargeableNumber, String phoneNumber) {
+        this.rechargeableNumber = rechargeableNumber;
         this.phoneNumber = phoneNumber;
     }
 
     public void savePayment() {
         loadingVisibility.setValue(true);
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("phone_number", phoneNumber);
+        jsonObject.addProperty("phone_number", rechargeableNumber);
         jsonObject.addProperty("package_type", String.valueOf(selectedPackageType));
         jsonObject.addProperty("charge_type", simType);
         new RetrofitFactory().getChargeRetrofit().setFavoriteInternetPackage(operator, jsonObject).enqueue(new Callback<ResponseBody>() {

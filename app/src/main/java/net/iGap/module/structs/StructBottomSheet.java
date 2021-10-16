@@ -12,7 +12,9 @@ package net.iGap.module.structs;
 
 import androidx.annotation.NonNull;
 
-public class StructBottomSheet implements Comparable<StructBottomSheet> {
+import java.io.Serializable;
+
+public class StructBottomSheet implements Comparable<StructBottomSheet>, Serializable {
 
     public int id;
     public boolean isSelected;

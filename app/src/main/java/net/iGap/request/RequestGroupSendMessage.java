@@ -54,6 +54,10 @@ public class RequestGroupSendMessage {
         return this;
     }
 
+    public RequestGroupSendMessage storyReply(ProtoGlobal.RoomMessageStoryReply storyReply) {
+        groupSendMessage.setStoryReply(storyReply);
+        return this;
+    }
     public RequestGroupSendMessage additionalData(AdditionalObject additionalObject) {
         groupSendMessage.setAdditionalData(additionalObject.data);
         groupSendMessage.setAdditionalType(additionalObject.type);

@@ -21,6 +21,7 @@ public class ApiStatic {
     static final String BILL_URL = BASE_URL + "bill-manager/" + VERSION;
     static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
+    public static final String PEC_QR_URL = BASE_URL + "pec-qr/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
     public static final String FILE = AppConfig.servicesBaseUrl + "/files/v1.0/";

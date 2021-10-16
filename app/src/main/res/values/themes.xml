@@ -23,16 +23,21 @@
         <item name="iGapPrimaryIconTextColor">@color/white</item>
         <item name="iGapLogoutButtonColor">@color/players_dark_background</item>
         <item name="iGapCardViewColor">@color/gray_6c</item>
+
         <item name="iGapEditTxtColor">@color/gray_6c</item>
         <item name="iGapMediaStripColor">@color/media_strip_color_dark</item>
         <item name="iGapBottomNavigationIconStart">#FF50B452</item>
         <item name="iGapBottomNavigationIconEnd">#FFC6DA42</item>
+
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_dark</item>
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_dark</item>
 
         <item name="iGapReceivedOtherTextColor">#aaaaaa</item>
         <item name="iGapReceivedMessageTextColor">#EEEEEE</item>
         <item name="iGapReceivedReplayColor">#494949</item>
 
         <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
+        <item name="iGapReplyContentBackground">#636363</item>
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
         <item name="iGapSendReplayColor">@color/green</item>
@@ -88,6 +93,7 @@
         <item name="iGapPrimaryIconTextColor">@color/green</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
+
         <item name="iGapEditTxtColor">#DBD9D9</item>
         <item name="iGapCallStripColor">@color/call_strip_color</item>
         <item name="iGapCallStripColorBlue">@color/call_strip_color_blue</item>
@@ -96,11 +102,15 @@
         <item name="iGapBottomNavigationIconStart">#FFC6DA42</item>
         <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
         <item name="iGapReceivedOtherTextColor">#7a7a7a</item>
         <item name="iGapReceivedReplayColor">#e2e8de</item>
 
         <item name="iGapSendMessageBubbleColor">#f5ffec</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">@color/green</item>
@@ -158,6 +168,9 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
 
 
         <item name="iGapBottomNavigationIconStart">#dd6f6f</item>
@@ -228,11 +241,15 @@
         <item name="iGapBottomNavigationIconStart">#ffb5b5</item>
         <item name="iGapBottomNavigationIconEnd">#f68787</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapReceivedOtherTextColor">#999999</item>
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
         <item name="iGapReceivedReplayColor">#F2BEBD</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
         <item name="iGapSendReplayColor">#da6463</item>
@@ -295,7 +312,11 @@
         <item name="iGapReceivedOtherTextColor">#8A8787</item>
         <item name="iGapReceivedReplayColor">#DBADDB</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#68265b</item>
@@ -361,7 +382,11 @@
         <item name="iGapReceivedOtherTextColor">#999999</item>
         <item name="iGapReceivedReplayColor">#92C7F2</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#07439b</item>
@@ -424,7 +449,11 @@
         <item name="iGapReceivedOtherTextColor">#999999</item>
         <item name="iGapReceivedReplayColor">#CFDDAA</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#8cb238</item>
@@ -488,7 +517,11 @@
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
         <item name="iGapReceivedReplayColor">#F2D585</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendReplayColor">#dd9f07</item>
@@ -552,7 +585,11 @@
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
         <item name="iGapReceivedOtherTextColor">#eeeeee</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
         <item name="iGapSendReplayColor">#ff6700</item>
@@ -600,7 +637,7 @@
 
         <item name="md_dark_theme">false</item>
 
-       <!-- <item name="md_background_color">@color/white</item>-->
+        <!-- <item name="md_background_color">@color/white</item>-->
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -615,7 +652,11 @@
         <item name="iGapEditTxtColor">#DBD9D9</item>
         <item name="iGapMediaStripColor">@color/media_strip_color_dark_gray</item>
 
+        <item name="iGapWalletDarkerBackground">@color/wallet_darker_background_light</item>
+        <item name="iGapWalletLighterBackground">@color/wallet_lighter_background_light</item>
+
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapReplyContentBackground">#FBFFF7</item>
         <item name="iGapBottomNavigationIconStart">#7495b5</item>
         <item name="iGapBottomNavigationIconEnd">#4e698a</item>
         <item name="iGapReceivedMessageTextColor">@color/white</item>

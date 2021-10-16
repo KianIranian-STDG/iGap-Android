@@ -71,6 +71,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
+
         if (haveAvatarImage) {
             if (imageView == null) {
                 imageView = new CircleImageView(getContext());
@@ -143,6 +144,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
             badgeView.measure(LayoutCreator.manageSpec(viewWidth, AT_MOST), LayoutCreator.manageSpec(viewHeight, AT_MOST));
             badgeView.layout(viewLeft, viewTop, imageView.getRight() + viewWidth - LayoutCreator.dpToPx(2), imageView.getTop() + LayoutCreator.dpToPx(10));
         }
+
     }
 
     @Override
@@ -285,7 +287,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         return active;
     }
 
-    public void updateBadge(int unreadTotal) {
+    public void updateBadge(int unreadTotal, boolean isNeedText) {
         if (badgeView != null) {
             badgeView.setBadgeColor(getContext().getResources().getColor(R.color.red));
             badgeView.setText(getUnreadCount(unreadTotal));

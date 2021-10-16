@@ -1,42 +1,40 @@
 
 package net.iGap.model.paymentPackage;
 
-
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class Operator {
+
     @SerializedName("key")
-    @Expose
-    private String key;
-    @SerializedName("title")
-    @Expose
-    private String title;
+    private String mKey;
     @SerializedName("logo")
-    @Expose
-    private String logo;
+    private String mLogo;
+    @SerializedName("title")
+    private String mTitle;
 
     public String getKey() {
-        return key;
+        return mKey;
     }
 
     public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        mKey = key;
     }
 
     public String getLogo() {
-        return logo;
+        return mLogo;
     }
 
     public void setLogo(String logo) {
-        this.logo = logo;
+        mLogo = logo;
     }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
 }

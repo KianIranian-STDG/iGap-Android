@@ -11,5 +11,5 @@
 package net.iGap.observers.interfaces;
 
 public interface OnUnreadChange {
-    void onChange(int unreadTotal);
+    void onChange(int unreadTotal,boolean isForStory);
 }

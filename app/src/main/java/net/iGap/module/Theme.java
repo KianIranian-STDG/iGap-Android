@@ -404,6 +404,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapSendReplayColor);
     }
 
+    public int getReplyContentBackground(Context context) {
+        return getColorFromAttr(context, R.attr.iGapReplyContentBackground);
+    }
+
     public int getToolbarBackgroundColor(Context context) {
         return getColorFromAttr(context, R.attr.toolbarBackgroundColor);
     }

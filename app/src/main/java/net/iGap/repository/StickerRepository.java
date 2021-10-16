@@ -456,6 +456,31 @@ public class StickerRepository {
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
     }
 
+    /*public Single<List<StructIGGiftSticker>> getMyGiftStickerBuy(String status, int skip, int limit) {
+        return getMyGiftStickerBuyApiService(status, skip, limit)
+                .map(userGiftStickersDataModel -> {
+                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
+                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
+                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
+                        structIGGiftStickers.add(giftSticker);
+                    }
+                    return structIGGiftStickers;
+                });
+
+    }
+
+    public Single<List<StructIGGiftSticker>> getMyActivatedGiftSticker(int skip, int limit) {
+        return getMyActivatedGiftStickerApiService(skip, limit)
+                .map(userGiftStickersDataModel -> {
+                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
+                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
+                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
+                        structIGGiftStickers.add(giftSticker);
+                    }
+                    return structIGGiftStickers;
+                });
+
+    }*/
 
 //    public Single<List<StructIGGiftSticker>> getMyActivatedGiftSticker() {
 //        return getMyActivatedGiftStickerApiService()
@@ -485,6 +510,12 @@ public class StickerRepository {
     public Single<IssueDataModel> addIssue(String stickerId, String phoneNumber, String nationalCode) {
         return addIssueApiService(stickerId, phoneNumber, nationalCode);
     }
+
+/*
+    public Single<StructIGGiftSticker> getCardStatus(String giftCardId) {
+        return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
+    }
+*/
 
     public Single<CardDetailDataModel> getActiveGiftCard(String stickerId, String nationalCode, String mobileNumber) {
         return getActiveGiftCardApiService(mobileNumber, nationalCode, stickerId)

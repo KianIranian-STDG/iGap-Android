@@ -95,7 +95,7 @@ public class HelperUrl {
 
     private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/[^\\s]*)";
     private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
-    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?!\\s|[\\u0600-\\u06FF]|\\.|$)(?:[a-zA-Z0-9\\u0600-\\u06FF\\u2000-\\u200F\\&\\%\\.\\/\\?\\:@\\-_+=#])*)";
+    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?!\\s|[\\u0600-\\u06FF]|\\.|$)(?:[a-zA-Z0-9\\u0600-\\u06FF\\u2000-\\u200F\\&\\%\\(\\).\\/\\?\\:@\\-_+=#])*)";
     private static final String BOT_LINK = "(\\/\\w+)";
     private static final String IGAP_RESOLVE = "(igap://resolve?)";
     private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
@@ -1464,32 +1464,32 @@ public class HelperUrl {
         try {
             if (activity != null) {
                 activity.runOnUiThread(() -> {
-                    List<String> items = new ArrayList<>();
-                    items.add(activity.getString(R.string.copy_item_dialog));
-                    items.add(activity.getString(R.string.verify_register_call));
-                    items.add(activity.getString(R.string.add_to_contact));
-                    items.add(activity.getString(R.string.verify_register_sms));
+                    List<Integer> items = new ArrayList<>();
+                    items.add(R.string.copy_item_dialog);
+                    items.add(R.string.verify_register_call);
+                    items.add(R.string.add_to_contact);
+                    items.add(R.string.verify_register_sms);
 
-                    new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+                    new BottomSheetFragment().setListDataWithResourceId(activity,items, -1, new BottomSheetItemClickCallback() {
                         @Override
                         public void onClick(int position) {
-                            if (items.get(position).equals(activity.getString(R.string.copy_item_dialog))) {
+                            if (items.get(position)==R.string.copy_item_dialog) {
                                 ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("Copied Text", text);
                                 clipboard.setPrimaryClip(clip);
                                 Toast.makeText(activity, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                            } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_call))) {
+                            } else if (items.get(position)==R.string.verify_register_call) {
                                 String uri = "tel:" + text;
                                 Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 activity.startActivity(intent);
-                            } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
+                            } else if (items.get(position)==R.string.add_to_contact) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance(
                                         text, FragmentAddContact.ContactMode.ADD
                                 );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                            } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {
+                            } else if (items.get(position)==R.string.verify_register_sms) {
                                 String uri = "smsto:" + text;
                                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                                 intent.setData(Uri.parse(uri));

@@ -11,6 +11,9 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageController;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserContactsEdit;
 import net.iGap.realm.RealmContacts;
@@ -44,6 +47,9 @@ public class UserContactsEditResponse extends MessageHandler {
         if (G.onUserContactEdit != null) {
             G.onUserContactEdit.onContactEdit(builder.getFirstName(), builder.getLastName(), builder.getInitials());
         }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
+        });
     }
 
     @Override

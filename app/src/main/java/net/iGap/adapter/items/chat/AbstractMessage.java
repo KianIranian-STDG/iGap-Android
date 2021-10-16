@@ -118,6 +118,7 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.context;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO;
@@ -881,7 +882,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if (messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) {
+        if ((messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) || messageObject.storyObject != null) {
 
             final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
@@ -892,14 +893,30 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     holder.itemView.performLongClick();
                     return;
                 }
-
-                messageClickListener.onReplyClick(messageObject.replayToMessage);
+                messageClickListener.onReplyClick(messageObject);
             });
 
             replayView.setOnLongClickListener(getLongClickPerform(holder));
 
             try {// TODO: 12/29/20 MESSAGE_REFACTOR
-                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
+                if (messageObject.replayToMessage != null) {
+                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
+                } else if (messageObject.storyObject != null) {
+                    AttachmentObject storyAttachment = messageObject.storyObject.attachmentObject;  // TODO: 8/15/21 must write a new method for this part
+                    ImageView view = replayView.findViewById(R.id.chslr_imv_replay_pic);
+                    if (storyAttachment != null) {
+                        if (storyAttachment.isFileExistsOnLocal(messageObject)) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.filePath), view);
+                        } else if (storyAttachment.isThumbnailExistsOnLocal(messageObject)) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.thumbnailPath), view);
+                        } else {
+                            view.setVisibility(View.GONE);
+                        }
+                    } else {
+                        view.setVisibility(View.GONE);
+                    }
+
+                }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -910,14 +927,34 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
                 RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.replayToMessage.userId);
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, (messageObject.replayToMessage != null ? messageObject.replayToMessage.userId : (messageObject.storyObject != null ? messageObject.storyObject.userId : 0)));
                 });
                 if (replayToInfo != null) {
-                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
+                    if (messageObject.storyObject != null) {
+                        if (messageObject.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                            replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
+                        }
+                    } else {
+                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
+                    }
+                } else if (messageObject.storyObject != null && messageObject.storyStatus != ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                    replyFrom.setText(R.string.unavailable_moment);
                 }
             }
             // TODO: 12/29/20 MESSAGE_REFACTOR
-            String replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
+            String replayText = null;
+            if (messageObject.replayToMessage != null) {
+                replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
+            } else if (messageObject.storyObject != null) {
+                if (messageObject.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                    replayText = messageObject.storyObject.caption;
+                    ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(replayText);
+                    replayText = AbstractMessage.removeBoldMark(replayText, places);
+                } else {
+                    replayText = context.getString(R.string.mement_is_no_longer_available);
+                }
+            }
+
             replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
             if (messageObject.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
@@ -953,17 +990,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
-//        if (holder instanceof NewChatItemHolder && !(holder instanceof GiftStickerItem.ViewHolder))
-//            mHolder = (NewChatItemHolder) holder;
-//        else
-//            return;
+        if (holder instanceof NewChatItemHolder)
+            mHolder = (NewChatItemHolder) holder;
+        else
+            return;
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
         View cslr_ll_forward22 = ((NewChatItemHolder) holder).getContentBloke().findViewById(R.id.cslr_ll_forward);
-/*        if (cslr_ll_forward22 != null) {
+        if (cslr_ll_forward22 != null) {
             mHolder.getContentBloke().removeView(cslr_ll_forward22);
-        }*/
+        }
 
         if (messageObject.forwardedMessage != null) {
 
@@ -1072,8 +1109,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (minWith < maxWith) {
                 minWith = maxWith;
             }
-            // mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
-          //  mHolder.getContentBloke().addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+            mHolder.getContentBloke().addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
@@ -1494,7 +1531,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     public void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType) {
-
+        onProgressFinish(holder, attachment, messageObject.forwardedMessage == null ? messageObject.messageType : messageObject.forwardedMessage.messageType);
     }
 
     private void downLoadThumbnail(final VH holder) {
@@ -1931,7 +1968,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (attachment == null || args[2] == null || args[3] == null) {
                         return;
                     }
-                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) args[2], attachment.name, messageType.getNumber());
                     attachment.token = (String) args[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
                     loadImageOrThumbnail(messageType);

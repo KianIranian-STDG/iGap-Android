@@ -90,11 +90,11 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
 
     private void showMenu() {
         if (getContext() != null) {
-            List<String> items = new ArrayList<>();
-            items.add(getString(R.string.financial_report));
-            items.add(getString(R.string.settings));
-            items.add(getString(R.string.fag));
-            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            List<Integer> items = new ArrayList<>();
+            items.add(R.string.financial_report);
+            items.add(R.string.settings);
+            items.add(R.string.fag);
+            new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
                 switch (position) {
                     case 0:
 

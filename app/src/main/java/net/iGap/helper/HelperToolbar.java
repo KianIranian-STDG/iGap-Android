@@ -40,7 +40,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
-import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
@@ -55,7 +54,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.controllers.CallManager;
 
-import org.paygear.WalletActivity;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -94,6 +92,7 @@ public class HelperToolbar {
     private TextView mBtnClearSearch;
     private View callLayout;
     private LinearLayout userNameLayout;
+    private boolean isStaticToolbar = false;
 
     private CircleImageView mTabletUserAvatar;
     private TextView mTabletUserName;
@@ -146,6 +145,7 @@ public class HelperToolbar {
         return new HelperToolbar();
     }
 
+
     public HelperToolbar setContext(Context context) {
         this.mContext = context;
         return this;
@@ -168,6 +168,11 @@ public class HelperToolbar {
 
     public HelperToolbar setRightIcons(@StringRes int... drawables) {
         System.arraycopy(drawables, 0, mRightIcons, 0, drawables.length);
+        return this;
+    }
+
+    public HelperToolbar setStaticToolbar(boolean staticToolbar) {
+        this.isStaticToolbar = staticToolbar;
         return this;
     }
 
@@ -875,7 +880,7 @@ public class HelperToolbar {
     private void connectionStateChecker(LifecycleOwner owner) {
 
         //check first time state then for every changes observer will change title
-        if (G.connectionState != null) {
+        if (G.connectionState != null && !isStaticToolbar) {
             if (G.connectionState == ConnectionState.CONNECTING) {
                 mTxtLogo.setText(R.string.connecting);
                 checkIGapFont();
@@ -887,7 +892,7 @@ public class HelperToolbar {
 
         G.connectionStateMutableLiveData.observe(owner, connectionState -> {
 
-            if (mTxtLogo != null) {
+            if (mTxtLogo != null && !isStaticToolbar) {
 
                 if (connectionState != null) {
                     if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -1032,13 +1037,6 @@ public class HelperToolbar {
                     //nothing
                 }
             }
-
-            if (userInfo == null || !userInfo.isWalletRegister()) {
-                new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            } else {
-                mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext, new Intent(mFragmentActivity, WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
-            }
-
         });
     }
 
@@ -2223,6 +2221,7 @@ public class HelperToolbar {
         public CircleImageView getSmallAvatar() {
             return smallAvatar;
         }
+
 
         //endregion getters
     }

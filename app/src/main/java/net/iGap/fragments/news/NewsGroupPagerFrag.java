@@ -21,7 +21,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -91,7 +90,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         ViewPager viewPager = binding.secondaryLayout.viewPager;
         tabLayout = binding.secondaryLayout.pagerTabLayout;
-        TabAdapter adapter = new TabAdapter(getFragmentManager());
+     //   TabAdapter adapter = new TabAdapter(getFragmentManager());
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
@@ -112,17 +111,17 @@ public class NewsGroupPagerFrag extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             });
         });
-        adapter.addFragment(frag, getResources().getString(R.string.news_latest));
+       // adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
         frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.MOST_HITS));
-        adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
+     //   adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
 
         NewsListFrag frag3 = new NewsListFrag();
         frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.CONTROVERSIAL_NEWS));
-        adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
+        //adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
 
-        viewPager.setAdapter(adapter);
+     //   viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
         updateFontTabLayout();

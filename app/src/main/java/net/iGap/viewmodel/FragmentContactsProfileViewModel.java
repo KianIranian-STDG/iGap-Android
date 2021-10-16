@@ -92,7 +92,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
     public MutableLiveData<String> copyUserNameToClipBoard = new MutableLiveData<>();
     public MutableLiveData<Boolean> editContactListener = new MutableLiveData<>();
-    public List<String> items;
+    public List<Integer> items;
     private RealmRoom mRoom;
     private RealmRegisteredInfo registeredInfo;
     private RealmList<RealmAvatar> avatarList;
@@ -157,8 +157,8 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }*/
         /*items.add(G.fragmentActivity.getString(R.string.clear_history));*/
         if (AccountManager.getInstance().getCurrentUser().getId() != userId && !disableDeleteContact) {
-            items.add(G.fragmentActivity.getString(R.string.delete_contact));
-            items.add(G.fragmentActivity.getString(R.string.edit_contact));
+            items.add(R.string.delete_contact);
+            items.add(R.string.edit_contact);
         }
         showMenu.setValue(true);
     }
