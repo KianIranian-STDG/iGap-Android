@@ -117,7 +117,8 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
                 items.get(position).toggleCheck();
                 lastChecked = position;
             }
-            listener.onPlanClicked(position, checkBox.isChecked());
+            if (position != -1)
+                listener.onPlanClicked(position, checkBox.isChecked());
             notifyDataSetChanged();
         }
 

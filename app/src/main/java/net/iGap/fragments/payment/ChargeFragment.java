@@ -77,6 +77,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
+
 
 public class ChargeFragment extends BaseFragment {
 
@@ -117,6 +119,7 @@ public class ChargeFragment extends BaseFragment {
     private int amountSelectedIndex = -1;
     private int chargeTypeDefaultIndex;
     private int chargeTypeSelectedIndex;
+    Call<GetFavoriteNumber> favoriteNumberCall;
 
     public static ChargeFragment newInstance() {
         Bundle args = new Bundle();
@@ -128,7 +131,7 @@ public class ChargeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_charge, container, false);
+        return LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_charge, container, false);
     }
 
     @Override
@@ -182,8 +185,7 @@ public class ChargeFragment extends BaseFragment {
                 initForm();
             }
         });
-
-        recyclerViewOperator.setLayoutManager(new GridLayoutManager(context, 3, RecyclerView.VERTICAL, false));
+        favoriteNumberCall = chargeApi.getFavoriteChargeNUmber();
 
     }
 
@@ -210,14 +212,21 @@ public class ChargeFragment extends BaseFragment {
         });
 
         //init RecyclerViewOperator
+        recyclerViewOperator.setLayoutManager(new GridLayoutManager(context, 3, RecyclerView.VERTICAL, false));
         adapterOperator = new OperatorAdapter(getContext(), operators, operatorName -> {
-            for (ConfigData configData : config.getData()) {
-                if (configData.getOperator().getKey().equals(operatorName)) {
-                    currentConfigData = configData;
-                    changeOperator(currentConfigData.getOperator());
-                    break;
+            if (currentConfigData != null) {
+                for (ConfigData configData : config.getData()) {
+                    if (configData.getOperator().getKey().equals(operatorName)) {
+                        currentConfigData = configData;
+                        changeOperator(currentConfigData.getOperator());
+                        break;
+                    }
                 }
+            } else {
+                adapterOperator.setCheckedRadioButton(null);
+                HelperError.showSnackMessage(getResources().getString(R.string.please_enter_phone_number), false);
             }
+
         });
         recyclerViewOperator.setAdapter(adapterOperator);
 
@@ -230,15 +239,25 @@ public class ChargeFragment extends BaseFragment {
             choosePriceButtonClicked();
         });
         amountPlusButton.setOnClickListener(v -> {
-            isHistorySelected(false);
-            currentAmount = new Amount(currentAmount, true);
-            buttonAmount.setText(currentAmount.getTextAmount());
+            if (currentAmount != null) {
+                isHistorySelected(false);
+                currentAmount = new Amount(currentAmount, true);
+                buttonAmount.setText(currentAmount.getTextAmount());
+            } else {
+                HelperError.showSnackMessage(getResources().getString(R.string.please_enter_desired_amount), false);
+            }
         });
         amountMinesButton.setOnClickListener(v -> {
-            if (currentAmount.getAmount() != 10000) {
-                isHistorySelected(false);
-                currentAmount = new Amount(currentAmount, false);
-                buttonAmount.setText(currentAmount.getTextAmount());
+            if (currentAmount != null) {
+                if (currentAmount.getAmount() > 10000) {
+                    isHistorySelected(false);
+                    currentAmount = new Amount(currentAmount, false);
+                    buttonAmount.setText(currentAmount.getTextAmount());
+                } else {
+                    HelperError.showSnackMessage(getResources().getString(R.string.minimizeAmount), false);
+                }
+            } else {
+                HelperError.showSnackMessage(getResources().getString(R.string.please_enter_desired_amount), false);
             }
         });
         buttonChargeType.setOnClickListener(v -> {
@@ -257,7 +276,7 @@ public class ChargeFragment extends BaseFragment {
             for (ConfigData configData : config.getData()) {
                 operators.add(configData.getOperator());
                 if (iconRemove.getText().toString().equals(getResources().getString(R.string.icon_edit))) {
-                    currentConfigData = config.getData().get(0);
+                    currentConfigData = null;
                 } else {
                     for (String preNumber : configData.getPreNumbers()) {
                         if (preNumber.equals(editText.substring(0, 4))) {
@@ -279,10 +298,12 @@ public class ChargeFragment extends BaseFragment {
 
             chargeTypesList.clear();
             chargeTypesList.addAll(currentConfigData.getTopupChargeTypes());
+            if (currentConfigData != null)
+                changeOperator(currentConfigData.getOperator());
+        } else {
+            faceValueList.clear();
+            chargeTypesList.clear();
         }
-
-        if (currentConfigData != null)
-            changeOperator(currentConfigData.getOperator());
     }
 
     private void changeOperator(Operator operator) {
@@ -349,7 +370,8 @@ public class ChargeFragment extends BaseFragment {
             progressBar.setVisibility(View.VISIBLE);
             historyButton.setEnabled(false);
             closeKeyboard(editTextNumber);
-            chargeApi.getFavoriteChargeNUmber().enqueue(new Callback<GetFavoriteNumber>() {
+
+            favoriteNumberCall.enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(@NonNull Call<GetFavoriteNumber> call, @NonNull Response<GetFavoriteNumber> response) {
                     progressBar.setVisibility(View.GONE);
@@ -453,6 +475,8 @@ public class ChargeFragment extends BaseFragment {
                     @Override
                     public void deny() {
                         progressBar.setVisibility(View.GONE);
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
+
                     }
                 });
             } catch (IOException e) {
@@ -547,7 +571,7 @@ public class ChargeFragment extends BaseFragment {
             }
             dialog.show();
         } else {
-            buttonChargeType.setClickable(false);
+            showError(getContext().getResources().getString(R.string.please_select_operator));
         }
     }
 
@@ -700,20 +724,19 @@ public class ChargeFragment extends BaseFragment {
                         progressBar.setVisibility(View.GONE);
                         if (getActivity() != null && mciPurchaseResponse.getToken() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), mciPurchaseResponse.getToken(), result -> {
-                                buttonEnter.setEnabled(true);
-                                if (result.isSuccess()) {
+                                if (result.isSuccess())
                                     saveChargeNumberInHistory(chargeType, rechargeableNumber, price, operator);
-                                }
                             });
                         }
-                        goBack();
+                        buttonEnter.setEnabled(true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        buttonEnter.setEnabled(true);
                         progressBar.setVisibility(View.GONE);
+                        HelperError.showSnackMessage(G.context.getString(R.string.faild), false);
+                        buttonEnter.setEnabled(true);
                     }
                 });
     }
@@ -721,6 +744,8 @@ public class ChargeFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        favoriteNumberCall.cancel();
+        faceValueList.clear();
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
             compositeDisposable = null;

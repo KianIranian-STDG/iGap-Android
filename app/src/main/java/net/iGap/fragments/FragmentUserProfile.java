@@ -222,20 +222,16 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
          */
         if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
-        if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
-        if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
-
-
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-            } else {
-                ImageHelper.correctRotateImage(viewModel.pathSaveImage, true); //rotate image
-                FragmentEditImage.insertItemList(viewModel.pathSaveImage, false);
-            }
             if (getActivity() != null) {
+                FragmentEditImage.checkItemGalleryList();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
+                    FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                } else {
+                    ImageHelper.correctRotateImage(viewModel.pathSaveImage, true); //rotate image
+                    FragmentEditImage.insertItemList(viewModel.pathSaveImage, false);
+                }
                 FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
                 fragmentEditImage.setOnProfileImageEdited(this);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
@@ -263,6 +259,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
     private void handleGalleryImageResult(String path) {
         if (getActivity() != null) {
+            FragmentEditImage.checkItemGalleryList();
             FragmentEditImage.insertItemList(path, false);
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
             fragmentEditImage.setOnProfileImageEdited(this);

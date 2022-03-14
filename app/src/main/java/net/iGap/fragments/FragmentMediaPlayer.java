@@ -83,10 +83,10 @@ public class FragmentMediaPlayer extends BaseFragment {
 
 
     private long nextMessageId = 0;
+    private long nextDocumentId = 0;
     private boolean isThereAnyMoreItemToLoad = false;
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
-    private ArrayList<RealmRoomMessage> mediaList;
     private RecyclerView.OnScrollListener onScrollListener;
     private boolean canUpdateAfterDownload = false;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
@@ -261,7 +261,6 @@ public class FragmentMediaPlayer extends BaseFragment {
 
 //        getDataFromServer(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
         loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO, ProtoGlobal.RoomMessageType.AUDIO);
-        mediaList = new ArrayList<>();
 
         for (MessageObject r : MusicPlayer.mediaList) {
 
@@ -337,8 +336,8 @@ public class FragmentMediaPlayer extends BaseFragment {
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
                     holder.iconPlay.setVisibility(View.GONE);
 
-                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.cacheId)) {
-                        startDownload(holder.getAdapterPosition(), holder.messageProgress);
+                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(MusicPlayer.selectedMedia).attachment.cacheId)) {
+                        startDownload(MusicPlayer.selectedMedia, holder.messageProgress);
                     }
                 }
             }
@@ -397,6 +396,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         offset = 0;
         nextMessageId = 0;
+        nextDocumentId = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override
@@ -411,6 +411,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                             saveDataToLocal(resultList, MusicPlayer.roomId);
 
                             nextMessageId = resultList.get(0).getMessageId();
+                            nextDocumentId = resultList.get(0).getDocumentId();
 
                             isThereAnyMoreItemToLoad = true;
 
@@ -593,44 +594,46 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     public void getInfoRealm() {
+        if (MusicPlayer.mediaList.size() != 0) {
+            changeListener = null;
+            List<RealmRoomMessage> realmRoomMessages = null;
 
-        changeListener = null;
-        List<RealmRoomMessage> realmRoomMessages = null;
+            try {
+                realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoomMessage.class)
+                            .equalTo("roomId", MusicPlayer.roomId)
+                            .notEqualTo("deleted", true)
+                            .contains("messageType", ProtoGlobal.RoomMessageType.AUDIO.toString())
+                            .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).id)
+                            .findAll().sort("messageId", Sort.DESCENDING);
+                });
+            } catch (IllegalStateException e) {
+            }
 
-        try {
-            realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class)
-                        .equalTo("roomId", MusicPlayer.roomId)
-                        .notEqualTo("deleted", true)
-                        .contains("messageType", ProtoGlobal.RoomMessageType.AUDIO.toString())
-                        .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).id)
-                        .findAll().sort("messageId", Sort.DESCENDING);
-            });
-        } catch (IllegalStateException e) {
-        }
-
-        if (realmRoomMessages != null && realmRoomMessages.size() > 0) {
+            if (realmRoomMessages != null && realmRoomMessages.size() > 0) {
 
 //                                mRealmList = RealmRoomMessage.filterMessage(getUiRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
-            if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
-                realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
+                if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
+                    realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
+                } else {
+                    realmRoomMessages = realmRoomMessages.subList(0, realmRoomMessages.size());
+                }
+
+                footerAdapter.clear();
+                for (RealmRoomMessage r : realmRoomMessages) {
+                    MessageObject messageObject = MessageObject.create(r);
+                    if (messageObject.attachment.isFileExistsOnLocal(messageObject)) {
+                        MusicPlayer.mediaList.add(messageObject);
+                    }
+                    fastItemAdapter.add(new AdapterListMusicPlayer().setItem(messageObject).withIdentifier(r.getMessageId()));
+                }
+
             } else {
-                realmRoomMessages = realmRoomMessages.subList(0, realmRoomMessages.size());
+                if (isThereAnyMoreItemToLoad)
+                    new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId,nextDocumentId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+
             }
-
-            footerAdapter.clear();
-            for (RealmRoomMessage r : realmRoomMessages) {
-                MessageObject messageObject = MessageObject.create(r);
-                MusicPlayer.mediaList.add(messageObject);
-                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(messageObject).withIdentifier(r.getMessageId()));
-            }
-
-        } else {
-            if (isThereAnyMoreItemToLoad)
-                new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
-
         }
-
     }
 
 }

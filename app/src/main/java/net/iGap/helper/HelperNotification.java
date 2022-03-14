@@ -825,7 +825,11 @@ public class HelperNotification {
 
     public void cancelNotification() {
         if (showNotification != null && showNotification.notificationManager != null) {
-            showNotification.notificationManager.cancelAll();
+            try {
+                showNotification.notificationManager.cancelAll();
+            }catch (SecurityException e){
+               FileLog.e(e);
+            }
         }
     }
 

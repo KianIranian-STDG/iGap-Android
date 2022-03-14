@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public final class ContactUtils {
     private Context mContext;
@@ -48,21 +49,20 @@ public final class ContactUtils {
     public ContactUtils(Context context, Uri contactUri) {
         this.mContext = context;
         this.mContactUri = contactUri;
+    }
 
-        // getting contact ID
+    @Nullable
+    public Uri getPhotoUri() {
+        ContentResolver contentResolver = mContext.getContentResolver();
         Cursor cursorID = mContext.getContentResolver().query(mContactUri, new String[]{ContactsContract.Contacts._ID}, null, null, null);
 
         if (cursorID != null && cursorID.moveToFirst()) {
             mContactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
             cursorID.close();
         }
-    }
-
-    @Nullable
-    public Uri getPhotoUri() {
-        ContentResolver contentResolver = mContext.getContentResolver();
-
         try {
+            // getting contact ID
+
             Cursor cursor = contentResolver.query(ContactsContract.Data.CONTENT_URI, null, ContactsContract.Data.CONTACT_ID + "=" + mContactID + " AND "
 
                     + ContactsContract.Data.MIMETYPE + "='" + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE + "'", null, null);
@@ -86,6 +86,13 @@ public final class ContactUtils {
     public Bitmap retrievePhoto() {
         try {
             Bitmap photo = null;
+            // getting contact ID
+            Cursor cursorID = mContext.getContentResolver().query(mContactUri, new String[]{ContactsContract.Contacts._ID}, null, null, null);
+
+            if (cursorID != null && cursorID.moveToFirst()) {
+                mContactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+                cursorID.close();
+
             InputStream inputStream =
                     ContactsContract.Contacts.openContactPhotoInputStream(mContext.getContentResolver(), ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(mContactID)));
 
@@ -96,6 +103,7 @@ public final class ContactUtils {
             assert inputStream != null;
             inputStream.close();
             return photo;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -345,6 +353,7 @@ public final class ContactUtils {
 
                 @Override
                 public void deny() {
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
                     // do nothing
                 }
             });

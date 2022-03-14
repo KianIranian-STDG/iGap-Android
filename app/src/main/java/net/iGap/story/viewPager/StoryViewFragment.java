@@ -16,6 +16,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.DbManager;
@@ -45,18 +46,30 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private long storyId;
     private int myStoryCount = 0;
     private boolean isForReply = false;
+    private boolean isForRoom;
+    private boolean isForOtherRoom;
+    private long roomId;
 
-
-    public StoryViewFragment(long userId, boolean myStory) {
+    public StoryViewFragment(long userId, long roomId, boolean myStory, boolean isForRoom, boolean isForOtherRoom) {
         this.userId = userId;
         this.myStory = myStory;
+        this.isForRoom = isForRoom;
+        this.roomId = roomId;
+        this.isForOtherRoom = isForOtherRoom;
     }
 
-    public StoryViewFragment(long userId, boolean myStory, boolean isSingle, long storyId) {
+    public StoryViewFragment(long userId, long roomId, boolean myStory, boolean isSingle, boolean isForRoom, boolean isForOtherRoom, long storyId, int fake) {
         this.userId = userId;
         this.myStory = myStory;
         this.isSingle = isSingle;
         this.storyId = storyId;
+        this.isForRoom = isForRoom;
+        this.roomId = roomId;
+        this.isForOtherRoom = isForOtherRoom;
+    }
+
+    public void setForRoom(boolean forRoom) {
+        isForRoom = forRoom;
     }
 
     public StoryViewFragment(long userId, boolean myStory, boolean isSingle, boolean isForReply, long storyId) {
@@ -106,7 +119,12 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             }
 
         } else {
-            storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(0, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
+            if (isForRoom && !isForOtherRoom) {
+                storyResults.addAll(getMessageDataStorage().getSortedRoomStoryObjectsInMainStoryObject(0, isForOtherRoom, roomId, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
+            } else {
+                storyResults.addAll(getMessageDataStorage().getSortedStoryObjectsInMainStoryObject(0, new String[]{"createdAt"}, new Sort[]{Sort.ASCENDING}));
+            }
+
         }
         setUpPager();
     }
@@ -125,36 +143,41 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             List<Story> stories = new ArrayList<>();
             storyUser.setUserName(storyResults.get(i).displayName);
             storyUser.setUserId(storyResults.get(i).userId);
+            storyUser.setRoomId(storyResults.get(i).roomId);
             for (int j = 0; j < realmStoryProtos.size(); j++) {
                 StoryObject storyObject = realmStoryProtos.get(j);
-                if (storyObject.userId == userId) {
+                if (storyResults.get(i).orginatorValue == 0 && storyObject.userId == userId) {
+                    currentPage = i;
+                } else if (storyResults.get(i).orginatorValue == 1 && storyObject.roomId == roomId) {
                     currentPage = i;
                 }
                 if (isSingle) {
                     if (storyObject.storyId != 0 && storyObject.storyId == storyId) {
                         Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
-                                storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
+                                storyObject.userId, storyObject.roomId, storyObject.displayName, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.isForRoom,storyObject.isVerified, storyObject.storyViewInfoObjects);
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     } else if (storyObject.index == storyId) {
                         Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
-                                storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
+                                storyObject.userId, storyObject.roomId, storyObject.displayName, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.isForRoom,storyObject.isVerified, storyObject.storyViewInfoObjects);
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     }
                 } else {
                     Story story = new Story(null, bitmap, storyObject.caption, storyObject.createdAt,
-                            storyObject.userId, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.storyViewInfoObjects);
+                            storyObject.userId, storyObject.roomId, storyObject.displayName, storyObject.storyId, storyObject.attachmentObject, null, storyObject.viewCount, storyObject.isForRoom,storyObject.isVerified, storyObject.storyViewInfoObjects);
                     stories.add(story);
                     storyUser.setStories(stories);
                 }
 
             }
-            storyUserList.add(storyUser);
-        }
+            if (storyUser.getStories() != null && storyUser.getStories().size() > 0) {
+                storyUserList.add(storyUser);
+            }
 
+        }
 
         pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this, myStory, isForReply);
         viewPager.setAdapter(pagerAdapter);
@@ -166,7 +189,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             void onPageScrollCanceled() {
                 StoryDisplayFragment fragment = (StoryDisplayFragment) pagerAdapter.findFragmentByPosition(viewPager, currentPage);
 //                Log.e("mmd", "onPageScrollCanceled resumeCurrentStory: "  );
-//                fragment.resumeCurrentStory();
+                // fragment.resumeCurrentStory();
             }
 
             @Override
@@ -175,6 +198,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 currentPage = position;
             }
         });
+
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -196,7 +220,11 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 public void onAnimationEnd(Animator animation) {
                     valueAnimator.removeAllUpdateListeners();
                     if (viewPager.isFakeDragging()) {
-                        viewPager.endFakeDrag();
+                        try {
+                            viewPager.endFakeDrag();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
                     prevDragPosition = 0;
                 }

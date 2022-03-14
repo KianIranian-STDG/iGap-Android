@@ -10,12 +10,13 @@
 
 package net.iGap.module;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -46,7 +48,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringTokenizer;
 
 
@@ -266,25 +267,27 @@ public class FileUtils {
      * @author paulburke
      */
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor = null;
+            final String column = "_data";
+            final String[] projection = {
+                    column
+            };
+            try {
+                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int column_index = cursor.getColumnIndexOrThrow(column);
+                    String value = cursor.getString(column_index);
+                    if (value.startsWith("content://") || !value.startsWith("/") && !value.startsWith("file://")) {
+                        return null;
+                    }
+                    return value;
+                }
+            } catch (Exception ignore) {
 
-        Cursor cursor = null;
-        final String column = MediaStore.Images.Media.DATA;
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                if (DEBUG) DatabaseUtils.dumpCursor(cursor);
-
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
+            } finally {
+                if (cursor != null) cursor.close();
             }
-        } catch (IllegalArgumentException e) {
-
-        } finally {
-            if (cursor != null) cursor.close();
         }
         return null;
     }
@@ -341,10 +344,10 @@ public class FileUtils {
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
                 return getDataColumn(context, contentUri, null, null);
+
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
@@ -353,12 +356,17 @@ public class FileUtils {
                 final String type = split[0];
 
                 Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+                switch (type) {
+                    case "image":
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                        break;
+                    case "video":
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                        break;
+                    case "audio":
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                        break;
                 }
 
                 final String selection = "_id=?";
@@ -553,24 +561,27 @@ public class FileUtils {
     }
 
     public static long getFolderSize(File dir) throws RuntimeException {
-        long size = 0;
-        if (dir == null) return size;
+        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            long size = 0;
+            if (dir == null) return size;
 
-        if (dir.listFiles() != null) {
+            if (dir.listFiles() != null) {
 
-            for (File file : dir.listFiles()) {
-                if (file != null) {
-                    if (file.isFile()) {
-                        size += file.length();
+                for (File file : dir.listFiles()) {
+                    if (file != null) {
+                        if (file.isFile()) {
+                            size += file.length();
+                        } else {
+                            size += getFolderSize(file);
+                        }
                     } else {
-                        size += getFolderSize(file);
+                        return size;
                     }
-                } else {
-                    return size;
                 }
             }
+            return size;
         }
-        return size;
+        return 0;
     }
 
     public static List<String> getSdCardPathList() {
@@ -624,14 +635,14 @@ public class FileUtils {
 
     public void getFileTotalSize(final Delegate delegate) {
         AndroidUtils.globalQueue.postRunnable(() -> {
-            final String size = FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)) +
-                    getFolderSize(new File(G.DIR_VIDEOS)) +
-                    getFolderSize(new File(G.DIR_DOCUMENT)) +
-                    getFolderSize(new File(G.DIR_AUDIOS)) +
-                    getFolderSize(new File(G.DIR_TEMP)) +
+            final String size = FileUtils.formatFileSize(getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())) +
+                    getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath())) +
+                    getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())) +
+                    getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath())) +
+                    getFolderSize(new File(G.context.getCacheDir().getAbsolutePath())) +
                     getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
-                    getFolderSize(new File(G.DIR_IMAGE_USER)) +
-                    getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+                    getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users")));
+            getFolderSize(Configuration.getInstance().getOsmdroidBasePath());
 
             G.runOnUiThread(() -> delegate.onSize(size));
         });
@@ -642,19 +653,19 @@ public class FileUtils {
     }
 
     public String getImageFileSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath())));
     }
 
     public String getVideoFileSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_VIDEOS)));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath())));
     }
 
     public String getDocumentFileSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_DOCUMENT)));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())));
     }
 
     public String getAudioFileSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_AUDIOS)));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath())));
     }
 
     public String getMapFileSize() {
@@ -662,23 +673,23 @@ public class FileUtils {
     }
 
     public String getOtherFileSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_TEMP)) + getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) + getFolderSize(new File(G.DIR_IMAGE_USER)));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.context.getCacheDir().getAbsolutePath())) + getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) + getFolderSize(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users")));
     }
 
     public void clearImageFile() {
-        clearFile(new File(G.DIR_IMAGES));
+        clearFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()));
     }
 
     public void clearVideoFile() {
-        clearFile(new File(G.DIR_VIDEOS));
+        clearFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath()));
     }
 
     public void clearDocumentFile() {
-        clearFile(new File(G.DIR_DOCUMENT));
+        clearFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()));
     }
 
     public void clearAudioFile() {
-        clearFile(new File(G.DIR_AUDIOS));
+        clearFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath()));
     }
 
     public void clearMapFile() {
@@ -687,9 +698,9 @@ public class FileUtils {
     }
 
     public void clearOtherFile() {
-        clearFile(new File(G.DIR_TEMP));
+        clearFile(new File(G.context.getCacheDir().getAbsolutePath()));
         clearFile(new File(G.DIR_CHAT_BACKGROUND));
-        clearFile(new File(G.DIR_IMAGE_USER));
+        clearFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users"));
     }
 
     private void clearFile(@NotNull File fileTmp) {

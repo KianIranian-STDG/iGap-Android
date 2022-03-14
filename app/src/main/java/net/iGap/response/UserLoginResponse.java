@@ -34,7 +34,6 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.request.RequestWalletGetAccessToken;
 
 import java.util.Date;
 
@@ -131,18 +130,11 @@ public class UserLoginResponse extends MessageHandler {
         }).start();
 
         G.onUserLogin.onLogin();
-        String FCMToken = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmUserInfo.class)
-                    .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
-                    .findFirst().getPushNotificationToken();
-        });
 
-        if (FCMToken != null && !FCMToken.isEmpty()) {
+        boolean doUserNeedFcmToken = builder.getNeedFcmToken();
+
+        if (doUserNeedFcmToken) {
             RealmUserInfo.sendPushNotificationToServer();
-        }
-
-        if (builder.getWalletActive() && builder.getWalletAgreementAccepted()) {
-            new RequestWalletGetAccessToken().walletGetAccessToken();
         }
 
         DbManager.getInstance().doRealmTransaction(realm -> {

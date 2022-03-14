@@ -19,6 +19,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.story.liststories.StoryFragment;
 
 public class UserContactsGetListResponse extends MessageHandler {
 
@@ -55,9 +56,9 @@ public class UserContactsGetListResponse extends MessageHandler {
                     RealmContacts.putOrUpdate(realm, registerUser);
                 }
             });
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
-            });
+
+            MessageController.getInstance(AccountManager.selectedAccount).getStories(0);
+
             G.refreshRealmUi();
             G.handler.post(new Runnable() {
                 @Override

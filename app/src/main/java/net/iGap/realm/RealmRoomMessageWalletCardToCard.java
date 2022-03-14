@@ -12,7 +12,6 @@ package net.iGap.realm;
 
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -45,7 +44,7 @@ public class RealmRoomMessageWalletCardToCard extends RealmObject {
         messageWallet.setDestBankName(input.getDestBankName());
         messageWallet.setCardOwnerName(input.getCardOwnerName());
         messageWallet.setOrderId(input.getOrderId());
-        messageWallet.setTraceNumber(Long.parseLong(input.getTraceNumber()));
+        messageWallet.setTraceNumber(!input.getTraceNumber().isEmpty() ? Long.parseLong(input.getTraceNumber()) : 0);
         messageWallet.setToken(input.getToken());
         messageWallet.setStatus(input.getStatus());
         messageWallet.setSourceCardNumber(input.getSourceCardNumber());

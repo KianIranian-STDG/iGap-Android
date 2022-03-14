@@ -22,6 +22,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -475,22 +476,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (maxsize > 0)
                 withTextHolder.messageView.setMaxWidth(maxsize);
             if (messageObject.hasLink) {
-                BetterLinkMovementMethod
-                        .linkify(Linkify.ALL, withTextHolder.messageView)
-                        .setOnLinkClickListener((tv, url) -> {
-                            return FragmentChat.isInSelectionMode;
-                        })
-                        .setOnLinkLongClickListener((tv, url) -> {
+                try {
+                    BetterLinkMovementMethod
+                            .linkify(Linkify.ALL, withTextHolder.messageView)
+                            .setOnLinkClickListener((tv, url) -> {
+                                return FragmentChat.isInSelectionMode;
+                            })
+                            .setOnLinkLongClickListener((tv, url) -> {
 
-                            if (!FragmentChat.isInSelectionMode) {
-                                if (HelperUrl.isTextLink(url)) {
-                                    G.isLinkClicked = true;
-                                    messageClickListener.onOpenLinkDialog(url);
+                                if (!FragmentChat.isInSelectionMode) {
+                                    if (HelperUrl.isTextLink(url)) {
+                                        G.isLinkClicked = true;
+                                        messageClickListener.onOpenLinkDialog(url);
+                                    }
+
                                 }
+                                return true;
+                            });
+                } catch (AndroidRuntimeException runtimeException) {
+                    /**this try-catch added to fixing bug following bug:
+                     * this bug happens because the "Android System WebView" started being
+                     * installed as its own application from Android 5.0 and greater and this
+                     * code happens to be running while "Android System WebView" is being updated.
+                     * While its being updated the package doesn't exist so it causes this exception */
+                    Toast.makeText(context, R.string.please_try_again, Toast.LENGTH_LONG).show();
+                }
 
-                            }
-                            return true;
-                        });
             } else {
                 // remove BetterLinkMovementMethod
             }
@@ -651,7 +662,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
             }
 
-            if (type == ProtoGlobal.Room.Type.CHAT && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !messageObject.isGiftSticker()) {
+            if (type == ProtoGlobal.Room.Type.CHAT && mAdapter.getRealmRoom().getChatRoom() != null && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !messageObject.isGiftSticker()) {
                 mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
                 forwardContainer.setVisibility(View.VISIBLE);
                 mHolder.getChannelForwardIv().setOnClickListener(v -> {
@@ -1015,7 +1026,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     } else {// TODO: 12/29/20 MESSAGE_REFACTOR
                         if (messageObject.username != null && messageObject.username.length() > 0) {
                             //TODO: fixed this and do not use G.currentActivity
-                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, messageObject.username, HelperUrl.ChatEntry.profile, (messageObject.forwardedMessage.id * (-1)));
+                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, messageObject.username, HelperUrl.ChatEntry.profile, (messageObject.forwardedMessage.id * (-1)), messageObject.forwardedMessage.documentId);
                         }
                     }
                 }
@@ -1042,7 +1053,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
-                messageObject.username = info.getUsername();
+                if (info.getUsername() != null)
+                    messageObject.username = info.getUsername();
                 txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
             } else if (messageObject.forwardedMessage.userId != 0) {
 
@@ -1061,10 +1073,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     switch (realmRoom.getType()) {
                         case CHANNEL:
-                            messageObject.username = realmRoom.getChannelRoom().getUsername();
+                            messageObject.username = realmRoom.getChannelRoom() != null ? realmRoom.getChannelRoom().getUsername() : "";
                             break;
                         case GROUP:
-                            messageObject.username = realmRoom.getGroupRoom().getUsername();
+                            messageObject.username = realmRoom.getGroupRoom() != null ? realmRoom.getGroupRoom().getUsername() : "";
                             break;
                     }
                 } else {
@@ -1129,13 +1141,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * if type was gif auto file start auto download
          */
-        if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
+        if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1 || sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE) || key.equals(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE)) ? 1 : -1)) != -1) {
             autoDownload(holder);
         } else {
-
             MessageProgress _Progress = ((IProgress) holder).getProgress();
             AppUtils.setProgresColor(_Progress.progressBar);
-
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
@@ -1387,6 +1397,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void onProgressFinish(VH holder, AttachmentObject attachment, int messageType) {
 
         if (attachment == null || !attachment.isFileExistsOnLocal(messageObject)) {
+            return;
+        }
+        if (!(holder instanceof IProgress)) {
             return;
         }
 
@@ -1772,7 +1785,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             try {
                 if (v.getId() == ButtonActionType.USERNAME_LINK) {
                     //TODO: fixed this and do not use G.currentActivity
-                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0, 0);
                 } else if (v.getId() == ButtonActionType.BOT_ACTION) {
 
                     long messageId = System.currentTimeMillis();

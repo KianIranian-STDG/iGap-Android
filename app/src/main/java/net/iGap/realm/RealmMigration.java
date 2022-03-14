@@ -630,7 +630,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 38) { // REALM_LATEST_MIGRATION_VERSION = 38
-
             oldVersion++;
         }
 
@@ -712,7 +711,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 43) {
-
 
             oldVersion++;
         }
@@ -824,7 +822,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == 49) {
 
-
             oldVersion++;
         }
 
@@ -898,6 +895,62 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmStoryViewInfoSchema != null) {
                 realmStoryViewInfoSchema.addField("displayName", String.class);
                 realmStoryViewInfoSchema.addField("profileColor", String.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 52) {
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("documentId", long.class);
+            }
+
+            RealmObjectSchema realmRoomSchema = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoomSchema != null) {
+                realmRoomSchema.addField("pinDocumentId", long.class);
+                realmRoomSchema.addField("pinMessageDocumentIdDeleted", long.class);
+                realmRoomSchema.addField("lastScrollPositionDocumentId", long.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 53) {
+            RealmObjectSchema realmStorySchema = schema.get(RealmStory.class.getSimpleName());
+            RealmObjectSchema realmStoryProtoSchema = schema.get(RealmStoryProto.class.getSimpleName());
+
+            if (realmStorySchema != null) {
+                realmStorySchema.addField("roomId", long.class);
+                realmStorySchema.addField("orginatorValue", int.class);
+                realmStorySchema.addIndex("roomId");
+            }
+
+            if (realmStoryProtoSchema != null) {
+                realmStoryProtoSchema.addField("roomId", long.class);
+                realmStoryProtoSchema.addField("isForRoom", boolean.class);
+            }
+
+            oldVersion++;
+        }
+        if (oldVersion == 54) {
+            RealmObjectSchema realmUserInfoSchema = schema.get(RealmUserInfo.class.getSimpleName());
+
+            if (realmUserInfoSchema != null) {
+                realmUserInfoSchema.addField("moduleToken", String.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 55) {
+            RealmObjectSchema realmStorySchema = schema.get(RealmStory.class.getSimpleName());
+            RealmObjectSchema realmStoryProtoSchema = schema.get(RealmStoryProto.class.getSimpleName());
+
+            if (realmStorySchema != null) {
+                realmStorySchema.addField("isVerified", boolean.class);
+            }
+
+            if (realmStoryProtoSchema != null) {
+                realmStoryProtoSchema.addField("isVerified", boolean.class);
             }
 
             oldVersion++;

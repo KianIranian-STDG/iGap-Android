@@ -225,7 +225,7 @@
 
     <string name="select_picture_en">"إختيار الصورة "</string>
 
-    <string name="slide_to_cancel_en">"إسحب للإلغاء"</string>
+    <string name="slide_to_cancel_en">"إسحب للإلغاء"&#160;&gt;</string>
 
     <string name="video_duration" formatted="false">"%s (%s)"</string>
 
@@ -902,7 +902,7 @@
 
     <string name="description">التفاصيل</string>
 
-    <string name="type_message">رسالة...</string>
+    <string name="type_message">رسالة</string>
 
     <string name="place">المكان </string>
 
@@ -1149,6 +1149,8 @@
     <string name="permission_record_audio">اذن مسجل الصوت </string>
 
     <string name="permission_phone">اذن الهاتف </string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">أنت بحاجة إلى السماح %s</string>
+
 
 
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
@@ -1573,7 +1575,7 @@
 
     <string name="show_line_pattern">إظهار نمط الخط</string>
 
-    <string name="unlock_with_fingerPrint">فتح القفل بواسطة البصمة</string>
+    <string name="biometric_unlock">فتح البيومترية</string>
 
     <string name="change_pass_code">تغيير الرمز </string>
 
@@ -2301,8 +2303,8 @@
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
     <string name="buy_internet_package_volume_type_title">الصوت</string>
-    <string name="buy_internet_package_volume_filter_gb_title">0f.% GB</string>
-    <string name="buy_internet_package_volume_filter_mb_title">0f.% MB</string>
+    <string name="buy_internet_package_volume_filter_gb_title">%.2f GB</string>
+    <string name="buy_internet_package_volume_filter_mb_title">%.2f MB</string>
     <string name="buy_internet_package_daily_filter_title">يوم %.0f</string>
     <string name="buy_internet_package_weekly_filter_title">أسبوع %.0f</string>
     <string name="buy_internet_package_month_filter_title">شهر %.0f</string>
@@ -2708,9 +2710,11 @@
     <string name="status">لحظات</string>
     <string name="status_title">لحظه</string>
     <string name="tap_to_add_status_update">انقر لإضافة لحظة</string>
+    <string name="add_status_update">إدارة اللحظات</string>
     <string name="viewed_updates">تم عرض التحديثات</string>
     <string name="recent_updates">التحديثات الأخيرة</string>
     <string name="your_status_updates_will_disappear_after_24_hours">سيتم حذف لحظاتك بعد 24 ساعة.</string>
+    <string name="my_channel_moments">لحظات قناتي</string>
     <string name="your_device_does_not_have_a_camera">جهازك ليس به كاميرا!</string>
     <string name="delete_status_update">هل تريد حذف هذه اللحظة؟ سيتم حذفه أيضًا لكل من استلمه.</string>
     <string name="story_views">الآراء</string>
@@ -2725,5 +2729,26 @@
     <string name="moments_string">لحظات</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">لا يمكن أن يزيد المبلغ عن 500 مليون ريال</string>
     <string name="invalid_qr_code">رمز شريطي غير صالح</string>
+    <string name="are_you_sure_add_follower">هل أنت متأكد أنك تريد إضافة هؤلاء المتابعين؟</string>
+    <string name="minimizeAmount">طلبك لهذا المبلغ غير ممكن</string>
+    <string name="forbidden_pin_room">لا يسمح لك لتثبيت هذه الدردشة</string>
+    <string name="pin_up_to_5_chat">يمكنك تثبيت ما يصل إلى 5 محادثات!</string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">يتطلب البحث العالمي 5 أحرف على الأقل</string>
+    <string name="faild_payment">عذرا ، حدث خطأ وحاول مرة أخرى</string>
+    <string name="biometric_password_description">من خلال تنشيط هذا الخيار ، سيتم تطبيق كلمة المرور الحيوية النشطة على هاتفك (بصمة الإصبع أو التعرف على الوجه أو مسح قزحية العين) على التطبيق</string>
+    <string name="biometric_password">كلمة المرور البيومترية</string>
+    <string name="set_now">تعيين الآن</string>
+    <string name="no_biometric_password_set_on_your_phone">لم يتم تعيين كلمة مرور بيومترية على هاتفك</string>
+    <string name="authentication_failed">المصادقة فشلت</string>
+    <string name="authentication_succeeded">نجحت المصادقة</string>
+    <string name="authentication_error">خطأ مصادقة: </string>
+    <string name="biometric_login">تسجيل الدخول البيومتري لتطبيقي</string>
+    <string name="use_biometric_authentication">تسجيل الدخول باستخدام بيانات الاعتماد البيومترية الخاصة بك</string>
+    <string name="send_current_location">إرسال الموقع الحالي:\n</string>
+    <string name="send_selected_location">إرسال الموقع المحدد:\n</string>
+    <string name="load_sticker_types_error_message">أنواع مرشح غير محملة</string>
+    <string name="select_sticker_type">حدد نوع الملصق</string>
+    <string name="locating">استقبال الموقف الحالي …</string>
+    <string name="enable_sending_non_media_file_soon">سيتم تمكين القدرة على إرسال ملفات غير الوسائط قريبًا</string>
 
 </resources>

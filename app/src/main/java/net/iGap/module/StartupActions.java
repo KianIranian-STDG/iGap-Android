@@ -515,6 +515,13 @@ public final class StartupActions {
 //                Raad.language = selectedLanguage;
 //                Raad.isFA = true;
                 break;
+            case "پشتو":
+                selectedLanguage = "ps";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+//                Raad.language = selectedLanguage;
+//                Raad.isFA = true;
+                break;
         }
         updateResources(context);
     }

@@ -59,9 +59,12 @@ public class DbManager {
         FileLog.i("DbManager " + "closeUiRealm: databaseName -> " + AccountManager.getInstance().getCurrentUser().getRealmConfiguration().getRealmFileName() + " userId -> " + AccountManager.getInstance().getCurrentUser().getId());
 
         if (uiRealm != null) {
-            uiRealm.removeAllChangeListeners();
-            uiRealm.close();
-
+            if (uiRealm.sharedRealm != null) {
+                if (uiRealm.sharedRealm.realmNotifier != null) {
+                    uiRealm.removeAllChangeListeners();
+                    uiRealm.close();
+                }
+            }
         }
     }
 

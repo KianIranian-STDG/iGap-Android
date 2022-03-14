@@ -20,6 +20,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMap;
+import net.iGap.fragments.NewFragmentMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
@@ -29,7 +30,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
 import net.iGap.structs.LocationObject;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
@@ -105,15 +107,16 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         @Override
                         public void Allow() {
                             G.handler.post(() -> {
-                                FragmentMap fragment = FragmentMap.getInstance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
-                                        RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
+                                NewFragmentMap fragment = NewFragmentMap.newInstance(finalItem.lat, finalItem.lan);
+//                                FragmentMap fragment = FragmentMap.getInstance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
+//                                        RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });
                         }
 
                         @Override
                         public void deny() {
-
+                            showDeniedPermissionMessage(G.context.getString(R.string.permission_location));
                         }
                     });
                 } catch (IOException | IllegalStateException e) {

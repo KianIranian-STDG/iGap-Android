@@ -25,6 +25,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.biometric.BiometricManager;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.multidex.MultiDex;
@@ -37,12 +38,14 @@ import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.api.webservice.JobServiceReconnect;
+import net.iGap.firebase1.FirebaseInitializer;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.accountManager.AccountManager;
@@ -365,6 +368,7 @@ public class G extends ApplicationContext {
         }
 
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
+        FirebaseInitializer.initialize(this);
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
 
         JobServiceReconnect.scheduleJob(getApplicationContext());
@@ -423,6 +427,7 @@ public class G extends ApplicationContext {
                         Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
                     }
                 });
+
     }
 
     @Override

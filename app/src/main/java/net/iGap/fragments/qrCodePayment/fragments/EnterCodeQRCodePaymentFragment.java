@@ -96,14 +96,14 @@ public class EnterCodeQRCodePaymentFragment extends BaseFragment {
     }
 
 
-    public void setListeners(){
+    public void setListeners() {
         mViewModel.getCodeRegistrationClicked().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 String inputCode = mBinding.codeEditText.getText().toString();
-                if(inputCode == null || inputCode.length() == 0){
+                if (inputCode == null || inputCode.length() == 0) {
                     Toast.makeText(getActivity(), R.string.enter_code, Toast.LENGTH_SHORT).show();
-                } else if(inputCode.length() != 0 && inputCode.length() != 10){
+                } else if (inputCode.length() != 0 && inputCode.length() != 10) {
                     Toast.makeText(getActivity(), R.string.code_length_is_10_digit, Toast.LENGTH_SHORT).show();
                 } else {
                     mBinding.progressBar.setVisibility(View.VISIBLE);
@@ -111,20 +111,21 @@ public class EnterCodeQRCodePaymentFragment extends BaseFragment {
                     call.enqueue(new Callback<MerchantInfo>() {
                         @Override
                         public void onResponse(Call<MerchantInfo> call, Response<MerchantInfo> response) {
-                            if(response.isSuccessful()) {
+                            if (response.isSuccessful()) {
                                 MerchantInfo merchantInfo = response.body();
-                                assert merchantInfo != null;
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(),merchantInfo.getQrCode(),merchantInfo.isPcqr()))
-                                        .addToBackStack(null)
-                                        .commit();
-                                mBinding.progressBar.setVisibility(View.GONE);
+                                if (getActivity() != null && merchantInfo != null) {
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .add(R.id.mainFrame, QRCodePaymentFragment.newInstance(merchantInfo.getMerchantName(), merchantInfo.getQrCode(), merchantInfo.isPcqr()))
+                                            .addToBackStack(null)
+                                            .commit();
+                                    mBinding.progressBar.setVisibility(View.GONE);
+                                }
                             } else {
                                 try {
                                     String[] splittedErrorBody = response.errorBody().string().split("\"");
                                     Toast.makeText(getActivity(), splittedErrorBody[7], Toast.LENGTH_LONG).show();
                                     mBinding.progressBar.setVisibility(View.GONE);
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }

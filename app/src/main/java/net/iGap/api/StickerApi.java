@@ -32,6 +32,9 @@ public interface StickerApi {
     @GET("category/{categoryId}")
     Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit);
 
+    @GET("category/{categoryId}")
+    Single<StickerCategoryGroupDataModel> getCategoryStickers(@Path("categoryId") String categoryId, @Query("skip") int skip, @Query("limit") int limit, @Query("type") String type);
+
     @GET("user-list")
     Single<StickerCategoryGroupDataModel> getUserStickersGroup();
 

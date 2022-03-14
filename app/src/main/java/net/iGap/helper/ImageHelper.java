@@ -20,7 +20,9 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
+import android.util.Log;
 
+import net.iGap.G;
 import net.iGap.observers.interfaces.OnRotateImage;
 
 import java.io.File;
@@ -30,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ImageHelper {
+
+    private static String TAG = "IMAGE_HELPER";
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -57,7 +61,7 @@ public class ImageHelper {
      * @param filepath picture file address
      * @return return correct rotate bitmap or return null if file path not exist
      */
-    public static void correctRotateImage(String filepath, boolean compress, OnRotateImage onRotateImage) {
+    public void correctRotateImage(String filepath, boolean compress, OnRotateImage onRotateImage) {
 
         new Thread(new Runnable() {
             @Override
@@ -65,6 +69,7 @@ public class ImageHelper {
                 onRotateImage.startProcess();
                 if (!isRotateNeed(filepath)) {
                     onRotateImage.success(filepath);
+
                     return;
                 }
 
@@ -124,12 +129,13 @@ public class ImageHelper {
 
         try {
 
-            if (filepath.length() > 0) {
+            if (filepath != null && filepath.length() > 0) {
                 File file = new File(filepath);
 
                 try {
                     if (compress) {
-                        bitmap = decodeFile(file);
+                        ImageHelper imageHelper = new ImageHelper();
+                        bitmap = imageHelper.decodeFile(file);
                     } else {
                         bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     }
@@ -201,29 +207,62 @@ public class ImageHelper {
      *
      * @param f image file
      */
-    public static Bitmap decodeFile(File f) {
+    public Bitmap decodeFile(File f) {
         try {
             //decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            final int IMAGE_MAX_SIZE = 921600; // 400MP
 
-            //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 400;
-            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            FileInputStream in = new FileInputStream(f);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options);
+            in.close();
+
+
+
             int scale = 1;
-            while (true) {
-                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE) break;
-                width_tmp /= 2;
-                height_tmp /= 2;
-                scale *= 2;
+            while ((options.outWidth * options.outHeight) * (1 / Math.pow(scale, 2)) >
+                    IMAGE_MAX_SIZE) {
+                scale++;
             }
+            Log.d(TAG, "scale = " + scale + ", orig-width: " + options.outWidth + ", orig-height: " + options.outHeight);
 
-            //decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+            Bitmap resultBitmap = null;
+            in = new FileInputStream(f);
+            if (scale > 1) {
+                scale--;
+                // scale to max possible inSampleSize that still yields an image
+                // larger than target
+                options = new BitmapFactory.Options();
+                options.inSampleSize = scale;
+                resultBitmap = BitmapFactory.decodeStream(in, null, options);
+
+                // resize to desired dimensions
+                int height = resultBitmap.getHeight();
+                int width = resultBitmap.getWidth();
+                Log.d(TAG, "1th scale operation dimenions - width: " + width + ", height: " + height);
+
+                double y = Math.sqrt(IMAGE_MAX_SIZE
+                        / (((double) width) / height));
+                double x = (y / height) * width;
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(resultBitmap, (int) x,
+                        (int) y, true);
+                resultBitmap.recycle();
+                resultBitmap = scaledBitmap;
+
+                System.gc();
+            } else {
+                resultBitmap = BitmapFactory.decodeStream(in);
+            }
+            in.close();
+
+            Log.d(TAG, "bitmap size - width: " +resultBitmap.getWidth() + ", height: " +
+                    resultBitmap.getHeight());
+            return resultBitmap;
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

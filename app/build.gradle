@@ -5,7 +5,6 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
@@ -19,18 +18,17 @@ apply plugin: 'kotlin-android'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "net.iGap"
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 30
         multiDexEnabled true
-        versionCode 273
-        versionName "2.3.0"
+        versionCode 302
+        versionName "2.4.1"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
-
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
@@ -68,6 +66,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"release\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -77,6 +78,9 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "Store", "\"debug\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -87,6 +91,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"MyKet\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -97,6 +104,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"IranMarket\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -107,6 +117,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"WEB\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -117,6 +130,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"CharKhone\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -127,6 +143,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"GooglePlay\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -137,6 +156,9 @@ android {
             shrinkResources true
             resValue "string", "Store", "\"Bazaar\""
             resValue "string", "TrackCode", "\"\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -146,7 +168,10 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"cerllu\""
+            resValue "string", "TrackCode", "\"kxsfvl\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -156,7 +181,10 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"i5p86b\""
+            resValue "string", "TrackCode", "\"mamxdg\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -166,7 +194,10 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"iizkif\""
+            resValue "string", "TrackCode", "\"6d26kf\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -176,7 +207,10 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"tyxhrg\""
+            resValue "string", "TrackCode", "\"eo44ya\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -186,184 +220,848 @@ android {
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"zrb95b\""
+            resValue "string", "TrackCode", "\"xhh3jx\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
 
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-        disable 'MissingTranslation'
-    }
+        release_TakupsOther1 {
+            matchingFallbacks = ['release', 'debug']
 
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-
-    flavorDimensions "default"
-
-    bundle {
-        language {
-            enableSplit = false
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"pzmruy\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
 
-    productFlavors {
-        fullVersion { // 32 and 64 bit ndk compile
-            ndk {
-                dimension "default"
-                abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        release_TakupsOther2 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"qho0xg\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther3 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"ysntzr\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther4 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"sbmgwc\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther5 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"rvwn3c\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_TakupsOther6 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"rtzzla\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther7 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"tpkhzt\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther8 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"vrgp4x\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther9 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"xnej5i\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther10 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"c2qfcy\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther11 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"eoufkx\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther12 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"9r4bsw\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther13 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"gqt5yi\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther14 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"enq9im\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther15 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"h1ieup\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther16 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"zejkum\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther17 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"gcghun\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther18 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"u3gcw7\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther19 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"olsbbr\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_TakupsOther20 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"nt6lah\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther21 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"fymzfn\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_TakupsOther22 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"se3re2\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther23 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"qomidm\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther24 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"q3xppe\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther25 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"gxhgao\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther26 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"uxnm88\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther27 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"qxkiib\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther28 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"nuiide\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther29 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"ivqgkz\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther30 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"8jbd0w\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther31 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"347yyp\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release_TakupsOther32 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"lujetj\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_TakupsOther33 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"ef6rxb\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe34 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"bpssrb\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe35 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"bvchpe\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe36 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"bwmkyz\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe37 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"gdfnme\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe38 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"6l3mp5\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe39 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"tvfakm\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe40 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"h5e62t\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe41_tmg01 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"z55qsj\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe42_tmg02 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"n8ymba\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe43_tmg03 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"goyb09\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe44_tmg04 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"hgvmt4\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takupsothe45_tmg05 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"hc3pzu\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             }
         }
-        minVersion { // only 32 bit ndk compile
-            ndk {
-                dimension "default"
-                abiFilters "armeabi-v7a", "x86"
+        release_Takupsothe46_tmg06 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"jgbl6l\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+        release_Takupsothe47_tmg07 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"cborb9\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+
+        release_Takupsothe48_tmg08 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"fkqbp3\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+
+        release_Takupsothe49_tmg09 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"vflayw\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+
+        release_Takupsothe50_tmg10 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            resValue "string", "Store", "\"Takups\""
+            resValue "string", "TrackCode", "\"a9wjmo\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+
+        lintOptions {
+            checkReleaseBuilds false
+            abortOnError false
+            disable 'MissingTranslation'
+        }
+
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
+
+        flavorDimensions "default"
+
+        bundle {
+            language {
+                enableSplit = false
             }
         }
+
+        productFlavors {
+            fullVersion { // 32 and 64 bit ndk compile
+                ndk {
+                    dimension "default"
+                    abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+                }
+            }
+            minVersion { // only 32 bit ndk compile
+                ndk {
+                    dimension "default"
+                    abiFilters "armeabi-v7a", "x86"
+                }
+            }
+        }
+
     }
 
-}
+    dependencies {
+        implementation fileTree(include: ['*.jar'], dir: 'libs')
+        implementation 'org.webrtc:google-webrtc:1.0.30039'
+        implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
+            transitive = true
+        }
+        implementation group: 'androidx.palette', name: 'palette', version: '1.0.0-alpha1'
 
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.webrtc:google-webrtc:1.0.30039'
-    implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
-        transitive = true
-    }
-    implementation group: 'androidx.palette', name: 'palette', version: '1.0.0-alpha1'
+        implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+        implementation 'com.google.firebase:firebase-analytics:18.0.0'
+//    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+        implementation "androidx.core:core:1.5.0"
+        implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.5'
 
-    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
-    implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'com.google.firebase:firebase-messaging:20.2.0'
-    implementation "androidx.core:core:1.5.0"
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.3'
+        //for adMob
+        implementation 'com.google.android.gms:play-services-ads:20.2.0'
 
-    //for adMob
-    implementation 'com.google.android.gms:play-services-ads:20.2.0'
-
-    implementation project(path: ':lvl')
-    implementation 'com.mikepenz:fastadapter:3.2.5'
-    implementation 'androidx.media:media:1.2.1'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'com.mikepenz:fastadapter-commons:3.2.5'
-    implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'
-    implementation 'com.mikepenz:fastadapter-extensions:3.2.5'
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'io.github.vicmikhailau:MaskedEditText:4.0.5'
-    implementation 'com.uncopt:android.justified:1.0'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
-    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.larswerkman:HoloColorPicker:1.5'
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'com.hanks.animatecheckbox:library:0.1'
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'com.google.zxing:core:3.3.2'
-    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    implementation 'com.google.android.gms:play-services-analytics:17.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.gms:play-services-base:17.1.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
-    implementation 'cat.ereza:customactivityoncrash:2.1.0'
-    implementation 'io.realm:android-adapters:3.0.0'
-    implementation 'org.osmdroid:osmdroid-android:5.6.5'
-    implementation 'io.fotoapparat:fotoapparat:2.7.0'
-    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
-    implementation 'com.github.KianIranian-STDG:MaterialChipsInput:1.0.8'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    implementation 'org.parceler:parceler-api:1.1.12'
-    annotationProcessor 'org.parceler:parceler:1.1.12'
-    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
-    compileOnly 'androidx.annotation:annotation:1.1.0'
-    implementation 'com.github.msarhan:ummalqura-calendar:1.1.7'
-    implementation 'com.sothree.slidinguppanel:library:3.4.0'
-    implementation 'com.github.krokyze:ucropnedit:2.2.2'
-    implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.mindorks.android:prdownloader:0.6.0'
-    implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
-    implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-    implementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
+        implementation project(path: ':lvl')
+        implementation 'com.mikepenz:fastadapter:3.2.5'
+        implementation 'androidx.media:media:1.2.1'
+        implementation "androidx.viewpager2:viewpager2:1.0.0"
+        implementation 'com.mikepenz:fastadapter-commons:3.2.5'
+        implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'
+        implementation 'com.mikepenz:fastadapter-extensions:3.2.5'
+        implementation 'androidx.multidex:multidex:2.0.1'
+        implementation 'androidx.appcompat:appcompat:1.0.0'
+        implementation 'com.nineoldandroids:library:2.4.0'
+        implementation 'androidx.recyclerview:recyclerview:1.1.0'
+        implementation 'com.google.android.material:material:1.0.0'
+        implementation 'io.github.vicmikhailau:MaskedEditText:4.0.5'
+        implementation 'com.uncopt:android.justified:1.0'
+        implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+        implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+        implementation 'androidx.cardview:cardview:1.0.0'
+        implementation 'com.larswerkman:HoloColorPicker:1.5'
+        implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+        implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        implementation 'com.makeramen:roundedimageview:2.3.0'
+        implementation 'com.hanks.animatecheckbox:library:0.1'
+        implementation 'androidx.gridlayout:gridlayout:1.0.0'
+        implementation 'com.google.zxing:core:3.3.2'
+        implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+        implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
+        implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+        implementation 'com.google.android.gms:play-services-maps:17.0.0'
+        implementation 'com.google.android.gms:play-services-location:17.0.0'
+        implementation 'com.google.android.gms:play-services-base:17.1.0'
+        implementation 'com.google.android.gms:play-services-auth:17.0.0'
+        implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
+        implementation 'cat.ereza:customactivityoncrash:2.1.0'
+        implementation 'io.realm:android-adapters:3.0.0'
+        implementation 'org.osmdroid:osmdroid-android:6.1.6'
+        implementation 'io.fotoapparat:fotoapparat:2.7.0'
+        implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
+        implementation 'com.github.KianIranian-STDG:MaterialChipsInput:1.0.8'
+        implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+        testImplementation 'junit:junit:4.12'
+        implementation 'org.parceler:parceler-api:1.1.12'
+        annotationProcessor 'org.parceler:parceler:1.1.12'
+        implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+        compileOnly 'androidx.annotation:annotation:1.1.0'
+        implementation 'com.github.msarhan:ummalqura-calendar:1.1.7'
+        implementation 'com.sothree.slidinguppanel:library:3.4.0'
+        implementation 'com.github.krokyze:ucropnedit:2.2.2'
+        implementation 'info.androidhive:imagefilters:1.0.7'
+        implementation 'com.mindorks.android:prdownloader:0.6.0'
+        implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
+        implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
+        implementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
+        debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
 //    implementation 'com.google.protobuf:protobuf-java:3.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    // don't upgrade this lib
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.squareup.picasso:picasso:2.71828' // JUST USE FOR PEC MPL
-    implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
-    implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation project(':pecpayment-release')
-    implementation project(':Ref')
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation 'ir.metrix:metrix:1.1.3'
-    implementation 'com.android.installreferrer:installreferrer:2.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
-    //  this lib is used for MPL
-    implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.github.smarteist:autoimageslider:1.3.2'
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
-    implementation 'com.airbnb.android:lottie:3.3.0'
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-    implementation 'com.google.guava:guava:28.1-android'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
-    //huawei
-    implementation 'com.huawei.hms:base:5.0.5.300'
-    //exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
-    implementation 'com.google.android.exoplayer:exoplayer:2.14.2'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
-    implementation 'com.google.android.exoplayer:extension-ima:2.14.2'
-    implementation 'com.google.android.exoplayer:extension-mediasession:2.14.2'
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+        implementation 'com.google.protobuf:protobuf-java:3.1.0'
+        implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+        implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+        implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+        implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+        // don't upgrade this lib
+        androidTestImplementation 'androidx.test:runner:1.2.0'
+        androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+        implementation 'com.squareup.picasso:picasso:2.71828' // JUST USE FOR PEC MPL
+        implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
+        implementation 'com.google.code.gson:gson:2.8.5'
+        implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
+        implementation 'me.saket:better-link-movement-method:2.2.0'
+        implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+        implementation 'com.nightonke:jellytogglebutton:1.0.2'
+        implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
+        implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+        implementation project(':pecpayment-release')
+        implementation project(':Ref')
+        implementation 'com.github.bumptech.glide:glide:4.11.0'
+        implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+        implementation 'ir.metrix:metrix:1.1.3'
+        implementation 'com.android.installreferrer:installreferrer:2.2'
+        implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+        annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+        implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+        implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+        implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+        implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
+        //  this lib is used for MPL
+        implementation 'com.android.volley:volley:1.1.1'
+        implementation 'com.github.smarteist:autoimageslider:1.3.2'
+        implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
+        implementation 'com.airbnb.android:lottie:3.3.0'
+        implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+        implementation 'com.google.guava:guava:28.1-android'
+        implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+        implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
+        implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
+        //huawei
+        implementation 'com.huawei.hms:base:5.0.5.300'
+        //exoplayer
+        implementation 'com.google.android.exoplayer:exoplayer-core:2.14.2'
+        implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.2'
+        implementation 'com.google.android.exoplayer:exoplayer:2.14.2'
+        implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.2'
+        implementation 'com.google.android.exoplayer:extension-ima:2.14.2'
+        implementation 'com.google.android.exoplayer:extension-mediasession:2.14.2'
+        //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+        implementation "androidx.viewpager2:viewpager2:1.0.0"
+        //for biometric authentication
+        implementation "androidx.biometric:biometric:1.1.0"
 
-    implementation project(path: ':video')
-    // This dependency is downloaded from the Google’s Maven repository.
-    // So, make sure you also include that repository in your project's build.gradle file.
-    implementation 'com.google.android.play:core:1.10.0'
-}
+        implementation project(path: ':video')
+        // This dependency is downloaded from the Google’s Maven repository.
+        // So, make sure you also include that repository in your project's build.gradle file.
+        implementation 'com.google.android.play:core:1.10.0'
+        testImplementation 'org.json:json:20140107'
 
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '28.0.0'
+        implementation project(path: ':moduleFirebase1')
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion '28.0.0'
+                }
             }
         }
     }
-}
 
-apply plugin: 'kotlin-android-extensions'
+    apply plugin: 'kotlin-android-extensions'
+}

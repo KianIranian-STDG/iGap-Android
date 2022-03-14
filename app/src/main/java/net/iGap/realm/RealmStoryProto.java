@@ -17,6 +17,7 @@ public class RealmStoryProto extends RealmObject {
     private RealmAttachment file;
     private long createdAt;
     private long userId;
+    private long roomId;
     private long storyId;
     private long id;
     private long sessionId;
@@ -24,7 +25,9 @@ public class RealmStoryProto extends RealmObject {
     private int viewCount;
     private int status;
     private int index;
+    private boolean isForRoom;
     private boolean isForReply;
+    private boolean isVerified;
     private String displayName;
     private String profileColor;
     private RealmList<RealmStoryViewInfo> realmStoryViewInfos;
@@ -86,6 +89,22 @@ public class RealmStoryProto extends RealmObject {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+
+    public boolean isForRoom() {
+        return isForRoom;
+    }
+
+    public void setForRoom(boolean forRoom) {
+        isForRoom = forRoom;
     }
 
     public long getStoryId() {
@@ -178,6 +197,14 @@ public class RealmStoryProto extends RealmObject {
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     public void setRealmStoryViewInfos(Realm realm, ProtoStoryGetOwnStoryViews.GroupedViews groupedViews) {

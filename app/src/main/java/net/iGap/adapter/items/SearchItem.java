@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
 
     public SearchItem setContact(SearchFragment.StructSearch item) {
         this.item = item;
+
         return this;
     }
 
@@ -54,12 +56,18 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         return R.layout.search_fragment_sub_layout;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         setAvatar(holder);
-
+        if (item.isVerified){
+            holder.txtIconVerified.setText(R.string.icon_blue_badge);
+            holder.txtIconVerified.setTextColor(holder.itemView.getContext().getColor(R.color.verify_color));
+        }else{
+            holder.txtIconVerified.setVisibility(View.GONE);
+        }
         holder.name.setText(item.name);
         if (item.comment.isEmpty()) {
             holder.lastSeen.setText(item.userName);
@@ -106,6 +114,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
 
     @Override
     public ViewHolder getViewHolder(View v) {
+
         return new ViewHolder(v);
     }
 
@@ -114,6 +123,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
+        protected TextView txtIconVerified;
         protected TextView lastSeen;
         protected TextView txtTime;
 
@@ -124,6 +134,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             name = view.findViewById(R.id.sfsl_txt_contact_name);
             lastSeen = view.findViewById(R.id.sfsl_txt_contact_lastseen);
             txtIcon = view.findViewById(R.id.sfsl_txt_icon);
+            txtIconVerified = view.findViewById(R.id.sfsl_txt_verified_icon);
             txtTime = view.findViewById(R.id.sfsl_txt_time);
         }
     }

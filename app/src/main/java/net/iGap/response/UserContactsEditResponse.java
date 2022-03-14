@@ -19,6 +19,7 @@ import net.iGap.proto.ProtoUserContactsEdit;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.story.liststories.StoryFragment;
 
 public class UserContactsEditResponse extends MessageHandler {
 
@@ -47,9 +48,7 @@ public class UserContactsEditResponse extends MessageHandler {
         if (G.onUserContactEdit != null) {
             G.onUserContactEdit.onContactEdit(builder.getFirstName(), builder.getLastName(), builder.getInitials());
         }
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
-        });
+        MessageController.getInstance(AccountManager.selectedAccount).getStories(0);
     }
 
     @Override

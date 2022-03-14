@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -224,7 +225,7 @@ public class GoToChatActivity {
                 List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
                 if (fragments.get(i) instanceof FragmentChat) {
                     FragmentChat fragmentChat = (FragmentChat) fragments.get(i);
-                    if (fragmentChat.getRoomId() == roomid) {
+                    if (fragmentChat.getRoomId() == roomid && activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
                         activity.getSupportFragmentManager().beginTransaction().remove(fragmentChat).commit();
                     }
                 }

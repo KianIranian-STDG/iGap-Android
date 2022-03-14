@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -95,13 +96,14 @@ import net.iGap.request.RequestUserContactsGetList;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.realm.Case;
 
 import static net.iGap.helper.ContactManager.CONTACT_LIMIT;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class RegisteredContactsFragment extends BaseMainFragments implements OnContactImport, OnUserContactDelete, OnContactsGetList {
 
@@ -120,7 +122,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
     private View btnAddNewChannel;
     private View btnAddNewGroup;
-    private View btnAddSecretChat;
     private View btnAddNewGroupCall;
     private View btnDialNumber;
     private RecyclerView realmRecyclerView;
@@ -208,7 +209,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 case FragmentMediaContainer.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
-                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.putExtra(ActivityMain.openMediaPlayer, true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
@@ -247,12 +248,17 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
             @Override
             public void onTextChanged(EditText editText) {
-                String text = editText.getText().toString();
-                if (text.length() > 0) {
-                    searchText = text;
-                    loadContact(text);
-                } else {
-                    loadContacts();
+                String text = null;
+                try {
+                    text = java.net.URLDecoder.decode(editText.getText().toString(), "UTF-8");
+                    if (text.length() > 0) {
+                        searchText = text;
+                        loadContact(text);
+                    } else {
+                        loadContacts();
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -281,7 +287,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                     } else {
                         if (isMultiSelect) {
                             contactsToolbar.hideActionToolbar();
-                            contactsToolbar.setBackIcon(null);
+                            contactsToolbar.setBackIcon(new BackDrawable(false));
                             setMultiSelectState(isMultiSelect);
                         } else {
                             if (!isSearchEnabled) {
@@ -350,7 +356,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
                             @Override
                             public void deny() {
-
+                                showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
                             }
                         });
                     } catch (IOException e) {
@@ -384,7 +390,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         prgMainLoader = view.findViewById(R.id.fc_loader_main);
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
         btnDialNumber = view.findViewById(R.id.menu_layout_btn_dial_number);
-        btnAddSecretChat = view.findViewById(R.id.menu_layout_btn_secret_chat);
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
         fastScroller = view.findViewById(R.id.fs_contact_fastScroller);
@@ -494,10 +499,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             }
         });
 
-        btnAddSecretChat.setOnClickListener(v -> {
-
-        });
-
         btnDialNumber.setOnClickListener(v -> {
             if (getActivity() != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new DailNumberFragment()).setReplace(false).load();
@@ -521,24 +522,20 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             btnDialNumber.setVisibility(View.GONE);
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
-            btnAddSecretChat.setVisibility(View.GONE);
         } else if (mode == 2) { // call mode
             btnAddNewGroupCall.setVisibility(View.VISIBLE);
             btnDialNumber.setVisibility(View.VISIBLE);
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
-            btnAddSecretChat.setVisibility(View.GONE);
         } else if (mode == 3) { // add mode
 
             btnAddNewChannel.setVisibility(View.VISIBLE);
             btnAddNewGroup.setVisibility(View.VISIBLE);
-            btnAddSecretChat.setVisibility(View.VISIBLE);
             btnAddNewGroupCall.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
         } else if (mode == 4) {//edit mode
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
-            btnAddSecretChat.setVisibility(View.GONE);
             btnAddNewGroupCall.setVisibility(View.GONE);
         }
     }
@@ -661,7 +658,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
     public void multi_select(int position) {
         if (contactsToolbar.isInActionMode()) {
 
-            if (results.get(position) == null) {
+            if (position < 0 && results.get(position) == null) {
                 return;
             }
 
@@ -671,15 +668,26 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 selectedList.put(results.get(position).getPhone(), true);
             }
             if (selectedList.size() > 0) {
+
+                contactsToolbar.showActionToolbar();
+                ImageView imageView = contactsToolbar.backIcon;
+                contactsToolbar.setBackIconToNull();
+                BackDrawable backDrawable = new BackDrawable(true);
+                backDrawable.setRotation(1, true);
+                backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+                contactsToolbar.setBackIcon(backDrawable);
+                contactsToolbar.removeView(imageView);
+
                 if (selectedList.size() > 1) {
                     editItem.setVisibility(View.GONE);
                 } else {
                     editItem.setVisibility(View.VISIBLE);
                 }
                 multiSelectCounter.setNumber(selectedList.size(), true);
+
             } else {
                 contactsToolbar.hideActionToolbar();
-                contactsToolbar.setBackIcon(null);
+                contactsToolbar.setBackIcon(new BackDrawable(false));
                 setMultiSelectState(isMultiSelect);
             }
             refreshAdapter(position, false);

@@ -1,5 +1,6 @@
 package net.iGap.fragments.chatMoneyTransfer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import net.iGap.fragments.payment.ChargeFragment;
 import net.iGap.fragments.payment.InternetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.dialog.BaseBottomSheet;
+
 
 public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
 
@@ -91,52 +93,10 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-
-    public void loadGiftSticker() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-  /*      if (!(fragment instanceof EnterNationalCodeFragment)) {
-            fragment = EnterNationalCodeFragment.getInstance(true);
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }*/
-        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
-    }
-
     public void finishedCardToCard(String cardNum, String amountNum, String descriptionTv) {
         dismiss();
         delegate.cardToCardClicked(cardNum, amountNum, descriptionTv);
 //                       cardToCardCallBack.onClick("6221-0612-1741-0739","10,000","سلام من ابوالفضلم بهممممممم پول بزن :)");
-    }
-
-
-    public void loadStickerPackagePage() {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-   /*     if (!(fragment instanceof GiftStickerPackageListFragment)) {
-            fragment = GiftStickerPackageListFragment.getInstance(true);
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }*/
-        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
-    }
-
-    public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
- /*       if (!(fragment instanceof GiftStickerItemListFragment)) {
-            fragment = GiftStickerItemListFragment.getInstance(stickerGroup, true);
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }*/
-        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
-    }
-
-    public void loadStickerPackageItemDetailPage(StructIGSticker sticker) {
-        Fragment fragment = getChildFragmentManager().findFragmentById(R.id.transferMoneyContainer);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-/*        if (!(fragment instanceof GiftStickerItemDetailFragment)) {
-            fragment = GiftStickerItemDetailFragment.getInstance(sticker, true);
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }*/
-        fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
     public void loadChargePayment() {

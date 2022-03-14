@@ -35,22 +35,20 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
     private final ObservableInt showDiscountCoupon = new ObservableInt(View.INVISIBLE);
     private final ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
-    /*private ObservableInt background = new ObservableInt();*/
     private final ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
     private final ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
     private final ObservableInt showButtons = new ObservableInt(View.GONE);
     private final ObservableInt showPaymentStatus = new ObservableInt(View.GONE);
+    private final ObservableInt showSaveReceipt = new ObservableInt(View.GONE);
     private final ObservableInt closeButtonColor = new ObservableInt(R.color.accent);
     private final ObservableField<String> paymentType = new ObservableField<>();
     private final ObservableField<String> title = new ObservableField<>();
     private final ObservableField<String> description = new ObservableField<>();
-    /*private ObservableField<String> paymentOrderId = new ObservableField<>();*/
-    private final ObservableField<String> paymentStatus = new ObservableField<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final SingleLiveEvent<Integer> price = new SingleLiveEvent<>();
     private final ObservableDouble paymentRRN = new ObservableDouble();
     private final MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private final MutableLiveData<String> goToWebPage = new MutableLiveData<>();
-
     private final MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
     private final ObservableInt discountVisibility = new ObservableInt(View.GONE);
     private final ObservableInt discountReceiptVisibility = new ObservableInt(View.GONE);
@@ -62,10 +60,8 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableInt discountErrorVisibility = new ObservableInt(View.GONE);
     private final ObservableField<String> discountErrorText = new ObservableField<>();
     private final ObservableInt saveDiscountCodeColor = new ObservableInt(R.color.green);
-
     private int discountPlanPosition = -1;
     private int originalPrice;
-
     private final String token;
     private String orderId;
     private CheckOrderResponse orderDetail;
@@ -124,10 +120,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return showPaymentErrorMessage;
     }
 
-    /*public ObservableInt getBackground() {
-        return background;
-    }*/
-
     public ObservableInt getPaymentStateIcon() {
         return paymentStateIcon;
     }
@@ -144,8 +136,8 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return showPaymentStatus;
     }
 
-    public ObservableInt getCloseButtonColor() {
-        return closeButtonColor;
+    public ObservableInt getShowSaveReceipt() {
+        return showSaveReceipt;
     }
 
     public ObservableField<String> getPaymentType() {
@@ -164,13 +156,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return paymentRRN;
     }
 
-    public ObservableField<String> getPaymentStatus() {
-        return paymentStatus;
+    public MutableLiveData<String> getErrorMessage() {
+        return errorMessage;
     }
-
-    /*public ObservableField<String> getPaymentOrderId() {
-        return paymentOrderId;
-    }*/
 
     public SingleLiveEvent<Integer> getPrice() {
         return price;
@@ -211,7 +199,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     public void setPaymentResult(Payment payment) {
         if (payment.getStatus().equals("SUCCESS") || payment.getStatus().equals("PAID")) {
-            Log.e("jdhfjhfjsdhf", "setPaymentResult: " );
             checkOrderStatus(payment.getOrderId());
             if (payment.getDiscount() != null && !payment.getDiscount().equals("null")) {
                 discountReceiptVisibility.set(View.VISIBLE);
@@ -222,7 +209,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 taxReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getTax()) : payment.getTax());
             }
         } else {
-            Log.e("jdhfjhfjsdhf", "setPaymentResultError: "+payment.getMessage()+"/"+payment.getStatus());
             showRetryView.set(View.GONE);
             showLoadingView.set(View.GONE);
             showMainView.set(View.VISIBLE);
@@ -230,11 +216,11 @@ public class PaymentViewModel extends BaseAPIViewModel {
             showButtons.set(View.INVISIBLE);
             showPaymentErrorMessage.set(View.VISIBLE);
             showPaymentStatus.set(View.VISIBLE);
+            showSaveReceipt.set(View.GONE);
             paymentStateIcon.set(R.string.icon_close);
             paymentStatusTextColor.set(R.color.red);
-            paymentStatus.set(payment.getMessage());
+            errorMessage.setValue(payment.getMessage());
             discountVisibility.set(View.GONE);
-            /*paymentOrderId.set(payment.getOrderId());*/
         }
     }
 
@@ -242,7 +228,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
         this.orderId = orderId;
         checkOrderStatus();
     }
-
 
     private void checkOrderToken() {
         showMainView.set(View.INVISIBLE);
@@ -253,7 +238,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
         repository.checkOrder(token, this, new ResponseCallback<CheckOrderResponse>() {
             @Override
             public void onSuccess(CheckOrderResponse data) {
-                Log.e("jdhfjhfjsdhf", "checkOrderToken: " );
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
                 showDiscountCoupon.set(View.VISIBLE);
@@ -272,7 +256,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             @Override
             public void onError(String error) {
                 onErrorHandler(error);
-                Log.e("jdhfjhfjsdhf", "checkOrderTokenError: "+error );
+
             }
 
             @Override
@@ -292,7 +276,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
                 @Override
                 public void onSuccess(CheckOrderResponse data) {
-                    Log.e("jdhfjhfjsdhf", "onSuccess2: " );
+                    Log.e("jdhfjhfjsdhf", "onSuccess2: ");
                     discountCodeEnable.set(false);
                     saveDiscountCodeEnable.set(false);
                     saveDiscountCodeColor.set(R.color.gray);
@@ -310,7 +294,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
                 @Override
                 public void onError(String error) {
-                    Log.e("jdhfjhfjsdhf", "onError2: "+error );
+                    Log.e("jdhfjhfjsdhf", "onError2: " + error);
                     discountCodeEnable.set(true);
                     saveDiscountCodeEnable.set(true);
                     saveDiscountCodeColor.set(R.color.green);
@@ -336,8 +320,8 @@ public class PaymentViewModel extends BaseAPIViewModel {
         repository.checkOrderStatus(orderId, this, new ResponseCallback<CheckOrderStatusResponse>() {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
-                Log.e("jdhfjhfjsdhf", "checkOrderStatus: " );
                 showPaymentErrorMessage.set(View.VISIBLE);
+                showSaveReceipt.set(View.VISIBLE);
                 showPaymentStatus.set(View.VISIBLE);
                 showRetryView.set(View.GONE);
                 showLoadingView.set(View.GONE);
@@ -346,8 +330,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 description.set(data.getPaymentInfo().getProduct().getDescription());
                 price.setValue(data.getPaymentInfo().getPrice());
                 title.set(data.getPaymentInfo().getProduct().getTitle());
-                /*paymentOrderId.set(data.getPaymentInfo().getId());*/
-                paymentStatus.set(data.getMessage());
+                errorMessage.setValue(data.getMessage());
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);
                     paymentStateIcon.set(R.string.icon_sent);
@@ -367,7 +350,6 @@ public class PaymentViewModel extends BaseAPIViewModel {
             @Override
             public void onError(String error) {
                 onErrorHandler(error);
-                Log.e("jdhfjhfjsdhf", "checkOrderStatusError: "+error );
             }
 
             @Override
@@ -383,28 +365,26 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     private void onErrorHandler(@NotNull String error) {
         showLoadingView.set(View.GONE);
-        showPaymentStatus.set(View.VISIBLE);
-        paymentStatus.set(error);
         paymentStateIcon.set(R.string.icon_error);
+        showPaymentStatus.set(View.VISIBLE);
+        showSaveReceipt.set(View.GONE);
+        errorMessage.setValue(error);
         paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
     }
 
     private void onFailedHandler() {
         showLoadingView.set(View.GONE);
         paymentStateIcon.set(R.string.icon_error);
-        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
         showPaymentStatus.set(View.VISIBLE);
-        paymentStatus.set("error");
+        showSaveReceipt.set(View.GONE);
+        errorMessage.setValue("errorPayment");
+        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
         closeButtonColor.set(R.color.red);
         showRetryView.set(View.VISIBLE);
     }
 
     public MutableLiveData<List<PaymentFeature>> getDiscountOption() {
         return discountOption;
-    }
-
-    public int getDiscountPlanPosition() {
-        return discountPlanPosition;
     }
 
     public void setDiscountPlanPosition(int discountPlanPosition) {

@@ -124,7 +124,7 @@
     <string name="device_dosenot_camera_en">ئەم ئامێرە دووربینی نییە.</string>
     <string name="do_you_want_to_turn_on_gps">سیستەمی شوێن دۆزینەوە جیهانییەکەت (GPS) کوژاوەتەوە، دەتەوێ هەڵی بکەیت؟</string>
     <string name="select_picture_en">هەڵبژاردنی وێنە</string>
-    <string name="slide_to_cancel_en">بۆ هەڵوەشانەوە بیکێشە</string>
+    <string name="slide_to_cancel_en">بۆ هەڵوەشانەوە بیکێشە&#160;&gt; </string>
     <string name="video_duration" formatted="false">"%s (%s)"</string>
     <string name="st_username">ناوی بەکارهێنەر </string>
     <string name="st_title_Clear_Cache">سڕینەوەی بیرگەی شاراوە</string>
@@ -786,7 +786,7 @@
     <string name="info_map">تەنیا دەتوانی ئەو بەکارهێنەرانە ببینیت کە بە مەودای پێنج کیلۆمەتر لە تۆوە دوورن و دۆخی نەخشەکەیان هەڵکراوە. </string>
     <string name="Theme_Dark">دۆخی شەو</string>
     <string name="two_step_pass_code">قفڵی چوونەناو بەرنامە</string>
-    <string name="unlock_with_fingerPrint">کردنەوەی قوفڵ بە پەنجەمۆر</string>
+    <string name="biometric_unlock">کردنەوەی قوفڵ بە پەنجەمۆر</string>
     <string name="change_pass_code">گۆڕانی کۆد</string>
     <string name="auto_lock">قوفڵی ئۆتۆماتیک</string>
     <string name="allow_screen_capture">توانستی گرتنی سکرین­شات</string>
@@ -1380,12 +1380,12 @@
     <string name="insert_amount_in_rial">بڕی پارەکە بە ریاڵ بنووسە.</string>
     <string name="enter_16_digit_card_number">ژمارەی کارتی ١٦ ژمارەیی بنووسە.</string>
     <string name="buy_internet_package_volume_type_title">قەبارە</string>
-    <string name="buy_internet_package_daily_filter_title">0f.% رۆژ</string>
-    <string name="buy_internet_package_weekly_filter_title">0f.% هەفتە</string>
-    <string name="buy_internet_package_month_filter_title">0f.% مانگ</string>
-    <string name="buy_internet_package_year_filter_title">0f.% ساڵ</string>
-    <string name="buy_internet_package_volume_filter_gb_title">0f.% گیگابایت</string>
-    <string name="buy_internet_package_volume_filter_mb_title">0f.% مێگابایت</string>
+    <string name="buy_internet_package_daily_filter_title">روژ %.0f</string>
+    <string name="buy_internet_package_weekly_filter_title">هفته %.0f</string>
+    <string name="buy_internet_package_month_filter_title">مانگ %.0f</string>
+    <string name="buy_internet_package_year_filter_title">سال %.0f</string>
+    <string name="buy_internet_package_volume_filter_gb_title">گیگابایت %.0f</string>
+    <string name="buy_internet_package_volume_filter_mb_title">میگابایت %.0f</string>
     <string name="buy_internet_package_choose_title">هەڵبژێرە</string>
     <string name="beeptunes_purchase_song">مووسیقا هەڵبژێردراوەکان</string>
     <string name="beeptunes_sync_song">مووسیقا دانلەودکراوەکان</string>
@@ -1944,14 +1944,15 @@
     <string name="Stop">متوقف کردن</string>
 
 
-
     <string name="status">لحظه ها</string>
     <string name="status_title">لحظه</string>
     <string name="my_status">لحظه من</string>
     <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
+    <string name="add_status_update">مدیریت لحظه ها</string>
     <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
     <string name="recent_updates">بروز رسانی های اخیر</string>
     <string name="your_status_updates_will_disappear_after_24_hours">لحظه های شما پس از ۲۴ ساعت حذف می شوند.</string>
+    <string name="my_channel_moments">لحظه کانال های من</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
@@ -1977,4 +1978,8 @@
     <string name="the_amount_can_not_be_less_than_1000_rials">مبلغ نمی تواند از ۱۰۰۰ ریال کمتر باشد</string>
     <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
+    <string name="faild_payment">متاسفانه خطایی رخ داده مجدد تلاش کنید
+</string>
+    <string name="load_sticker_types_error_message">قسم کے فلٹر لوڈ نہیں ہوئے ہیں۔</string>
+    <string name="select_sticker_type">اسٹیکر کی قسم منتخب کریں۔</string>
 </resources>

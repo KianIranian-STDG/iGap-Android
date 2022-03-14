@@ -69,6 +69,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 import static net.iGap.helper.HelperString.isNumeric;
 
 public class InternetFragment extends BaseFragment implements HandShakeCallback {
@@ -151,11 +152,18 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         paymentRepository = PaymentRepository.getInstance();
         progressBar.setVisibility(View.VISIBLE);
         paymentRepository.getConfigs(userToken, config -> {
-            if (config != null) {
+            if (config != null && getActivity() != null) {
                 this.config = config;
                 initForm();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        paymentRepository.clearRepository();
+        paymentRepository = null;
     }
 
     private void initForm() {
@@ -171,7 +179,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                 }
                 if (phoneNumber != null && phoneNumber.equals("0")) {
                     avatar.setVisibility(View.GONE);
-                    editTextNumber.setHint(getResources().getString(R.string.please_enter_phone_number));
+                    editTextNumber.setHint(getActivity().getString(R.string.please_enter_phone_number));
                     removeButton.setText(R.string.icon_edit);
                 } else {
                     avatar.setVisibility(View.GONE);
@@ -184,7 +192,14 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                 editTextNumber.setSelection(editTextNumber.getText() == null ? 0 : editTextNumber.getText().length());
             }
         });
-        operatorAdapter = new OperatorAdapter(getContext(), operators, operatorName -> changeOperator(currentConfigData.getOperator()));
+        operatorAdapter = new OperatorAdapter(getContext(), operators, operatorName -> {
+            if (currentConfigData != null) {
+                changeOperator(currentConfigData.getOperator());
+            } else {
+                operatorAdapter.setCheckedRadioButton(null);
+                HelperError.showSnackMessage(getActivity().getString(R.string.please_enter_phone_number), false);
+            }
+        });
         lstOperator.setAdapter(operatorAdapter);
         detectOperatorByNumber(editTextNumber.getText().toString());
         chargeApi = new RetrofitFactory().getChargeRetrofit();
@@ -197,7 +212,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
             RadioButton radioButton = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
             if (radioButton != null) {
                 if (currentSimType == null) {
-                    showError(getResources().getString(R.string.invalid_sim_type));
+                    showError(getActivity().getString(R.string.invalid_sim_type));
                     return;
                 }
                 if (editTextNumber.getText() == null) {
@@ -216,7 +231,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                 int packageType = historyNumber != null ? Integer.parseInt(historyNumber.getPackageType()) : -1;
                 new HelperFragment(getActivity().getSupportFragmentManager(), PaymentInternetFragment.newInstance(userNumber, rechargeableNumber, currentOperator.getKey(), currentSimType, packageType)).setAnimated(false).setReplace(false).load();
             } else {
-                showError(getResources().getString(R.string.sim_type_not_choosed));
+                showError(getActivity().getString(R.string.sim_type_not_choosed));
             }
         });
         progressBar.setVisibility(View.GONE);
@@ -226,13 +241,13 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
     private void detectOperatorByNumber(String editText) {
         if (editText.length() == 10 && editText.charAt(0) != '0')
             editTextNumber.setText("0".concat(editTextNumber.getText().toString()));
-        if (editText.length() == 11 || removeButton.getText().toString().equals(getResources().getString(R.string.icon_edit))) {
+        if (editText.length() == 11 || removeButton.getText().toString().equals(getActivity().getString(R.string.icon_edit))) {
             operators.clear();
             packageChargeTypes.clear();
             for (ConfigData configData : config.getData()) {
                 operators.add(configData.getOperator());
-                if (removeButton.getText().toString().equals(getResources().getString(R.string.icon_edit))) {
-                    currentConfigData = config.getData().get(0);
+                if (removeButton.getText().toString().equals(getActivity().getString(R.string.icon_edit))) {
+                    currentConfigData = null;
                 } else {
                     for (int j = 0; j < configData.getPreNumbers().size(); j++) {
                         if (editText.substring(0, 4).equals(configData.getPreNumbers().get(j))) {
@@ -246,6 +261,8 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         if (currentConfigData != null) {
             packageChargeTypes.addAll(currentConfigData.getPackageChargeTypes());
             changeOperator(currentConfigData.getOperator());
+        } else {
+            packageChargeTypes.clear();
         }
     }
 
@@ -361,7 +378,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                         frameContact.setEnabled(true);
                         progressBar.setVisibility(View.GONE);
                         if (contactNumbers.size() == 0) {
-                            HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
+                            HelperError.showSnackMessage(getActivity().getString(R.string.no_number_found), false);
                         } else {
                             adapterContact.setContactNumbers(contactNumbers);
                             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
@@ -405,6 +422,8 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
 
                 @Override
                 public void deny() {
+                    progressBar.setVisibility(View.GONE);
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
                 }
             });
         } catch (IOException e) {
@@ -424,7 +443,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
     private void setPhoneNumberEditText(String phone) {
         phone = phone.replace("+", "");
         if (phone.contains("+") && !phone.contains("+98")) {
-            showError(getResources().getString(R.string.phone_number_is_not_valid));
+            showError(getActivity().getString(R.string.phone_number_is_not_valid));
             return;
         }
         if (phone.startsWith("98")) {
@@ -448,7 +467,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                     List<FavoriteNumber> numbers = response.body().getData();
                     if (numbers.size() == 0) {
                         progressBar.setVisibility(View.GONE);
-                        HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
+                        HelperError.showSnackMessage(getActivity().getString(R.string.no_history_found), false);
                     } else {
                         progressBar.setVisibility(View.GONE);
                         MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
@@ -470,7 +489,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                     }
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(getResources().getString(R.string.list_empty), false);
+                    HelperError.showSnackMessage(getActivity().getString(R.string.list_empty), false);
                 }
             }
 
@@ -478,7 +497,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
             public void onFailure(@NotNull Call<GetFavoriteNumber> call, @NotNull Throwable t) {
                 frameHistory.setEnabled(true);
                 progressBar.setVisibility(View.GONE);
-                HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
+                HelperError.showSnackMessage(getActivity().getString(R.string.no_history_found), false);
             }
         });
     }
@@ -494,7 +513,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
 
     public void setDialogBackground(View view) {
         if (G.themeColor == Theme.DARK) {
-            view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
+            view.setBackground(getActivity().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }
 }

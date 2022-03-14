@@ -533,7 +533,7 @@ public class BotInit implements MakeButtons.OnClickListener {
             try {
                 if (v.getId() == ButtonActionType.USERNAME_LINK) {
                     //TODO: fixed this and do not use G.currentActivity
-                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0, 0);
                 } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                     try {
                         Long identity = System.currentTimeMillis();

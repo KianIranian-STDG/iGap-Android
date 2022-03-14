@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -247,7 +248,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
         channelOrGroupProfileSetTv.setOnClickListener(v -> {
 
-            if (onProfileImageEdited != null) {
+            if (onProfileImageEdited != null && itemGalleryList.size() != 0) {
                 onProfileImageEdited.profileImageAdd(itemGalleryList.get(0).getPath());
                 return;
             }
@@ -783,7 +784,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
-            if (itemGalleryList.get(position).path != null) {
+            if (itemGalleryList.size() > 0 && itemGalleryList.get(position).path != null) {
                 new Thread(() -> {
                     String oldPath = itemGalleryList.get(position).path;
                     String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
@@ -819,22 +820,23 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     }
 
     private void setValueCheckBox(int position) {
+        if (itemGalleryList.size() != 0) {
+            if (checkBox.isChecked()) {
+                checkBox.setChecked(false);
+                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+                itemGalleryList.get(position).setSelected(true);
+                textImageList.remove(itemGalleryList.get(position).path);
 
-        if (checkBox.isChecked()) {
-            checkBox.setChecked(false);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-            itemGalleryList.get(position).setSelected(true);
-            textImageList.remove(itemGalleryList.get(position).path);
-
-        } else {
-            checkBox.setChecked(true);
-            StructBottomSheet item = new StructBottomSheet();
-            item.setText(edtChat.getText().toString());
-            item.setPath(itemGalleryList.get(position).path);
-            item.setId(itemGalleryList.get(position).getId());
-            textImageList.put(itemGalleryList.get(position).path, item);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
-            itemGalleryList.get(position).setSelected(false);
+            } else {
+                checkBox.setChecked(true);
+                StructBottomSheet item = new StructBottomSheet();
+                item.setText(edtChat.getText().toString());
+                item.setPath(itemGalleryList.get(position).path);
+                item.setId(itemGalleryList.get(position).getId());
+                textImageList.put(itemGalleryList.get(position).path, item);
+                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+                itemGalleryList.get(position).setSelected(false);
+            }
         }
         if (textImageList.size() > 0 && isChatPage) {
             txtCountImage.setVisibility(VISIBLE);
@@ -864,7 +866,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         edtChat = view.findViewById(R.id.chl_edt_chat);
         edtChat.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtChat.setInputType(edtChat.getInputType() | EditorInfo.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
         checkBox = view.findViewById(R.id.checkBox_editImage);
@@ -873,7 +874,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     private void goToCropPage(View v) {
         AndroidUtils.closeKeyboard(v);
-        if (itemGalleryList.size() == 0) {
+        if (itemGalleryList.size() <= 0) {
             return;
         }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
@@ -893,7 +894,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
-            UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, SAMPLE_CROPPED_IMAGE_NAME)))
+            UCrop.of(uri, Uri.fromFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), SAMPLE_CROPPED_IMAGE_NAME)))
                     .withOptions(options)
                     .useSourceImageAspectRatio()
                     .start(G.context, FragmentEditImage.this);
@@ -919,10 +920,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected) {
 
-        if (itemGalleryList == null) {
-            itemGalleryList = new ArrayList<>();
-        }
-
         if (!HelperPermission.grantedUseStorage()) {
             return itemGalleryList;
         }
@@ -938,10 +935,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
     }
 
     public static ArrayList<StructBottomSheet> insertItemList(String path, String message, boolean isSelected) {
-
-        if (itemGalleryList == null) {
-            itemGalleryList = new ArrayList<>();
-        }
 
         if (!HelperPermission.grantedUseStorage()) {
             return itemGalleryList;
@@ -959,10 +952,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected, CompleteEditImage completeEdit) {
 
-        if (itemGalleryList == null) {
-            itemGalleryList = new ArrayList<>();
-        }
-
         if (!HelperPermission.grantedUseStorage()) {
             return itemGalleryList;
         }
@@ -979,11 +968,22 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         return itemGalleryList;
     }
 
+    public static void checkItemGalleryList() {
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+        if (textImageList == null) {
+            textImageList = new HashMap<>();
+        }
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
+    }
+
     private void serCropAndFilterImage(String path) {
 
         int po = (viewPager.getCurrentItem());
 
-        if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
+        if (po < itemGalleryList.size() && textImageList.containsKey(itemGalleryList.get(po).getPath())) {
 
             String message = textImageList.get(itemGalleryList.get(po).getPath()).getText();
             int id = textImageList.get(itemGalleryList.get(po).getPath()).getId();
@@ -1008,6 +1008,12 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         super.onDestroy();
         if (rootView != null)
             rootView.setListener(null);
+        if (FragmentEditImage.itemGalleryList != null && FragmentEditImage.textImageList != null) {
+            FragmentEditImage.itemGalleryList.clear();
+            FragmentEditImage.itemGalleryList = null;
+            FragmentEditImage.textImageList.clear();
+            FragmentEditImage.textImageList = null;
+        }
 
         updateImage = null;
     }

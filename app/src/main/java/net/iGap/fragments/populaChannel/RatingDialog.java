@@ -3,6 +3,7 @@ package net.iGap.fragments.populaChannel;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import com.google.android.play.core.tasks.Task;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperLog;
 import net.iGap.module.SHP_SETTING;
 
 import java.util.ArrayList;
@@ -70,7 +73,11 @@ public class RatingDialog {
                             Intent intent = new Intent(Intent.ACTION_EDIT);
                             intent.setData(Uri.parse("bazaar://details?id=" + context.getPackageName()));
                             intent.setPackage("com.farsitel.bazaar");
-                            activity.startActivity(intent);
+                            try {
+                                activity.startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                FileLog.e(e);
+                            }
                             sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
                             dialog.dismiss();
                         } else {

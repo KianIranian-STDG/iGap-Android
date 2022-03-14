@@ -91,6 +91,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -241,7 +242,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
                     case 0: {
 
                         try {
-                            HelperPermission.getStoragePermision(context, new OnGetPermission() {
+                            HelperPermission.getStoragePermission(context, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
 
@@ -255,7 +256,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
 
                                 @Override
                                 public void deny() {
-
+                                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                                 }
                             });
                         } catch (IOException e) {
@@ -268,7 +269,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
                         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
 
-                                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
                                     @Override
                                     public void Allow() throws IOException {
                                         HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
@@ -284,7 +285,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
 
                                             @Override
                                             public void deny() {
-
+                                                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                                             }
                                         });
                                     }
@@ -375,7 +376,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();
@@ -383,7 +384,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
 
                     @Override
                     public void deny() {
-
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
             }
@@ -507,7 +508,6 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
         bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
         bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
         fragmentCreateChannel.setArguments(bundle);
-        getActivity().onBackPressed();
         if (getActivity() != null) {
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
@@ -524,27 +524,26 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
          */
         if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
-        if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
-        if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
-
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-            } else {
-                ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-                FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-            }
             if (getActivity() != null) {
+                FragmentEditImage.checkItemGalleryList();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
+                    FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                } else {
+                    ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
+                    FragmentEditImage.insertItemList(AttachFile.imagePath, false);
+                }
                 FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
                 fragmentEditImage.setOnProfileImageEdited(this);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
-                ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
-                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                 if (getActivity() != null) {
+                    FragmentEditImage.checkItemGalleryList();
+                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                     FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
                     fragmentEditImage.setOnProfileImageEdited(this);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
@@ -704,7 +703,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
 
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
-        RealmRoom.updateMemberCount(roomId, roomType, countMember+ 1); // plus with 1 , for own account
+        RealmRoom.updateMemberCount(roomId, roomType, countMember + 1); // plus with 1 , for own account
         if (getActivity() != null && isAdded()) {
             G.handler.post(new Runnable() {
                 @Override

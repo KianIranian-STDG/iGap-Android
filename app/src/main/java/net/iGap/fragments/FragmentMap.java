@@ -108,7 +108,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private String provider;
 
 
-    public static FragmentMap getInstance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
+    public static FragmentMap getInsance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
 
         FragmentMap fragmentMap = new FragmentMap();
 

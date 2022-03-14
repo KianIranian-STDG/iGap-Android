@@ -13,8 +13,13 @@ package net.iGap.helper;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -74,35 +79,56 @@ public class HelperPermission {
     }
 
     //************************************************************************************************************
-    public static void getStoragePermision(Context context, OnGetPermission onGetPermission) throws IOException {
+    public static void getStoragePermission(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
             if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
 
+        /**Following condition do not affect on app flow temporary
+         *because Enviroment.isExternalStorageManager always return false*/
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            if (Environment.isExternalStorageManager()) {
+                if (onGetPermission != null) {
+                    G.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                onGetPermission.Allow();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                    });
+                }
+                return;
+            }
+        }
+
         ResultStorage = onGetPermission;
 
-        ArrayList<String> needPermosion = null;
+        ArrayList<String> needPermission = null;
 
         int permissionReadStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionWriteStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionManageStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
 
         if (permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
-            needPermosion = new ArrayList<>();
-            needPermosion.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            needPermission = new ArrayList<>();
+            needPermission.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
 
         if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
-            if (needPermosion == null) {
-                needPermosion = new ArrayList<>();
+            if (needPermission == null) {
+                needPermission = new ArrayList<>();
             }
-            needPermosion.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            needPermission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
-        if (needPermosion != null) {
-            String[] mStringArray = new String[needPermosion.size()];
-            mStringArray = needPermosion.toArray(mStringArray);
+        if (needPermission != null) {
+            String[] mStringArray = new String[needPermission.size()];
+            mStringArray = needPermission.toArray(mStringArray);
             getPermission(context, mStringArray, MY_PERMISSIONS_STORAGE, context.getResources().getString(R.string.permission_storage), ResultStorage);
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
@@ -325,10 +351,10 @@ public class HelperPermission {
 
     //************************************************************************************************************
     public static void getPermission(final Context context, final String[] needPermission, final int requestCode, String Text, final OnGetPermission onGetPermission) {
+        Activity activity = (Activity) context;
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, needPermission[0])) {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
-
-            String message = context.getString(R.string.you_need_to_allow) + " " + Text;
+            String message = activity.getString(R.string.you_need_to_allow) + " " + Text;
 
             //final DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
             //    @Override public void onClick(DialogInterface dialog, int which) {
@@ -344,12 +370,12 @@ public class HelperPermission {
             //    }
             //};
 
-            new MaterialDialog.Builder(context).cancelable(false).content(message).positiveText(context.getString(R.string.ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(activity).cancelable(false).content(message).positiveText(activity.getString(R.string.ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
+                    ActivityCompat.requestPermissions(activity, needPermission, requestCode);
                 }
-            }).negativeText(context.getString(R.string.cancel)).onNegative(new MaterialDialog.SingleButtonCallback() {
+            }).negativeText(activity.getString(R.string.cancel)).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     if (onGetPermission != null) onGetPermission.deny();
@@ -367,7 +393,7 @@ public class HelperPermission {
             return;
         }
 
-        ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
+        ActivityCompat.requestPermissions(activity, needPermission, requestCode);
     }
 
     //************************************************************************************************************
@@ -420,4 +446,41 @@ public class HelperPermission {
     }
 
     //************************************************************************************************************
+
+    public static void showDeniedPermissionMessage(String permissionName) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            if (G.currentActivity == null) {
+                return;
+            }
+            new MaterialDialog.Builder(G.fragmentActivity)
+                    .title(G.context.getString(R.string.app_name))
+                    .content(G.context.getString(R.string.to_use_this_section_you_need_to_obtain_permissions, permissionName))
+                    .positiveText(G.context.getString(R.string.settings))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            try {
+                                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + G.context.getPackageName()));
+                                G.currentActivity.startActivity(intent);
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+
+                        }
+                    }).negativeText(G.context.getString(R.string.ok))
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+
+        } else {
+            HelperError.showSnackMessage(G.context.getString(R.string.you_need_to_allow) + " " + permissionName, false);
+        }
+
+
+    }
 }

@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperTracker;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.realm.RealmStory;
-import net.iGap.story.StoryPagerFragment;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -42,9 +44,11 @@ import java.util.List;
 
 import io.realm.RealmResults;
 
+import static net.iGap.activities.ActivityMain.DEEP_LINK;
+
 public class BottomNavigationFragment extends BaseFragment implements OnUnreadChange {
 
-    public static final int CONTACT_FRAGMENT = 0;
+    public static final int STORY_FRAGMENT = 0;
     private static final int CALL_FRAGMENT = 1;
     public static final int CHAT_FRAGMENT = 2;
     public static final int DISCOVERY_FRAGMENT = 3;
@@ -80,7 +84,19 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     @Override
     public void onStart() {
         super.onStart();
-
+        int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
+        if (activeAccountCount == 0) {
+            finish();
+        } else {
+            Uri data = getActivity().getIntent().getData();
+            if (data!=null) {
+                String[] strings = data.toString().split("/");
+                String path = strings[strings.length - 1];
+                if ((getActivity().getIntent().getExtras() != null && getActivity().getIntent().getExtras().getString(DEEP_LINK) != null)||path.startsWith("d:")) {
+                    ((ActivityMain) getActivity()).handleDeepLink(getActivity().getIntent());
+                }
+            }
+        }
         if (crawlerMap != null) {
             autoLinkCrawler(crawlerMap, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
                 @Override
@@ -169,7 +185,8 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
         switch (position) {
-            case CONTACT_FRAGMENT:
+            case STORY_FRAGMENT:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_MOMENTS_TAB);
                 fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
                 if (fragment == null) {
                     fragment = new StoryFragment();
@@ -236,10 +253,14 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
 
     public boolean isFirstTabItem() {
-        if (bottomNavigation.getSelectedItemPosition() == CHAT_FRAGMENT) {
-            return true;
+        if (bottomNavigation != null) {
+            if (bottomNavigation.getSelectedItemPosition() == CHAT_FRAGMENT) {
+                return true;
+            } else {
+                bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
+                return false;
+            }
         } else {
-            bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
             return false;
         }
     }
@@ -308,7 +329,10 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
                 if (address.length > 1) {
                     int lastIndexOfDiscovery = discoveryUri.length - 1;
-
+                    if (discoveryUri[lastIndexOfDiscovery].toLowerCase().startsWith("d:"))
+                        discoveryUri[lastIndexOfDiscovery] = discoveryUri[lastIndexOfDiscovery].toLowerCase().replace("d:","");
+                    if (discoveryUri[lastIndexOfDiscovery].contains(":"))
+                        discoveryUri[lastIndexOfDiscovery] = discoveryUri[lastIndexOfDiscovery].toLowerCase().split(":")[0];
                     if (HelperString.isInteger(discoveryUri[lastIndexOfDiscovery])) {
                         onDeepLinkValid.linkValid(discoveryUri[lastIndexOfDiscovery]);
                         DeepLinkHelper.HandleDiscoveryDeepLink(this, discoveryUri[lastIndexOfDiscovery]);
@@ -339,7 +363,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 break;
             case DEEP_LINK_CONTACT:
                 onDeepLinkValid.linkValid(address[0]);
-                setCrawlerMap(CONTACT_FRAGMENT, null);
+                setCrawlerMap(STORY_FRAGMENT, null);
                 break;
             case DEEP_LINK_POPULAR:
                 onDeepLinkValid.linkValid(address[0]);
@@ -386,8 +410,8 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             }
         } else {
             switch (position) {
-                case CONTACT_FRAGMENT:
-                    bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
+                case STORY_FRAGMENT:
+                    bottomNavigation.setCurrentItem(STORY_FRAGMENT);
                     break;
                 case CALL_FRAGMENT:
                     bottomNavigation.setCurrentItem(CALL_FRAGMENT);

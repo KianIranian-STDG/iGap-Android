@@ -51,6 +51,17 @@
                 android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/largeTextSize" />
 
+            <TextView
+                android:id="@+id/sfsl_txt_verified_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:paddingTop="@dimen/dp2"
+                android:textColor="@color/verify_color"
+                android:textSize="@dimen/largeTextSize" />
+
         </LinearLayout>
 
         <LinearLayout

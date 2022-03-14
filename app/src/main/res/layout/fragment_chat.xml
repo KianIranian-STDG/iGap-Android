@@ -20,6 +20,7 @@
             android:adjustViewBounds="true"
             android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardFloatingTime"
             android:layout_width="wrap_content"
@@ -57,8 +58,8 @@
             android:id="@+id/chatContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="56dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="56dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -278,19 +279,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp52"
                 android:background="?attr/iGapTopRoundButtonPrimary"
-                android:gravity="center"
                 android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
                 android:text="@string/restrictions_on_sending_messages"
                 android:textColor="?attr/iGapPrimaryTextColor"
                 android:textSize="@dimen/standardTextSize"
-                android:visibility="gone"
-                android:focusable="true" />
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/fl_chat_keyboardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom" />
 
             <include
                 android:id="@+id/layout_bot"
@@ -364,7 +365,47 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/chat_action_buttons_root_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp60"
+            android:visibility="gone"
+            android:orientation="vertical">
 
+            <FrameLayout
+                android:id="@+id/custom_status_action_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <net.iGap.module.MaterialDesignTextView
+                    style="@style/myIconTextViewStyleGray"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:text="@string/icon_edit"
+                    android:textColor="@color/white" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/add_story_action_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10">
+
+                <net.iGap.module.MaterialDesignTextView
+                    style="@style/myIconTextViewStyleGray"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="@dimen/dp52"
+                    android:text="@string/icon_camera"
+                    android:textColor="@color/white" />
+            </FrameLayout>
+
+        </LinearLayout>
         <include
             android:id="@+id/layout_add_contact"
             layout="@layout/chat_sub_layout_block_user"
@@ -372,7 +413,6 @@
             android:layout_height="40dp"
             android:layout_marginTop="56dp"
             android:visibility="gone" />
-
 
 
         <include
@@ -390,6 +430,7 @@
             android:layout_centerInParent="true"
             android:indeterminate="true"
             android:visibility="gone" />
+
         <include
             android:id="@+id/ac_ll_strip_Pin"
             layout="@layout/chat_sub_layout_strip_pin"

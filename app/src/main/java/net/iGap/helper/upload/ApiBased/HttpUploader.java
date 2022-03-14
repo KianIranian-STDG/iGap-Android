@@ -56,6 +56,8 @@ public class HttpUploader implements IUpload {
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private ThreadPoolExecutor mThreadPoolExecutor;
     public static boolean isMultiUpload = false;
+    public static boolean isRoomMultiUpload = false;
+    public static long storyRoomIdForUpload = 0;
     public static boolean isStoryUploading = false;
     private FileIOExecutor fileExecutors;
 
@@ -259,10 +261,15 @@ public class HttpUploader implements IUpload {
                             MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryFileToken(fileObject.messageId, fileObject.fileToken);
 
 
-                            if (isMultiUpload) {
+                            if (isMultiUpload || isRoomMultiUpload) {
                                 if (MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryById(AccountManager.getInstance().getCurrentUser().getId(), false).storyObjects.size() ==
                                         MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), 0).size()) {
-                                    List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING, true, new String[]{"createdAt"});
+                                    List<StoryObject> realmStoryProtos;
+                                    if (isRoomMultiUpload) {
+                                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), storyRoomIdForUpload, MessageObject.STATUS_SENDING, true, true, new String[]{"createdAt"});
+                                    } else {
+                                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), 0, MessageObject.STATUS_SENDING, true, false, new String[]{"createdAt"});
+                                    }
                                     if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
                                         List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
                                         for (int i = 0; i < realmStoryProtos.size(); i++) {
@@ -272,7 +279,12 @@ public class HttpUploader implements IUpload {
                                             storyObjects.add(storyAddRequest.build());
                                         }
                                         isStoryUploading = false;
-                                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                        if (isRoomMultiUpload) {
+                                            MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, storyRoomIdForUpload);
+                                        } else {
+                                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                        }
+
                                     }
 
                                 }
@@ -287,7 +299,12 @@ public class HttpUploader implements IUpload {
                                         storyObjects.add(storyAddRequest.build());
                                     }
                                     isStoryUploading = false;
-                                    MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                    if (realmStoryProtos.get(0).isForRoom) {
+                                        MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, realmStoryProtos.get(0).roomId);
+                                    } else {
+                                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                    }
+
                                 }
                             }
 

@@ -28,6 +28,7 @@ import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.observers.interfaces.PaymentCallBack;
 
 /**
@@ -212,15 +213,17 @@ public class HelperFragment {
 
     public void removeAll(boolean keepMain) {
         /*if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {*/
-        if (G.twoPaneMode) {
-            Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
-            if (fragment instanceof FragmentChat) {
-                fragmentManager.beginTransaction().remove(fragment).commit();
-            }
-            fragmentManager.popBackStack(TabletEmptyChatFragment.class.getName(), 0);
-        } else {
-            fragmentManager.popBackStack(BottomNavigationFragment.class.getName(), 0);
-        }
+        if( fragmentManager != null){
+            if (G.twoPaneMode) {
+                Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
+                if (fragment instanceof FragmentChat) {
+                    fragmentManager.beginTransaction().remove(fragment).commit();
+                }
+                fragmentManager.popBackStack(TabletEmptyChatFragment.class.getName(), 0);
+            } else {
+                fragmentManager.popBackStack(BottomNavigationFragment.class.getName(), 0);
+            }}
+
         /*for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
 
         }*/
@@ -342,6 +345,9 @@ public class HelperFragment {
         setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         replace = false;
         load();
+    }
+
+    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
     }
 
     private boolean isRelatedToChat(String fragmentName) {

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -69,6 +70,7 @@ import net.iGap.fragments.filterImage.BitmapUtils;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.EmojiView;
@@ -90,6 +92,7 @@ import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
+import net.iGap.story.liststories.MyStatusStoryListFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -102,6 +105,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Listener,
         OnPhotoEditorListener, BrushConfigDialog.Properties, BrushViewChangeListener, EmojiDialogFrag.EmojiListener, FilterDialogFragment.FiltersListFragmentListener {
@@ -138,6 +142,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private ArrayList<StructBottomSheet> itemGalleryList;
     public HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     private static final String PATH = "path";
+    private static final String IS_ROOM = "isRoom";
+    private static final String ROOM_ID = "roomId";
+    private static final String LIST_MODE = "listMode";
+    private static final String ROOM_TITLE = "roomTitle";
     private String path;
     private SharedPreferences emojiSharedPreferences;
     private EmojiView emojiView;
@@ -172,19 +180,31 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private PreviewAdapter previewAdapter;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private int num = 0;
+    private boolean isForRoom;
+    private long roomId;
+    private int listMode;
+    private String roomTitle;
 
-    public static PhotoViewer newInstance(String path) {
+    public static PhotoViewer newInstance(String path, boolean isForRoom, long roomId, int listMode, String roomTitle) {
         Bundle args = new Bundle();
         args.putString(PATH, path);
+        args.putBoolean(IS_ROOM, isForRoom);
+        args.putLong(ROOM_ID, roomId);
+        args.putInt(LIST_MODE, listMode);
+        args.putString(ROOM_TITLE, roomTitle);
         PhotoViewer fragment = new PhotoViewer();
         fragment.setArguments(args);
         return fragment;
     }
 
 
-    public static PhotoViewer newInstance(ArrayList<GalleryItemModel> selectedPhotos) {
+    public static PhotoViewer newInstance(ArrayList<GalleryItemModel> selectedPhotos, boolean isForRoom, long roomId, int listMode, String roomTitle) {
         Bundle args = new Bundle();
         args.putSerializable(SELECTED_PHOTOS, selectedPhotos);
+        args.putBoolean(IS_ROOM, isForRoom);
+        args.putLong(ROOM_ID, roomId);
+        args.putInt(LIST_MODE, listMode);
+        args.putString(ROOM_TITLE, roomTitle);
         PhotoViewer fragment = new PhotoViewer();
         fragment.setArguments(args);
         return fragment;
@@ -197,6 +217,13 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             getActivity().setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
     }
 
     public interface UpdateImage {
@@ -399,6 +426,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         modes = new HashMap<>();
         redoViews = new ArrayList<>();
         path = getArguments().getString(PATH);
+        this.isForRoom = getArguments().getBoolean(IS_ROOM, false);
+        this.roomId = getArguments().getLong(ROOM_ID, 0);
+        this.listMode = getArguments().getInt(LIST_MODE, 0);
+        this.roomTitle = getArguments().getString(ROOM_TITLE, "");
         selectedPhotos = (List<GalleryItemModel>) getArguments().getSerializable(SELECTED_PHOTOS);
         brushConfigDialog = new BrushConfigDialog();
         brushConfigDialog.setPropertiesChangeListener(this);
@@ -406,7 +437,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         modes.put(viewHolderPostion, StoryModes.NONE);
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
 
                     @Override
                     public void Allow() throws IOException {
@@ -415,7 +446,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
                     @Override
                     public void deny() {
-
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
             } catch (IOException e) {
@@ -460,19 +491,19 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 modes.put(viewHolderPostion, StoryModes.ADD_TEXT);
 
                 TextEditorDialogFragment textEditorDialogFragment =
-                        TextEditorDialogFragment.newInstance(getActivity());
+                        TextEditorDialogFragment.newInstance(requireActivity());
                 textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode, width) -> {
-                    FrameLayout rootView = new FrameLayout(getContext());
-                    stickerBorder = new FrameLayout(getContext());
+                    FrameLayout rootView = new FrameLayout(context);
+                    stickerBorder = new FrameLayout(context);
                     stickerBorder.setPadding(10, 10, 10, 10);
                     rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
-                    textTv = new TextView(getContext());
+                    textTv = new TextView(context);
                     textTv.setId(R.id.story_added_text);
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
                     textTv.setGravity(Gravity.CENTER);
-                    textTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+                    textTv.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
                     textTv.setTextSize(30);
                     TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 22, 30, 1,
                             TypedValue.COMPLEX_UNIT_DIP);
@@ -596,6 +627,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         pickerViewSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_MOMENTS_SUBMIT_PICTURE_PAGE);
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
@@ -791,7 +823,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private void setCreatedFinalBitmap(String path) {
 
 
-        if (textImageList.containsKey(itemGalleryList.get(counter).getPath())) {
+        if (counter < itemGalleryList.size() && textImageList.containsKey(itemGalleryList.get(counter).getPath())) {
 
             String message = textImageList.get(itemGalleryList.get(counter).getPath()).getText();
             int id = textImageList.get(itemGalleryList.get(counter).getPath()).getId();
@@ -809,8 +841,18 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         finalBitmapsPaths.add(path);
         counter++;
         if (counter == itemGalleryList.size()) {
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths, itemGalleryList);
-            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+            if (isForRoom && listMode == 0) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MyStatusStoryListFragment(finalBitmapsPaths, itemGalleryList, roomId, 0, roomTitle)).setReplace(false).load();
+            } else if (isForRoom && listMode == 1) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ROOM_IMAGE_UPLOAD, finalBitmapsPaths, itemGalleryList, roomId, 1, roomTitle);
+            } else {
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths, itemGalleryList, isForRoom, roomId, listMode, roomTitle);
+                new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+            }
+
+
         }
 
     }
@@ -896,11 +938,11 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     public void addEmoji(Typeface emojiTypeface, String emojiName) {
-        FrameLayout rootView = new FrameLayout(getContext());
-        stickerBorder = new FrameLayout(getContext());
+        FrameLayout rootView = new FrameLayout(context);
+        stickerBorder = new FrameLayout(context);
         rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.NO_GRAVITY, 8, 8, 8, 8));
 
-        textTv = new TextView(getContext());
+        textTv = new TextView(context);
         textTv.setTextColor(Color.BLACK);
         textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
                 18);
@@ -1152,7 +1194,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     null, viewPager,
                     textStickerView,
                     textStickerView.getBitmapHolderImageView(),
-                    AdapterViewPager.this, getContext(), addedText, colorCode);
+                    AdapterViewPager.this, context, addedText, colorCode);
 
             multiTouchListener.setOnGestureControl(new OnGestureControl() {
                 boolean isDownAlready = false;
@@ -1284,7 +1326,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
-            UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, SAMPLE_CROPPED_IMAGE_NAME)))
+            UCrop.of(uri, Uri.fromFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), SAMPLE_CROPPED_IMAGE_NAME)))
                     .withOptions(options)
                     .useSourceImageAspectRatio()
                     .start(G.context, PhotoViewer.this);
@@ -1363,7 +1405,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public void openPhotoForEdit(String path, String message, boolean isSelected) {
 
         this.path = path;
-        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+        ImageHelper imageHelper = new ImageHelper();
+        imageHelper.correctRotateImage(path, true, new OnRotateImage() {
             @Override
             public void startProcess() {
 
@@ -1422,7 +1465,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         if (value == 0) {
             return 0;
         }
-        return (int) Math.ceil(getContext().getResources().getDisplayMetrics().density * value);
+        return (int) Math.ceil(context.getResources().getDisplayMetrics().density * value);
     }
 
     private void setUpViewPager() {
@@ -1546,7 +1589,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     private void createEmojiView() {
         if (emojiView == null) {
-            emojiView = new EmojiView(rootView.getContext(), false, true);
+            emojiView = new EmojiView(context, false, true);
             emojiView.setVisibility(View.GONE);
             emojiView.setContentView(EmojiView.EMOJI);
             emojiView.setListener(new EmojiView.Listener() {

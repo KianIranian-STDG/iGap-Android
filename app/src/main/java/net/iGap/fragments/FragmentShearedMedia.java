@@ -51,6 +51,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -59,12 +60,10 @@ import net.iGap.activities.CallActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.messenger.ui.components.FragmentMediaContainer;
@@ -89,7 +88,6 @@ import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
@@ -116,7 +114,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -132,6 +129,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     public static String SELECTED_TAB_ID = "selected_tab";
     private static final String ROOM_ID = "RoomId";
+    private static final String DOCUMENT_ID = "DocumentId";
     private static final String USERNAME = "USERNAME";
     public static ArrayList<Long> list = new ArrayList<>();
     private static long countOFImage = 0;
@@ -166,7 +164,9 @@ public class FragmentShearedMedia extends BaseFragment {
     private boolean isSendRequestForLoading = false;
     private boolean isThereAnyMoreItemToLoad = false;
     private long nextMessageId = 0;
+    private long nextDocumentId = 0;
     private long roomId = 0;
+    private long documentId = 0;
     private MaterialDesignTextView btnGoToPage;
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
@@ -242,6 +242,7 @@ public class FragmentShearedMedia extends BaseFragment {
         //MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getArguments().getLong(ROOM_ID);
+        documentId = getArguments().getLong(DOCUMENT_ID);
         roomType = RealmRoom.detectType(roomId);
 
         initSharedTypes();
@@ -292,7 +293,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 case FragmentMediaContainer.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
-                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.putExtra(ActivityMain.openMediaPlayer, true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }
@@ -337,11 +338,13 @@ public class FragmentShearedMedia extends BaseFragment {
                                 }
                                 if (realmRoom != null) {
                                     ArrayList<Long> selectedListForDel = new ArrayList<>();
+                                    ArrayList<Long> selectedDocumentListForDel = new ArrayList<>();
 
                                     for (StructShearedMedia item : SelectedList) {
                                         selectedListForDel.add(item.messageId);
+                                        selectedDocumentListForDel.add(item.documentId);
                                     }
-                                    getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, selectedListForDel, bothDeleteMessageId);
+                                    getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, selectedListForDel, selectedDocumentListForDel, bothDeleteMessageId);
                                 }
                                 resetItems();
                             }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
@@ -353,10 +356,12 @@ public class FragmentShearedMedia extends BaseFragment {
                                     bothDeleteMessageId = null;
                                     if (realmRoom != null) {
                                         ArrayList<Long> messageIds = new ArrayList<>();
+                                        ArrayList<Long> documentIds = new ArrayList<>();
                                         for (StructShearedMedia item : SelectedList) {
                                             messageIds.add(item.messageId);
+                                            documentIds.add(item.documentId);
                                         }
-                                        getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, messageIds, bothDeleteMessageId);
+                                        getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, messageIds, documentIds, bothDeleteMessageId);
                                     }
                                     resetItems();
                                 }
@@ -380,8 +385,9 @@ public class FragmentShearedMedia extends BaseFragment {
                 case seeInChatTag:
                     if (SelectedList.size() == 1) {
                         long messageId = SelectedList.get(0).messageId;
-                        RealmRoomMessage.setGap(messageId);
-                        goToPositionFromShardMedia.goToPosition(messageId);
+                        long documentId = SelectedList.get(0).documentId;
+                        RealmRoomMessage.setGap(messageId,documentId);
+                        goToPositionFromShardMedia.goToPosition(messageId, documentId);
                         goToPosition = true;
                         popBackStackFragment();
                         adapter.resetSelected();
@@ -401,7 +407,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         complete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            public void complete(boolean result, String messageOne, String MessageTwo) {
 
                 int whatAction = 0;
                 String number = "0";
@@ -410,7 +416,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (messageOne.length() > 0) whatAction = Integer.parseInt(messageOne);
                 }
 
-                if (MessageTow != null) if (MessageTow.length() > 0) number = MessageTow;
+                if (MessageTwo != null) if (MessageTwo.length() > 0) number = MessageTwo;
 
                 callBack(result, whatAction, number);
             }
@@ -433,7 +439,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                         if (lastVisiblePosition + 30 >= offset) {
 
-                            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, nextMessageId, mFilter);
+                            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, nextMessageId, nextDocumentId, mFilter);
 
                             isSendRequestForLoading = true;
                             progressBar.setVisibility(View.VISIBLE);
@@ -910,6 +916,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         offset = 0;
         nextMessageId = 0;
+        nextDocumentId = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override
@@ -934,6 +941,7 @@ public class FragmentShearedMedia extends BaseFragment {
                             saveDataToLocal(resultList, roomId);
 
                             nextMessageId = resultList.get(0).getMessageId();
+                            nextDocumentId = resultList.get(0).getDocumentId();
 
                             isSendRequestForLoading = false;
                             isThereAnyMoreItemToLoad = true;
@@ -979,7 +987,7 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         };
 
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, nextMessageId, filter);
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, nextMessageId, nextDocumentId, filter);
         progressBar.setVisibility(View.VISIBLE);
         isSendRequestForLoading = true;
     }
@@ -1114,13 +1122,15 @@ public class FragmentShearedMedia extends BaseFragment {
         boolean isItemTime = false;
         String messageTime;
         long messageId;
+        long documentId;
         boolean isToday = false;
 
         public StructShearedMedia() {
         }
 
-        public StructShearedMedia(long messageId) {
+        public StructShearedMedia(long messageId, long documentId) {
             this.messageId = messageId;
+            this.documentId = documentId;
         }
 
         @Override
@@ -1229,7 +1239,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 // set blue back ground for selected file
                 FrameLayout layout = holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
-                if (SelectedList.indexOf(new StructShearedMedia(mList.get(position).messageId)) != -1) {
+                if (SelectedList.indexOf(new StructShearedMedia(mList.get(position).messageId, mList.get(position).documentId)) != -1) {
                     layout.setForeground(getContext().getResources().getDrawable(R.drawable.selected_item_foreground));
                 } else {
                     layout.setForeground(new ColorDrawable(Color.TRANSPARENT));
@@ -1258,8 +1268,9 @@ public class FragmentShearedMedia extends BaseFragment {
             }
 
             long messageId = mList.get(position).messageId;
+            long documentId = mList.get(position).documentId;
 
-            int index = SelectedList.indexOf(new StructShearedMedia(messageId));
+            int index = SelectedList.indexOf(new StructShearedMedia(messageId, documentId));
 
             if (index != -1) {
                 SelectedList.remove(mList.get(position));
@@ -1495,7 +1506,7 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         }
 
-        private void showActionMode(){
+        private void showActionMode() {
             createActionMode();
             sharedMediaToolbar.showActionToolbar();
             AnimatorSet animatorSet = new AnimatorSet();
@@ -1568,7 +1579,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 if (filet.exists()) {
 
                     if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                        G.imageLoader.displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
+                        Glide.with(getActivity()).load(suitablePath(vh.tempFilePath)).centerCrop().into(vh.imvPicFile);
                     }
                 } else {
                     DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
@@ -1584,7 +1595,7 @@ public class FragmentShearedMedia extends BaseFragment {
                                                 return;
                                             if (arg.data.getProgress() == 100) {
                                                 if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), vh.imvPicFile);
+                                                    Glide.with(getActivity()).load(AndroidUtils.suitablePath(arg.data.getFilePath())).centerCrop().into(vh.imvPicFile);
                                                 }
                                             }
                                     }
@@ -1692,7 +1703,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 if (filethumpnail.exists()) {
                     if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), holder1.imvPicFile);
+                        Glide.with(getActivity()).load(AndroidUtils.suitablePath(tempFilePath)).centerCrop().into(holder1.imvPicFile);
                     }
                 } else {
                     holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
@@ -1708,7 +1719,7 @@ public class FragmentShearedMedia extends BaseFragment {
                                             return;
                                         if (arg.data.getProgress() == 100) {
                                             if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.imvPicFile);
+                                                Glide.with(getActivity()).load(AndroidUtils.suitablePath(arg.data.getFilePath())).centerCrop().into(holder1.imvPicFile);
                                             }
                                         }
                                 }
@@ -1884,9 +1895,8 @@ public class FragmentShearedMedia extends BaseFragment {
                         } else {
                             file = new File(tempFilePath);
                             if (file.exists()) {
-
                                 if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), holder1.imvPicFile);
+                                    Glide.with(getActivity()).load(AndroidUtils.suitablePath(tempFilePath)).centerCrop().into(holder1.imvPicFile);
                                 }
                             }
                         }
@@ -1901,7 +1911,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (file.exists()) {
 
                         if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), holder1.imvPicFile);
+                            Glide.with(getActivity()).load(AndroidUtils.suitablePath(tempFilePath)).centerCrop().into(holder1.imvPicFile);
                         }
                     }
                 }
@@ -2120,7 +2130,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (filethumpnail.exists()) {
 
                         if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(holder1.tempFilePath), holder1.gifView);
+                            Glide.with(getActivity()).load(AndroidUtils.suitablePath(holder1.tempFilePath)).centerCrop().into(holder1.gifView);
                         }
                     } else {
                         DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
@@ -2135,7 +2145,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                                             if (arg.data.getProgress() == 100) {
                                                 if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.gifView);
+                                                    Glide.with(getActivity()).load(AndroidUtils.suitablePath(arg.data.getFilePath())).centerCrop().into(holder1.gifView);
                                                 }
                                             }
                                     }
@@ -2452,7 +2462,7 @@ public class FragmentShearedMedia extends BaseFragment {
     }
 
     public interface GoToPositionFromShardMedia {
-        void goToPosition(Long aLong);
+        void goToPosition(Long aLong, long documentId);
     }
 
     private class SharedButtons {

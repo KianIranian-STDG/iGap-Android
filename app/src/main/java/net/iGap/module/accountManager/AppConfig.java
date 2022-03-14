@@ -53,7 +53,7 @@ public class AppConfig {
                 SharedPreferences preferences = G.context.getSharedPreferences("app_config", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("services_base_url", servicesBaseUrl);
-                editor.putInt("file_gateway", fileGateway);
+                editor.putInt("file_gateway", 0);
                 editor.putInt("default_tab", defaultTab);
                 editor.putLong("time_out", defaultTimeout);
                 editor.putLong("max_file_size", maxFileSize);

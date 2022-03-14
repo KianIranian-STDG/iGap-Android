@@ -10,6 +10,11 @@
 
 package net.iGap.realm;
 
+import android.content.ContentValues;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+
 import androidx.annotation.Nullable;
 
 import net.iGap.G;
@@ -24,7 +29,6 @@ import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 
 import java.io.File;
-import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -130,11 +134,11 @@ public class RealmAttachment extends RealmObject {
             switch (attachmentFor) {
                 case MESSAGE_ATTACHMENT:
                     filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
-                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_TEMP, true);
+                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.context.getCacheDir().getAbsolutePath(), true);
                     break;
                 case AVATAR:
-                    filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
-                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true);
+                    filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), false);
+                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.context.getCacheDir().getAbsolutePath(), true);
                     break;
             }
 
@@ -171,7 +175,7 @@ public class RealmAttachment extends RealmObject {
             }
 
             if (realmAttachment.getLocalThumbnailPath() == null) {
-                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
+                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), true));
             }
         }
 

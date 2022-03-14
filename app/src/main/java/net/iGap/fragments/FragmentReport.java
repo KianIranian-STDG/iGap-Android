@@ -31,6 +31,7 @@ public class FragmentReport extends BaseFragment {
     private EditText edtReport;
     private long roomId;
     private long messageId = 0;
+    private long documentId = 0;
     private boolean isUserReport;
 
     public FragmentReport() {
@@ -53,6 +54,7 @@ public class FragmentReport extends BaseFragment {
         if (extras != null) {
             roomId = extras.getLong("ROOM_ID");
             messageId = extras.getLong("MESSAGE_ID");
+            documentId = extras.getLong("DOCUMENT_ID");
             isUserReport = extras.getBoolean("USER_ID");
         }
 
@@ -73,7 +75,7 @@ public class FragmentReport extends BaseFragment {
                     if (isUserReport) {
                         new RequestUserReport().userReport(roomId, ProtoUserReport.UserReport.Reason.OTHER, edtReport.getText().toString());
                     } else {
-                        new RequestClientRoomReport().roomReport(roomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, edtReport.getText().toString());
+                        new RequestClientRoomReport().roomReport(roomId, messageId,documentId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, edtReport.getText().toString());
                     }
                     closeKeyboard(v);
                     G.fragmentActivity.onBackPressed();

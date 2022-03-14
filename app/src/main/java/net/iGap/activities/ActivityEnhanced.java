@@ -18,6 +18,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -63,6 +65,9 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             }*/
         }
     };
+
+    public ActivityEnhanced() {
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -240,7 +245,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
         isOnGetPermission = false;
 
-        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
+        if (new File(G.DIR_APP).exists() && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
             return;
         } else {
             StartupActions.makeFolder();

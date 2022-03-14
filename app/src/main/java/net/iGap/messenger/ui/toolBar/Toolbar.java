@@ -38,7 +38,7 @@ public class Toolbar extends FrameLayout {
     public static final int SEARCH_TAG = 1020;
     private TextView titleTextView;
     private TextView subTitleTextView;
-    private ImageView backIcon;
+    public ImageView backIcon;
     protected ToolbarListener listener;
     private ToolbarItems items;
     private ToolbarItems actionItems;
@@ -72,21 +72,23 @@ public class Toolbar extends FrameLayout {
     }
 
     public AppCompatImageView addAvatar(RealmRoom item, AvatarHandler avatarHandler) {
-        if (circleImageView == null) {
+        if (circleImageView == null)
             circleImageView = new CircleImageView(getContext());
+
+        if (item != null) {
+            long idForGetAvatar;
+            if (item.getType() == CHAT) {
+                idForGetAvatar = item.getChatRoom().getPeerId();
+            } else {
+                idForGetAvatar = item.getId();
+            }
+            avatarHandler.getAvatar(new ParamWithInitBitmap(circleImageView, idForGetAvatar)
+                    .initBitmap(HelperImageBackColor.drawAlphabetOnPicture((int)
+                            getContext().getResources().getDimension(R.dimen.dp40), item.getInitials(), item.getColor())));
+
+            addView(circleImageView);
         }
 
-        long idForGetAvatar;
-        if (item.getType() == CHAT) {
-            idForGetAvatar = item.getChatRoom().getPeerId();
-        } else {
-            idForGetAvatar = item.getId();
-        }
-        avatarHandler.getAvatar(new ParamWithInitBitmap(circleImageView, idForGetAvatar)
-                .initBitmap(HelperImageBackColor.drawAlphabetOnPicture((int)
-                        getContext().getResources().getDimension(R.dimen.dp40), item.getInitials(), item.getColor())));
-
-        addView(circleImageView);
         return circleImageView;
     }
 

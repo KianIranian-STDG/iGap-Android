@@ -38,11 +38,15 @@ import android.hardware.Camera.Parameters;
 import android.os.Handler;
 import android.os.Process;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.zxing.BarcodeFormat;
+
+import net.iGap.G;
+import net.iGap.R;
 
 /**
  * Code scanner.
@@ -816,7 +820,12 @@ public final class CodeScanner {
                 if (errorCallback != null) {
                     errorCallback.onError(e);
                 } else {
-                    throw e;
+                    G.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, R.string.please_try_again, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }

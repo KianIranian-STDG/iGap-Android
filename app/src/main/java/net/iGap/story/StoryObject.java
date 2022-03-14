@@ -18,9 +18,12 @@ public class StoryObject {
     public AttachmentObject attachmentObject;
     public long createdAt;
     public long userId;
+    public long roomId;
     public long storyId;
     public long sessionId;
     public boolean isSeen;
+    public boolean isVerified;
+    public boolean isForRoom = false;
     public String imagePath;
     public RealmAttachment realmAttachment;
     public int status = MessageObject.STATUS_LISTENED;
@@ -32,7 +35,7 @@ public class StoryObject {
     public List<StoryViewInfoObject> storyViewInfoObjects = new ArrayList<>();
 
 
-    public static StoryObject create(ProtoGlobal.Story igapStory, int index, String displayName, String profileColor) {
+    public static StoryObject create(ProtoGlobal.Story igapStory, int index, String displayName, String profileColor, boolean isForRoom, boolean isVerified) {
         StoryObject storyObject = new StoryObject();
 
         storyObject.caption = igapStory.getCaption();
@@ -41,13 +44,21 @@ public class StoryObject {
         if (storyObject.file != null && storyObject.fileToken != null) {
             storyObject.status = MessageObject.STATUS_SENT;
         }
+        storyObject.isForRoom = isForRoom;
         storyObject.createdAt = igapStory.getCreatedAt();
         storyObject.userId = igapStory.getUserId();
+        storyObject.roomId = igapStory.getRoomId();
         storyObject.storyId = igapStory.getId();
         storyObject.isSeen = igapStory.getSeen();
+        storyObject.viewCount = igapStory.getViews();
+        storyObject.isVerified = isVerified;
         storyObject.index = index;
         storyObject.profileColor = profileColor;
-        storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : displayName;
+        if (isForRoom) {
+            storyObject.displayName = displayName;
+        } else {
+            storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : displayName;
+        }
 
         return storyObject;
     }
@@ -67,10 +78,17 @@ public class StoryObject {
         storyObject.userId = igapStory.getUserId();
         storyObject.storyId = igapStory.getStoryId();
         storyObject.isSeen = igapStory.isSeen();
+        storyObject.roomId = igapStory.getRoomId();
+        storyObject.isForRoom = igapStory.isForRoom();
+        storyObject.isVerified = igapStory.isVerified();
         storyObject.id = igapStory.getId();
         storyObject.index = igapStory.getIndex();
         storyObject.viewCount = igapStory.getViewCount();
-        storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : igapStory.getDisplayName();
+        if (storyObject.isForRoom) {
+            storyObject.displayName = igapStory.getDisplayName();
+        } else {
+            storyObject.displayName = storyObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : igapStory.getDisplayName();
+        }
 
 
         for (int i = 0; i < igapStory.getRealmStoryViewInfos().size(); i++) {

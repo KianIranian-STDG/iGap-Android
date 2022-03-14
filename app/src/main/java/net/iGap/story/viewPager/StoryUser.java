@@ -8,6 +8,7 @@ public class StoryUser implements Serializable {
 
     private String userName;
     private long userId;
+    private long roomId;
     private String profilePicUrl;
     private List<Story> stories;
 
@@ -41,5 +42,13 @@ public class StoryUser implements Serializable {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
     }
 }

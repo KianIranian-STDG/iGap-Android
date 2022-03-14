@@ -103,10 +103,7 @@ import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.tileprovider.MapTile;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
@@ -131,6 +128,9 @@ import io.realm.Sort;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.R.id.st_fab_gps;
+
+//import org.osmdroid.tileprovider.MapTile;
+//import org.osmdroid.util.BoundingBoxE6;
 
 public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
@@ -397,17 +397,19 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     }
 
 
-    public void setTile(final boolean state) {
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-            @Override
-            public String getTileURLString(MapTile aTile) {
-                if (state)
-                    return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                else
-                    return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-            }
-        });
-    }
+//    public void setTile(final boolean state) {
+//        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
+//            @Override
+//            public String getTileURLString(long pMapTileIndex) {
+//                if (state)
+//                    return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + pMapTileIndex.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+//                else
+//                    return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+//                return null;
+//            }
+//
+//        });
+//    }
 
     @Nullable
     @Override
@@ -491,9 +493,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     deleteMapFileCash();
                     getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", true).apply();
 
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
 
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentiGapMap.getInstance()).load();
                 }
 
             }
@@ -902,16 +904,15 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
                     .getBoolean("state", false);
 
-            map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-                @Override
-                public String getTileURLString(MapTile aTile) {
-
-                    if (!changeState)
-                        return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                    else
-                        return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                }
-            });
+//            map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
+//                @Override
+//                public String getTileURLString(MapTile aTile) {
+//                    if (!changeState)
+//                        return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+//                    else
+//                        return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+//                }
+//            });
 
 
             ViewGroup mapContainer = view.findViewById(R.id.mapContainer);
@@ -1154,8 +1155,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         eastLimitation = bound[3];
         southLimitation = bound[0];
         westLimitation = bound[1];
-        BoundingBoxE6 bBox = new BoundingBoxE6(bound[2] + extraBounding, bound[3] + extraBounding, bound[0] - extraBounding, bound[1] - extraBounding);
-        map.setScrollableAreaLimit(bBox);
+//        BoundingBoxE6 bBox = new BoundingBoxE6(bound[2] + extraBounding, bound[3] + extraBounding, bound[0] - extraBounding, bound[1] - extraBounding);
+//        map.setScrollableAreaLimit(bBox);
     }
 
     private double[] getBoundingBox(final double pLatitude, final double pLongitude, final int pDistanceInMeters) {

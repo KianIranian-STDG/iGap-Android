@@ -94,6 +94,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.waveView.setTag(messageObject.id);
 
         holder.mMessageID = messageObject.id + "";
+        holder.mDocumentID = messageObject.documentId + "";
 
         holder.complete = (result, messageOne, MessageTow) -> {
             if (holder.waveView.getTag().equals(messageObject.id) && (messageObject.id + "").equals(MusicPlayer.messageId)) {
@@ -106,28 +107,32 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                         break;
                     case UPDATE:
-                        if (result) {
+                        G.handler.post(() -> {
+                            if (HelperCalander.convertToUnicodeEnglishNumber(MessageTow).equals(holder.mTimeMusic)) {
+                                holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
+                                holder.waveView.setProgress(0);
+                            }
 
-                            G.handler.post(() -> {
+                            if (result) {
                                 holder.waveView.setProgress(MusicPlayer.musicProgress);
                                 if ((messageObject.id + "").equals(MusicPlayer.messageId)) {
                                     holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
                                     if (HelperCalander.isPersianUnicode) {
                                         holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                     }
+                                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                                 }
-                            });
-                        } else {
-                            holder.btnPlayMusic.post(() -> {
 
-                                holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
-                                if (HelperCalander.isPersianUnicode) {
-                                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
-                                }
-                                holder.waveView.setProgress(0);
-                            });
-                        }
-
+                            } else {
+                                holder.btnPlayMusic.post(() -> {
+                                    holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
+                                    if (HelperCalander.isPersianUnicode) {
+                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                    }
+                                    holder.waveView.setProgress(0);
+                                });
+                            }
+                        });
                 }
             }
         };
@@ -151,7 +156,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
                 if (holder.roomType.getNumber() != CHANNEL_VALUE) {
-                    messageClickListener.onVoiceListenedStatus(holder.roomType.getNumber(), holder.mRoomId, parseLong(holder.mMessageID), LISTENED_VALUE);
+                    messageClickListener.onVoiceListenedStatus(holder.roomType.getNumber(), holder.mRoomId, parseLong(holder.mMessageID), parseLong(holder.mDocumentID), LISTENED_VALUE);
                 }
                 RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
             }
@@ -218,11 +223,16 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         } else {
             holder.author.setText("");
         }
+        long _st = 0;
+        if (messageObject.isForwarded() && messageObject.forwardedMessage.attachment != null) {
+            _st = (int) (messageObject.forwardedMessage.attachment.duration * 1000);
+            holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        final long _st = (int) ((messageObject.isForwarded() ? messageObject.forwardedMessage.attachment.duration : attachment.duration) * 1000);
-
-        holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
-
+        }
+        if (!messageObject.isForwarded() && attachment != null) {
+            _st = (int) (attachment.duration * 1000);
+            holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
+        }
         if (holder.waveView.getTag().equals(messageObject.id) && MusicPlayer.messageId.equals(messageObject.id + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
 
@@ -290,6 +300,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         private AppCompatTextView author;
         private String mFilePath = "";
         private String mMessageID = "";
+        private String mDocumentID = "";
         private String mTimeMusic = "";
         private long mRoomId;
         private ProtoGlobal.Room.Type roomType;

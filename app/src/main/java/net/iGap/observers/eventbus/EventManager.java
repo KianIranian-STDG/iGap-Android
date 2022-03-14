@@ -34,6 +34,7 @@ public class EventManager {
 
     public static final int CONNECTION_STATE_CHANGED = eventId++;
     public static final int MEDIA_PLAYER_STATE_CHANGED = eventId++;
+    public static final int ON_NEW_MEDIA_MESSAGE_RECEIVED = eventId++;
 
     public static final int STICKER_DOWNLOAD = eventId++;
     public static final int EMOJI_LOADED = eventId++;
@@ -59,12 +60,15 @@ public class EventManager {
     public static final int CHAT_UPDATE_STATUS = eventId++;
     public static final int ON_FILE_DOWNLOAD_COMPLETED = eventId++;
 
+    public static final int ON_FILE_PICKED_FROM_INTENT = eventId++;
+
     public static final int USER_LOGIN_CHANGED = eventId++;
 
     public static final int CHANNEL_ADD_VOTE = eventId++;
     public static final int CHANNEL_GET_VOTE = eventId++;
     public static final int CHANNEL_UPDATE_VOTE = eventId++;
     public static final int CHANNEL_UPDATE_SIGNATURE = eventId++;
+    public static final int ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE = eventId++;
 
     public static final int NEXT_VOICE = eventId++;
 
@@ -78,9 +82,18 @@ public class EventManager {
     public static final int STORY_SENDING = eventId++;
     public static final int STORY_UPLOADED_FAILED = eventId++;
     public static final int STORY_USER_INFO = eventId++;
+    public static final int STORY_ROOM_INFO = eventId++;
     public static final int STORY_STATUS_UPLOAD = eventId++;
+    public static final int STORY_ROOM_UPLOAD = eventId++;
+    public static final int STORY_ROOM_IMAGE_UPLOAD = eventId++;
+    public static final int STORY_TEXT_EDITOR_CLOSE = eventId++;
+    public static final int STORY_VIEWS_FETCHED = eventId++;
 
     public static final int ON_VOLUME_DOWN_KEY = eventId++;
+
+    public static final int ON_CAMERA_PERMISSION_GRANTED = eventId++;
+
+    public static final int ON_INPUT_PASS_CODE_INCORRECT = eventId++;
 
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();

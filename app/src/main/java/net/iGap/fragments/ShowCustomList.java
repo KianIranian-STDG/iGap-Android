@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -48,14 +51,15 @@ import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnSelectedList;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowCustomList extends BaseFragment implements ToolbarListener {
-    private static List<StructContactInfo> contacts;
-    private static OnSelectedList onSelectedList;
+    private List<StructContactInfo> contacts;
+    private OnSelectedList onSelectedList;
     private FastAdapter fastAdapter;
     private boolean dialogShowing = false;
     private long lastId = 0;
@@ -66,16 +70,16 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     private ChipsInput chipsInput;
     private boolean isRemove = true;
     private HelperToolbar mHelperToolbar;
+    private static ProtoGlobal.Room.Type mRoomType;
 
-    public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
+    public void setFields(ProtoGlobal.Room.Type roomType, List<StructContactInfo> list, OnSelectedList onSelectedListResult){
         onSelectedList = onSelectedListResult;
         contacts = list;
+        mRoomType = roomType;
 
         for (int i = 0; i < contacts.size(); i++) {
             contacts.get(i).isSelected = false;
         }
-
-        return new ShowCustomList();
     }
 
     @Nullable
@@ -263,75 +267,104 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
     }
 
-    private void showDialog() {
+    @SuppressLint("ResourceAsColor")
+    private void showDialog(ProtoGlobal.Room.Type roomType) {
+        if (roomType == ProtoGlobal.Room.Type.GROUP) {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                switch (which) {
-                    case 0:
-                        count = 0;
-                        if (onSelectedList != null) {
-                            onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
-                        }
-                        // G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                        popBackStackFragment();
-                        break;
-                    case 1:
-                        count = 0;
-                        if (onSelectedList != null) {
-
-                            onSelectedList.getSelectedList(true, "fromNow", count, getSelectedList());
-                        }
-                        //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                        popBackStackFragment();
-
-                        break;
-                    case 2:
-                        count = 50;
-                        if (onSelectedList != null) {
-                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                        }
-                        // G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                        popBackStackFragment();
-
-                        break;
-                    case 3:
-                        dialog.dismiss();
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (onSelectedList != null) {
-                                    onSelectedList.getSelectedList(true, "", count, getSelectedList());
-                                }
-                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                                popBackStackFragment();
-
+                    switch (which) {
+                        case 0:
+                            count = 0;
+                            if (onSelectedList != null) {
+                                onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
                             }
-                        }).inputType(InputType.TYPE_CLASS_NUMBER).input(G.fragmentActivity.getResources().getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                if (input.toString() != null && !input.toString().isEmpty()) {
-                                    if (input.length() < 5) {
-                                        count = Integer.parseInt(input.toString());
+                            // G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+                            popBackStackFragment();
+                            break;
+                        case 1:
+                            count = 0;
+                            if (onSelectedList != null) {
+
+                                onSelectedList.getSelectedList(true, "fromNow", count, getSelectedList());
+                            }
+                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+                            popBackStackFragment();
+
+                            break;
+                        case 2:
+                            count = 50;
+                            if (onSelectedList != null) {
+                                onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                            }
+                            // G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+                            popBackStackFragment();
+
+                            break;
+                        case 3:
+                            dialog.dismiss();
+                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    if (onSelectedList != null) {
+                                        onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                                    }
+                                    //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+                                    popBackStackFragment();
+
+                                }
+                            }).inputType(InputType.TYPE_CLASS_NUMBER).input(G.fragmentActivity.getResources().getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(MaterialDialog dialog, CharSequence input) {
+                                    if (input.toString() != null && !input.toString().isEmpty()) {
+                                        if (input.length() < 5) {
+                                            count = Integer.parseInt(input.toString());
+                                        } else {
+                                            count = 0;
+                                        }
+
                                     } else {
                                         count = 0;
                                     }
-
-                                } else {
-                                    count = 0;
                                 }
-                            }
-                        }).show();
-                        break;
+                            }).show();
+                            break;
+                    }
                 }
-            }
-        }).show();
+            }).show();
+
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+
+            new MaterialDialog.Builder(G.fragmentActivity)
+                    .items(G.context.getResources().getString(R.string.are_you_sure_add_follower))
+                    .itemsColorAttr(R.attr.iGapTitleTextColor)
+                    .itemsGravity(GravityEnum.START)
+                    .buttonsGravity(GravityEnum.CENTER)
+                    .positiveText(R.string.yes)
+                    .positiveColorAttr(R.attr.colorAccent)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (onSelectedList != null) {
+                                onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
+                            }
+                            popBackStackFragment();
+                        }
+                    }).negativeText(R.string.no)
+                    .negativeColorAttr(R.attr.iGapSubtitleTextColor)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            popBackStackFragment();
+                        }
+                    }).show();
+        }
     }
 
     private ArrayList<StructContactInfo> getSelectedList() {
@@ -364,7 +397,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
 
         fixChipsLayoutShowingState();
         if (dialogShowing) {
-            showDialog();
+            showDialog(mRoomType);
         } else {
             if (onSelectedList != null) {
                 onSelectedList.getSelectedList(true, "", 0, getSelectedList());

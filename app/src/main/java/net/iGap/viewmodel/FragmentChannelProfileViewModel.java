@@ -179,7 +179,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
         isMuteNotification.set(mRoom.getMute());
 
-        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()) : mRoom.getChannelRoom().getParticipantsCountLabel());
+        subscribersCountSet();
         DbManager.getInstance().doRealmTask(realm -> {
             String adminCount = String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size());
             administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(adminCount) : adminCount);
@@ -212,6 +212,10 @@ public class FragmentChannelProfileViewModel extends ViewModel
         initRecycleView();
 
         FragmentShearedMedia.getCountOfSharedMedia(roomId);
+    }
+
+    public void subscribersCountSet() {
+        subscribersCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(mRoom.getChannelRoom().getParticipantsCountLabel()) : mRoom.getChannelRoom().getParticipantsCountLabel());
     }
 
     public void onNotificationCheckChange() {

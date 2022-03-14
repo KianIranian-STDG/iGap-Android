@@ -56,10 +56,12 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGroupAvatarDelete;
 import net.iGap.observers.interfaces.OnGroupCheckUsername;
 import net.iGap.observers.interfaces.OnGroupUpdateUsername;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCheckUsername;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
@@ -85,7 +87,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
-public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarDelete {
+public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarDelete, EventManager.EventDelegate {
 
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
@@ -247,18 +249,19 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.goToShowCustomListPage.observe(getViewLifecycleOwner(), listItem -> {
             if (getActivity() != null && listItem != null) {
-                Fragment fragment = ShowCustomList.newInstance(listItem, (result, message, countForShowLastMessage, list) -> {
+
+                ShowCustomList showCustomListFragment = new ShowCustomList();
+                showCustomListFragment.setFields(ProtoGlobal.Room.Type.GROUP, listItem, (result, message, countForShowLastMessage, list) -> {
                     for (int i = 0; i < list.size(); i++) {
                         new RequestGroupAddMember().groupAddMember(viewModel.roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(viewModel.roomId, countForShowLastMessage));
                     }
                 });
-
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("DIALOG_SHOWING", true);
                 bundle.putLong("COUNT_MESSAGE", 0);
-                fragment.setArguments(bundle);
+                showCustomListFragment.setArguments(bundle);
 
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), showCustomListFragment).setReplace(false).load();
             }
         });
 
@@ -414,10 +417,22 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         viewModel.checkGroupIsEditable();
         showAvatar();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, this);
     }
 
     private void initialToolbar() {
@@ -504,7 +519,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            public void complete(boolean result, String messageOne, String MessageTwo) {
 
                 long mAvatarId = 0;
                 if (messageOne != null && !messageOne.equals("")) {
@@ -819,6 +834,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 HelperError.showSnackMessage(getString(R.string.time_out), false);
             }
         });
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if(id == EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE && (long)args[0] == roomId) {
+            viewModel.setMemberCount(roomId);
+        }
     }
 }
 

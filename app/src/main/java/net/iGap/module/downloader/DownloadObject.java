@@ -1,5 +1,7 @@
 package net.iGap.module.downloader;
 
+import android.os.Environment;
+
 import net.iGap.G;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -66,7 +68,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         String path = suitableAppFilePath(finalMessage.getMessageType());
         struct.destFile = new File(path + "/" + struct.thumbCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
 
         if (struct.tempFile.exists()) {
@@ -105,7 +107,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
         struct.destFile = new File(path + "/" + struct.thumbCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(messageType);
 
         if (struct.tempFile.exists()) {
@@ -140,8 +142,42 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(finalMessage.messageType));
         struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
+    public static DownloadObject createForRoomMessage(AttachmentObject attachmentObject, int messageType) {
+
+
+        if (attachmentObject == null) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = FILE_VALUE;
+        struct.key = createKey(attachmentObject.cacheId, struct.selector);
+        struct.mainCacheId = attachmentObject.cacheId;
+        struct.fileToken = attachmentObject.token;
+        struct.fileName = attachmentObject.name;
+        struct.fileSize = attachmentObject.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.publicUrl = struct.getPublicUrl(attachmentObject.publicUrl);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+
+        String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+        struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.valueOf(messageType);
 
         if (struct.tempFile.exists()) {
             struct.offset = struct.tempFile.length();
@@ -174,7 +210,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         String path = suitableAppFilePath(finalMessage.getMessageType());
         struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + File.separator + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
 
         if (struct.tempFile.exists()) {
@@ -200,14 +236,14 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.mainCacheId = attachment.cacheId;
         struct.fileToken = attachment.token;
         struct.fileName = attachment.name;
-        struct.fileSize = attachment.largeThumbnail.size;
+        struct.fileSize = (attachment.largeThumbnail != null) ? attachment.largeThumbnail.size : 0;
         struct.mimeType = struct.extractMime(struct.fileName);
         struct.publicUrl = struct.getPublicUrl(attachment.url);
         struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
 
-        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
+        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users", true);
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         if (struct.tempFile.exists()) {
@@ -250,7 +286,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
             filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
         }
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.STORY;
 
         if (struct.tempFile.exists()) {

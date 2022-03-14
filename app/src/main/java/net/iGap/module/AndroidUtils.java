@@ -46,6 +46,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -248,7 +249,7 @@ public final class AndroidUtils {
 
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
-        String outPath = G.DIR_TEMP + "/thumb_" + SUID.id().get() + ".jpg";
+        String outPath = G.context.getCacheDir() + "/thumb_" + SUID.id().get() + ".jpg";
         try {
             out = new FileOutputStream(outPath);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
@@ -536,14 +537,11 @@ public final class AndroidUtils {
                                 if (lastProgress <= System.currentTimeMillis() - 500) {
                                     lastProgress = System.currentTimeMillis();
                                     final int progress = (int) ((float) a / (float) size * 100);
-                                    G.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                finalProgress.setProgress(progress);
-                                            } catch (Exception e) {
-                                                FileLog.e(e);
-                                            }
+                                    G.runOnUiThread(() -> {
+                                        try {
+                                            finalProgress.setProgress(progress);
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
                                         }
                                     });
                                 }
@@ -573,18 +571,15 @@ public final class AndroidUtils {
                     FileLog.e(e);
                 }
                 if (finalProgress != null) {
-                    G.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (finalProgress.isShowing()) {
-                                    finalProgress.dismiss();
-                                } else {
-                                    finished[0] = true;
-                                }
-                            } catch (Exception e) {
-                                FileLog.e(e);
+                    G.runOnUiThread(() -> {
+                        try {
+                            if (finalProgress.isShowing()) {
+                                finalProgress.dismiss();
+                            } else {
+                                finished[0] = true;
                             }
+                        } catch (Exception e) {
+                            FileLog.e(e);
                         }
                     });
                 }
@@ -600,6 +595,12 @@ public final class AndroidUtils {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             mediaScanIntent.setData(uri);
             G.context.sendBroadcast(mediaScanIntent);
+            G.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(G.fragmentActivity, R.string.save_ok, Toast.LENGTH_LONG).show();
+                }
+            });
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -813,22 +814,19 @@ public final class AndroidUtils {
             case AUDIO:
             case AUDIO_TEXT:
             case VOICE:
-                return G.DIR_AUDIOS;
-            case FILE:
-            case FILE_TEXT:
-                return G.DIR_DOCUMENT;
+                return G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
             case IMAGE:
             case IMAGE_TEXT:
             case STICKER:
             case GIF:
             case GIF_TEXT:
             case STORY:
-                return G.DIR_IMAGES;
+                return G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
             case VIDEO:
             case VIDEO_TEXT:
-                return G.DIR_VIDEOS;
+                return G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath();
             default:
-                return G.DIR_APP;
+                return G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         }
     }
 

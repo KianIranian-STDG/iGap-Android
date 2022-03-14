@@ -10,17 +10,29 @@ package net.iGap.viewmodel;
  */
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableInt;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.G;
+import net.iGap.helper.HelperBiometricAuthentication;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -29,6 +41,7 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmUserInfo;
 
 import java.io.IOException;
@@ -37,6 +50,7 @@ import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
+import java.util.concurrent.Executor;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -53,6 +67,8 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private ObservableInt passwordMaxLength = new ObservableInt(4);
     private ObservableInt passwordInputType = new ObservableInt(TYPE_TEXT_VARIATION_PASSWORD);
     private ObservableInt showCheckPasswordButton = new ObservableInt(View.GONE);
+    private ObservableInt showFingerPrintIcon = new ObservableInt(View.GONE);
+    private ObservableInt showBiometricPasswordIcon = new ObservableInt(View.GONE);
     private MutableLiveData<Boolean> initialPatternView = new MutableLiveData<>();
     private MutableLiveData<FingerprintManager.CryptoObject> showDialogFingerPrint = new MutableLiveData<>();
     private MutableLiveData<Boolean> showDialogForgetPassword = new MutableLiveData<>();
@@ -69,14 +85,24 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private KeyStore keyStore;
     private Cipher cipher;
 
+    private Activity activity;
     private RealmUserInfo realmUserInfo;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+    SharedPreferences sharedPreferences;
 
-    public ActivityEnterPassCodeViewModel(boolean isLinePattern) {
+    public ActivityEnterPassCodeViewModel(Activity activity, boolean isLinePattern) {
+        this.activity = activity;
         initialPatternView.setValue(!isLinePattern);
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        HelperBiometricAuthentication.canAuthenticate();
+        CheckAndSetFingerAndBiometricPasswordIcon();
 
         realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmUserInfo.class).findFirst();
         });
+
 
         if (realmUserInfo != null) {
             isPattern.set(PassCode.getInstance().isPattern() ? View.VISIBLE : View.GONE);
@@ -101,6 +127,18 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         } else {
             goBack.setValue(true);
         }
+    }
+
+    public ObservableInt getShowFingerPrintIcon() {
+        return showFingerPrintIcon;
+    }
+
+    public ObservableInt getShowBiometricPasswordIcon() {
+        return showBiometricPasswordIcon;
+    }
+
+    public void setShowBiometricPasswordIcon(ObservableInt showBiometricPasswordIcon) {
+        this.showBiometricPasswordIcon = showBiometricPasswordIcon;
     }
 
     public ObservableInt getIsPattern() {
@@ -171,6 +209,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
                 hideKeyword.setValue(true);
                 showErrorMessage.setValue(R.string.invalid_password);
                 clearPassword.setValue(true);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_INPUT_PASS_CODE_INCORRECT));
             }
         } else {
             hideKeyword.setValue(true);
@@ -253,5 +292,62 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
                 }
             }
         }
+    }
+
+    public void onBiometricIconClick() {
+
+        if (sharedPreferences.getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false)) {
+            executor = ContextCompat.getMainExecutor(activity);
+            biometricPrompt = new BiometricPrompt((FragmentActivity) activity,
+                    executor, new BiometricPrompt.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationError(int errorCode,
+                                                  @NonNull CharSequence errString) {
+                    super.onAuthenticationError(errorCode, errString);
+
+                }
+
+                @Override
+                public void onAuthenticationSucceeded(
+                        @NonNull BiometricPrompt.AuthenticationResult result) {
+                    super.onAuthenticationSucceeded(result);
+                    Toast.makeText(G.context, R.string.authentication_succeeded, Toast.LENGTH_SHORT).show();
+                    passwordCorrect();
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    super.onAuthenticationFailed();
+                    Toast.makeText(G.context, R.string.authentication_failed,
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
+
+            promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(G.context.getString(R.string.biometric_login))
+                    .setSubtitle(G.context.getString(R.string.use_biometric_authentication))
+//                    .setNegativeButtonText("Use account password")
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                    .build();
+
+            // Prompt appears.
+            // Consider integrating with the keystore to unlock cryptographic operations,
+            // if needed by your app.
+            biometricPrompt.authenticate(promptInfo);
+        }
+
+    }
+
+    private void CheckAndSetFingerAndBiometricPasswordIcon() {
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            showBiometricPasswordIcon.set(G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
+            showFingerPrintIcon.set(View.GONE);
+        }else {
+            showFingerPrintIcon.set(G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
+            showBiometricPasswordIcon.set(View.GONE);
+        }
+
     }
 }

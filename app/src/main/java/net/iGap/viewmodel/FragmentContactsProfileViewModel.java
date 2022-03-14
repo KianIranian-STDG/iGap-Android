@@ -177,9 +177,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 }
             }).negativeText(R.string.B_cancel).show();
         } else*/
-        if (items.get(position).equals(G.fragmentActivity.getString(R.string.delete_contact))) {
+        if (items.get(position).equals(R.string.delete_contact)) {
             showDeleteContactDialog.setValue(true);
-        } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.edit_contact))) {
+        } else if (items.get(position).equals(R.string.edit_contact)) {
             editContactListener.setValue(true);
         }
     }

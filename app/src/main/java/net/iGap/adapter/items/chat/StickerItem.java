@@ -17,6 +17,8 @@ import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -75,27 +77,36 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                 }
             }
         });
+            String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
+            if (path == null){
+                return;
+            }
+            if (new File(path).exists()) {
+                Glide.with(G.context)
+                        .load(suitablePath(path))
+                        .fitCenter()
+                        .centerInside()
+                        .into(holder.image);
+            } else {
+                EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, (id, account, args) -> {
+                    if (id == EventManager.STICKER_DOWNLOAD) {
+                        String filePath = (String) args[0];
+                        String fileToken = (String) args[1];
 
-        String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
-        if (new File(path).exists()) {
-            G.imageLoader.displayImage(suitablePath(path), holder.image);
-        } else {
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, (id, account, args) -> {
-                if (id == EventManager.STICKER_DOWNLOAD) {
-
-                    String filePath = (String) args[0];
-                    String fileToken = (String) args[1];
-
-                    if (holder.image.getTag().equals(fileToken)) {
-                        G.handler.post(() -> {
-                            G.imageLoader.displayImage(suitablePath(filePath), holder.image);
-                        });
+                        if (holder.image.getTag().equals(fileToken)) {
+                            G.handler.post(() -> {
+                                Glide.with(G.context)
+                                        .load(suitablePath(filePath))
+                                        .fitCenter()
+                                        .centerInside()
+                                        .into(holder.image);
+                            });
+                        }
                     }
-                }
-            });
+                });
 
-            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
-        }
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
+            }
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));
         holder.progress.setVisibility(View.GONE);

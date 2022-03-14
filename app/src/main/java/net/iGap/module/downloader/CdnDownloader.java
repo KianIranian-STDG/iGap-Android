@@ -1,10 +1,13 @@
 package net.iGap.module.downloader;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
+import com.downloader.OnProgressListener;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 import com.downloader.Status;
@@ -26,6 +29,7 @@ import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.SMALL_THUMB
 public class CdnDownloader extends BaseController implements IDownloader {
     private static CdnDownloader[] instance = new CdnDownloader[AccountManager.MAX_ACCOUNT_COUNT];
     private HashMap<String, DownloadObject> requestedDownload = new HashMap<>();
+    private String TAG = "CdnDownloader";
 
     private CdnDownloader(int account) {
         super(account);
@@ -77,7 +81,10 @@ public class CdnDownloader extends BaseController implements IDownloader {
             publicMessage.downloadId = PRDownloader.download(publicMessage.publicUrl, publicMessage.tempFile.getParent(), publicMessage.tempFile.getName())
                     .setTag(publicMessage.key)
                     .build()
-                    .setOnProgressListener(progress -> handleProgress(finalPublicMessage, progress))
+                    .setOnProgressListener(progress -> {
+                        handleProgress(finalPublicMessage, progress);
+                        finalPublicMessage.progress = (int) ((progress.currentBytes * 100) / progress.totalBytes);
+                    })
                     .setOnCancelListener(() -> {
                         requestedDownload.remove(finalPublicMessage.key);
                         finalPublicMessage.removeAll();
@@ -105,6 +112,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
     private void handleProgress(DownloadObject message, Progress progress) {
         int percent = (int) ((progress.currentBytes * 100) / progress.totalBytes);
         if (percent > message.progress) {
+            Log.i(TAG, "handleProgress: percent=" + percent + "progress=" + message.progress);
             message.notifyObservers(Resource.loading(new HttpRequest.Progress(message, percent, message.destFile.getAbsolutePath(), message.fileToken, message.selector)));
         }
     }

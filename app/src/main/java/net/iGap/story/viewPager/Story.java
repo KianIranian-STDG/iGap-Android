@@ -21,23 +21,31 @@ public class Story implements Serializable {
     private String txt;
     private long storyData;
     private long userId;
+    private long roomId;
     private long storyId;
+    private String displayName;
     private AttachmentObject attachment;
     private ProtoGlobal.File file;
     private int viewCount;
-    private  List<StoryViewInfoObject> userIdList;
+    private boolean isRoom;
+    private boolean isVerified;
+    private List<StoryViewInfoObject> userIdList;
 
-    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, AttachmentObject attachment, ProtoGlobal.File file, int viewCount, List<StoryViewInfoObject> userIdList) {
+    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long roomId, String displayName, long storyId, AttachmentObject attachment, ProtoGlobal.File file, int viewCount, boolean isRoom, boolean isVerified, List<StoryViewInfoObject> userIdList) {
         this.url = url;
         this.bitmap = bitmap;
         this.txt = txt;
         this.storyData = storyData;
         this.userId = userId;
+        this.roomId = roomId;
         this.storyId = storyId;
         this.attachment = attachment;
         this.file = file;
         this.viewCount = viewCount;
         this.userIdList = userIdList;
+        this.displayName = displayName;
+        this.isRoom = isRoom;
+        this.isVerified = isVerified;
     }
 
     public Story() {
@@ -52,13 +60,20 @@ public class Story implements Serializable {
     }
 
 
-
     public long getUserId() {
         return userId;
     }
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
     }
 
     public String getTxt() {
@@ -101,6 +116,14 @@ public class Story implements Serializable {
         this.storyId = storyId;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
     public int getViewCount() {
         return viewCount;
     }
@@ -123,5 +146,21 @@ public class Story implements Serializable {
 
     public void setUserIdList(List<StoryViewInfoObject> userIdList) {
         this.userIdList = userIdList;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public boolean isRoom() {
+        return isRoom;
+    }
+
+    public void setRoom(boolean room) {
+        isRoom = room;
     }
 }

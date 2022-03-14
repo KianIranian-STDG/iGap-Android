@@ -694,6 +694,8 @@
     <string name="map">Mapa</string>
     <string name="elecBill_main_billPhoneTitle">Ingrese su número de teléfono o número de teléfono móvil: \ Número de teléfono Muestra: 021 ******** \ NMOBILE NÚMERO MUESTRA: 09 *********</string>
     <string name="permission_phone">Llamada telefónica</string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">Necesita permiso para acceder a %s</string>
+
     <string name="to_delete_contact">Borrar contacto</string>
     <string name="password_answer">Respuesta</string>
     <string name="kuknos_send_token_error">No se puede enviar este token.</string>
@@ -727,7 +729,7 @@
     <string name="three_number">3</string>
     <string name="contact_message">Mensaje de contacto</string>
     <string name="loan_number">Número de préstamo:</string>
-    <string name="slide_to_cancel_en">Deslice para cancelar</string>
+    <string name="slide_to_cancel_en">&lt; &#160;Deslice para cancelar</string>
     <string name="new_version_alert">Alerta</string>
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
     <string name="set_gender">Configurar el género</string>
@@ -1293,7 +1295,7 @@
     <string name="B_edit">Editar</string>
     <string name="Default_Notification_tone">Tono de notificaciones predeterminadas</string>
     <string name="personalAccountType">Personal</string>
-    <string name="buy_internet_package_volume_filter_gb_title">%Of gb</string>
+    <string name="buy_internet_package_volume_filter_gb_title">%.2f GB</string>
     <string name="bank_resalat">RQ BANK</string>
     <string name="igap">IGAP</string>
     <string name="forgot_password">¿Se ha olvidado su contraseña?</string>
@@ -1704,7 +1706,7 @@
     <string name="transactions">Actas</string>
     <string name="kuknos_panelStr_firstUser">Su cuenta no está activa. Use Recibir o comprar el menú Peyman para obtener créditos.</string>
     <string name="am_contact">Contacto</string>
-    <string name="type_message">Mensaje...</string>
+    <string name="type_message">Mensaje</string>
     <string name="Documents">Documentos</string>
     <string name="not_answerd_call">Llamada cancelada</string>
     <string name="kuknos_trade_price">Precio</string>
@@ -2082,10 +2084,12 @@
     <string name="my_status">Mi momento</string>
     <string name="status">Momentos</string>
     <string name="status_title">Momento</string>
-    <string name="tap_to_add_status_update">Toca para agregar un momento</string>
+    <string name="tap_to_add_status_update">Gestionar momentos</string>
+    <string name="add_status_update">Agrega el momento</string>
     <string name="viewed_updates">Actualizaciones vistas</string>
     <string name="recent_updates">Actualizaciones recientes</string>
     <string name="your_status_updates_will_disappear_after_24_hours">Tus momentos se eliminarán después de 24 horas.</string>
+    <string name="my_channel_moments">Momentos de mi canal</string>
     <string name="your_device_does_not_have_a_camera">¡Tu dispositivo no tiene cámara!</string>
     <string name="delete_status_update">¿Eliminar este momento? También se eliminará para todos los que lo recibieron.</string>
     <string name="story_views">puntos de vista</string>
@@ -2100,4 +2104,26 @@
     <string name="moments_string">Momentos</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">La cantidad no puede superar los 500 millones de riales</string>
     <string name="invalid_qr_code">Código de barras inválido</string>
+    <string name="are_you_sure_add_follower">¿Estás seguro de que deseas agregar estos seguidores?</string>
+    <string name="minimizeAmount">Via peto pri ĉi tiu sumo ne eblas</string>
+    <string name="forbidden_pin_room">No puedes fijar este chat</string>
+    <string name="pin_up_to_5_chat">¡Puedes anclar hasta 5 chats!</string>
+    <string name="faild_payment">Lo sentimos, se produjo un error e inténtelo de nuevo.</string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">La búsqueda global requiere al menos 5 caracteres</string>
+    <string name="biometric_password_description">Al activar esta opción, la contraseña biométrica activa en su teléfono (huella dactilar, reconocimiento facial o escaneo de iris), se aplicará a la aplicación.</string>
+    <string name="biometric_password">contraseña biométrica</string>
+    <string name="set_now">Establecer ahora</string>
+    <string name="no_biometric_password_set_on_your_phone">No hay ninguna contraseña biométrica configurada en su teléfono</string>
+    <string name="authentication_failed">Autenticación fallida</string>
+    <string name="authentication_succeeded">Autenticación exitosa</string>
+    <string name="authentication_error">Error de autenticación: </string>
+    <string name="biometric_login">Inicio de sesión biométrico para mi aplicación</string>
+    <string name="use_biometric_authentication">Inicie sesión con su credencial biométrica</string>
+    <string name="send_current_location">Enviar ubicación actual:\n</string>
+    <string name="send_selected_location">Enviar ubicación seleccionada:\n</string>
+    <string name="load_sticker_types_error_message">filtro de tipos no cargado</string>
+    <string name="select_sticker_type">Seleccione el tipo de etiqueta</string>
+
+    <string name="locating">recibiendo la posición actual…</string>
+    <string name="enable_sending_non_media_file_soon">La capacidad de enviar archivos no multimedia se habilitará pronto</string>
 </resources>

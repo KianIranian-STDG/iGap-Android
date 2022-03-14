@@ -9,11 +9,13 @@ package net.iGap.activities;
  * All rights reserved.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,26 +32,25 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
+import net.iGap.helper.HelperAnimation;
 import net.iGap.helper.HelperError;
-import net.iGap.module.FingerprintHandler;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.FingerPrint;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;
 
 import java.util.List;
 
-public class ActivityEnterPassCode extends ActivityEnhanced {
+public class ActivityEnterPassCode extends ActivityEnhanced implements EventManager.EventDelegate {
 
     private ActivityEnterPassCodeViewModel viewModel;
     private ActivityEnterPassCodeBinding binding;
-
-    private FingerprintManager fingerprintManager;
-    private FingerprintHandler helper;
-
-    private MaterialDialog fingerPrintDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ActivityEnterPassCodeViewModel(getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true));
+                return (T) new ActivityEnterPassCodeViewModel(ActivityEnterPassCode.this, getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true));
             }
         }).get(ActivityEnterPassCodeViewModel.class);
 
@@ -74,17 +75,16 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                 binding.patternLockView.setTactileFeedbackEnabled(true);                            // Enables vibration feedback when the pattern is drawn
                 binding.patternLockView.setInputEnabled(true);                                      // Disables any input from the pattern lock view completely
 
-                binding.patternLockView.setDotCount(4);
-                binding.patternLockView.setDotNormalSize((int) getResources().getDimension(R.dimen.dp22));
-                binding.patternLockView.setDotSelectedSize((int) getResources().getDimension(R.dimen.dp32));
+                binding.patternLockView.setDotCount(3);
+                binding.patternLockView.setDotNormalSize((int) getResources().getDimension(R.dimen.dp10));
+                binding.patternLockView.setDotSelectedSize((int) getResources().getDimension(R.dimen.dp20));
                 binding.patternLockView.setPathWidth((int) getResources().getDimension(R.dimen.pattern_lock_path_width));
                 binding.patternLockView.setAspectRatioEnabled(true);
                 binding.patternLockView.setAspectRatio(PatternLockView.AspectRatio.ASPECT_RATIO_HEIGHT_BIAS);
-                binding.patternLockView.setNormalStateColor(getResources().getColor(R.color.white));
-                binding.patternLockView.setCorrectStateColor(getResources().getColor(R.color.white));
+                binding.patternLockView.setCorrectStateColor(getResources().getColor(R.color.green));
                 binding.patternLockView.setWrongStateColor(getResources().getColor(R.color.red));
                 binding.patternLockView.setDotAnimationDuration(150);
-                binding.patternLockView.setPathEndAnimationDuration(100);
+                binding.patternLockView.setPathEndAnimationDuration(200);
             }
         });
 
@@ -121,46 +121,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             }
         });
 
-        viewModel.getShowDialogFingerPrint().observe(this, cryptoObject -> {
-            if (cryptoObject != null) {
-                if (fingerPrintDialog != null && fingerPrintDialog.isShowing()) {
-                    fingerPrintDialog.dismiss();
-                }
-                fingerPrintDialog = new MaterialDialog.Builder(this).title(R.string.FingerPrint).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            helper.stopListening();
-                        }
-                    }
-                }).negativeText(R.string.B_cancel).build();
-
-                View viewDialog = fingerPrintDialog.getView();
-
-                AppCompatTextView iconFingerPrint = viewDialog.findViewById(R.id.iconDialogTitle);
-                AppCompatTextView textFingerPrint = viewDialog.findViewById(R.id.txtDialogTitle);
-                fingerPrintDialog.show();
-                helper = new FingerprintHandler(this, new FingerPrint() {
-                    @Override
-                    public void success() {
-                        viewModel.passwordCorrect();
-                        fingerPrintDialog.dismiss();
-                    }
-
-                    @Override
-                    public void error() {
-                        if (fingerPrintDialog.isShowing()) {
-                            if (iconFingerPrint != null && textFingerPrint != null) {
-                                iconFingerPrint.setTextColor(getResources().getColor(R.color.red));
-                                textFingerPrint.setTextColor(getResources().getColor(R.color.red));
-                                textFingerPrint.setText(R.string.Fingerprint_not_recognized);
-                            }
-                        }
-                    }
-                });
-                helper.startAuth(fingerprintManager, cryptoObject);
-            }
-        });
 
         viewModel.getClearPassword().observe(this, isClear -> {
             if (isClear != null && isClear) {
@@ -195,10 +155,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-        }
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_INPUT_PASS_CODE_INCORRECT, ActivityEnterPassCode.this);
     }
 
     @Override
@@ -210,11 +172,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     @Override
     protected void onStop() {
         super.onStop();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            if (helper != null) {
-                helper.stopListening();
-            }
-        }
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_INPUT_PASS_CODE_INCORRECT, ActivityEnterPassCode.this);
     }
 
     @Override
@@ -233,4 +191,10 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         }
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_INPUT_PASS_CODE_INCORRECT) {
+            HelperAnimation.bigAndSmall(binding.lockIcon, 1.5f, 1f);
+        }
+    }
 }

@@ -48,27 +48,6 @@ public class RetrofitFactory {
         return httpClient;
     }
 
-    public OkHttpClient getHttpClientForMobileBank() {
-        OkHttpClient httpClient;
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(httpLoggingInterceptor);
-        }
-
-        if (BuildConfig.DEBUG) {
-            httpClient = builder.build();
-        } else {
-            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(TlsVersion.TLS_1_2)
-                    .build();
-            httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
-        }
-        return httpClient;
-    }
-
     public BeepTunesApi getBeepTunesRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.BEEP_TUNES_URL)

@@ -271,7 +271,8 @@ public class FragmentPaintImage extends Fragment {
 
     private Bitmap getBitmapFile(Context context, String fileName) {
         File image = new File(fileName);
-        return ImageHelper.decodeFile(image);
+        ImageHelper imageHelper = new ImageHelper();
+        return imageHelper.decodeFile(image);
     }
 
     @Override

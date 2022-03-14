@@ -2,7 +2,9 @@ package net.iGap.fragments.emoji.add;
 
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
@@ -12,20 +14,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.module.MyAppBarLayout;
 import net.iGap.observers.rx.ObserverFragment;
 import net.iGap.viewmodel.AddStickerViewModel;
 
 public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
 
     private AddStickerFragmentAdapter adapter;
-    private StructIGStickerCategory category;
+    private String category;
+    private String type;
+    private String title;
+    private CustomTextViewMedium customTextViewMedium;
+    private RippleView buttonBack;
+    private MyAppBarLayout addStickerToolbar;
 
     private ProgressBar progressBar;
 
-    public static AddStickersFragment newInstance(StructIGStickerCategory category) {
+    public static AddStickersFragment newInstance(String category, String type, String title) {
         AddStickersFragment addStickersFragment = new AddStickersFragment();
         addStickersFragment.category = category;
+        addStickersFragment.type = type;
+        addStickersFragment.title = title;
         return addStickersFragment;
     }
 
@@ -37,6 +49,12 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     @Override
     public void setupViews() {
         progressBar = rootView.findViewById(R.id.progress_stricker);
+        addStickerToolbar = rootView.findViewById(R.id.toolbar2);
+        customTextViewMedium = rootView.findViewById(R.id.title);
+        buttonBack = rootView.findViewById(R.id.chl_ripple_back_Button);
+
+        if (title == null) addStickerToolbar.setVisibility(View.GONE);
+        else customTextViewMedium.setText(title);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.rcvSettingPage);
         recyclerView.setAdapter(adapter);
@@ -51,6 +69,12 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
                 viewModel.onPageEnded();
             }
         };
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popBackStackFragment();
+            }
+        });
 
         recyclerView.addOnScrollListener(scrollListener);
 
@@ -92,6 +116,7 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel.setCategory(category);
+        viewModel.setType(type);
         adapter = new AddStickerFragmentAdapter();
     }
 

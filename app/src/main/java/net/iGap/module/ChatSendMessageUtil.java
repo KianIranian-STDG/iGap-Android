@@ -414,9 +414,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
             // todo:please check in group and channel that user is joined
 
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), roomMessage.getDocumentId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), roomMessage.getDocumentId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             }
         }
     }

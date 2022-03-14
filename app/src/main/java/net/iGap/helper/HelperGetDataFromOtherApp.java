@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +58,15 @@ public class HelperGetDataFromOtherApp {
             return;
         }
 
-        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
+        if (new File(G.DIR_APP).exists()
+                && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()).exists()
+                && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath()).exists()
+                && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath()).exists()
+                && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()).exists()
+                && new File(G.DIR_CHAT_BACKGROUND).exists()
+                && new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users").exists()
+                && new File(G.context.getExternalCacheDir().getAbsolutePath()).exists()
+        ) {
             checkData(activityCompat, intent);
         } else {
             StartupActions.makeFolder();
@@ -145,7 +154,7 @@ public class HelperGetDataFromOtherApp {
             }
         }
 
-        if (hasSharedData && ActivityMain.isOpenChatBeforeSheare) {
+        if (hasSharedData && ActivityMain.isOpenChatBeforeShare) {
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {

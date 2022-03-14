@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
@@ -57,17 +59,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
+import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
+
 public class StoryCell extends FrameLayout {
 
     private CircleImageView circleImage;
     private ImageLoadingView circleImageLoading;
     private TextView topText;
+    private LinearLayout topViewRootView;
     private TextView middleText;
     private TextView bottomText;
     private IconView icon;
     private IconView icon2;
     private MaterialDesignTextView addIcon;
     private MaterialDesignTextView deleteIcon;
+    private MaterialDesignTextView uploadIcon;
     private Context context;
     private int padding = 16;
     private boolean isRtl = G.isAppRtl;
@@ -76,13 +83,19 @@ public class StoryCell extends FrameLayout {
     private IconClicked iconClicked;
     private AvatarHandler avatarHandler;
     private boolean isFromMyStatus;
+    private boolean isVerified;
     private long userId = 0;
+    private long roomId = 0;
     private long storyId = 0;
     private long uploadId;
     private String fileToken;
     private int sendStatus;
     private int storyIndex;
+    private boolean isRoom;
+    private int mode;
     private String userColorId = "#4aca69";
+    private FontIconTextView verifyIconTv;
+    private FontIconTextView channelIconTv;
 
     private static boolean isCreatedView = false;
 
@@ -134,40 +147,94 @@ public class StoryCell extends FrameLayout {
         this.storyIndex = storyIndex;
     }
 
-    public void setData(StoryObject storyObject, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
+    public boolean isRoom() {
+        return isRoom;
+    }
+
+    public void setRoom(boolean room) {
+        isRoom = room;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public void setData(StoryObject storyObject, boolean isRoom, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
         initView(context, needDivider, status, imageLoadingStatus, iconClicked, storyObject.createdAt);
         this.userId = storyObject.userId;
+        this.roomId = storyObject.roomId;
         this.isFromMyStatus = true;
 
         String name = HelperImageBackColor.getFirstAlphabetName(storyObject.displayName != null ? storyObject.displayName : "");
 
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
-            deleteIcon.setVisibility(VISIBLE);
-            deleteIcon.setText(R.string.icon_upload);
-            topText.setVisibility(GONE);
-            bottomText.setVisibility(GONE);
-            middleText.setVisibility(VISIBLE);
-            middleText.setText(context.getString(R.string.story_could_not_sent));
-            middleText.setTextColor(Color.RED);
+
+            if (isRoom && mode == 0) {
+                deleteIcon.setTextColor(Color.RED);
+                topText.setText(storyObject.displayName);
+                bottomText.setText(context.getString(R.string.story_could_not_sent));
+                bottomText.setTextColor(Color.RED);
+            } else {
+                uploadIcon.setVisibility(VISIBLE);
+                deleteIcon.setVisibility(VISIBLE);
+                deleteIcon.setText(R.string.icon_delete);
+                topText.setVisibility(GONE);
+                bottomText.setVisibility(GONE);
+                middleText.setVisibility(VISIBLE);
+                middleText.setText(context.getString(R.string.story_could_not_sent));
+                middleText.setTextColor(Color.RED);
+            }
+
 
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
-            deleteIcon.setVisibility(GONE);
-            topText.setVisibility(GONE);
-            bottomText.setVisibility(GONE);
-            middleText.setVisibility(VISIBLE);
-            middleText.setText(context.getString(R.string.story_sending));
-            middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            if (isRoom && mode == 0) {
+                topText.setText(storyObject.displayName);
+                bottomText.setText(context.getString(R.string.story_sending));
+            } else {
+                uploadIcon.setVisibility(GONE);
+                deleteIcon.setVisibility(GONE);
+                topText.setVisibility(GONE);
+                middleText.setVisibility(VISIBLE);
+                middleText.setText(context.getString(R.string.story_sending));
+                middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            }
 
         } else {
             topText.setVisibility(VISIBLE);
             bottomText.setVisibility(VISIBLE);
             middleText.setVisibility(GONE);
+            uploadIcon.setVisibility(GONE);
             deleteIcon.setVisibility(VISIBLE);
-            if (G.selectedLanguage.equals("fa")) {
-                topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(storyObject.viewCount)) + " " + context.getString(R.string.story_views));
+            if (isRoom && mode == 0) {
+                topText.setText(storyObject.displayName);
             } else {
-                topText.setText(storyObject.viewCount + " " + context.getString(R.string.story_views));
+                if (G.selectedLanguage.equals("fa")) {
+                    topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(storyObject.viewCount)) + " " + context.getString(R.string.story_views));
+                } else {
+                    topText.setText(storyObject.viewCount + " " + context.getString(R.string.story_views));
+                }
             }
+
             bottomText.setText(LastSeenTimeUtil.computeTime(context, storyObject.userId, storyObject.createdAt / 1000L, false, false));
         }
 
@@ -194,15 +261,13 @@ public class StoryCell extends FrameLayout {
                             HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                         }
 
-
-                        DbManager.getInstance().doRealmTransaction(realm1 -> {
-                            for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
-                                realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                            }
-                        });
-                        Log.e("skfjskjfsd", "setData3: " + storyId + "/" + arg.data.getDownloadObject().downloadId);
                         if (arg.data.getDownloadObject().downloadId == storyId) {
-                            Log.e("skfjskjfsd", "setData4: " + storyId + "/" + arg.data.getDownloadObject().downloadId);
+                            DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                RealmStoryProto realmStoryProto = realm1.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
+                                if (realmStoryProto != null) {
+                                    realmStoryProto.getFile().setLocalFilePath(filepath);
+                                }
+                            });
                             G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
                         }
 
@@ -217,15 +282,24 @@ public class StoryCell extends FrameLayout {
     }
 
     public void setData(MainStoryObject mainStoryObject, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
-        initView(context, needDivider, status, imageLoadingStatus, iconClicked, mainStoryObject.storyObjects.get(0).createdAt);
         this.userId = mainStoryObject.userId;
+        this.roomId = mainStoryObject.roomId;
+        this.isVerified = mainStoryObject.isVerified;
+        initView(context, needDivider, status, imageLoadingStatus, iconClicked, mainStoryObject.storyObjects.get(0).createdAt);
+
         circleImageLoading.setStatus(imageLoadingStatus);
         if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             topText.setText(context.getString(R.string.my_status));
         } else {
-            topText.setText(mainStoryObject.displayName != null ? mainStoryObject.displayName : "");
+            if (roomId != 0) {
+                channelIconTv.setVisibility(VISIBLE);
+            }
+            if (isVerified) {
+                verifyIconTv.setVisibility(VISIBLE);
+            }
+            topText.setText(mainStoryObject.storyObjects.get(0).displayName != null ? mainStoryObject.storyObjects.get(0).displayName : "");
         }
-        String name = HelperImageBackColor.getFirstAlphabetName(mainStoryObject.displayName != null ? mainStoryObject.displayName : "");
+        String name = HelperImageBackColor.getFirstAlphabetName(mainStoryObject.storyObjects.get(0).displayName != null ? mainStoryObject.storyObjects.get(0).displayName : "");
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             bottomText.setText(context.getString(R.string.story_could_not_sent));
             bottomText.setTextColor(Color.RED);
@@ -267,12 +341,13 @@ public class StoryCell extends FrameLayout {
                             }
 
 
-                            DbManager.getInstance().doRealmTransaction(realm1 -> {
-                                for (RealmStory realmAvatar1 : realm1.where(RealmStory.class).equalTo("userId", userId).findAll()) {
-                                    realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
-                                }
-                            });
                             if (arg.data.getDownloadObject().downloadId == storyId) {
+                                DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                    RealmStoryProto realmStoryProto = realm1.where(RealmStoryProto.class).equalTo("isForReply", false).equalTo("storyId", storyId).findFirst();
+                                    if (realmStoryProto != null) {
+                                        realmStoryProto.getFile().setLocalFilePath(filepath);
+                                    }
+                                });
                                 G.runOnUiThread(() -> Glide.with(G.context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
                             }
 
@@ -324,6 +399,18 @@ public class StoryCell extends FrameLayout {
 
         addView(addIcon, LayoutCreator.createFrame(18, 18, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, isRtl ? 0 : padding, 8, isRtl ? padding : 0, 8));
 
+        topViewRootView = new LinearLayout(context);
+        topViewRootView.setOrientation(LinearLayout.HORIZONTAL);
+        topViewRootView.setGravity(Gravity.CENTER);
+        addView(topViewRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
+
+        channelIconTv = new FontIconTextView(getContext());
+        setTextSize(channelIconTv, R.dimen.dp14);
+        channelIconTv.setText(R.string.icon_channel);
+        channelIconTv.setTextColor(Theme.getInstance().getAccentColor(channelIconTv.getContext()));
+        channelIconTv.setVisibility(GONE);
+        topViewRootView.addView(channelIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
         topText = new TextView(context);
         topText.setSingleLine();
         topText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
@@ -332,7 +419,15 @@ public class StoryCell extends FrameLayout {
         topText.setEllipsize(TextUtils.TruncateAt.END);
         topText.setTextColor(Theme.getInstance().getSendMessageTextColor(topText.getContext()));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
+        topViewRootView.addView(topText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, !isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0, isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0));
+
+        verifyIconTv = new FontIconTextView(getContext());
+        verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verifyIconTv.setText(R.string.icon_blue_badge);
+        setTextSize(verifyIconTv, R.dimen.standardTextSize);
+        verifyIconTv.setVisibility(GONE);
+        topViewRootView.addView(verifyIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, !isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0, isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0));
+
 
         middleText = new TextView(context);
         middleText.setSingleLine();
@@ -364,18 +459,25 @@ public class StoryCell extends FrameLayout {
         icon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         addView(icon2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 30) : padding, 0, isRtl ? padding : (30 + padding), 0));
 
+        LinearLayout iconsRootView = new LinearLayout(getContext());
+        iconsRootView.setOrientation(LinearLayout.HORIZONTAL);
+        iconsRootView.setGravity(Gravity.CENTER);
+        addView(iconsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
 
-        deleteIcon = new MaterialDesignTextView(getContext());
-        deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
-        deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-        deleteIcon.setText(R.string.icon_other_horizontal_dots);
-        deleteIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(deleteIcon.getContext()));
-        deleteIcon.setGravity(Gravity.CENTER);
-        deleteIcon.setOnClickListener(new View.OnClickListener() {
+        uploadIcon = new MaterialDesignTextView(getContext());
+        uploadIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
+        uploadIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+        uploadIcon.setText(R.string.icon_upload);
+        uploadIcon.setVisibility(GONE);
+        uploadIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(uploadIcon.getContext()));
+        uploadIcon.setGravity(Gravity.CENTER);
+        uploadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED && isFromMyStatus) {
+                if ((circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED && isFromMyStatus && !isRoom) ||
+                        (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED && isFromMyStatus && isRoom && mode == 1)) {
                     deleteIcon.setVisibility(GONE);
+                    uploadIcon.setVisibility(GONE);
                     middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
                     middleText.setText(context.getString(R.string.story_sending));
                     circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
@@ -393,8 +495,12 @@ public class StoryCell extends FrameLayout {
                         storyAddRequest.setToken(realmStoryProto.fileToken);
                         storyAddRequest.setCaption(realmStoryProto.caption);
                         storyAddRequests.add(storyAddRequest.build());
+                        if (isRoom) {
+                            MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyAddRequests, roomId);
+                        } else {
+                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyAddRequests);
+                        }
 
-                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyAddRequests);
                     } else if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.id))) {
                         MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(realmStoryProto.id, MessageObject.STATUS_SENDING);
                         HttpUploader.isStoryUploading = true;
@@ -403,13 +509,27 @@ public class StoryCell extends FrameLayout {
                     EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_SENDING);
 
                 } else {
-                    deleteStory.deleteStory(storyId);
+                    deleteStory.deleteStory(StoryCell.this, storyId, roomId, isRoom);
                 }
-
-
             }
         });
-        addView(deleteIcon, LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
+
+        deleteIcon = new MaterialDesignTextView(getContext());
+        deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
+        deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+        deleteIcon.setText(R.string.icon_other_horizontal_dots);
+        deleteIcon.setVisibility(GONE);
+        deleteIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(deleteIcon.getContext()));
+        deleteIcon.setGravity(Gravity.CENTER);
+        deleteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteStory.deleteStory(StoryCell.this, storyId, roomId, isRoom);
+            }
+        });
+
+        iconsRootView.addView(uploadIcon, LayoutCreator.createLinear(72, 72, Gravity.CENTER_VERTICAL));
+        iconsRootView.addView(deleteIcon, LayoutCreator.createLinear(72, 72, Gravity.CENTER_VERTICAL));
 
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             setOnClickListener(v -> {
@@ -434,6 +554,12 @@ public class StoryCell extends FrameLayout {
     public void setTextSize(int topTextSize, int bottomTextSize) {
         this.topText.setTextSize(topTextSize);
         this.bottomText.setTextSize(bottomTextSize);
+    }
+
+    public static void setTextSize(TextView v, int sizeSrc) {
+
+        int mSize = i_Dp(sizeSrc);
+        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
     }
 
     public void setTextStyle(int typeFace) {
@@ -581,7 +707,7 @@ public class StoryCell extends FrameLayout {
     }
 
     public interface DeleteStory {
-        void deleteStory(long storyId);
+        void deleteStory(StoryCell storyCell, long storyId, long roomId, boolean isRoom);
 
         void onStoryClick(StoryCell storyCell);
     }

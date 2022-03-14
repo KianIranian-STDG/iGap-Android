@@ -565,7 +565,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                                 public void error() {
                                     hideProgress();
                                     G.handler.post(() -> {
-                                        new DefaultRoundDialog(getContext())
+                                        new DefaultRoundDialog(requireActivity())
                                                 .setTitle(R.string.warning)
                                                 .setMessage(R.string.str_frag_sync_error)
                                                 // Specifying a listener allows you to take an action before dismissing the dialog.

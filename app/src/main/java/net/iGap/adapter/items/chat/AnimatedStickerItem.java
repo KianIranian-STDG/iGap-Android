@@ -80,10 +80,12 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
         });
 
         String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
-        if (new File(path).exists()) {
-            holder.stickerCell.playAnimation(path);
-        } else {
-            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
+        if (path != null) {
+            if (new File(path).exists()) {
+                holder.stickerCell.playAnimation(path);
+            } else {
+                IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
+            }
         }
     }
 

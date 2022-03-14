@@ -36,7 +36,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/topUp_title"
                 android:textColor="?iGapButtonTextColor"
@@ -207,13 +206,13 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/add_amount"
-                android:layout_width="@dimen/dp36"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp36"
                 android:background="@drawable/shape_stroke_green"
                 android:elevation="@dimen/dp4"
-                android:layoutDirection="rtl"
                 android:padding="@dimen/dp6"
                 app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/choose_amount"
@@ -226,7 +225,6 @@
                 android:layout_height="@dimen/dp36"
                 android:background="@drawable/shape_stroke_red"
                 android:elevation="@dimen/dp4"
-                android:layoutDirection="rtl"
                 android:padding="@dimen/dp6"
                 app:layout_constraintBottom_toBottomOf="@+id/choose_amount"
                 app:layout_constraintEnd_toStartOf="@+id/choose_amount"
@@ -240,15 +238,14 @@
                 style="@style/iGapButtonStroke"
                 android:layout_width="247dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:text="@string/select_the_amount"
                 android:textColor="?iGapButtonTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintEnd_toStartOf="@+id/add_amount"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/low_amount"
-                app:layout_constraintTop_toBottomOf="@+id/llWarning"
-                app:layout_constraintWidth_percent=".6" />
+                app:layout_constraintTop_toBottomOf="@+id/llWarning" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_charge_type"

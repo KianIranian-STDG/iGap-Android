@@ -186,7 +186,7 @@ public class IG_RPC {
     public static class Story_Room_Add_New extends AbstractObject {
         public static int actionId = 1202;
         public List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests;
-
+        public long roomId;
 
         @Override
 
@@ -203,6 +203,7 @@ public class IG_RPC {
         public Object getProtoObject() {
             ProtoStoryRoomAddNew.StoryRoomAddNew.Builder builder = ProtoStoryRoomAddNew.StoryRoomAddNew.newBuilder();
             builder.addAllTokenBatch(storyAddRequests);
+            builder.setRoomId(roomId);
             return builder;
         }
     }
@@ -408,6 +409,7 @@ public class IG_RPC {
         public static int actionId = 311;
         public long roomId;
         public long messageId;
+        public long documentId;
         public ProtoGlobal.RoomMessageStatus roomMessageStatus;
 
         @Override
@@ -426,6 +428,7 @@ public class IG_RPC {
             ProtoGroupUpdateStatus.GroupUpdateStatus.Builder builder = ProtoGroupUpdateStatus.GroupUpdateStatus.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setStatus(roomMessageStatus);
             return builder;
         }
@@ -436,6 +439,7 @@ public class IG_RPC {
         public String updaterAuthorHash;
         public long roomId;
         public long messageId;
+        public long documentId;
         public long statusVersion;
         public ProtoGlobal.RoomMessageStatus statusValue;
 
@@ -461,6 +465,7 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             updaterAuthorHash = response.getUpdaterAuthorHash();
             statusValue = response.getStatus();
             statusVersion = response.getStatusVersion();
@@ -471,6 +476,7 @@ public class IG_RPC {
         public static int actionId = 202;
         public long roomId;
         public long messageId;
+        public long documentId;
         public ProtoGlobal.RoomMessageStatus roomMessageStatus;
 
         @Override
@@ -489,6 +495,7 @@ public class IG_RPC {
             ProtoChatUpdateStatus.ChatUpdateStatus.Builder builder = ProtoChatUpdateStatus.ChatUpdateStatus.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setStatus(roomMessageStatus);
             return builder;
         }
@@ -499,6 +506,7 @@ public class IG_RPC {
         public String updaterAuthorHash;
         public long roomId;
         public long messageId;
+        public long documentId;
         public long statusVersion;
         public ProtoGlobal.RoomMessageStatus statusValue;
 
@@ -524,6 +532,7 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             updaterAuthorHash = response.getUpdaterAuthorHash();
             statusValue = response.getStatus();
             statusVersion = response.getStatusVersion();
@@ -1021,6 +1030,7 @@ public class IG_RPC {
 
         public long roomId;
         public long messageId;
+        public long documentId;
         public String message;
 
         @Override
@@ -1033,6 +1043,7 @@ public class IG_RPC {
             ProtoChatEditMessage.ChatEditMessage.Builder builder = ProtoChatEditMessage.ChatEditMessage.newBuilder();
             builder.setMessage(message);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setRoomId(roomId);
             return builder;
         }
@@ -1048,6 +1059,7 @@ public class IG_RPC {
 
         public String newMessage;
         public long messageId;
+        public long documentId;
         public int messageType;
         public long messageVersion;
         public long roomId;
@@ -1075,6 +1087,7 @@ public class IG_RPC {
 
             newMessage = response.getMessage();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
@@ -1087,6 +1100,7 @@ public class IG_RPC {
 
         public long roomId;
         public long messageId;
+        public long documentId;
         public String message;
 
         @Override
@@ -1099,6 +1113,7 @@ public class IG_RPC {
             ProtoGroupEditMessage.GroupEditMessage.Builder builder = ProtoGroupEditMessage.GroupEditMessage.newBuilder();
             builder.setMessage(message);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setRoomId(roomId);
             return builder;
         }
@@ -1114,6 +1129,7 @@ public class IG_RPC {
 
         public String newMessage;
         public long messageId;
+        public long documentId;
         public int messageType;
         public long messageVersion;
         public long roomId;
@@ -1141,6 +1157,7 @@ public class IG_RPC {
 
             newMessage = response.getMessage();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
@@ -1152,6 +1169,7 @@ public class IG_RPC {
 
         public long roomId;
         public long messageId;
+        public long documentId;
         public String message;
 
         @Override
@@ -1164,6 +1182,7 @@ public class IG_RPC {
             ProtoChatEditMessage.ChatEditMessage.Builder builder = ProtoChatEditMessage.ChatEditMessage.newBuilder();
             builder.setMessage(message);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setRoomId(roomId);
             return builder;
         }
@@ -1179,6 +1198,7 @@ public class IG_RPC {
 
         public String newMessage;
         public long messageId;
+        public long documentId;
         public int messageType;
         public long messageVersion;
         public long roomId;
@@ -1206,6 +1226,7 @@ public class IG_RPC {
 
             newMessage = response.getMessage();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
@@ -1217,6 +1238,7 @@ public class IG_RPC {
 
         public long roomId;
         public long messageId;
+        public long documentId;
 
         @Override
         public AbstractObject deserializeResponse(int constructor, byte[] message) {
@@ -1228,6 +1250,7 @@ public class IG_RPC {
             ProtoGroupPinMessage.GroupPinMessage.Builder builder = ProtoGroupPinMessage.GroupPinMessage.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             return builder;
         }
 
@@ -1263,7 +1286,6 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoGroupPinMessage.GroupPinMessageResponse response = ProtoGroupPinMessage.GroupPinMessageResponse.parseFrom(message);
             resId = response.getResponse().getId();
-
             pinnedMessage = response.getPinnedMessage();
             roomId = response.getRoomId();
         }
@@ -1275,6 +1297,7 @@ public class IG_RPC {
 
         public long roomId;
         public long messageId;
+        public long documentId;
 
         @Override
         public AbstractObject deserializeResponse(int constructor, byte[] message) {
@@ -1286,6 +1309,7 @@ public class IG_RPC {
             ProtoChannelPinMessage.ChannelPinMessage.Builder builder = ProtoChannelPinMessage.ChannelPinMessage.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             return builder;
         }
 
@@ -1321,7 +1345,6 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoChannelPinMessage.ChannelPinMessageResponse response = ProtoChannelPinMessage.ChannelPinMessageResponse.parseFrom(message);
             resId = response.getResponse().getId();
-
             pinnedMessage = response.getPinnedMessage();
             roomId = response.getRoomId();
         }
@@ -1332,6 +1355,7 @@ public class IG_RPC {
         public static int actionId = 411;
         public long roomId;
         public long messageId;
+        public long documentId;
 
         @Override
         public AbstractObject deserializeResponse(int constructor, byte[] message) {
@@ -1343,6 +1367,7 @@ public class IG_RPC {
             ProtoChannelDeleteMessage.ChannelDeleteMessage.Builder builder = ProtoChannelDeleteMessage.ChannelDeleteMessage.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             return builder;
         }
 
@@ -1357,6 +1382,7 @@ public class IG_RPC {
         public static int actionId = 30411;
         public long roomId;
         public long messageId;
+        public long documentId;
         public long deleteVersion;
 
         @Override
@@ -1383,6 +1409,7 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             deleteVersion = response.getDeleteVersion();
         }
     }
@@ -1392,6 +1419,7 @@ public class IG_RPC {
         public static final int actionId = 204;
         public long roomId;
         public long messageId;
+        public long documentId;
         public boolean both;
 
         @Override
@@ -1404,6 +1432,7 @@ public class IG_RPC {
             ProtoChatDeleteMessage.ChatDeleteMessage.Builder builder = ProtoChatDeleteMessage.ChatDeleteMessage.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setBoth(both);
             return builder;
         }
@@ -1419,6 +1448,7 @@ public class IG_RPC {
         public static int actionId = 30204;
         public long roomId;
         public long messageId;
+        public long documentId;
         public long deleteVersion;
 
         @Override
@@ -1444,6 +1474,7 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             deleteVersion = response.getDeleteVersion();
         }
     }
@@ -1453,6 +1484,7 @@ public class IG_RPC {
         public static int actionId = 320;
         public long roomId;
         public long messageId;
+        public long documentId;
 
         @Override
         public AbstractObject deserializeResponse(int constructor, byte[] message) {
@@ -1464,6 +1496,7 @@ public class IG_RPC {
             ProtoGroupDeleteMessage.GroupDeleteMessage.Builder builder = ProtoGroupDeleteMessage.GroupDeleteMessage.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             return builder;
         }
 
@@ -1478,6 +1511,7 @@ public class IG_RPC {
         public static int actionId = 30320;
         public long roomId;
         public long messageId;
+        public long documentId;
         public long deleteVersion;
 
         @Override
@@ -1502,6 +1536,7 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
+            documentId = response.getDocumentId();
             deleteVersion = response.getDeleteVersion();
         }
     }
@@ -1511,6 +1546,7 @@ public class IG_RPC {
         public static int actionId = 424;
         public long roomId;
         public long messageId;
+        public long documentId;
         public ProtoGlobal.RoomMessageReaction reaction;
 
 
@@ -1519,6 +1555,7 @@ public class IG_RPC {
             ProtoChannelAddMessageReaction.ChannelAddMessageReaction.Builder builder = ProtoChannelAddMessageReaction.ChannelAddMessageReaction.newBuilder();
             builder.setRoomId(roomId);
             builder.setMessageId(messageId);
+            builder.setDocumentId(documentId);
             builder.setReaction(reaction);
             return builder;
         }

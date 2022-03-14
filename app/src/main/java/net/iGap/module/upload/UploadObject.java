@@ -38,7 +38,7 @@ public class UploadObject {
     public static UploadObject createForMessage(MessageObject messageObject, ProtoGlobal.Room.Type roomType) {
         UploadObject object = new UploadObject();
 
-        if (messageObject == null || messageObject.id == 0 || messageObject.attachment == null) {
+        if (messageObject == null || messageObject.id == 0 || messageObject.attachment == null || messageObject.attachment.filePath == null) {
             return null;
         }
 

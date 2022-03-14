@@ -53,7 +53,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
                 }
             });
-            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory, direction);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(0).getDocumentId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getDocumentId(), reachMessageId, messageIdGetHistory, direction);
 
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;
@@ -74,7 +74,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             RequestClientGetRoomHistory.IdentityClientGetRoomHistory identityParams = ((RequestClientGetRoomHistory.IdentityClientGetRoomHistory) identity);
             ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
             if (G.onClientGetRoomHistoryResponse != null) {
-                G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(errorResponse.getMajorCode(), errorResponse.getMinorCode(), identityParams.messageIdGetHistory, identityParams.direction);
+                G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(errorResponse.getMajorCode(), errorResponse.getMinorCode(), identityParams.messageIdGetHistory, identityParams.documentIdGetHistory, identityParams.direction);
             }
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;

@@ -40,13 +40,13 @@ public class AccountHelper {
     }
 
     private void baseBefore() {
-        clearSharedDataAndForward();
-        clearCookies(G.context);
         WebSocketClient.getInstance().disconnectSocket(false);
-        G.handler.removeCallbacksAndMessages(null);
-        AccountManager.getInstance().clearSomeStaticValue();
         //close realm ui
         DbManager.getInstance().closeUiRealm();
+        clearSharedDataAndForward();
+        clearCookies(G.context);
+        G.handler.removeCallbacksAndMessages(null);
+        AccountManager.getInstance().clearSomeStaticValue();
     }
 
     private void baseAfter() {

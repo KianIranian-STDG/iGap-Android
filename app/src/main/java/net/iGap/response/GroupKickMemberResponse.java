@@ -10,7 +10,10 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.helper.HelperMember;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGroupKickMember;
 import net.iGap.realm.RealmRoomAccess;
 
@@ -27,6 +30,12 @@ public class GroupKickMemberResponse extends MessageHandler {
         HelperMember.kickMember(builder.getRoomId(), builder.getMemberId());
 
         RealmRoomAccess.getAccess(builder.getMemberId(), builder.getRoomId());
+        G.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, ((ProtoGroupKickMember.GroupKickMemberResponse.Builder) message).getRoomId());
+            }
+        });
     }
 
     @Override

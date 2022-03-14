@@ -166,17 +166,16 @@ public class RoomListCell extends FrameLayout {
             roomVerified = false;
         }
 
-        if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0 && !haveDate) {
+        if (!haveDate) {
             messageDateTv = new AppCompatTextView(getContext());
             messageDateTv.setSingleLine(true);
             messageDateTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDateTv.getContext()));
-            messageDateTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
             setTextSize(messageDateTv, R.dimen.smallTextSize);
             setTypeFace(messageDateTv);
             addView(messageDateTv);
             haveDate = true;
-
-        } else if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0) {
+        }
+        if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0) {
             messageDateTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
         }
 
@@ -232,6 +231,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getLastMessage() != null) {
             if (!haveLastMessage) {
                 lastMessageTv = new AppCompatTextView(getContext());
+                lastMessageTv.setPadding(4,0,4,0);
                 lastMessageTv.setEllipsize(TextUtils.TruncateAt.END);
                 lastMessageTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 lastMessageTv.setSingleLine(true);
@@ -740,7 +740,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO:
-                            attachmentTag = AppUtils.getEmojiByUnicode(MUSIC) + lastMessage.getAttachment().getName();
+                            attachmentTag = (lastMessage.getAttachment().getName()==null) ? AppUtils.getEmojiByUnicode(MUSIC) +" AUDIO ":AppUtils.getEmojiByUnicode(MUSIC) + lastMessage.getAttachment().getName();
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case FILE:
@@ -817,7 +817,7 @@ public class RoomListCell extends FrameLayout {
 
                     if (haveSenderName) {
                         if (haveAttachment) {
-                            builder.append(senderNameSpannable).append(senderNameQuoteSpannable).append(attachmentSpannable).append(lastMessageSpannable);
+                            builder.append(senderNameSpannable).append(senderNameQuoteSpannable).append(attachmentSpannable).append(" ").append(lastMessageSpannable);
                         } else
                             builder.append(senderNameSpannable).append(senderNameQuoteSpannable).append(lastMessageSpannable);
                     } else {

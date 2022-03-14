@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +43,6 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Theme;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
@@ -78,13 +76,21 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
     private OnGalleryIconClicked onGalleryIconClicked;
     private TextView bottomPanelTitle;
     public static boolean isInStoryFragment = false;
+    private boolean isForRoom;
+    private long roomId;
+    private int listMode;
+    private String roomTitle;
 
-    public static CameraStoryFragment newInstance(OnGalleryIconClicked onGalleryIconClicked) {
+    public static CameraStoryFragment newInstance(OnGalleryIconClicked onGalleryIconClicked, boolean isForRoom, long roomId, int listMode, String roomTitle) {
 
         Bundle args = new Bundle();
 
         CameraStoryFragment fragment = new CameraStoryFragment();
         fragment.onGalleryIconClicked = onGalleryIconClicked;
+        fragment.isForRoom = isForRoom;
+        fragment.roomId = roomId;
+        fragment.listMode = listMode;
+        fragment.roomTitle = roomTitle;
         fragment.setArguments(args);
         return fragment;
     }
@@ -329,17 +335,13 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
-                    if (FragmentEditImage.itemGalleryList == null) {
-                        FragmentEditImage.itemGalleryList = new ArrayList<>();
-                    }
                     //CameraController.getInstance().initCamera(null);
                     cameraView.initCamera();
-                    FragmentEditImage.itemGalleryList.clear();
-                    FragmentEditImage.textImageList.clear();
                     ImageHelper.correctRotateImage(finalCameraFile.getAbsolutePath(), true);
+                    FragmentEditImage.checkItemGalleryList();
                     FragmentEditImage.insertItemList(finalCameraFile.getAbsolutePath(), true);
                     if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.newInstance(finalCameraFile.getAbsolutePath())).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.newInstance(finalCameraFile.getAbsolutePath(), isForRoom,roomId,listMode,roomTitle)).setReplace(false).load();
                     }
                 });
 
@@ -373,7 +375,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
 
                         @Override
                         public void Allow() throws IOException {
-                            HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                            HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
                                 @Override
                                 public void Allow() throws IOException {
                                     if (checkCameraHardware(getContext())) {

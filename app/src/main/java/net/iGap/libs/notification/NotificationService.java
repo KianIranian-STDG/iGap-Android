@@ -1,13 +1,11 @@
 package net.iGap.libs.notification;
 
 
-import android.util.Log;
-
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.firebase1.ModuleRemoteMessage;
+import net.iGap.firebase1.NotificationCenterDelegate;
 import net.iGap.helper.HelperNotification;
 import net.iGap.model.AccountUser;
 import net.iGap.module.accountManager.AccountManager;
@@ -22,7 +20,7 @@ import org.json.JSONArray;
 import ir.metrix.Metrix;
 
 
-public class NotificationService extends FirebaseMessagingService {
+public class NotificationService implements NotificationCenterDelegate {
 
     private final static String ROOM_ID = "roomId";
     private final static String MESSAGE_ID = "messageId";
@@ -34,7 +32,6 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String mToken) {
-        super.onNewToken(mToken);
         if (G.ISRealmOK) {
             RealmUserInfo.setPushNotification(mToken);
             Metrix.setPushToken(mToken);
@@ -49,7 +46,7 @@ public class NotificationService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(ModuleRemoteMessage remoteMessage) {
 
         if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
             HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());

@@ -55,6 +55,8 @@
     <string name="icon_lock">\ueab6</string>
     <string name="icon_unlock">\uea4e</string>
     <string name="icon_finger_print">\uead9</string>
+    <string name="icon_face_id">\ueaea</string>
+    <string name="icon_biometric_password">\ue913</string>
     <string name="icon_edit_picture">\ueb03</string>
     <string name="icon_edit">\ueb02</string>
     <string name="icon_dial">\ueb1f</string>
@@ -126,5 +128,6 @@
     <string name="icon_language">\ueabe</string>
     <string name="icon_privacy_and_security">\uea7e</string>
     <string name="icon_notification">\uea8f</string>
+    <string name="icon_story_footer">\ue90c</string>
 
 </resources>

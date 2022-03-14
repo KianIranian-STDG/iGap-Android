@@ -14,6 +14,7 @@
 
         <item name="rootBackgroundColor">@color/background_setting_dark</item>
         <item name="iGapTitleTextColor">@color/white</item>
+        <item name="iGapIconTextColor">@color/white</item>
         <item name="iGapSubtitleTextColor">@color/gray_9d</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/gray_4c</item>
@@ -82,6 +83,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapVoiceCallIconColor">@color/voice_icon_color</item>
         <item name="iGapVideoCallIconColor">@color/video_icon_color</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -158,6 +160,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -227,7 +230,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
@@ -294,6 +297,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -364,6 +368,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -431,6 +436,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -499,6 +505,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -567,6 +574,7 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
@@ -640,6 +648,7 @@
         <!-- <item name="md_background_color">@color/white</item>-->
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
+        <item name="iGapIconTextColor">@color/gray_5c</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/grayDividerLine</item>

@@ -12,6 +12,8 @@ package net.iGap.response;
 
 import net.iGap.G;
 import net.iGap.helper.HelperMember;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoChannelAddMember;
 import net.iGap.proto.ProtoError;
 
@@ -34,6 +36,12 @@ public class ChannelAddMemberResponse extends MessageHandler {
         super.handler();
         ProtoChannelAddMember.ChannelAddMemberResponse.Builder builder = (ProtoChannelAddMember.ChannelAddMemberResponse.Builder) message;
         HelperMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
+        G.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, ((ProtoChannelAddMember.ChannelAddMemberResponse.Builder) message).getRoomId());
+            }
+        });
         if (G.onChannelAddMember != null) {
             G.onChannelAddMember.onChannelAddMember(builder.getRoomId(), builder.getUserId(), builder.getRole());
         }

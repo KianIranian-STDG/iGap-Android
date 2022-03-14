@@ -39,7 +39,7 @@ public class ClientRegisterDeviceResponse extends MessageHandler {
                 (ProtoClientRegisterDevice.ClientRegisterDeviceResponse.Builder) message;
         DbManager.getInstance().doRealmTransaction(realm -> realm.where(RealmUserInfo.class)
                 .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
-                .findFirst().setPushNotificationToken(""));
+                .findFirst().setModuleToken(""));
     }
 
     @Override

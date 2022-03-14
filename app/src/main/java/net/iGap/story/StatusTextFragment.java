@@ -54,6 +54,8 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.BitmapUtils;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
@@ -69,6 +71,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.EventEditText;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.story.liststories.MyStatusStoryListFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,7 +111,21 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
     private Bitmap finalBitmap;
     private FrameLayout addTextRootView;
     private int typingState = 0;
+    private boolean isFromRoom = false;
+    private long roomId;
+    private String roomTitle;
+    private int listMode;
 
+    public StatusTextFragment(boolean isFromRoom) {
+        this.isFromRoom = isFromRoom;
+    }
+
+    public StatusTextFragment(boolean isFromRoom, long roomId, int listMode, String roomTitle) {
+        this.isFromRoom = isFromRoom;
+        this.roomId = roomId;
+        this.roomTitle = roomTitle;
+        this.listMode = listMode;
+    }
 
     @Override
     public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, @Nullable Bundle savedInstanceState) {
@@ -324,6 +341,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         floatActionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                HelperTracker.sendTracker(HelperTracker.TRACKER_MOMENTS_SUBMIT_PICTURE_TEXT);
                 showPopUPView(-1);
                 String text = addTextEditTExt.getText().toString();
                 //layoutRootView.setVisibility(View.GONE);
@@ -379,7 +397,13 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
             if (getActivity() != null) {
                 getActivity().onBackPressed();
             }
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_STATUS_UPLOAD, imageFile.getAbsolutePath());
+            if (isFromRoom && listMode == 0) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new MyStatusStoryListFragment(isFromRoom, imageFile.getAbsolutePath(), roomId, roomTitle, 0)).setReplace(false).load();
+            } else if (isFromRoom && listMode == 1) {
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ROOM_UPLOAD, imageFile.getAbsolutePath(), roomId, roomTitle);
+            } else {
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_STATUS_UPLOAD, imageFile.getAbsolutePath(), isFromRoom);
+            }
 
 
         } catch (Exception e) {

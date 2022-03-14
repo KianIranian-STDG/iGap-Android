@@ -123,7 +123,7 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getActivity() != null && phoneNumber != null) {
+            if (getActivity() != null && phoneNumber != null && !phoneNumber.isEmpty()) {
                 new MaterialDialog.Builder(getActivity())
                         .content(getString(R.string.Re_dialog_verify_number_part1) + "\n" + phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
                         .positiveText(R.string.B_ok)

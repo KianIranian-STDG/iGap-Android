@@ -126,7 +126,7 @@
     <string name="device_dosenot_support">Cet appareil n\'a pas d\'application pour cette action</string>
     <string name="do_you_want_to_turn_on_gps">Le GPS est désactivé , vous voulez l\'activer?</string>
     <string name="select_picture_en">choix d\'image</string>
-    <string name="slide_to_cancel_en">Glisser pour annuler</string>
+    <string name="slide_to_cancel_en">&lt; &#160;Glisser pour annuler</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
     <string name="st_username">Nom d\'utilisateur</string>
     <string name="st_title_Clear_Cache">Vider le cach</string>
@@ -454,7 +454,7 @@
     <string name="music_name">titre de musique</string>
     <string name="info">informations</string>
     <string name="description">explications</string>
-    <string name="type_message">Message...</string>
+    <string name="type_message">Message</string>
     <string name="place">place</string>
     <string name="channel_link">lien de canal</string>
     <string name="iran">Iran</string>
@@ -576,6 +576,7 @@
     <string name="permission_location">Donner au téléphone un positionneur</string>
     <string name="permission_record_audio">Donne le micro</string>
     <string name="permission_phone">Donne le téléphone portable</string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">Doit avoir la permission d\'utiliser %s</string>
     <string name="channel_public_hint_revoke">lien publique de canal</string>
     <string name="self_destructs">autodestruction</string>
     <string name="save_ok">a été enregistré</string>
@@ -787,7 +788,7 @@
     <string name="info_map">Seuls les utilisateurs situés dans un rayon de 5 km sont visibles pour vous si leur statut de carte est sur ON</string>
     <string name="Theme_Dark">Mode nuit</string>
     <string name="two_step_pass_code">Verrou de connexion à l\'application</string>
-    <string name="unlock_with_fingerPrint">déverrouiller  par empreinte digitale</string>
+    <string name="biometric_unlock">Déverrouillage biométrique</string>
     <string name="change_pass_code">Changer le mot de passe</string>
     <string name="auto_lock">auto verrouillage</string>
     <string name="allow_screen_capture">Capacité de capture d\'écran</string>
@@ -1921,9 +1922,11 @@
     <string name="status">Des moments</string>
     <string name="status_title">Moment</string>
     <string name="tap_to_add_status_update">Appuyez pour ajouter un moment</string>
+    <string name="add_status_update">Gérer les instants</string>
     <string name="viewed_updates">Mises à jour consultées</string>
     <string name="recent_updates">Mises à jour récentes</string>
     <string name="your_status_updates_will_disappear_after_24_hours">Vos moments seront supprimés après 24 heures.</string>
+    <string name="my_channel_moments">Mes moments de chaîne</string>
     <string name="your_device_does_not_have_a_camera">Votre appareil a pas d\'appareil photo !</string>
     <string name="delete_status_update">Supprimer ce moment ? Il sera également supprimé pour tous ceux qui l\'ont reçu.</string>
     <string name="story_views">vues</string>
@@ -1938,5 +1941,26 @@
     <string name="moments_string">Des moments</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">Le montant ne peut pas dépasser 500 millions de rials</string>
     <string name="invalid_qr_code">Code-barres invalide</string>
+    <string name="are_you_sure_add_follower">Voulez-vous vraiment ajouter ces abonnés ?</string>
+    <string name="minimizeAmount">Votre demande pour ce montant n\'est pas possible</string>
+    <string name="forbidden_pin_room">Vous n\'êtes pas autorisé à épingler ce chat</string>
+    <string name="pin_up_to_5_chat">Vous pouvez épingler jusqu\'à 5 chats ! </string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">La recherche globale nécessite au moins 5 caractères</string>
+    <string name="faild_payment">Désolé, une erreur s\'est produite et réessayez</string>
+    <string name="biometric_password_description">En activant cette option, le mot de passe biométrique actif sur votre téléphone (empreinte digitale, reconnaissance faciale ou scan de l\'iris), sera appliqué à l\'application</string>
+    <string name="biometric_password">mot de passe biométrique</string>
+    <string name="set_now">Définir maintenant</string>
+    <string name="no_biometric_password_set_on_your_phone">Aucun mot de passe biométrique n\'est défini sur votre téléphone</string>
+    <string name="authentication_failed">Authentification échouée</string>
+    <string name="authentication_succeeded">Authentification réussie</string>
+    <string name="authentication_error">Erreur d\'authentification: </string>
+    <string name="biometric_login">Connexion biométrique pour mon application</string>
+    <string name="use_biometric_authentication">Connectez-vous avec votre identifiant biométrique</string>
+    <string name="send_current_location">Envoyer l\'emplacement actuel:\n</string>
+    <string name="send_selected_location">Envoyer l\'emplacement sélectionné:\n</string>
+    <string name="load_sticker_types_error_message">filtre de types non chargé</string>
+    <string name="select_sticker_type">Sélectionnez le type d\'autocollant</string>
+    <string name="locating">réception de la position actuelle…</string>
+    <string name="enable_sending_non_media_file_soon">La possibilité d\'envoyer des fichiers non multimédias sera bientôt activée</string>
 
 </resources>

@@ -10,9 +10,12 @@ public class MainStoryObject {
 
     public long id;
     public long userId; // userId for users and roomId for rooms
+    public long roomId;// userId for users and roomId for rooms
+    public int orginatorValue;
     public boolean isSeenAll;
     public boolean isSentAll;
     public boolean isUploadedAll;
+    public boolean isVerified;
     public int indexOfSeen;
     public String displayName;
     public String profileColor;
@@ -36,11 +39,14 @@ public class MainStoryObject {
 
         mainStoryObject.id = realmStory.getId();
         mainStoryObject.userId = realmStory.getUserId();
+        mainStoryObject.roomId = realmStory.getRoomId();
+        mainStoryObject.orginatorValue = realmStory.getRoomId() != 0 ? 1 : 0;
         mainStoryObject.isSeenAll = realmStory.isSeenAll();
         mainStoryObject.isSentAll = realmStory.isSentAll();
         mainStoryObject.isUploadedAll = realmStory.isUploadedAll();
         mainStoryObject.indexOfSeen = realmStory.getIndexOfSeen();
         mainStoryObject.profileColor = realmStory.getProfileColor();
+        mainStoryObject.isVerified = realmStory.isVerified();
         mainStoryObject.displayName = mainStoryObject.userId == AccountManager.getInstance().getCurrentUser().getId() ? AccountManager.getInstance().getCurrentUser().getName() : realmStory.getDisplayName();
 
         for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {

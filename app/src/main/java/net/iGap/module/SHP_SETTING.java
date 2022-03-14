@@ -212,6 +212,8 @@ public class SHP_SETTING {
     public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
     public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
 
+    public static final String IS_ACTIVE_PHONE_BIOMETRIC_SECURITY = "is_active_phone_biometric_security";
+
 }
 
 

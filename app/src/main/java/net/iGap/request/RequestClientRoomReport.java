@@ -16,10 +16,11 @@ import net.iGap.proto.ProtoClientRoomReport;
 
 public class RequestClientRoomReport {
 
-    public void roomReport(long roomId, long messageId, ProtoClientRoomReport.ClientRoomReport.Reason reason, @Nullable String description) {
+    public void roomReport(long roomId, long messageId, long documentId, ProtoClientRoomReport.ClientRoomReport.Reason reason, @Nullable String description) {
         ProtoClientRoomReport.ClientRoomReport.Builder builder = ProtoClientRoomReport.ClientRoomReport.newBuilder();
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
+        builder.setDocumentId(documentId);
         builder.setReason(reason);
         if (reason == ProtoClientRoomReport.ClientRoomReport.Reason.OTHER) {
             builder.setDescription(description);

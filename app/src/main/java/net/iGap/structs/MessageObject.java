@@ -65,6 +65,7 @@ public class MessageObject {
     public long messageVersion;
     public long statusVersion;
     public long previousMessageId;
+    public long documentId;
     public RoomMessage.ChannelExtra channelExtra;
     public ChannelExtraObject channelExtraObject;
     public ProtoGlobal.Room.Type roomType;
@@ -118,6 +119,7 @@ public class MessageObject {
         messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLog());
         messageObject.contact = RoomContactObject.create(roomMessage.getContact());
+        messageObject.documentId = roomMessage.getDocumentId();
 
         if (roomMessage.getWallet() != null) {
             messageObject.wallet = WalletObject.create(roomMessage.getWallet());
@@ -213,6 +215,7 @@ public class MessageObject {
         messageObject.statusVersion = roomMessage.getStatusVersion();
         messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
         messageObject.createTime = roomMessage.getCreateTime();
+        messageObject.documentId = roomMessage.getDocumentId();
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();

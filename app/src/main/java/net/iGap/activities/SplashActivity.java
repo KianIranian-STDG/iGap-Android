@@ -1,22 +1,15 @@
 package net.iGap.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.caspian.otpsdk.context.ApplicationContext;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.firebase1.NotificationCenter;
 import net.iGap.helper.FileLog;
-import net.iGap.helper.HelperTracker;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
@@ -24,6 +17,7 @@ import net.iGap.realm.RealmUserInfo;
 import ir.metrix.Metrix;
 
 public class SplashActivity extends ActivityEnhanced {
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,10 +31,10 @@ public class SplashActivity extends ActivityEnhanced {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
-                    final String[] token = {realmUserInfo.getPushNotificationToken()};
+                    final String[] token = {realmUserInfo.getModuleToken()};
                     if (token[0] == null || token[0].length() < 2) {
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-                            token[0] = instanceIdResult.getToken();
+                        NotificationCenter.getInstance().setOnTokenReceived(token1 -> {
+                            token[0] = token1;
                             RealmUserInfo.setPushNotification(token[0]);
                             Metrix.setPushToken(token[0]);
                         });
@@ -82,6 +76,7 @@ public class SplashActivity extends ActivityEnhanced {
                 finish();
             }
         }
+
     }
 
     @Override

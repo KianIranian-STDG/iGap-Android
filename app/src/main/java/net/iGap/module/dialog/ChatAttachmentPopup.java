@@ -1,15 +1,18 @@
 package net.iGap.module.dialog;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -34,11 +38,11 @@ import net.iGap.R;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.AdapterPopupOpenGallery;
 import net.iGap.adapter.items.BottomSheetItem;
-import net.iGap.story.PhotoViewer;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
-import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -54,6 +58,7 @@ import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.fotoapparat.Fotoapparat;
@@ -62,15 +67,15 @@ import io.fotoapparat.selector.ResolutionSelectorsKt;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.R.string.item;
 import static net.iGap.fragments.FragmentChat.listPathString;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
-public class ChatAttachmentPopup {
+public class ChatAttachmentPopup implements EventManager.EventDelegate {
 
     private final long POPUP_ANIMATION_DURATION = 170;
     private final int MAX_COUNT_OF_IMAGE = 100;
     private final String TAG = "ChatAttachmentPopup";
 
     public boolean isShowing = false;
-    private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
     private PopupWindow mPopup;
@@ -94,6 +99,7 @@ public class ChatAttachmentPopup {
     private Animator animation;
     private View contentView;
     private View privacyView;
+    private View mNoCameraPermission;
     private int mChatBoxHeight;
     private int mMessagesLayoutHeight;
 
@@ -105,11 +111,6 @@ public class ChatAttachmentPopup {
 
     public static ChatAttachmentPopup create() {
         return new ChatAttachmentPopup();
-    }
-
-    public ChatAttachmentPopup setContext(Context context) {
-        this.mContext = context;
-        return this;
     }
 
     public ChatAttachmentPopup setRootView(View view) {
@@ -149,22 +150,19 @@ public class ChatAttachmentPopup {
 
     public ChatAttachmentPopup build() {
 
-        if (mContext == null)
-            throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
-
         if (mRootView == null)
             throw new IllegalArgumentException(TAG + " : set root view!");
 
 
         //inflate layout
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(mFrgActivity);
         viewRoot = inflater.inflate(R.layout.attachment_popup_view, null, false);
 
         attachFile = new AttachFile(mFrgActivity);
         initViews(viewRoot);
 
         //setup popup
-        mPopup = new PopupWindow(mContext);
+        mPopup = new PopupWindow(mFrgActivity);
         mPopup.setContentView(viewRoot);
         mPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopup.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -180,6 +178,8 @@ public class ChatAttachmentPopup {
             isShowing = false;
             disableCamera();
         });
+
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_CAMERA_PERMISSION_GRANTED, ChatAttachmentPopup.this);
 
         return this;
     }
@@ -334,11 +334,7 @@ public class ChatAttachmentPopup {
         camera.setOnClickListener(v -> {
             dismiss();
 
-            if (mSharedPref.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                attachFile.showDialogOpenCamera(v, null, mFragment);
-            } else {
-                attachFile.showDialogOpenCamera(v, null, mFragment);
-            }
+            attachFile.showDialogOpenCamera(v, null, mFragment);
         });
 
         photo.setOnClickListener(v -> {
@@ -425,10 +421,32 @@ public class ChatAttachmentPopup {
             }
         };
 
-
+        mNoCameraPermission = view.findViewById(R.id.no_camera_permission);
         rcvBottomSheet = view.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(mFrgActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setAdapter(fastItemAdapter);
+
+        mNoCameraPermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                        @Override
+                        public void Allow() throws IOException {
+                            mNoCameraPermission.setVisibility(View.GONE);
+                            rcvBottomSheet.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void deny() {
+                            HelperPermission.showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
+                        }
+                    });
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
 
         //disable and enable camera when user scroll on recycler view
         rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
@@ -463,7 +481,7 @@ public class ChatAttachmentPopup {
     private void openPhotoGallery() {
         try {
 
-            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+            HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     //clear at first time to load image gallery
@@ -482,7 +500,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-                    showDeniedPermissionMessage();
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                 }
             });
 
@@ -491,15 +509,11 @@ public class ChatAttachmentPopup {
         }
     }
 
-    private void showDeniedPermissionMessage() {
-        if (mContext != null)
-            HelperError.showSnackMessage(mContext.getString(R.string.you_need_to_allow) + " " + mContext.getString(R.string.permission_storage), false);
-    }
 
     private void openVideoGallery() {
         try {
 
-            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+            HelperPermission.getStoragePermission(G.currentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
@@ -522,7 +536,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-                    showDeniedPermissionMessage();
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                 }
             });
 
@@ -533,7 +547,7 @@ public class ChatAttachmentPopup {
 
     private void openMusicGallery() {
         try {
-            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+            HelperPermission.getStoragePermission(G.currentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
@@ -556,7 +570,7 @@ public class ChatAttachmentPopup {
 
                 @Override
                 public void deny() {
-                    showDeniedPermissionMessage();
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                 }
             });
 
@@ -584,7 +598,9 @@ public class ChatAttachmentPopup {
     public void dismiss() {
         if (mPopup == null) return;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            hideViewWithCircularReveal(contentView);
+            if (contentView != null && contentView.isAttachedToWindow()) {
+                hideViewWithCircularReveal(contentView);
+            }
         } else {
             isShowing = false;
             mPopup.dismiss();
@@ -621,14 +637,43 @@ public class ChatAttachmentPopup {
             } else {
                 listPathString = new ArrayList<>();
             }
-
+            if (FragmentEditImage.itemGalleryList == null) {
+                FragmentEditImage.itemGalleryList = new ArrayList<>();
+            }
             FragmentEditImage.itemGalleryList.clear();
+
+            if (FragmentEditImage.textImageList == null) {
+                FragmentEditImage.textImageList = new HashMap<>();
+            }
             if (isNewBottomSheet) {
                 FragmentEditImage.textImageList.clear();
             }
-
+            /**Following code commented for accepting google play policy for
+             * restrictions on MANAGE_EXTERNAL_STORAGE that do not allowed us to
+             * publish igap on google play with that permission*/
             try {
-                HelperPermission.getStoragePermision(mFrgActivity, new OnGetPermission() {
+
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    if (Environment.isExternalStorageManager()) {
+//                        getAllShownImagesPath(mFrgActivity, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
+//                            @Override
+//                            public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
+//                                FragmentEditImage.itemGalleryList = listOfAllImages;
+//                                if (rcvBottomSheet != null)
+//                                    rcvBottomSheet.setVisibility(View.VISIBLE);
+//                                G.runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        checkCameraAndLoadImage();
+//                                    }
+//                                });
+//                            }
+//                        });
+//                    } else {
+//                        HelperPermission.showDeniedPermissionMessage(G.fragmentActivity.getString(R.string.permission_storage));
+//                    }
+//                } else {
+                HelperPermission.getStoragePermission(mFrgActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         getAllShownImagesPath(mFrgActivity, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
@@ -650,16 +695,16 @@ public class ChatAttachmentPopup {
 
                     @Override
                     public void deny() {
-                        loadImageGallery();
+                        HelperPermission.showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             checkCameraAndLoadImage();
         }
-
 
     }
 
@@ -670,38 +715,41 @@ public class ChatAttachmentPopup {
                 HelperPermission.getCameraPermission(mFrgActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                addItemToRecycler(new AdapterCamera("", onClickCamera).withIdentifier(99));
-                                loadItemsToRecycler();
-                                isPermissionCamera = true;
-                            }
-                        });
-                        showPopup();
+                        rcvBottomSheet.setVisibility(View.VISIBLE);
+                        mNoCameraPermission.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void deny() {
-
-                        loadImageGallery();
-
+                        rcvBottomSheet.setVisibility(View.INVISIBLE);
+                        mNoCameraPermission.setVisibility(View.VISIBLE);
                     }
                 });
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    addItemToRecycler(new AdapterCamera("", onClickCamera).withIdentifier(99));
+                    loadItemsToRecycler();
+                    isPermissionCamera = true;
+                }
+            });
+            showPopup();
+
         } else {
             loadImageGallery();
         }
     }
 
     private void loadItemsToRecycler() {
-        for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-            addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
-        }
+        if (FragmentEditImage.itemGalleryList != null)
+            for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
+            }
         if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
             addItemToRecycler(new AdapterPopupOpenGallery(() -> {
                 dismiss();
@@ -727,10 +775,10 @@ public class ChatAttachmentPopup {
         enableCamera();
 
 
-        if (HelperPermission.grantedUseStorage()) {
+        if (HelperPermission.grantedUseStorage() && ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             rcvBottomSheet.setVisibility(View.VISIBLE);
         } else {
-            rcvBottomSheet.setVisibility(View.GONE);
+            rcvBottomSheet.setVisibility(View.INVISIBLE);
         }
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -744,7 +792,7 @@ public class ChatAttachmentPopup {
     }
 
     private void loadImageGallery() {
-
+        FragmentEditImage.itemGalleryList.clear();
         loadItemsToRecycler();
         showPopup();
 
@@ -758,41 +806,43 @@ public class ChatAttachmentPopup {
      * get images for show in bottom sheet
      */
     private void getAllShownImagesPath(Activity activity, OnImagesGalleryPrepared onImagesGalleryPrepared) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
-                Uri uri;
-                Cursor cursor;
-                int column_index_data;
-                String absolutePathOfImage;
-                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+                    Uri uri;
+                    Cursor cursor;
+                    int column_index_data;
+                    String absolutePathOfImage;
+                    uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-                String[] projection = {
-                        MediaStore.MediaColumns.DATA
-                };
+                    String[] projection = {
+                            MediaStore.MediaColumns.DATA
+                    };
 
-                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+                    cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
-                if (cursor != null) {
-                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                    if (cursor != null) {
+                        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
 
-                    while (cursor.moveToNext()) {
-                        absolutePathOfImage = cursor.getString(column_index_data);
+                        while (cursor.moveToNext()) {
+                            absolutePathOfImage = cursor.getString(column_index_data);
 
-                        StructBottomSheet item = new StructBottomSheet();
-                        item.setId(listOfAllImages.size());
-                        item.setPath(absolutePathOfImage);
-                        item.isSelected = true;
-                        listOfAllImages.add(item);
-                        if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
+                            StructBottomSheet item = new StructBottomSheet();
+                            item.setId(listOfAllImages.size());
+                            item.setPath(absolutePathOfImage);
+                            item.isSelected = true;
+                            listOfAllImages.add(item);
+                            if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
+                        }
+                        cursor.close();
+                        G.runOnUiThread(() -> onImagesGalleryPrepared.imagesList(listOfAllImages));
+
                     }
-                    cursor.close();
-                    onImagesGalleryPrepared.imagesList(listOfAllImages);
-
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     private void animateViews() {
@@ -808,7 +858,7 @@ public class ChatAttachmentPopup {
         int currentHeight = LayoutCreator.dp(300);
 
         if (contentView != null) {
-            emojiSharedPreferences = mContext.getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
+            emojiSharedPreferences = G.context.getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
             int keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
             int keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
 
@@ -885,7 +935,7 @@ public class ChatAttachmentPopup {
     private void buildCameraSwitcher() {
 
         try {
-            fotoapparatSwitcher = Fotoapparat.with(mContext)
+            fotoapparatSwitcher = Fotoapparat.with(G.context)
                     .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
                     .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
 //                .lensPosition(back())     // we want back camera
@@ -923,6 +973,15 @@ public class ChatAttachmentPopup {
         }
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_CAMERA_PERMISSION_GRANTED) {
+            rcvBottomSheet.setVisibility(View.VISIBLE);
+            mNoCameraPermission.setVisibility(View.GONE);
+            enableCamera();
+        }
+    }
+
     public interface ChatPopupListener {
 
         void onAttachPopupVideoPickerResult(List<String> results);
@@ -938,6 +997,7 @@ public class ChatAttachmentPopup {
         void onAttachPopupFilePicked(List<String> selectedPathList, String caption);
 
         void onAttachPopupSendSelected();
+
     }
 
     public enum ChatPopupAction {

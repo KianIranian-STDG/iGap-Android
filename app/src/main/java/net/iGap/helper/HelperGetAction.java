@@ -145,7 +145,7 @@ public class HelperGetAction {
      * @return latest Action
      */
 
-    private static ProtoGlobal.ClientAction getLatestAction(long roomId) {
+    public static ProtoGlobal.ClientAction getLatestAction(long roomId) {
         for (int i = (structActions.size() - 1); i >= 0; i--) {
             if (structActions.get(i).roomId == roomId) {
                 return structActions.get(i).action;

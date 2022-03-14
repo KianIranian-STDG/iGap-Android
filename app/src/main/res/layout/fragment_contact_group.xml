@@ -86,17 +86,6 @@
         app:layout_constraintEnd_toEndOf="@id/fcg_recycler_view_add_item_to_group"
         app:layout_constraintTop_toTopOf="@id/fcg_recycler_view_add_item_to_group" />
 
-
-    <ProgressBar
-        android:id="@+id/fcg_prgWaiting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

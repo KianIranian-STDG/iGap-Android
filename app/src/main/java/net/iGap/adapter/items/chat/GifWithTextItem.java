@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
@@ -36,6 +37,7 @@ import java.util.List;
 import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
 
@@ -76,8 +78,9 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        holder.image.setImageURI(Uri.fromFile(new File(localPath)));
-
+        if (localPath != null) {
+            holder.image.setImageURI(Uri.fromFile(new File(localPath)));
+        }
         if (fileType == LocalFileType.FILE) {
             SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {

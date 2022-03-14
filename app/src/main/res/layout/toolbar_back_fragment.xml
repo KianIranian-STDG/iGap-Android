@@ -56,19 +56,14 @@
                 android:textSize="@dimen/largeTextSize" />
 
 
-            <net.iGap.module.MaterialDesignTextView
+            <ImageView
                 android:id="@+id/menu_item1"
-                style="@style/myIconToolbarStyle"
                 android:layout_width="@dimen/contact_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center"
                 android:layout_marginRight="@dimen/dp10"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/icon_delete"
                 android:visibility="visible" />
 
 

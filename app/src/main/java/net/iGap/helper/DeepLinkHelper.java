@@ -53,8 +53,9 @@ public class DeepLinkHelper {
 
         fragment.getRequestManager().sendRequest(req, (response, error) -> {
             G.runOnUiThread(() -> {
+                dialog.dismiss();
+                dialog.cancel();
                 if (response != null) {
-                    dialog.dismiss();
                     IG_RPC.Res_Client_Get_Discovery res = (IG_RPC.Res_Client_Get_Discovery) response;
                     discoveryArrayList = res.items;
 
@@ -73,7 +74,7 @@ public class DeepLinkHelper {
                     }
 
                 } else {
-                    dialog.dismiss();
+
                     IG_RPC.Error err = (IG_RPC.Error) error;
                     Log.e("TAG", "getDiscoveryItems: " + err.major + " - " + err.minor);
                 }

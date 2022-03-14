@@ -40,9 +40,9 @@ public class Downloader extends BaseController implements IDownloader {
 
     @Override
     public void download(@NonNull DownloadObject file, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-//        if (file.isPublic()) {
-//            publicCacheId.add(file.mainCacheId);
-//        }
+        if (file.isPublic()) {
+            publicCacheId.add(file.mainCacheId);
+        }
         getCurrentDownloader(file.mainCacheId).download(file, selector, priority, observer);
     }
 

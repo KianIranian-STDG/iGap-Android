@@ -40,11 +40,11 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.controllers.RoomController;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -53,11 +53,16 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnSetAction;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserReport;
+import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -71,28 +76,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 import static net.iGap.module.Contacts.showLimitDialog;
 
 //todo : fixed view mode and view and remove logic code from view
-public class FragmentContactsProfile extends BaseFragment {
+public class FragmentContactsProfile extends BaseFragment implements OnSetAction {
 
     private static final String ROOM_ID = "RoomId";
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
-
     private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f;
     private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private final int ALPHA_ANIMATIONS_DURATION = 200;
-
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
-
     private String report;
     private FragmentContactsProfileBinding binding;
     private FragmentContactsProfileViewModel viewModel;
     private CircleImageView userAvatarImageView;
     private boolean isCollapsed;
     private long userId;
+    private RealmRoom realmRoom;
+    private ProtoGlobal.Room.Type roomType;
+    private long peerId;
+    private String action;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -124,6 +131,8 @@ public class FragmentContactsProfile extends BaseFragment {
             roomId = getArguments().getLong(ROOM_ID);
             enterFrom = getArguments().getString(ENTER_FROM);
         }
+        Bundle extras = getArguments();
+        peerId = extras.getLong(PEER_ID);
         viewModel.init(roomId, userId, enterFrom, avatarHandler);
         return attachToSwipeBack(binding.getRoot());
     }
@@ -133,22 +142,38 @@ public class FragmentContactsProfile extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initialToolbar();
+        DbManager.getInstance().doRealmTask(realm -> {
+            realmRoom = realm.where(RealmRoom.class).equalTo("id", viewModel.roomId).findFirst();
+            if (realmRoom != null) {
+                roomType = realmRoom.getType();
+                action = realmRoom.getActionState();
+            }
+        });
+
+        G.onSetAction = this;
+
+        if (peerId == AccountManager.getInstance().getCurrentUser().getId()) {
+            binding.toolbarTxtStatusExpanded.setText(requireContext().getResources().getString(R.string.chat_with_yourself));
+        } else {
+            viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
+                if (action != null && realmRoom != null)
+                    binding.toolbarTxtStatusExpanded.setText(action);
+                else
+                    binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
+            });
+        }
 
         userAvatarImageView = binding.toolbarAvatar;
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
-
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
         binding.toolbarCall.setOnClickListener(v -> onCallButtonClick());
 
         viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner(), userName -> {
-
             if (userName == null) return;
-
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("LINK_USER", Config.IGAP_LINK_PREFIX + userName);
             clipboard.setPrimaryClip(clip);
-
             Toast.makeText(getActivity(), getString(R.string.username_copied), Toast.LENGTH_SHORT).show();
 
         });
@@ -171,7 +196,6 @@ public class FragmentContactsProfile extends BaseFragment {
             }
         });
 
-
         viewModel.menuVisibility.observe(getViewLifecycleOwner(), visible -> {
             if (visible != null) binding.toolbarMore.setVisibility(visible);
         });
@@ -180,7 +204,6 @@ public class FragmentContactsProfile extends BaseFragment {
             if (visible != null) binding.toolbarCall.setVisibility(visible);
         });
 
-        //todo: fixed it and move to viewModel
         viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
             binding.enableNotification.setChecked(isChecked);
             getRoomController().clientMuteRoom(viewModel.roomId, isChecked);
@@ -192,10 +215,6 @@ public class FragmentContactsProfile extends BaseFragment {
                 binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
                 binding.toolbarTxtNameExpanded.setSelected(true);
             }
-        });
-
-        viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
-            binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
         });
 
         viewModel.goToChatPage.observe(getViewLifecycleOwner(), userRoomId -> {
@@ -481,13 +500,13 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
         });*/
 
-        viewModel.showMenu.observe(this, aBoolean -> {
+        viewModel.showMenu.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showPopUp();
             }
         });
 
-        viewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
+        viewModel.showPhoneNumberDialog.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
@@ -500,7 +519,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
 
                             @Override
                             public void deny() {
-
+                                showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
                             }
                         });
                     } catch (IOException e) {
@@ -517,13 +536,13 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
         });*/
 
-        viewModel.showClearChatDialog.observe(this, aBoolean -> {
+        viewModel.showClearChatDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
 
-        viewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
+        viewModel.goToCustomNotificationPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
@@ -534,7 +553,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
         });
 
-        viewModel.setAvatar.observe(this, aBoolean -> {
+        viewModel.setAvatar.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null) {
                 if (aBoolean) {
                     avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
@@ -544,7 +563,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
         });
 
-        viewModel.showDeleteContactDialog.observe(this, aBoolean -> {
+        viewModel.showDeleteContactDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -555,19 +574,19 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
         });
 
-        viewModel.showDialogReportContact.observe(this, aBoolean -> {
+        viewModel.showDialogReportContact.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 openDialogReport();
             }
         });
 
-        viewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
+        viewModel.showDialogStartSecretChat.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 Toast.makeText(getContext(), "secret chat", Toast.LENGTH_LONG).show();
             }
         });
 
-        viewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
+        viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), isCurrentUser -> {
             if (getActivity() != null && isCurrentUser != null) {
                 Log.wtf(this.getClass().getName(), "goToShowAvatarPage observe");
                 FragmentShowAvatars fragment;
@@ -650,7 +669,6 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
 
     }
 
-
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
@@ -701,10 +719,9 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
 
     @Override
     public void onResume() {
-        if (binding != null && !mIsTheTitleContainerVisible) {
-            startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
-        }
         super.onResume();
+        if (binding != null && !mIsTheTitleContainerVisible)
+            startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
         viewModel.onResume();
     }
 
@@ -718,11 +735,6 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
     public void onStop() {
         super.onStop();
         viewModel.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     /**
@@ -864,14 +876,14 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
         items.add(R.string.st_Abuse);
         items.add(R.string.st_FakeAccount);
         items.add(R.string.st_Other);
-        new BottomSheetFragment().setListDataWithResourceId(getContext(),items, -1, position -> {
-            if (items.get(position)==R.string.st_Spam) {
+        new BottomSheetFragment().setListDataWithResourceId(getContext(), items, -1, position -> {
+            if (items.get(position) == R.string.st_Spam) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
-            } else if (items.get(position)==R.string.st_Abuse) {
+            } else if (items.get(position) == R.string.st_Abuse) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
-            } else if (items.get(position)==R.string.st_FakeAccount) {
+            } else if (items.get(position) == R.string.st_FakeAccount) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
-            } else if (items.get(position)==R.string.st_Other) {
+            } else if (items.get(position) == R.string.st_Other) {
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -925,5 +937,28 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
                 e.getStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onSetAction(long roomId, long userId, ProtoGlobal.ClientAction clientAction) {
+        if (viewModel.roomId == roomId) {
+            RealmRoom.setAction(roomId, userId, action);
+            action = HelperGetAction.getAction(roomId, userId, roomType, clientAction);
+            G.runOnUiThread(() -> {
+                if (roomType != null) {
+                    if (action != null && AccountManager.getInstance().getCurrentUser().getId() != userId) {
+                        binding.toolbarTxtStatusExpanded.setText(action);
+                    } else {
+                        binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(viewModel.lastSeen.getValue()));
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        G.onSetAction = null;
+        super.onDestroyView();
     }
 }

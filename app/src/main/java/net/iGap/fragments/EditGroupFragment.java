@@ -48,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
+
 public class EditGroupFragment extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
     private static final String ROOM_ID = "RoomId";
@@ -158,7 +160,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         viewModel.goToModeratorPage.observe(getViewLifecycleOwner(), aBoolean -> showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()));
 
-        viewModel.initEmoji.observe(this, aBoolean -> {
+        viewModel.initEmoji.observe(getViewLifecycleOwner(), aBoolean -> {
 //            if (aBoolean != null) {
 //                emojiPopup.toggle();
 //            }
@@ -201,12 +203,9 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             String filePath = null;
             long avatarId = SUID.id().get();
 
-            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
-            if (FragmentEditImage.itemGalleryList != null)
-                FragmentEditImage.itemGalleryList.clear();
-
             if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
                 if (getActivity() != null) {
+                    FragmentEditImage.checkItemGalleryList();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                         FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, null);
@@ -237,7 +236,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
                 if (which == 0) {
                     try {
-                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
@@ -257,7 +256,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
                             @Override
                             public void deny() {
-
+                                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                             }
                         });
                     } catch (IOException e) {
@@ -276,7 +275,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
                                 @Override
                                 public void deny() {
-
+                                    showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                                 }
                             });
                         } catch (IOException e) {
@@ -292,6 +291,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     private void handleGalleryImageResult(String path) {
         if (getActivity() != null) {
+            FragmentEditImage.checkItemGalleryList();
             ImageHelper.correctRotateImage(path, true);
             FragmentEditImage.insertItemList(path, false);
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);

@@ -51,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class FragmentWebView extends BaseFragment implements IOnBackPressed {
 
@@ -445,6 +446,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
 
                                                 @Override
                                                 public void deny() {
+                                                    showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                                                 }
                                             });
                                         }
@@ -493,7 +495,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         //For Android 5.0+
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
             try {
-                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         HelperPermission.getCameraPermission(getContext(), new OnGetPermission() {
@@ -540,6 +542,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
 
                             @Override
                             public void deny() {
+                                showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                             }
                         });
                     }

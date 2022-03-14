@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Check connect to internet Page introduce app -->
-
+    <string name="gcm_defaultSenderId" translatable="false">891852120925</string>
+    <string name="default_web_client_id" translatable="false">780057141561-etdtrh2c8au993nmrigoj0jfjoplu3t8.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://igap-im.firebaseio.com</string>
+    <string name="ga_trackingId" translatable="false">UA-89789834-5</string>
+    <string name="google_api_key" translatable="false">AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA</string>
+    <string name="google_app_id" translatable="false">1:780057141561:android:69c59b7595e50096</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA</string>
+    <string name="google_storage_bucket" translatable="false">igap-im.appspot.com</string>
+    <string name="project_id" translatable="false">igap-im</string>
     <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">Security &amp; Privacy</string>
     <string name="text_line_2_introduce_page2">iGap attaches the utmost importance to your security and privacy using the individual encryption algorithms and guarantees a safe and secure connection between you, your friends and family.</string>
@@ -132,7 +140,7 @@
     <string name="device_dosenot_support">This device does not have an app for this action.</string>
     <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
     <string name="select_picture_en">Select Picture</string>
-    <string name="slide_to_cancel_en">Slide to Cancel</string>
+    <string name="slide_to_cancel_en">&lt; &#160;Slide to Cancel</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
 
     <!-- setting -->
@@ -493,7 +501,7 @@
     <string name="music_name">Music Name</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
-    <string name="type_message">Message...</string>
+    <string name="type_message">Message</string>
     <string name="place">Place</string>
     <string name="channel_link">Channel Link</string>
     <string name="iran">Iran</string>
@@ -655,6 +663,7 @@ Want to get it?</string>
     <string name="permission_location">Location</string>
     <string name="permission_record_audio">Record Audio</string>
     <string name="permission_phone">Call Phone</string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">iGap needs to access your %s</string>
 
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
@@ -886,7 +895,7 @@ Want to get it?</string>
     <string name="st_24_Clock">24 hour clock</string>
     <string name="Theme_Dark">Dark Theme</string>
     <string name="two_step_pass_code">PassCode Lock</string>
-    <string name="unlock_with_fingerPrint">Unlock With FingerPrint</string>
+    <string name="biometric_unlock">Biometric unlock</string>
     <string name="change_pass_code">Change PassCode</string>
     <string name="auto_lock">Auto-lock</string>
     <string name="allow_screen_capture">Allow Screen Capture</string>
@@ -896,8 +905,8 @@ Want to get it?</string>
     <string name="Fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="Auto_lock_description">The app will be locked after each time you choose and you need to unlock it at the beginning.</string>
     <string name="Allow_Screen_Capture_description">If enabled, you can take screenshots of the app, but the system will display your chats in the task switcher even when the passcode is on. You may need to restart the app for this to take effect.</string>
-    <string name="set_pass_code_description">When you set a passcode, a lock icon will appear on top of the main chats page. Tap it to lock or unlock the app.
-    \nNote: you can set only numbers as a PIN or a combination of numbers and letters as a Password with no restriction. \nIf you forget your passcode, you just need to log out once and log in again with no need to enter the PIN/Password.</string>
+    <string name="set_pass_code_description">When you set a pass code or pattern, a lock icon will appear on top of the main chats page. Tap it to lock or unlock the app.
+    \nNote: you can set only numbers as a PIN or a combination of numbers and letters as a Password with no restriction. \nIf you forget your pass code, you just need to log out once and log in again with no need to enter the PIN/Password.</string>
 
     <string name="forgot_pin_desc">If you have forgotten your PIN/Password, there is no way to recover but only to log out and log in again. Are you sure to log out?</string>
     <string name="forgot_pin_title">Forgot PIN/Password?</string>
@@ -2291,9 +2300,11 @@ Want to get it?</string>
     <string name="status">Moments</string>
     <string name="status_title">Moment</string>
     <string name="tap_to_add_status_update">Tap to add moment</string>
+    <string name="add_status_update">Manage Moments</string>
     <string name="viewed_updates">Viewed updates</string>
     <string name="recent_updates">Recent Updates</string>
     <string name="your_status_updates_will_disappear_after_24_hours">Your moments will be delete after 24 hours.</string>
+    <string name="my_channel_moments">My Channel Moments</string>
     <string name="your_device_does_not_have_a_camera">Your device does not have a camera!</string>
     <string name="delete_status_update">Delete this moment? It will also be deleted for everyone who received it.</string>
     <string name="story_views">views</string>
@@ -2790,4 +2801,28 @@ Want to get it?</string>
     <string name="unavailable_moment">Unavailable Moment</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">The amount can not be more than 500 million rials</string>
     <string name="invalid_qr_code">Invalid QR code</string>
+    <string name="are_you_sure_add_follower">Are you sure you want to add these followers?</string>
+    <string name="minimizeAmount">Your request for this amount is not possible</string>
+    <string name="forbidden_pin_room">You are not allowed to pin this chat</string>
+    <string name="pin_up_to_5_chat">You can pin up to 5 chats!</string>
+    <string name="read_more">read More</string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">At least 5 characters are required for a global search</string>
+    <string name="faild_payment">Sorry, an error occurred and try again</string>
+    <string name="biometric_password_description">By activating this option, the active biometric password on your phone (fingerprint, face recognition or iris scan), will be applied to the application</string>
+    <string name="biometric_password">Biometric password</string>
+    <string name="set_now">Set now</string>
+    <string name="no_biometric_password_set_on_your_phone">No biometric password is set on your phone</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="authentication_succeeded">Authentication succeeded</string>
+    <string name="authentication_error">Authentication error: </string>
+    <string name="biometric_login">Biometric login for my app</string>
+    <string name="use_biometric_authentication">Log in using your biometric credential</string>
+    <string name="send_current_location">Send current location:\n</string>
+    <string name="send_selected_location">Send selected location:\n</string>
+    <string name="select_sticker_type">Select sticker type</string>
+    <string name="load_sticker_types_error_message">types filter not loaded</string>
+
+    <string name="locating">Receiving current position…</string>
+    <string name="enable_sending_non_media_file_soon">Ability to send non-media files will be enabled soon</string>
+
 </resources>

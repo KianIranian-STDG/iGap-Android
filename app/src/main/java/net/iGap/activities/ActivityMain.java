@@ -133,11 +133,8 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
-import net.iGap.request.RequestWalletGetAccessToken;
-import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.story.CameraStoryFragment;
 import net.iGap.viewmodel.UserScoreViewModel;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -147,7 +144,7 @@ import java.util.concurrent.Executors;
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
-import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.EventDelegate {
 
@@ -157,7 +154,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static final String DEEP_LINK = "deepLink";
 
-    public static final String openMediaPlyer = "openMediaPlyer";
+    public static final String openMediaPlayer = "openMediaPlayer";
 
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
@@ -170,7 +167,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private boolean retryProviderInstall;
 
-    public static boolean isOpenChatBeforeSheare = false;
+    public static boolean isOpenChatBeforeShare = false;
     public static boolean isLock = false;
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
@@ -183,7 +180,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private TextView iconLock;
     private int retryConnectToWallet = 0;
     public DataTransformerListener<Intent> dataTransformer;
-    private BroadcastReceiver audioManagerReciver;
+    private BroadcastReceiver audioManagerReceiver;
     private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
     @Override
@@ -288,8 +285,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (G.ISRealmOK) {
-            if (audioManagerReciver != null) {
-                unregisterReceiver(audioManagerReciver);
+            if (audioManagerReceiver != null) {
+                unregisterReceiver(audioManagerReceiver);
             }
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
@@ -323,23 +320,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        isOpenChatBeforeSheare = true;
+        isOpenChatBeforeShare = true;
         checkIntent(intent);
-        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
-            handleDeepLink(intent);
+        Uri data = intent.getData();
+        if (data != null) {
+            String[] strings = data.toString().split("/");
+            String path = strings[strings.length - 1];
+            if ((intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) || path.toLowerCase().startsWith("d:")) {
+                handleDeepLink(intent);
+            }
         }
+
         if (G.isFirstPassCode) {
             openActivityPassCode();
         }
     }
 
     public void handleDeepLink(Intent intent) {
-        if (intent != null && intent.getExtras() != null)
-            handleDeepLink(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+        if (intent != null && intent.getData() != null)
+            handleDeepLink(intent.getData().toString());
     }
 
     public void handleDeepLink(String uri) {
+        String[] strings = uri.split("/");
+        if (strings[strings.length - 1].toLowerCase().startsWith("d:"))
+            uri = "discovery/" + uri;
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+
         if (bottomNavigationFragment != null)
             bottomNavigationFragment.autoLinkCrawler(uri, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
                 @Override
@@ -403,7 +410,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             FragmentLanguage.languageChanged = false;
 
-            boolean openMediaPlayer = extras.getBoolean(ActivityMain.openMediaPlyer);
+            boolean openMediaPlayer = extras.getBoolean(ActivityMain.openMediaPlayer);
             if (openMediaPlayer) {
                 if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragment = new FragmentMediaPlayer();
@@ -476,7 +483,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     AudioManager.RINGER_MODE_CHANGED_ACTION);
 
 
-            audioManagerReciver = new BroadcastReceiver() {
+            audioManagerReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //code...
@@ -488,14 +495,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            registerReceiver(audioManagerReciver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
+            registerReceiver(audioManagerReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                     isChinesPhone();
             }
-
 
 
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
@@ -522,7 +528,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     @Override
                     public boolean getBackChatVisibility() {
-                        return G.twoPaneMode && findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE;
+                        FrameLayout fullScreenFrame = findViewById(R.id.fullScreenFrame);
+                        if (fullScreenFrame != null) {
+                            return G.twoPaneMode && fullScreenFrame.getVisibility() == View.VISIBLE;
+                        }
+                        return false;
                     }
 
                     @Override
@@ -534,14 +544,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
             }
 
-            isOpenChatBeforeSheare = false;
+            isOpenChatBeforeShare = false;
 
-            int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
-            if (activeAccountCount == 0) {
-                finish();
-            } else {
-                checkIntent(getIntent());
-            }
 
             initComponent();
 
@@ -656,7 +660,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             showToast(textView);
         }
 
-
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
@@ -665,19 +668,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(), "------------------------------------------------");
-                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
-                    Log.wtf(this.getClass().getName(), "fragment: " + getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                try {
+                    Log.wtf(this.getClass().getName(), "------------------------------------------------");
+                    for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                        Log.wtf(this.getClass().getName(), "fragment: " + getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                    }
+                    Log.wtf(this.getClass().getName(), "------------------------------------------------");
+                } catch (OutOfMemoryError error) {
+                    Log.e(this.getClass().getName(), error.getMessage());
                 }
-                Log.wtf(this.getClass().getName(), "------------------------------------------------");
             }
         });
 
         GPSTracker.getGpsTrackerInstance().checkLocation();
 
         Log.wtf(this.getClass().getName(), "onCreate");
-        InstallReferrerClient referrerClient = InstallReferrerClient.newBuilder(this).build();
-        backgroundExecutor.execute(() -> getInstallReferrerFromClient(referrerClient));
+        try {
+            InstallReferrerClient referrerClient = InstallReferrerClient.newBuilder(this).build();
+            backgroundExecutor.execute(() -> getInstallReferrerFromClient(referrerClient));
+            if (getIntent() != null) {
+                checkIntent(getIntent());
+            }
+        } catch (RuntimeException e) {
+            Log.e(this.getClass().getName(), e.getMessage());
+        }
     }
 
     void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
@@ -962,13 +976,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
                 break;
             case kuknosRequestCodeQrCode:
-                IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
-                if (kuknosWID.getContents() != null) {
-            /*        KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
-                    if (myFragment != null && myFragment.isVisible()) {
-                        myFragment.setWalletIDQrCode(kuknosWID.getContents());
-                    }*/
-                }
+
                 break;
             case WALLET_REQUEST_CODE:
                 /*try {
@@ -1012,6 +1020,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
                 break;
+            case AttachFile.REQUEST_CODE_PICK_FILE_FROM_INTENT:
+                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_PICKED_FROM_INTENT, data);
+
         }
     }
 
@@ -1442,25 +1453,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
 //                        List fragmentList = getSupportFragmentManager().getFragments();
-                        boolean handled = false;
-                        try {
-                            // because some of our fragments are NOT extended from BaseFragment
-                            if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
-                                SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
-                                if (searchFragment != null && searchFragment.isVisible()) {
-                                    searchFragment.onSearchCollapsed();
-                                }
+                    boolean handled = false;
+                    try {
+                        // because some of our fragments are NOT extended from BaseFragment
+                        if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
+                            SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
+                            if (searchFragment != null && searchFragment.isVisible()) {
+                                searchFragment.onSearchCollapsed();
                             }
-                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
-                            handled = ((BaseFragment) frag).onBackPressed();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                        if (!handled) {
-                            super.onBackPressed();
-                        }
+                        Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+                        handled = ((BaseFragment) frag).onBackPressed();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (!handled) {
+                        super.onBackPressed();
                     }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
@@ -1513,32 +1522,54 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
         if (Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null && appLinkData.getHost() != null && appLinkData.getHost().equals("com.android.contacts")) {
-            ContactUtils contactUtils = new ContactUtils(G.context, appLinkData);
-            String userId = contactUtils.retrieveNumber(); // we set retrieveNumber as userId
+            try {
+                HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        ContactUtils contactUtils = new ContactUtils(context, appLinkData);
+                        String userId = contactUtils.retrieveNumber(); // we set retrieveNumber as userId
 
-            if (intent.getType().equalsIgnoreCase("vnd.android.cursor.item/vnd.net.iGap.call")) {
+                        if (intent.getType().equalsIgnoreCase("vnd.android.cursor.item/vnd.net.iGap.call")) {
 
-                try {
-                    check(Long.parseLong(userId));
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
+                            try {
+                                check(Long.parseLong(userId));
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void deny() {
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                FileLog.e(e);
             }
 
+
         } else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+
             Uri data = intent.getData();
-            if (data != null && data.getHost().equals("deep_link")) {
-                Intent intentTemp = new Intent();
-                intentTemp.putExtra(DEEP_LINK, data.getQuery());
-                handleDeepLink(intentTemp);
-            } else {
-                HelperUrl.getLinkInfo(intent, ActivityMain.this);
+            if (data != null) {
+                String[] strings = data.toString().split("/");
+                String path = strings[strings.length - 1];
+                path = path.toLowerCase();
+                if (data != null && (path.startsWith("d:") || data.getHost().equals("deep_link"))) {
+                    Intent intentTemp = new Intent();
+                    intentTemp.putExtra(DEEP_LINK, data.getQuery());
+                    handleDeepLink(intentTemp);
+                } else {
+                    HelperUrl.getLinkInfo(intent, ActivityMain.this);
+                }
             }
         }
 
@@ -1942,14 +1973,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     });
 
                     break;
-
-                case SocketMessages.FAILED:
-                    if (retryConnectToWallet < 3) {
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
-                        retryConnectToWallet++;
-                    }
-
-                    break;
             }
             // backthread
         }
@@ -2003,7 +2026,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             getSupportFragmentManager().popBackStack(TabletEmptyChatFragment.class.getName(), 0);
         } else {
-            getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+            getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(), 0);
         }
     }
 
@@ -2047,14 +2070,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void updateUiForChangeAccount() {
-        int t = getSupportFragmentManager().getBackStackEntryCount();
-        for (int i = 0; i < t; i++) {
-            getSupportFragmentManager().popBackStackImmediate();
+        try {
+            int t = getSupportFragmentManager().getBackStackEntryCount();
+            for (int i = 0; i < t; i++) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+            initTabStrip(getIntent());
+            // Clear all notification
+            NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            nMgr.cancelAll();
+        } catch (IllegalStateException ignored) {
+            FileLog.e(ignored);
+            // There's no way to avoid getting this if saveInstanceState has already been called.
         }
-        initTabStrip(getIntent());
-        // Clear all notification
-        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nMgr.cancelAll();
+
     }
 
     public void chatBackgroundChanged() {

@@ -268,7 +268,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void goToChatActivity() {
         Intent intent = new Intent(ActivityPopUpNotification.this, ActivityMain.class);
-        intent.putExtra(ActivityMain.openChat, mList.get(viewPager.getCurrentItem()).roomId);
+        if (mList.size() != 0)
+            intent.putExtra(ActivityMain.openChat, mList.get(viewPager.getCurrentItem()).roomId);
         intent.putExtra(ActivityMain.userId, userId);
         startActivity(intent);
         finish();

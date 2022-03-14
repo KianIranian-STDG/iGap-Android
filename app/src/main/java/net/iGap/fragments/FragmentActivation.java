@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -78,7 +79,7 @@ public class FragmentActivation extends BaseFragment{
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, 0);
-                set.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), (int) getResources().getDimension(R.dimen.dp20), 0);
+                set.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), AndroidUtils.dp(20), 0);
                 set.applyTo(binding.root);
             }
         });

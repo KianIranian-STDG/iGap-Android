@@ -60,7 +60,7 @@ public class UserInfoResponse extends MessageHandler {
             RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
             RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
         });
-        MessageDataStorage.getInstance(AccountManager.selectedAccount).storySetDisplayName(builder.getUser().getId(), builder.getUser().getDisplayName());
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).storySetDisplayName( builder.getUser().getId(), builder.getUser().getDisplayName());
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {

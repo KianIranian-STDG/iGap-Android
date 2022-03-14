@@ -17,12 +17,13 @@ import java.util.List;
 
 public class RequestClientGetRoomHistory {
 
-    public String getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, Object identity) {
+    public String getRoomHistory(long roomId, long documentId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, Object identity) {
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder = ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
         builder.setRoomId(roomId);
         builder.setFirstMessageId(firstMessageId);
         builder.setDirection(direction);
+        builder.setDocumentId(documentId);
         builder.setLimit(limit);
 
         RequestWrapper requestWrapper = new RequestWrapper(603, builder, identity);
@@ -34,10 +35,11 @@ public class RequestClientGetRoomHistory {
         }
     }
 
-    public String getRoomHistory(long roomId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, OnHistoryReady historyReady) {
+    public String getRoomHistory(long roomId, long documentId, long firstMessageId, int limit, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, OnHistoryReady historyReady) {
         RequestData requestData = new RequestData(historyReady, roomId, firstMessageId, limit);
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Builder builder = ProtoClientGetRoomHistory.ClientGetRoomHistory.newBuilder();
         builder.setRoomId(roomId);
+        builder.setDocumentId(documentId);
         builder.setFirstMessageId(firstMessageId);
         builder.setDirection(direction);
         builder.setLimit(limit);
@@ -75,12 +77,14 @@ public class RequestClientGetRoomHistory {
     public static class IdentityClientGetRoomHistory {
         public long roomId;
         public long messageIdGetHistory;
+        public long documentIdGetHistory;
         public long reachMessageId;
         public ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
 
-        public IdentityClientGetRoomHistory(long roomId, long messageIdGetHistory, long reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        public IdentityClientGetRoomHistory(long roomId, long documentIdGetHistory, long messageIdGetHistory, long reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
             this.roomId = roomId;
             this.messageIdGetHistory = messageIdGetHistory;
+            this.documentIdGetHistory = documentIdGetHistory;
             this.reachMessageId = reachMessageId;
             this.direction = direction;
         }

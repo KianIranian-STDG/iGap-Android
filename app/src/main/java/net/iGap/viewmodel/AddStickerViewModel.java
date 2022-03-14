@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.repository.StickerRepository;
@@ -20,7 +19,8 @@ import io.reactivex.processors.PublishProcessor;
 
 public class AddStickerViewModel extends ObserverViewModel {
     private StickerRepository repository;
-    private StructIGStickerCategory category;
+    private String category;
+    private String type;
 
     private MutableLiveData<StructIGStickerGroup> openStickerDetailLiveData = new MutableLiveData<>();
     private MutableLiveData<List<StructIGStickerGroup>> stickerGroupLiveData = new MutableLiveData<>();
@@ -37,7 +37,7 @@ public class AddStickerViewModel extends ObserverViewModel {
         repository = StickerRepository.getInstance();
     }
 
-    public void setCategory(StructIGStickerCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -46,7 +46,7 @@ public class AddStickerViewModel extends ObserverViewModel {
         Disposable disposable = pagination
                 .onBackpressureDrop()
                 .doOnNext(integer -> loadMoreProgressLiveData.postValue(View.VISIBLE))
-                .concatMapSingle(page -> repository.getCategoryStickerGroups(category.getId(), page * limit, limit))
+                .concatMapSingle(getType().equalsIgnoreCase("ALL") ? page -> repository.getCategoryStickerGroups(category, page * limit, limit): page -> repository.getCategoryStickerGroups(category, page * limit, limit, getType()))
                 .doOnError(throwable -> loadMoreProgressLiveData.postValue(View.GONE))
                 .onErrorReturn(throwable -> new ArrayList<>())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,7 +123,16 @@ public class AddStickerViewModel extends ObserverViewModel {
         buttonStatusChangedLiveData.postValue(addedInUserList);
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public interface OnClickResult {
         void onResult(StructIGStickerGroup sticker);
     }
+
 }

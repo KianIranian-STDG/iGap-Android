@@ -372,7 +372,7 @@ public class AvatarHandler {
 
             new RequestUserInfo().userInfoWithCallBack(new OnComplete() {
                 @Override
-                public void complete(boolean result, String messageOne, String MessageTow) {
+                public void complete(boolean result, String messageOne, String MessageTwo) {
                     getAvatar(baseParam, false);
                 }
             }, baseParam.avatarOwnerId, "" + baseParam.avatarOwnerId);

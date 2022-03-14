@@ -32,22 +32,22 @@
                         android:layout_marginLeft="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp32"
                         android:layout_marginRight="@dimen/dp20"
-                        android:layout_marginBottom="@dimen/dp12"
                         android:adjustViewBounds="true"
-                        android:paddingTop="@dimen/dp20"
+                        android:paddingTop="@dimen/dp32"
                         android:scaleType="fitCenter"
                         android:visibility="gone"
                         app:srcCompat="@drawable/find1" />
 
                     <TextView
-                        android:id="@+id/sfl_txt_empty_list_comment"
+                        android:id="@+id/txt_search_hint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:paddingLeft="@dimen/dp20"
                         android:paddingRight="@dimen/dp20"
-                        android:textColor="?iGapTitleTextColor"
+                        android:text="@string/at_least_5_characters_are_required_for_a_global_search"
+                        android:textColor="?attr/iGapHintTextColor"
                         android:textSize="@dimen/dp13"
                         android:visibility="gone" />
 
@@ -77,7 +77,6 @@
 
 
     </FrameLayout>
-
 
 
 </RelativeLayout>

@@ -36,9 +36,15 @@ public class WaitingDialog extends AlertDialog {
 
             @Override
             public void onFinish() {
-                if (timerTextView != null) {
-                    timerTextView.setText("00:00");
-                    dismiss();
+                try {
+                    if (isShowing() && timerTextView != null) {
+                        timerTextView.setText("00:00");
+                        dismiss();
+                    }
+                } catch (final IllegalArgumentException e) {
+                    // Handle or log or ignore
+                } catch (final Exception e) {
+                    // Handle or log or ignore
                 }
             }
         };

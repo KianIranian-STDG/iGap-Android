@@ -305,7 +305,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(requireActivity().getString(R.string.AccessBan), false);
+                    HelperError.showSnackMessage(G.currentActivity.getString(R.string.AccessBan), false);
                 });
             }
 
@@ -314,7 +314,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(requireActivity().getString(R.string.time_out), false);
+                    HelperError.showSnackMessage(G.currentActivity.getString(R.string.time_out), false);
                 });
             }
         };
@@ -557,7 +557,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         if (getActivity() != null) {
 
-            Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
+            ShowCustomList showCustomListFragment = new ShowCustomList();
+            showCustomListFragment.setFields(roomType, userList, new OnSelectedList() {
                 @Override
                 public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
@@ -575,9 +576,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             Bundle bundle = new Bundle();
             bundle.putBoolean("DIALOG_SHOWING", true);
             bundle.putLong("COUNT_MESSAGE", 0);
-            fragment.setArguments(bundle);
+            showCustomListFragment.setArguments(bundle);
 
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), showCustomListFragment).setReplace(false).load();
         }
     }
 
@@ -789,6 +790,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             });
 
             holder.itemView.setOnLongClickListener(v -> {
+                if (role == null)
+                    role = GroupChatRole.UNRECOGNIZED.toString();
                 if (!role.equals(GroupChatRole.MEMBER.toString()))
                     showMemberDialog(mContact);
                 return true;

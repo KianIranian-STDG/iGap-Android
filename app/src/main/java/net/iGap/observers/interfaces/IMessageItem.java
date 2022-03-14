@@ -36,7 +36,7 @@ public interface IMessageItem {
 
     void onItemShowingMessageId(MessageObject messageInfo);
 
-    void onVoiceListenedStatus(int roomType, long roomId, long messageId, int roomMessageStatus);
+    void onVoiceListenedStatus(int roomType, long roomId, long messageId,long documentId, int roomMessageStatus);
 
     void onPlayMusic(String messageId);
 

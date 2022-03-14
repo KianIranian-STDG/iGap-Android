@@ -15,9 +15,10 @@ import net.iGap.proto.ProtoClientGetRoomMessage;
 
 public class RequestClientGetRoomMessage {
 
-    public void clientGetRoomMessage(long roomId, long messageId, OnClientGetRoomMessage onClientGetRoomMessage) {
+    public void clientGetRoomMessage(long roomId, long messageId, long documentId, OnClientGetRoomMessage onClientGetRoomMessage) {
         ProtoClientGetRoomMessage.ClientGetRoomMessage.Builder builder = ProtoClientGetRoomMessage.ClientGetRoomMessage.newBuilder();
         builder.setRoomId(roomId);
+        builder.setDocumentId(documentId);
         builder.setMessageId(messageId);
 
         RequestWrapper requestWrapper = new RequestWrapper(604, builder, new RequestClientGetRoomMessageExtra(roomId, onClientGetRoomMessage));

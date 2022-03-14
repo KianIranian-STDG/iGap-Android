@@ -3,7 +3,14 @@ package net.iGap.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.telephony.TelephonyManager;
+
+import net.iGap.G;
+import net.iGap.helper.HelperPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
+
+import java.io.IOException;
 
 /**
  * Network utility
@@ -18,7 +25,6 @@ public class NetworkUtility {
      * Get maximum concurrency for upload/download
      *
      * @param context
-     *
      * @return the max number of concurrent upload
      */
     public static int getMaxConcurrency(Context context) {
@@ -46,10 +52,33 @@ public class NetworkUtility {
         return concurrencyNum;
     }
 
+    private static int networkType;
+
     private static String getNetworkClass(Context context) {
         TelephonyManager mTelephonyManager = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
-        int networkType = mTelephonyManager.getNetworkType();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            try {
+                HelperPermission.getPhonePermision(G.currentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        networkType = mTelephonyManager.getNetworkType();
+                    }
+
+                    @Override
+                    public void deny() {
+                        networkType = 0;
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            networkType = mTelephonyManager.getNetworkType();
+        }
+
+
         switch (networkType) {
             case TelephonyManager.NETWORK_TYPE_GPRS:
             case TelephonyManager.NETWORK_TYPE_EDGE:

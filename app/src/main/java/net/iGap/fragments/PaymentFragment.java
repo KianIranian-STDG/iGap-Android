@@ -1,9 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,26 +21,38 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.PaymentPlansAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperScreenShot;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentFeature;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.PaymentCallBack;
 import net.iGap.viewmodel.PaymentViewModel;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class PaymentFragment extends BaseAPIViewFrag {
 
@@ -55,6 +65,8 @@ public class PaymentFragment extends BaseAPIViewFrag {
     private PaymentViewModel paymentViewModel;
     private PaymentPlansAdapter adapter;
     private boolean isShowValueAdded = false;
+    private String filename;
+    private CompositeDisposable disposables;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -84,6 +96,8 @@ public class PaymentFragment extends BaseAPIViewFrag {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        disposables = new CompositeDisposable();
+
         paymentViewModel = ViewModelProviders.of(
                 this,
                 new ViewModelProvider.Factory() {
@@ -169,10 +183,22 @@ public class PaymentFragment extends BaseAPIViewFrag {
         });
 
         binding.screenshotButton.setOnClickListener(v -> {
-            loadImage loadImage = new loadImage();
-            loadImage.execute();
-        });
+            try {
+                HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        getScreenshot();
+                    }
 
+                    @Override
+                    public void deny() {
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+                    }
+                });
+            } catch (IOException e) {
+                FileLog.e(e);
+            }
+        });
         paymentViewModel.getPrice().observe(getViewLifecycleOwner(), price -> {
             if (getContext() != null && price != null) {
                 DecimalFormat df = new DecimalFormat(",###");
@@ -191,72 +217,84 @@ public class PaymentFragment extends BaseAPIViewFrag {
                 paymentViewModel.checkOrderTokenForDiscount(code);
             }
         });
+
+        paymentViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
+                if (errorMessage.equals("errorPayment")) {
+                    binding.paymentStatus.setText(getContext().getResources().getString(R.string.faild_payment));
+                } else {
+                    binding.paymentStatus.setText(errorMessage);
+                }
+            }
+        });
     }
 
     public void setPaymentResult(Payment paymentModel) {
         paymentViewModel.setPaymentResult(paymentModel);
     }
 
-    //ToDo: create base view for fragment with request
-    private void showDialogNeedGooglePlay() {
-        if (getActivity() != null) {
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
-                    .titleGravity(GravityEnum.CENTER)
-                    .buttonsGravity(GravityEnum.CENTER)
-                    .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
-                    .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
-                    .show();
-        }
-    }
+    private void getScreenshot() {
 
-    private class loadImage extends AsyncTask<String, String, Boolean> {
+        loadImage()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Boolean>() {
 
-        String filename;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-
-            Date date = new Date();
-            filename = "receipt" + date.getTime() + ".jpeg";
-            return HelperScreenShot.takeScreenshotAndSaveIi(binding.v, filename);
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean s) {
-            if (s) {
-                Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.picture_save_to_galary), Snackbar.LENGTH_LONG);
-                snackbar.setAction(getResources().getString(R.string.navigation_drawer_open), new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Payment_Receipt/" + filename);
-                        Log.d("amini", "onClick: " + file.getAbsolutePath());
-                        /*Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(file), "image/*");*/
-                        Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
-                                        FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", file) :
-                                        Uri.fromFile(file), "image/*")
-                                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        startActivity(intent);
-//                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(file.getAbsolutePath())));
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                        disposables.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(@io.reactivex.annotations.NonNull Boolean s) {
+                        if (s) {
+                            Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.picture_save_to_galary), Snackbar.LENGTH_LONG);
+                            snackbar.setAction(getResources().getString(R.string.navigation_drawer_open), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "ScreenShots/" + filename + ".jpg");
+                                    Log.d("amini", "onClick: " + file.getAbsolutePath());
+
+                                    Intent intent = new Intent(Intent.ACTION_VIEW).setDataAndType(
+                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ?
+                                                    FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", file) :
+                                                    Uri.fromFile(file), "image/*")
+                                            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(intent);
+
+                                }
+                            });
+                            snackbar.show();
+                        } else {
+                            Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.str_frag_sync_error), Snackbar.LENGTH_LONG);
+                            snackbar.setAction(getResources().getString(R.string.ok), v -> snackbar.dismiss());
+                            snackbar.show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
                     }
                 });
-                snackbar.show();
-            } else {
-                Snackbar snackbar = Snackbar.make(binding.v, getResources().getString(R.string.str_frag_sync_error), Snackbar.LENGTH_LONG);
-                snackbar.setAction(getResources().getString(R.string.ok), v -> snackbar.dismiss());
-                snackbar.show();
-            }
+    }
 
-            super.onPostExecute(s);
-        }
+    private Single<Boolean> loadImage() {
+        Date date = new Date();
+        filename = "receipt" + date.getTime();
+        return Single.just(HelperScreenShot.takeScreenshotAndSaveIi(binding.v, filename));
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // don't send events once the activity is destroyed
+        disposables.clear();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return super.onBackPressed();
     }
 }

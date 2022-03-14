@@ -71,6 +71,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
+
 public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventManager.EventDelegate {
 
     private static final String ROOM_ID = "RoomId";
@@ -250,12 +252,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             String filePath = null;
             long avatarId = SUID.id().get();
 
-            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
-            if (FragmentEditImage.itemGalleryList != null)
-                FragmentEditImage.itemGalleryList.clear();
-
             if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
                 if (getActivity() != null) {
+                    FragmentEditImage.checkItemGalleryList();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
 
@@ -265,7 +264,6 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     } else {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-
                         FragmentEditImage.insertItemList(AttachFile.imagePath, false);
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
                         fragmentEditImage.setOnProfileImageEdited(this);
@@ -293,7 +291,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
                                 @Override
                                 public void deny() {
-
+                                    showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                                 }
                             });
                         } catch (IOException e) {
@@ -304,7 +302,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                     }
                 } else {
                     try {
-                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
@@ -324,7 +322,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
                             @Override
                             public void deny() {
-
+                                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                             }
                         });
                     } catch (IOException e) {
@@ -337,6 +335,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void handleGalleryImageResult(String path) {
         if (getActivity() != null) {
+            FragmentEditImage.checkItemGalleryList();
             ImageHelper.correctRotateImage(path, true); //rotate image
             FragmentEditImage.insertItemList(path, false);
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);

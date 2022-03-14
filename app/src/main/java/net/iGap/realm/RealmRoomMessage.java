@@ -67,6 +67,7 @@ public class RealmRoomMessage extends RealmObject {
     public boolean hasMessageLink = false;
     public RealmAttachment attachment;
     public long userId;
+    public long documentId;
     public RealmRoomMessageLocation location;
     public RealmRoomMessageContact roomMessageContact;
     public RealmRoomMessageWallet roomMessageWallet;
@@ -241,7 +242,7 @@ public class RealmRoomMessage extends RealmObject {
                                 if (roomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
-                                    MessageController.getInstance(AccountManager.selectedAccount).sendUpdateStatus(room.getType().getNumber(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN_VALUE);
+                                    MessageController.getInstance(AccountManager.selectedAccount).sendUpdateStatus(room.getType().getNumber(), room.getId(), roomMessage.getMessageId(), roomMessage.getDocumentId(), ProtoGlobal.RoomMessageStatus.SEEN_VALUE);
                                 }
                             }
                         }
@@ -266,6 +267,7 @@ public class RealmRoomMessage extends RealmObject {
         if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, messageId);
         }
+        message.setDocumentId(input.getDocumentId());
         message.setRoomId(roomId);
         if (input.hasForwardFrom()) {
             message.setForwardMessage(putOrUpdate(realm, -1, input.getForwardFrom(), new StructMessageOption().setGap().setForwardOrReply()));
@@ -725,16 +727,17 @@ public class RealmRoomMessage extends RealmObject {
      *
      * @param messageId message that want set gapMessageId to that
      */
-    public static void setGap(final long messageId) {
+    public static void setGap(final long messageId, final long documentId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            setGapInTransaction(realm, messageId);
+            setGapInTransaction(realm, messageId, documentId);
         });
     }
 
-    public static void setGapInTransaction(Realm realm, final long messageId) {
+    public static void setGapInTransaction(Realm realm, final long messageId, final long documentId) {
         RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (realmRoomMessage != null) {
             realmRoomMessage.setPreviousMessageId(messageId);
+            realmRoomMessage.setDocumentId(documentId);
             realmRoomMessage.setFutureMessageId(messageId);
         }
     }
@@ -982,6 +985,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setMessageId(long messageId) {
         this.messageId = messageId;
+    }
+
+    public long getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(long documentId) {
+        this.documentId = documentId;
     }
 
     public long getMessageVersion() {

@@ -36,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -47,6 +48,8 @@ import com.google.android.gms.location.LocationServices;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FileManagerFragment;
+import net.iGap.fragments.NewFragmentMap;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -71,6 +74,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
+
 public class AttachFile {
 
     public static final int request_code_TAKE_PICTURE = 10;
@@ -86,6 +91,7 @@ public class AttachFile {
     public static final int requestOpenGalleryForVideoMultipleSelect = 20;
     public static final int request_code_open_document = 21;
     public static final int request_code_trim_video = 22;
+    public static final int REQUEST_CODE_PICK_FILE_FROM_INTENT = 23;
     public static boolean isInAttach = false;
     public static String imagePath = "";
     public static Uri imageUri;
@@ -241,16 +247,16 @@ public class AttachFile {
             switch (fileType) {
 
                 case video:
-                    destinationPath = G.DIR_VIDEOS;
+                    destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_MOVIES).getAbsolutePath();
                     break;
                 case audio:
-                    destinationPath = G.DIR_AUDIOS;
+                    destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
                     break;
                 case image:
-                    destinationPath = G.DIR_IMAGES;
+                    destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
                     break;
                 default:
-                    destinationPath = G.DIR_DOCUMENT;
+                    destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
                     break;
             }
 
@@ -267,6 +273,8 @@ public class AttachFile {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -302,7 +310,7 @@ public class AttachFile {
                 Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                if (fragment != null) {
+                if (fragment != null && fragment.isAdded()) {
                     fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
                 } else {
                     ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
@@ -324,41 +332,43 @@ public class AttachFile {
      */
 
     public static void getAllShownImagesPath(Activity activity, int count, ChatAttachmentPopup.OnImagesGalleryPrepared onImagesGalleryPrepared) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
-                Uri uri;
-                Cursor cursor;
-                int column_index_data;
-                String absolutePathOfImage;
-                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+                    Uri uri;
+                    Cursor cursor;
+                    int column_index_data;
+                    String absolutePathOfImage;
+                    uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-                String[] projection = {
-                        MediaStore.MediaColumns.DATA
-                };
+                    String[] projection = {
+                            MediaStore.MediaColumns.DATA
+                    };
 
-                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+                    cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
-                if (cursor != null) {
-                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                    if (cursor != null) {
+                        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
 
-                    while (cursor.moveToNext()) {
-                        absolutePathOfImage = cursor.getString(column_index_data);
+                        while (cursor.moveToNext()) {
+                            absolutePathOfImage = cursor.getString(column_index_data);
 
-                        StructBottomSheet item = new StructBottomSheet();
-                        item.setId(listOfAllImages.size());
-                        item.setPath(absolutePathOfImage);
-                        item.isSelected = true;
-                        listOfAllImages.add(item);
-                        if (listOfAllImages.size() >= count) break;
+                            StructBottomSheet item = new StructBottomSheet();
+                            item.setId(listOfAllImages.size());
+                            item.setPath(absolutePathOfImage);
+                            item.isSelected = true;
+                            listOfAllImages.add(item);
+                            if (listOfAllImages.size() >= count) break;
+                        }
+                        cursor.close();
+                        onImagesGalleryPrepared.imagesList(listOfAllImages);
+
                     }
-                    cursor.close();
-                    onImagesGalleryPrepared.imagesList(listOfAllImages);
-
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     //*************************************************************************************************************
@@ -381,6 +391,7 @@ public class AttachFile {
         HelperPermission.getCameraPermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
+
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -389,23 +400,26 @@ public class AttachFile {
                     Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 0);
 
                     if (outPath != null) {
-                        imagePath = outPath.getPath();
-                        imageUri = outPath;
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-
-                        if (fragment != null) {
-                            fragment.startActivityForResult(intent, request_code_TAKE_PICTURE);
-                        } else {
-                            ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+                        try {
+                            imagePath = outPath.getPath();
+                            imageUri = outPath;
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
+                            if (fragment != null && fragment.isAdded()) {
+                                fragment.startActivityForResult(intent, request_code_TAKE_PICTURE);
+                            } else {
+                                ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+                            }
+                            isInAttach = true;
+                        } catch (Exception e) {
+                            FileLog.e(e);
                         }
-
-                        isInAttach = true;
                     }
                 }
             }
 
             @Override
             public void deny() {
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
 
             }
         });
@@ -431,7 +445,7 @@ public class AttachFile {
         //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
 
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -452,7 +466,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }
@@ -471,7 +485,7 @@ public class AttachFile {
      */
     public void requestOpenGalleryForVideoMultipleSelect(final Fragment fragment) throws IOException {
 
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -491,7 +505,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }
@@ -510,7 +524,7 @@ public class AttachFile {
      */
     public void requestOpenGalleryForImageSingleSelect(final Fragment fragment) throws IOException {
 
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -530,7 +544,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }
@@ -585,7 +599,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
             }
         });
     }
@@ -609,7 +623,7 @@ public class AttachFile {
         //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -628,7 +642,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }
@@ -644,23 +658,50 @@ public class AttachFile {
      * @throws IOException
      */
     public void requestPickFile(final IPickFile listener) throws IOException {
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+
+        /**Following codes where commented due to new google storage accessibility policy, do not let to app
+         * that get top storage permission (MANAGE_STORAGE_PERMISSION)*/
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if (Environment.isExternalStorageManager()) {
+//                new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
+//            } else {
+//                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+//            }
+//        } else {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    try {
+                        Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        if (Build.VERSION.SDK_INT >= 18) {
+                            photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                        }
+                        photoPickerIntent.setType("*/*");
+                        G.fragmentActivity.startActivityForResult(photoPickerIntent, REQUEST_CODE_PICK_FILE_FROM_INTENT);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
+                }
             }
 
             @Override
             public void deny() {
-                if (context != null)
+                if (context != null) {
                     HelperError.showSnackMessage(context.getString(R.string.you_need_to_allow) + " " + context.getString(R.string.permission_storage), false);
+                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+                }
             }
         });
+
     }
 
     public void requestOpenDocumentFolder(final IPickFile listener) throws IOException {
 
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
+        HelperPermission.getStoragePermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 //Intent intent = new Intent(context, ActivityExplorer.class);
@@ -681,7 +722,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }
@@ -717,6 +758,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
 
             }
         });
@@ -746,7 +788,7 @@ public class AttachFile {
 
             @Override
             public void deny() {
-
+                showDeniedPermissionMessage(G.context.getString(R.string.permission_location));
             }
         });
     }
@@ -759,25 +801,7 @@ public class AttachFile {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                Location location = getLastBestLocation();
-                if (location != null) {
-                    location.getLatitude();
-                    location.getLongitude();
-
-                    String position = location.getLatitude() + "," + location.getLongitude();
-
-                    if (complete != null) complete.complete(true, position, "");
-                } else {
-                    sendPosition = true;
-                    pd = new ProgressDialog(context);
-                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    pd.setMessage(context.getString(R.string.just_wait_en));
-                    pd.setIndeterminate(false);
-                    pd.setCancelable(true);
-                    pd.show();
-                }
+                new HelperFragment(G.fragmentActivity.getSupportFragmentManager(), NewFragmentMap.newInstance()).setReplace(false).load();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -843,9 +867,9 @@ public class AttachFile {
         if (galleryPath == null) return "";
 
         if (ImageHelper.isRotateNeed(galleryPath) || ImageHelper.isNeedToCompress(new File(galleryPath))) {
-
-            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
-            bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
+            ImageHelper imageHelper = new ImageHelper();
+            Bitmap bitmap = imageHelper.decodeFile(new File(galleryPath));
+            bitmap = imageHelper.correctRotate(galleryPath, bitmap);
 
             if (bitmap != null) {
                 result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
@@ -870,7 +894,7 @@ public class AttachFile {
     private File getOutputMediaFile(int type) {
 
         // External sdcard location
-        File mediaStorageDir = new File(G.DIR_IMAGES);
+        File mediaStorageDir = new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath());
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

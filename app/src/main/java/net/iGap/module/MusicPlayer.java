@@ -52,7 +52,6 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.controllers.MessageController;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
@@ -119,6 +118,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static int musicProgress = 0;
     public static boolean isPause = false;
     public static ArrayList<MessageObject> mediaList;
+    public static int selectedMedia = 0;
     public static String strTimer = "";
     public static String messageId = "";
     public static int roomType = 0;
@@ -150,7 +150,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
-    private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
     private static double amoungToupdate;
@@ -231,7 +230,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             public void onClick(View v) {
                 if (!isVoice) {
                     Intent intent = new Intent(context, ActivityMain.class);
-                    intent.putExtra(ActivityMain.openMediaPlyer, true);
+                    intent.putExtra(ActivityMain.openMediaPlayer, true);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);
@@ -528,7 +527,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
                 if (roomType != CHANNEL_VALUE && isVoice) {
-                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE,roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE);
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE,roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE,mediaList.get(selectedMedia).documentId);
                 }
             }
             if (FragmentChat.onMusicListener != null) {
@@ -987,7 +986,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             getMusicInfo();
 
             Intent intentFragmentMusic = new Intent(context, ActivityMain.class);
-            intentFragmentMusic.putExtra(ActivityMain.openMediaPlyer, true);
+            intentFragmentMusic.putExtra(ActivityMain.openMediaPlayer, true);
 
             PendingIntent pi = PendingIntent.getActivity(context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -1071,7 +1070,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                                 if (roomMessage.id == Long.parseLong(messageId)) {
                                     isOnListMusic = true;
                                 }
-                                mediaList.add(roomMessage);
+                                if(roomMessage.attachment.isFileExistsOnLocal(roomMessage)){
+                                    mediaList.add(roomMessage);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

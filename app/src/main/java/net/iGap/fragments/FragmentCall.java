@@ -221,7 +221,7 @@ public class FragmentCall extends BaseMainFragments {
                 case FragmentMediaContainer.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
-                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.putExtra(ActivityMain.openMediaPlayer, true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getActivity().startActivity(intent);
                     }

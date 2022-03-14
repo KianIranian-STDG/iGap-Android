@@ -42,11 +42,16 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.ViewHo
         setViewBackground(holder.root);
         AppCompatRadioButton radioButton = holder.radioButton;
         radioButton.setTag(operator.getKey());
-        if (tagKey.equals(radioButton.getTag().toString())) {
-            if (lastCheckedRB != null) {
-                lastCheckedRB.setChecked(false);
+        if (tagKey != null) {
+            if (tagKey.equals(radioButton.getTag().toString())) {
+                if (lastCheckedRB != null) {
+                    lastCheckedRB.setChecked(false);
+                }
+                radioButton.setChecked(true);
+                lastCheckedRB = radioButton;
             }
-            radioButton.setChecked(true);
+        } else {
+            radioButton.setChecked(false);
             lastCheckedRB = radioButton;
         }
 

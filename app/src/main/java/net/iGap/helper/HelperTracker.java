@@ -35,6 +35,7 @@ public class HelperTracker {
     private static final String CATEGORY_DISCOVERY = "Discovery@";
     private static final String CATEGORY_ACCOUNT = "Account@";
     private static final String CATEGORY_BILL = "Bill@";
+    private static final String CATEGORY_MOMENTS = "Moments@";
 
     public static final String TRACKER_CHANGE_LANGUAGE = CATEGORY_SETTING + "TRACKER_CHANGE_LANGUAGE";
 
@@ -85,6 +86,15 @@ public class HelperTracker {
     public static final String TRACKER_FINE_BILL_PAY = CATEGORY_BILL + "TRACKER_FINE_BILL_PAY";
     public static final String TRACKER_MOBILE_BILL_PAY = CATEGORY_BILL + "TRACKER_MOBILE_BILL_PAY";
     public static final String TRACKER_GAS_BILL_PAY = CATEGORY_BILL + "TRACKER_GAS_BILL_PAY";
+
+
+    public static final String TRACKER_MOMENTS_TAB = CATEGORY_MOMENTS + "TRACKER_MOMENTS_TAB";
+    public static final String TRACKER_MOMENTS_CREATE_PICTURE_PAGE = CATEGORY_MOMENTS + "TRACKER_MOMENTS_CRATE_PICTURE_PAGE";
+    public static final String TRACKER_MOMENTS_CREATE_TEXT_PAGE = CATEGORY_MOMENTS + "TRACKER_MOMENTS_CRATE_TEXT_PAGE";
+    public static final String TRACKER_MOMENTS_SUBMIT_PICTURE_PAGE = CATEGORY_MOMENTS + "TRACKER_MOMENTS_SUBMIT_PICTURE_PAGE";
+    public static final String TRACKER_MOMENTS_SUBMIT_PICTURE_TEXT = CATEGORY_MOMENTS + "TRACKER_MOMENTS_SUBMIT_PICTURE_TEXT";
+    public static final String TRACKER_MOMENTS_SHOW = CATEGORY_MOMENTS + "TRACKER_MOMENTS_SHOW";
+    public static final String TRACKER_MOMENTS_MY_PAGE = CATEGORY_MOMENTS + "TRACKER_MOMENTS_MY_PAGE";
 
 
     private static HelperTracker instance;
@@ -339,6 +349,41 @@ public class HelperTracker {
                     Metrix.newEvent("lmkey");
                     //CHANGE_LANGUAGE_FIRST_UNIQUE
                     Metrix.newEvent("gxkzj");
+                    break;
+                case TRACKER_MOMENTS_TAB:
+                    Metrix.newEvent("wxnsi");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("fcwfh");
+                    break;
+                case TRACKER_MOMENTS_CREATE_PICTURE_PAGE:
+                    Metrix.newEvent("hxogy");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("rwupn");
+                    break;
+                case TRACKER_MOMENTS_CREATE_TEXT_PAGE:
+                    Metrix.newEvent("apbev");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("nyaox");
+                    break;
+                case TRACKER_MOMENTS_SUBMIT_PICTURE_PAGE:
+                    Metrix.newEvent("jedyu");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("rmtdz");
+                    break;
+                case TRACKER_MOMENTS_SUBMIT_PICTURE_TEXT:
+                    Metrix.newEvent("nyvgw");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("enryv");
+                    break;
+                case TRACKER_MOMENTS_SHOW:
+                    Metrix.newEvent("vvmsz");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("ufoeg");
+                    break;
+                case TRACKER_MOMENTS_MY_PAGE:
+                    Metrix.newEvent("lpedc");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.newEvent("zupls");
                     break;
             }
 

@@ -1,114 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:layoutDirection="rtl">
 
     <FrameLayout
+        android:id="@+id/lmr_layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="55dp"
+        android:background="?attr/rootBackgroundColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/lmr_layout_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_gravity="bottom"
-            android:background="?attr/rootBackgroundColor"
-            android:orientation="vertical" />
+    <View
+        android:layout_width="@dimen/dp60"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toTopOf="@+id/lmr_btn_mic_layout"
+        app:layout_constraintEnd_toEndOf="@+id/lmr_txt_Lock"
+        app:layout_constraintStart_toStartOf="@+id/lmr_txt_Lock"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp200"
-            android:background="@color/transparent"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/lmr_txt_Lock"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp18"
+        android:padding="8dp"
+        android:text="@string/icon_unlock"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textColor="?iGapIconTextColor"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/lmr_btn_mic_layout"
+        app:layout_constraintEnd_toEndOf="@+id/lmr_btn_mic_layout"
+        app:layout_constraintStart_toStartOf="@+id/lmr_btn_mic_layout" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:paddingLeft="@dimen/dp6">
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/lmr_btn_mic_layout"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:background="?attr/iGapAvatarBackground"
+        android:text="@string/icon_microphone"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/lmr_layout_bottom"
+        app:layout_constraintStart_toStartOf="@+id/lmr_layout_bottom"
+        app:layout_constraintTop_toTopOf="@+id/lmr_layout_bottom"
+        app:layout_constraintVertical_bias="0.0" />
 
-                <ImageView
-                    android:id="@+id/img_pic_record"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:src="@mipmap/circle_white" />
+    <TextView
+        android:id="@+id/txt_slideto_cancel"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:text="@string/slide_to_cancel_en"
+        android:textColor="?iGapIconTextColor"
+        android:textSize="@dimen/dp14"
+        app:layout_constraintBottom_toBottomOf="@+id/lmr_layout_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/txt_time_mili_secend"
+        app:layout_constraintStart_toEndOf="@+id/lmr_btn_mic_layout"
+        app:layout_constraintTop_toTopOf="@+id/lmr_layout_bottom" />
 
-                <TextView
-                    android:id="@+id/txt_time_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="00:00"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp14" />
+    <ImageView
+        android:id="@+id/img_pic_record"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="@dimen/dp8"
+        android:background="@null"
+        android:src="@drawable/circle_red"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_slideto_cancel"
+        app:layout_constraintEnd_toEndOf="@+id/lmr_layout_bottom"
+        app:layout_constraintTop_toTopOf="@+id/txt_slideto_cancel" />
 
-                <TextView
-                    android:id="@+id/txt_time_mili_secend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="99"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp14" />
-            </LinearLayout>
+    <TextView
+        android:id="@+id/txt_time_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="00:00"
+        android:textColor="?iGapIconTextColor"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/img_pic_record"
+        app:layout_constraintEnd_toStartOf="@+id/img_pic_record"
+        app:layout_constraintTop_toTopOf="@+id/img_pic_record" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+    <TextView
+        android:id="@+id/txt_time_mili_secend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="99"
+        android:textColor="?iGapIconTextColor"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_time_record"
+        app:layout_constraintEnd_toStartOf="@+id/txt_time_record"
+        app:layout_constraintTop_toTopOf="@+id/txt_time_record" />
 
-                <TextView
-                    android:id="@+id/txt_slideto_cancel"
-                    android:layout_width="0dp"
-                    android:layout_height="55dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginRight="@dimen/dp8"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:text="@string/slide_to_cancel_en"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp14" />
-
-                <LinearLayout
-                    android:id="@+id/lmr_layout_mic"
-                    android:layout_width="@dimen/dp68"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:orientation="vertical">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/lmr_txt_Lock"
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="@dimen/dp32"
-                        android:layout_gravity="bottom|center"
-                        android:layout_marginBottom="@dimen/dp6"
-                        android:background="@drawable/circle_white"
-                        android:gravity="center"
-                        android:text="@string/icon_lock"
-                        android:textAppearance="@style/TextIconAppearance.all"
-                        android:textColor="@color/gray_4c"
-                        android:textSize="@dimen/dp16" />
-
-                    <net.iGap.module.MaterialDesignTextView
-                        android:id="@+id/lmr_btn_mic_layout"
-                        style="@style/baseFontIcon"
-                        android:layout_width="@dimen/dp68"
-                        android:layout_height="@dimen/dp68"
-                        android:layout_gravity="bottom"
-                        android:background="?attr/iGapAvatarBackground"
-                        android:padding="@dimen/dp8"
-                        android:text="@string/icon_microphone"
-                        android:textColor="@color/black_register"
-                        android:textSize="@dimen/dp26" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </FrameLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

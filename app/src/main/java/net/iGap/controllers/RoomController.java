@@ -1,6 +1,9 @@
 package net.iGap.controllers;
 
+import android.widget.Toast;
+
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -48,7 +51,7 @@ public class RoomController extends BaseController {
                 RealmChannelRoom.updateReactionStatus(res.roomId, res.reactionStatus);
                 G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_UPDATE_VOTE, res.roomId, res.reactionStatus));
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Channel Update Reaction Status -> Major" + e.major + "Minor" + e.minor);
             }
         });
@@ -66,7 +69,7 @@ public class RoomController extends BaseController {
                 RealmRoom.updateSignature(res.roomId, res.signature);
                 G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_UPDATE_SIGNATURE, res.roomId, res.signature));
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Channel Update Signature -> Major" + e.major + "Minor" + e.minor);
             }
         });
@@ -87,11 +90,25 @@ public class RoomController extends BaseController {
                     RealmRoom.updatePin(res.roomId, false, res.pinId);
                 }
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Client Pin Room -> Major" + e.major + "Minor" + e.minor);
+                switch (e.major) {
+                    case 653:
+                    case 654: {
+                        Toast.makeText(G.context, R.string.please_try_again, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 655: {
+                        Toast.makeText(G.context, R.string.forbidden_pin_room, Toast.LENGTH_SHORT).show();
+                    }
+                    case 5: {
+                        if (e.minor == 1) {
+                            Toast.makeText(G.context, R.string.server_do_not_response, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         });
-
     }
 
     public void clientMuteRoom(long roomId, boolean roomMute) {
@@ -110,7 +127,7 @@ public class RoomController extends BaseController {
                     }
                 });
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Client Mute Room -> Major" + e.major + "Minor" + e.minor);
             }
 
@@ -130,7 +147,7 @@ public class RoomController extends BaseController {
                     G.onChatDelete.onChatDelete(res.roomId);
                 }
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Chat Delete Room -> Major" + e.major + "Minor" + e.minor);
             }
         });
@@ -149,8 +166,7 @@ public class RoomController extends BaseController {
                 if (G.onGroupDelete != null) {
                     G.onGroupDelete.onGroupDelete(res.roomId);
                 }
-            }
-            else {
+            } else {
                 IG_RPC.Error err = (IG_RPC.Error) error;
                 if (err.major == 358 && err.minor == 2) {
                     getMessageDataStorage().deleteRoomFromStorage(roomId);
@@ -216,7 +232,7 @@ public class RoomController extends BaseController {
                     RealmMember.kickMember(res.roomId, res.memberId);
                 }
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Channel Left -> Major: " + e.major + "Minor: " + e.minor);
 
                 if (e.major == 437) {

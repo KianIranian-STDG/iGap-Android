@@ -123,13 +123,13 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static String getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        String requestId = new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId, messageIdGetHistoryNotSafe, reachMessageId, direction));
+    public static String getOnlineMessage(final Realm realm, final long roomId, long documentId, final long messageIdGetHistoryNotSafe, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        String requestId = new RequestClientGetRoomHistory().getRoomHistory(roomId, documentId, messageIdGetHistoryNotSafe, limit, direction, new RequestClientGetRoomHistory.IdentityClientGetRoomHistory(roomId,documentId, messageIdGetHistoryNotSafe, reachMessageId, direction));
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
 
-            public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, long messageIdGetHistorySafe, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
+            public void onGetRoomHistory(final long roomId, final long startMessageId, long startDocumentId, final long endMessageId, long endDocumentId, final long reachMessageId, long messageIdGetHistorySafe, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction historyDirection) {
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
@@ -203,7 +203,7 @@ public final class MessageLoader {
                             @Override
                             public void run() {
                                 G.refreshRealmUi();
-                                onMessageReceive.onMessage(roomId, startMessageId, endMessageId, list, gapReachedFinal, jumpOverLocalFinal, historyDirection);
+                                onMessageReceive.onMessage(roomId, startMessageId,startDocumentId, endMessageId,endDocumentId, list, gapReachedFinal, jumpOverLocalFinal, historyDirection);
                             }
                         });
                     }
@@ -211,7 +211,7 @@ public final class MessageLoader {
             }
 
             @Override
-            public void onGetRoomHistoryError(int majorCode, int minorCode, long messageIdGetHistory, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+            public void onGetRoomHistoryError(int majorCode, int minorCode, long messageIdGetHistory, long documentIdGetHistory, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                 if (majorCode == 617) {
                     /**
                      * clear all gap state because not exist any more message
@@ -235,7 +235,7 @@ public final class MessageLoader {
                     //});
                 }
 
-                onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory, direction);
+                onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory,documentIdGetHistory, direction);
             }
         };
 

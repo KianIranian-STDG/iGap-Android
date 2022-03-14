@@ -19,11 +19,15 @@ public class RealmStory extends RealmObject {
     private long id;
     @Index
     private long userId; // userId for users and roomId for rooms
+    @Index
+    private long roomId;
     private boolean isSeenAll;
     private boolean isSentAll;
     private boolean isUploadedAll;
+    private boolean isVerified;
     private long lastCreatedAt;
     private int indexOfSeen;
+    private int orginatorValue;
     private long sessionId;
     private String displayName;
     private String profileColor;
@@ -76,6 +80,14 @@ public class RealmStory extends RealmObject {
         this.userId = userId;
     }
 
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+
     public RealmList<RealmStoryProto> getRealmStoryProtos() {
         return realmStoryProtos;
     }
@@ -94,6 +106,14 @@ public class RealmStory extends RealmObject {
 
     public void setIndexOfSeen(int indexOfSeen) {
         this.indexOfSeen = indexOfSeen;
+    }
+
+    public int getOrginatorValue() {
+        return orginatorValue;
+    }
+
+    public void setOrginatorValue(int orginatorValue) {
+        this.orginatorValue = orginatorValue;
     }
 
     public boolean isSentAll() {
@@ -140,6 +160,14 @@ public class RealmStory extends RealmObject {
         return profileColor;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
     public void setProfileColor(String profileColor) {
         this.profileColor = profileColor;
     }
@@ -182,7 +210,7 @@ public class RealmStory extends RealmObject {
             } else {
                 storyProto.setCreatedAt(igapStory.createdAt * 1000L);
             }
-
+            storyProto.setVerified(igapStory.isVerified);
             storyProto.setFileToken(igapStory.fileToken);
             storyProto.setUserId(igapStory.userId);
             storyProto.setStoryId(igapStory.storyId);
@@ -192,6 +220,9 @@ public class RealmStory extends RealmObject {
             storyProto.setForReply(false);
             storyProto.setDisplayName(igapStory.displayName);
             storyProto.setProfileColor(igapStory.profileColor);
+            storyProto.setRoomId(igapStory.roomId);
+            storyProto.setForRoom(igapStory.isForRoom);
+            storyProto.setViewCount(igapStory.viewCount);
             storyProto.setSessionId(AccountManager.getInstance().getCurrentUser().getId());
             if (isExist) {
                 storyProto.setIndex(storyProto.getIndex());
@@ -202,6 +233,10 @@ public class RealmStory extends RealmObject {
 
             if (igapStory.isSeen) {
                 setIndexOfSeen(stories.indexOf(igapStory));
+            }
+
+            if (getIndexOfSeen() > stories.size()) {
+                setIndexOfSeen(0);
             }
 
             if (isExist) {

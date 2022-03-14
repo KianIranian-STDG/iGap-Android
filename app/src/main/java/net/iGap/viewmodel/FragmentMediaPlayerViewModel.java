@@ -101,7 +101,7 @@ public class FragmentMediaPlayerViewModel {
 
         FragmentMediaPlayer.onComplete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, final String MessageTow) {
+            public void complete(boolean result, String messageOne, final String MessageTwo) {
 
                 if (messageOne.equals("play")) {
                     callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.icon_play));
@@ -129,7 +129,7 @@ public class FragmentMediaPlayerViewModel {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            callBackTxtTimer.set(MessageTow);
+                            callBackTxtTimer.set(MessageTwo);
                             seekBar1.set(MusicPlayer.musicProgress);
                         }
                     });

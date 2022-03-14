@@ -12,13 +12,18 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.media.MediaRecorder;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -44,7 +49,6 @@ public class VoiceRecord {
     private int second = 0;
     private int minute = 0;
     private TextView txtTimeRecord;
-    private LinearLayout layoutMicLock;
     private int firstX;
     private boolean cancel = false;
     private int distanceToCancel = 130;
@@ -60,38 +64,37 @@ public class VoiceRecord {
     private boolean continuePlay;
     private boolean isHandFree = false;
     private int firstY;
+    private final Context context;
+    private Animation animation1;
 
     public VoiceRecord(Context context, View layoutMic, View layoutAttach, OnVoiceRecord listener) {
         imgPicRecord = layoutMic.findViewById(R.id.img_pic_record);
         txtTimeRecord = layoutMic.findViewById(R.id.txt_time_record);
         txtMillisecond = layoutMic.findViewById(R.id.txt_time_mili_secend);
-        layoutMicLock = layoutMic.findViewById(R.id.lmr_layout_mic);
         txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
         btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
         btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
-        AndroidUtils.setBackgroundShapeColor(btnMicLayout, new Theme().getPrimaryColor(context));
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
         this.onVoiceRecordListener = listener;
+        this.context = context;
         distanceToCancel = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, context.getResources().getDisplayMetrics());
+        animation1 = AnimationUtils.loadAnimation(context, R.anim.reverse_bottom_to_top_slow);
+        btnLock.startAnimation(animation1);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.reverse_left_to_right);
+        txt_slide_to_cancel.startAnimation(animation);
+        txt_slide_to_cancel.setOnClickListener(v -> {
+            cancel = true;
+            reset();
+        });
 
-        txt_slide_to_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancel = true;
+        btnMicLayout.setOnClickListener(v -> {
+            if (isHandFree)
                 reset();
-            }
         });
-
-        btnMicLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (isHandFree) {
-                    reset();
-                }
-            }
-        });
+        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP){
+            btnLock.setBackgroundResource(R.drawable.circle_white);
+        }
     }
 
     public String getItemTag() {
@@ -116,6 +119,8 @@ public class VoiceRecord {
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
+            } catch (RuntimeException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -135,7 +140,7 @@ public class VoiceRecord {
             G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.RECORDING_VOICE);
         }
 
-        outputFile = G.DIR_AUDIOS + "/" + "record_" + HelperString.getRandomFileName(3) + ".mp3";
+        outputFile = G.context.getExternalFilesDir(Environment.DIRECTORY_MUSIC) + "/" + "record_" + HelperString.getRandomFileName(3) + ".mp3";
 
         if (mediaRecorder != null) {
             mediaRecorder.release();
@@ -166,27 +171,21 @@ public class VoiceRecord {
         canStop = false;
         startRecording();
         timertask = new TimerTask() {
-
             @Override
             public void run() {
                 if (state) {
-
-                    imgPicRecord.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            imgPicRecord.setImageResource(R.mipmap.circle_white);
-                            state = false;
+                    imgPicRecord.post(() -> {
+                        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP){
+                            imgPicRecord.setImageResource(R.drawable.circle_white);
                         }
+                        state = false;
                     });
                 } else {
-                    imgPicRecord.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            imgPicRecord.setImageResource(R.mipmap.circle_red);
-                            state = true;
+                    imgPicRecord.post(() -> {
+                        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP) {
+                            imgPicRecord.setImageResource(R.drawable.circle_red);
                         }
+                        state = true;
                     });
                 }
             }
@@ -252,9 +251,9 @@ public class VoiceRecord {
                         @Override
                         public void run() {
                             if (milliSecond < 10) {
-                                txtMillisecond.setText(":0" + milliSecond + "");
+                                txtMillisecond.setText(milliSecond + ":0");
                             } else {
-                                txtMillisecond.setText(":" + milliSecond + "");
+                                txtMillisecond.setText(milliSecond + ":");
                             }
                         }
                     });
@@ -310,42 +309,36 @@ public class VoiceRecord {
             reset();
         } else {
             txt_slide_to_cancel.setAlpha(((float) (distanceToCancel - moveX) / distanceToCancel));
-            layoutMicLock.setPadding(0, 0, 0, MoveY);
             txt_slide_to_cancel.setPadding(0, 0, moveX, 0);
         }
     }
 
     private void lockVoice() {
-        isHandFree = true;
-        layoutMicLock.setPadding(0, 0, 0, 0);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.reverse_bottom_to_top);
+        btnLock.setAnimation(animation);
+        btnLock.setText(R.string.icon_lock);
         txt_slide_to_cancel.setPadding(0, 0, 50, 0);
         txt_slide_to_cancel.setAlpha(1);
         txt_slide_to_cancel.setText(R.string.cancel);
-        txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.red));
-        //txt_slide_to_cancel.setTypeface(Typeface.DEFAULT_BOLD);
+        txt_slide_to_cancel.clearAnimation();
+        txt_slide_to_cancel.setTextColor(new Theme().getAccentColor(context));
         btnMicLayout.setText(R.string.icon_send);
-        btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.white));
-        btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp16));
-        btnLock.setText(R.string.icon_lock);
-        btnLock.setTextColor(G.context.getResources().getColor(R.color.red));
+        isHandFree = true;
     }
 
     private void reset() {
-
-        layoutMicLock.setPadding(0, 0, 0, 0);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.reverse_left_to_right);
+        btnLock.setAnimation(animation1);
+        btnLock.setText(R.string.icon_unlock);
         txt_slide_to_cancel.setPadding(0, 0, 0, 0);
         txt_slide_to_cancel.setText(R.string.slide_to_cancel_en);
+        txt_slide_to_cancel.startAnimation(animation);
         txt_slide_to_cancel.setAlpha(1);
+        txt_slide_to_cancel.setTextColor(new Theme().getIconTextColor(context));
         btnMicLayout.setText(R.string.icon_microphone);
-        btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.black_register));
-        btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp26));
-        btnLock.setText(R.string.icon_lock);
-        btnLock.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
-
         itemTag = "";
         layoutAttach.setVisibility(View.VISIBLE);
         layoutMic.setVisibility(View.GONE);
-
         isHandFree = false;
 
         if (timertask != null) {

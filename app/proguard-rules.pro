@@ -52,6 +52,7 @@
 ###Crashlytics
 -keep class com.crashlytics.** { *; }
 -keepattributes SourceFile,LineNumberTable
+-dontwarn com.crashlytics.**
 ###
 
 ###For Compress Module

@@ -34,13 +34,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
+
 public class HelperSaveFile {
 
     public static void saveFileToDownLoadFolder(final String filePath, final String fileName, final FolderType folderType) {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         saveFileToDownLoadFolder(filePath, fileName, folderType);
@@ -48,7 +50,7 @@ public class HelperSaveFile {
 
                     @Override
                     public void deny() {
-
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
             } catch (IOException e) {
@@ -225,7 +227,7 @@ public class HelperSaveFile {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         saveToMusicFolder(path, name);
@@ -233,7 +235,7 @@ public class HelperSaveFile {
 
                     @Override
                     public void deny() {
-
+                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
             } catch (IOException e) {

@@ -360,6 +360,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.colorPrimary);
     }
 
+    public int getIconTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapIconTextColor);
+    }
+
     public int getAccentColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccent);
     }

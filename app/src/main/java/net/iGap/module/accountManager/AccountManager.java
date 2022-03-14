@@ -17,6 +17,7 @@ import net.iGap.proto.ProtoUserLogin;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.response.UserLoginResponse;
+import net.iGap.story.liststories.StoryFragment;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -266,6 +267,7 @@ public class AccountManager {
 
     public void clearSomeStaticValue() {
         ClientGetRoomListResponse.roomListFetched = false;
+        StoryFragment.storyListFetched = false;
         RequestClientGetRoomList.isPendingGetRoomList = false;
         MainFragment.mOffset = 0;
         G.serverHashContact = null;

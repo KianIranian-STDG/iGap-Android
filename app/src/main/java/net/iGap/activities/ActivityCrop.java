@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -108,7 +109,7 @@ public class ActivityCrop extends ActivityEnhanced {
                     options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
                     options.setCompressionQuality(80);
 
-                    UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, nzmeFile)))
+                    UCrop.of(uri, Uri.fromFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), nzmeFile)))
                             .withAspectRatio(16, 9)
                             .withOptions(options)
                             .start(ActivityCrop.this);

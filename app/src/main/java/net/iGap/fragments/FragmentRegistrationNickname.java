@@ -61,6 +61,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class FragmentRegistrationNickname extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
@@ -145,11 +146,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
-            if (FragmentEditImage.textImageList != null)
-                FragmentEditImage.textImageList.clear();
-            if (FragmentEditImage.itemGalleryList != null)
-                FragmentEditImage.itemGalleryList.clear();
-
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
                     String path;
@@ -159,9 +155,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                         path = AttachFile.imagePath;
                     }
                     ImageHelper.correctRotateImage(path, true); //rotate image
-
-                    FragmentEditImage.insertItemList(path, false);
                     if (getActivity() instanceof ActivityRegistration) {
+                        FragmentEditImage.checkItemGalleryList();
+                        FragmentEditImage.insertItemList(path, false);
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(path, false, true, 0);
                         fragmentEditImage.setOnProfileImageEdited(this);
                         ((ActivityRegistration) getActivity()).loadFragment(fragmentEditImage, true);
@@ -172,8 +168,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                         if (data.getData() == null) {
                             return;
                         }
-                        FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                         if (getActivity() instanceof ActivityRegistration) {
+                            FragmentEditImage.checkItemGalleryList();
+                            FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, true, 0);
                             fragmentEditImage.setOnProfileImageEdited(this);
                             ((ActivityRegistration) getActivity()).loadFragment(fragmentEditImage, true);
@@ -240,7 +237,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                                 dialog.dismiss();
                                 break;
                             case 1:
-                                if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                if (FragmentRegistrationNickname.this.isAdded() && getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                     try {
                                         HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
                                             @Override
@@ -252,7 +249,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
 
                                             @Override
                                             public void deny() {
-
+                                                showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                                             }
                                         });
                                     } catch (IOException e) {

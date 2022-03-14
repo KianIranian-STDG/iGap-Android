@@ -16,6 +16,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
@@ -65,6 +66,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
@@ -107,6 +109,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener, StoriesProgressView.StoryProgressListener, RecyclerListView.OnItemClickListener, ViewUserDialogFragment.ViewUserDialogState {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
@@ -153,7 +156,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private ProgressBar storyVideoProgress;
     private ImageView storyDisplayImage;
     private PlayerView storyVideoPlayer;
+    private LinearLayout topLinearRootView;
     private TextView nickName, storyTime;
+    private FontIconTextView chatIconTv;
+    private FontIconTextView verifyIconTv;
     private FrameLayout keyboardContainer;
     private ProgressBar storyProgress;
     private TextView seenCount;
@@ -274,11 +280,34 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         profileContainer.setContentDescription("profileContainer");
         profileContainer.setOrientation(LinearLayout.VERTICAL);
 
+        topLinearRootView = new LinearLayout(context);
+        topLinearRootView.setGravity(Gravity.CENTER);
+        topLinearRootView.setOrientation(LinearLayout.HORIZONTAL);
+        profileContainer.addView(topLinearRootView, 0, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+
         nickName = new TextView(context);
         nickName.setContentDescription("nickName");
         nickName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         nickName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
         nickName.setTextColor(Color.WHITE);
+        topLinearRootView.addView(nickName, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        chatIconTv = new FontIconTextView(getContext());
+        setTextSize(chatIconTv, R.dimen.dp14);
+        chatIconTv.setVisibility(View.GONE);
+        chatIconTv.setContentDescription("chatIconTv");
+        chatIconTv.setText(R.string.icon_channel);
+        chatIconTv.setTextColor(Color.WHITE);
+        topLinearRootView.addView(chatIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 4, 0, 0, 0));
+
+        verifyIconTv = new FontIconTextView(getContext());
+        verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verifyIconTv.setText(R.string.icon_blue_badge);
+        verifyIconTv.setVisibility(View.GONE);
+        setTextSize(verifyIconTv, R.dimen.standardTextSize);
+        topLinearRootView.addView(verifyIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 4, 0, 0, 0));
+
+
 
         storyTime = new TextView(context);
         storyTime.setContentDescription("storyTime");
@@ -287,7 +316,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storyTime.setTextColor(Color.WHITE);
 
 
-        profileContainer.addView(nickName, 0, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
         profileContainer.addView(storyTime, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         storyOverlay.addView(profileContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.LEFT, 56, 8, 0, 0));
@@ -453,12 +481,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
         stories = storyUser.getStories();
         isMyStory = storyUser.getUserId() == AccountManager.getInstance().getCurrentUser().getId();
-
         if (isMyStory) {
             storyReplyContainer.setVisibility(View.INVISIBLE);
             storySeenContainer.setVisibility(View.VISIBLE);
         } else {
-            storyReplyContainer.setVisibility(View.VISIBLE);
+            if (stories.get(counter).isRoom()) {
+                storyReplyContainer.setVisibility(View.INVISIBLE);
+            } else {
+                storyReplyContainer.setVisibility(View.VISIBLE);
+            }
             storySeenContainer.setVisibility(View.INVISIBLE);
         }
 
@@ -757,7 +788,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 public void onAddStickerClicked() {
                     if (getActivity() != null) {
                         showPopup(-1);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance("ALL")).setReplace(false).load();
                     }
                 }
 
@@ -984,7 +1015,20 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         }
 
         storyTime.setText(LastSeenTimeUtil.computeTime(context, stories.get(counter).getUserId(), stories.get(counter).getStoryData() / 1000L, false, false));
-        nickName.setText(storyUser.getUserName());
+        nickName.setText(stories.get(counter).getDisplayName());
+
+        if (stories.get(counter).isRoom()) {
+            chatIconTv.setVisibility(View.VISIBLE);
+        } else {
+            chatIconTv.setVisibility(View.GONE);
+        }
+
+        if (stories.get(counter).isVerified()) {
+            verifyIconTv.setVisibility(View.VISIBLE);
+        } else {
+            verifyIconTv.setVisibility(View.GONE);
+        }
+
         replyTo.setText(EmojiManager.getInstance().replaceEmoji(storyUser.getUserName(), replyTo.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
         replyCaption.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
         AttachmentObject attachmentObject = stories.get(counter).getAttachment();
@@ -1006,8 +1050,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             });
         }
 
-        if (counter == (stories.size() - 1) && !getMessageDataStorage().isAllStorySeen(stories.get(counter).getUserId())) {
-            getMessageDataStorage().storySetSeenAll(stories.get(counter).getUserId(), true);
+        if (counter == (stories.size() - 1) && !getMessageDataStorage().isAllStorySeen(storyUser.getRoomId() == 0, storyUser.getRoomId() == 0 ? storyUser.getUserId() : storyUser.getRoomId())) {
+            getMessageDataStorage().storySetSeenAll(storyUser.getRoomId() == 0 ? storyUser.getUserId() : storyUser.getRoomId(), true, storyUser.getRoomId() == 0);
             int storyUnSeenCount = getMessageDataStorage().getUnSeenStoryCount();
             if (storyUnSeenCount > 0) {
                 G.onUnreadChange.onChange(storyUnSeenCount, true);
@@ -1036,7 +1080,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 ProtoFileDownload.FileDownload.Selector selector;
                 if (attachmentObject.largeThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.DIR_IMAGES, true);
+                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), true);
                     if (new File(path).exists()) {
                         Story story = stories.get(counter);
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
@@ -1068,7 +1112,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     }
                 } else if (attachmentObject.smallThumbnail != null) {
                     selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.DIR_IMAGES, true);
+                    path = AndroidUtils.getFilePathWithCashId(attachmentObject.smallThumbnail.cacheId, attachmentObject.name, G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), true);
                     if (new File(path).exists()) {
                         Story story = stories.get(counter);
                         if (story.getAttachment().filePath != null && (new File(story.getAttachment().filePath).exists())) {
@@ -1129,7 +1173,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 //
 //            }
 //        });
-        avatarHandler.getAvatar(new ParamWithAvatarType(profileImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+        avatarHandler.getAvatar(new ParamWithAvatarType(profileImage, stories.get(counter).isRoom() ? stories.get(counter).getRoomId() : stories.get(counter).getUserId()).avatarType(stories.get(counter).isRoom() ? AvatarHandler.AvatarType.ROOM : AvatarHandler.AvatarType.USER));
         Glide.with(replyThumb.getContext()).load(path).into(replyThumb);
         if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
@@ -1154,7 +1198,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onSwipeTop() {
-                if (!isMyStory && !isFormChat) {
+                if (!isMyStory && !isFormChat && !stories.get(counter).isRoom()) {
                     setupReply();
                 }
             }
@@ -1327,17 +1371,19 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void savePosition(int pos) {
-        getMessageDataStorage().storySetIndexOfSeen(storyUser.getUserId(), pos);
+        getMessageDataStorage().storySetIndexOfSeen(storyUser.getUserId(), storyUser.getRoomId(), pos);
     }
 
     public int restorePosition() {
         return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<Integer>) realm -> {
-            RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", storyUser.getUserId()).findFirst();
+            RealmStory realmStory = realm.where(RealmStory.class).equalTo(storyUser.getRoomId() != 0 ? "roomId" : "userId", storyUser.getRoomId() != 0 ? storyUser.getRoomId() : storyUser.getUserId()).findFirst();
             if (realmStory != null) {
                 return realmStory.getIndexOfSeen();
             }
             return 0;
         });
+
+
     }
 
     public void pauseCurrentStory() {

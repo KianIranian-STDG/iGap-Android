@@ -124,7 +124,7 @@
     <string name="device_dosenot_camera_en">Это устройство без камеры.</string>
     <string name="do_you_want_to_turn_on_gps">Ваша система глобального позиционирования (GPS) выключена, вы хотите ее включить?</string>
     <string name="select_picture_en">Выбор изображения</string>
-    <string name="slide_to_cancel_en">Потяните для отмены</string>
+    <string name="slide_to_cancel_en">&lt; &#160;Потяните для отмены</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
     <string name="st_username">Имя пользователя</string>
     <string name="st_title_Clear_Cache">Очистить кэш</string>
@@ -575,6 +575,7 @@
     <string name="permission_location">Дайте диспетчер устройств позиционирования</string>
     <string name="permission_record_audio">Дайте микрофон</string>
     <string name="permission_phone">Дайте телефон</string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">Должен иметь разрешение на использование %s</string>
     <string name="channel_public_hint_revoke">Общедоступная ссылка на канал</string>
     <string name="self_destructs">Самоликвидироваться</string>
     <string name="save_ok">Сохранено</string>
@@ -785,7 +786,7 @@
     <string name="info_map">Только видимые вам пользователи находятся в пределах 5 километров от вас, и их статус карты ясен.</string>
     <string name="Theme_Dark">Ночной режим</string>
     <string name="two_step_pass_code">Войти в приложение</string>
-    <string name="unlock_with_fingerPrint">Разблокировка отпечатков пальцев</string>
+    <string name="biometric_unlock">Биометрическая разблокировка</string>
     <string name="change_pass_code">Сменить пароль</string>
     <string name="auto_lock">Автоблокировка</string>
     <string name="allow_screen_capture">Возможность снимка скриншот</string>
@@ -1695,9 +1696,11 @@
     <string name="status">Моменты</string>
     <string name="status_title">Момент</string>
     <string name="tap_to_add_status_update">Нажмите, чтобы добавить момент</string>
+    <string name="add_status_update">Управляйте моментами</string>
     <string name="viewed_updates">Просмотренные обновления</string>
     <string name="recent_updates">Недавние обновления</string>
     <string name="your_status_updates_will_disappear_after_24_hours">Ваши моменты будут удалены через 24 часа.</string>
+    <string name="my_channel_moments">Мои моменты на канале</string>
     <string name="your_device_does_not_have_a_camera">В вашем устройстве нет камеры!</string>
     <string name="delete_status_update">Удалить этот момент? Он также будет удален у всех, кто его получил.</string>
     <string name="story_views">Просмотры</string>
@@ -1712,4 +1715,25 @@
     <string name="moments_string">Моменты</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">Сумма не может быть больше 500 миллионов риалов.</string>
     <string name="invalid_qr_code">Недействительный штрих-код</string>
+    <string name="are_you_sure_add_follower">Вы уверены, что хотите добавить этих подписчиков?</string>
+    <string name="minimizeAmount">Ваш запрос на эту сумму невозможен</string>
+    <string name="forbidden_pin_room">Вы не можете закрепить этот чат</string>
+    <string name="pin_up_to_5_chat">Вы можете закрепить до 5 чатов!</string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">Для глобального поиска требуется не менее 5 символов</string>
+    <string name="faild_payment">Извините, произошла ошибка, попробуйте еще раз</string>
+    <string name="biometric_password_description">При активации этой опции к приложению будет применен активный биометрический пароль на вашем телефоне (отпечаток пальца, распознавание лица или сканирование радужной оболочки глаза).By activating this option, the active biometric password on your phone(fingerprint, face recognition or iris scan), will be applied to the application</string>
+    <string name="biometric_password">биометрический пароль</string>
+    <string name="set_now">Установить сейчас</string>
+    <string name="no_biometric_password_set_on_your_phone">На вашем телефоне не установлен биометрический пароль</string>
+    <string name="authentication_failed">Ошибка аутентификации</string>
+    <string name="authentication_succeeded">Аутентификация прошла успешно</string>
+    <string name="authentication_error">Ошибка аутентификации: </string>
+    <string name="biometric_login">Биометрический вход в мое приложение</string>
+    <string name="use_biometric_authentication">Войдите, используя свои биометрические учетные данные</string>
+    <string name="send_current_location">Отправить текущее местоположение:\n</string>
+    <string name="send_selected_location">Отправить выбранное местоположение:\n</string>
+    <string name="load_sticker_types_error_message">фильтр типов не загружен</string>
+    <string name="select_sticker_type">Выберите тип стикера</string>
+    <string name="locating">получение текущей позиции…</string>
+    <string name="enable_sending_non_media_file_soon">Возможность отправки файлов, не являющихся мультимедийными, будет включена в ближайшее время.</string>
 </resources>

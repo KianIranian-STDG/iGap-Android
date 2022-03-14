@@ -10,21 +10,28 @@
 
 package net.iGap.fragments;
 
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.SparseArrayCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -36,12 +43,14 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.protobuf.AbstractMessage;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
@@ -58,10 +67,12 @@ import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.IDownloader;
+import net.iGap.module.downloader.Status;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -79,9 +90,10 @@ import java.util.List;
 
 import io.realm.Sort;
 
-public class FragmentShowContent extends Fragment implements ShowMediaListener {
+public class FragmentShowContent extends Fragment implements ShowMediaListener, EventManager.EventDelegate {
     private TextView contentNumberTv;
     private ViewPager2 viewPager;
+    private ShowContentAdapter mAdapter;
     private int selectedFile = 0;
     private int lastOrientation = 0;
     private RealmRoom room;
@@ -128,6 +140,18 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_NEW_MEDIA_MESSAGE_RECEIVED, this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_NEW_MEDIA_MESSAGE_RECEIVED, this);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation != lastOrientation) {
@@ -164,9 +188,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     private List<RealmRoomMessage> getRoomMediaMessages(Bundle bundle) {
-        if (getActivity() != null) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
+
         if (bundle != null) {
             long mRoomId = bundle.getLong(RealmConstants.REALM_ROOM_ID, 0L);
             long selectedFileToken = bundle.getLong(RealmConstants.REALM_SELECTED_IMAGE);
@@ -239,7 +261,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     private void initViewPager(List<RealmRoomMessage> roomMessages) {
-        ShowContentAdapter mAdapter = new ShowContentAdapter(this);
+        mAdapter = new ShowContentAdapter(this);
         mAdapter.setRoomMessages(roomMessages);
         setViewPagerListener(roomMessages);
         viewPager.setAdapter(mAdapter);
@@ -413,12 +435,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         }
     }
 
-
     @Override
     public void setToolbarVisibility(int state) {
         toolbarLl.setVisibility(state);
     }
-
 
     private class ShowContentAdapter extends RecyclerView.Adapter<ShowContentAdapter.ViewHolder> {
         private List<RealmRoomMessage> roomMessages = new ArrayList<>();
@@ -458,8 +478,22 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             private final TextView dateTv;
             private final TextView timeTv;
             private final TextView descriptionTv;
+            private final TextView readMore;
+            private final LinearLayout readMoreRoot;
             private final ConstraintLayout mediaInfoCl;
             private ProtoGlobal.RoomMessageType messageType;
+
+            private final static int MAX_LINES_COLLAPSED = 8;
+            private final boolean INITIAL_IS_COLLAPSED = true;
+
+            private static final int IDLE_ANIMATION_STATE = 1;
+            private static final int EXPANDING_ANIMATION_STATE = 2;
+            private static final int COLLAPSING_ANIMATION_STATE = 8;
+            private boolean readMoreFlag = false;
+
+            private int mCurrentAnimationState = IDLE_ANIMATION_STATE;
+
+            private boolean isCollapsed = INITIAL_IS_COLLAPSED;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -472,14 +506,21 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 dateTv = itemView.findViewById(R.id.asi_txt_image_date);
                 timeTv = itemView.findViewById(R.id.asi_txt_image_time);
                 descriptionTv = itemView.findViewById(R.id.asi_txt_image_desc);
+                readMore = itemView.findViewById(R.id.asi_txt_image_readMore);
                 mediaInfoCl = itemView.findViewById(R.id.asi_layout_image_name);
                 playerView = itemView.findViewById(R.id.showContentPlayerView);
+                readMoreRoot = itemView.findViewById(R.id.readMore_root);
             }
 
             void bind(List<RealmRoomMessage> roomMessages, int position) {
                 MessageObject message = MessageObject.create(roomMessages.get(position));
                 final MessageObject messageObject = RealmRoomMessage.getFinalMessage(message);
                 if (messageObject != null) {
+                    if (messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE) {
+                        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    } else {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    }
                     if (HelperDownloadFile.getInstance().isDownLoading(messageObject.getAttachment().cacheId)) {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, zoomableImageView, roomMessages);
@@ -515,33 +556,44 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                             // if thumbnail does not exist then download it
                             ProtoFileDownload.FileDownload.Selector selector = null;
                             long fileSize = 0;
+                            boolean big = false;
 
                             if (messageObject.attachment.smallThumbnail != null) {
                                 selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                                 fileSize = messageObject.attachment.smallThumbnail.size;
+                                big = false;
                             } else if (messageObject.attachment.largeThumbnail != null) {
                                 selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
                                 fileSize = messageObject.attachment.largeThumbnail.size;
+                                big = true;
                             }
                             final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(messageObject.attachment.cacheId, messageObject.attachment.name, G.DIR_TEMP, true);
 
                             if (selector != null && fileSize > 0) {
-                                HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType), System.currentTimeMillis() + "", messageObject.attachment.token, messageObject.attachment.publicUrl, messageObject.attachment.cacheId, messageObject.attachment.name, fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                    @Override
-                                    public void OnProgress(final String path, int progress) {
-                                        if (progress == 100) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
-                                                }
-                                            });
+                                DownloadObject downloadObject = DownloadObject.createForThumb(messageObject.attachment, ProtoGlobal.RoomMessageType.IMAGE.getNumber(), big);
+                                Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
+                                    if (arg.status == Status.SUCCESS && arg.data != null) {
+                                        String filepath = arg.data.getFilePath();
+                                        String fileToken = arg.data.getToken();
+
+                                        if (!(new File(filepath).exists())) {
+                                            HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                         }
+
+
+                                        DbManager.getInstance().doRealmTransaction(realm -> {
+                                            for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
+                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                            }
+                                        });
+                                        G.currentActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, filepath);
+                                            }
+                                        });
                                     }
 
-                                    @Override
-                                    public void OnError(String token) {
-                                    }
                                 });
                             }
                         }
@@ -549,11 +601,18 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 } else {
                     return;
                 }
-
                 // show content info
                 if (messageObject.message != null && !messageObject.message.isEmpty()) {
                     descriptionTv.setText(EmojiManager.getInstance().replaceEmoji(messageObject.message, descriptionTv.getPaint().getFontMetricsInt()));
                     descriptionTv.setVisibility(View.VISIBLE);
+                    if (descriptionTv.getText().length() > 250) {
+                        readMoreRoot.setVisibility(View.VISIBLE);
+                    }
+
+                    String s = String.valueOf(EmojiManager.getInstance().replaceEmoji(messageObject.message, descriptionTv.getPaint().getFontMetricsInt()));
+                    updateWithNewText(s);
+                    applyLayoutTransition();
+                    readMore.setMovementMethod(new ScrollingMovementMethod());
                 } else {
                     descriptionTv.setVisibility(View.GONE);
                 }
@@ -577,7 +636,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     timeTv.setText(HelperCalander.convertToUnicodeFarsiNumber(timeTv.getText().toString()));
                     dateTv.setText(HelperCalander.convertToUnicodeFarsiNumber(dateTv.getText().toString()));
                 }
-
                 progress.setOnClickListener(view -> {
                     String _cashID = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment.cacheId : messageObject.attachment.cacheId;
                     int currentAccount = AccountManager.selectedAccount;
@@ -598,7 +656,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     mShowContentListener.setToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
                 });
-
+                readMore.setTypeface(ResourcesCompat.getFont(readMore.getContext(), R.font.main_font));
                 zoomableImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -611,6 +669,74 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         }
                     }
                 });
+                descriptionTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        descriptionTv.setVerticalScrollBarEnabled(false);
+                        descriptionTv.setMovementMethod(null);
+                        if (readMoreFlag) {
+                            if (isRunning()) {
+                                mediaInfoCl.setLayoutTransition(mediaInfoCl.getLayoutTransition());
+                            }
+                            if (isCollapsed) {
+                                mCurrentAnimationState = EXPANDING_ANIMATION_STATE;
+                                descriptionTv.setMaxLines(Integer.MAX_VALUE);
+                                readMoreRoot.setVisibility(View.GONE);
+                            } else {
+                                readMoreRoot.setVisibility(View.VISIBLE);
+                                mCurrentAnimationState = COLLAPSING_ANIMATION_STATE;
+                                descriptionTv.setMaxLines(MAX_LINES_COLLAPSED);
+                                descriptionTv.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descriptionTv.setMaxLines(Integer.MAX_VALUE);
+                                    }
+                                });
+                            }
+                            isCollapsed = !isCollapsed;
+                            readMoreFlag = false;
+                        }
+
+                    }
+                });
+                readMoreRoot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!readMoreFlag) {
+                            descriptionTv.setVerticalScrollBarEnabled(true);
+                            descriptionTv.setMovementMethod(new ScrollingMovementMethod());
+                            if (isRunning()) {
+                                mediaInfoCl.setLayoutTransition(mediaInfoCl.getLayoutTransition());
+                            }
+                            if (isCollapsed) {
+                                mCurrentAnimationState = EXPANDING_ANIMATION_STATE;
+                                descriptionTv.setMaxLines(Integer.MAX_VALUE);
+                                readMoreRoot.setVisibility(View.GONE);
+                            } else {
+                                readMoreRoot.setVisibility(View.VISIBLE);
+                                mCurrentAnimationState = COLLAPSING_ANIMATION_STATE;
+                                descriptionTv.setMaxLines(MAX_LINES_COLLAPSED);
+                                descriptionTv.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descriptionTv.setMaxLines(Integer.MAX_VALUE);
+                                    }
+                                });
+                            }
+                            isCollapsed = !isCollapsed;
+                            readMoreFlag = true;
+                        }
+
+                    }
+                });
+
+                if (isCollapsed) {
+                    descriptionTv.setMaxLines(MAX_LINES_COLLAPSED);
+                } else {
+                    descriptionTv.setMaxLines(Integer.MAX_VALUE);
+                }
+
+
             }
 
             private void startDownload(int position, final MessageProgress progress, final PhotoView ZoomableImageView, final List<RealmRoomMessage> roomMessages) {
@@ -670,6 +796,80 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 playerView.setVisibility(View.VISIBLE);
                 zoomableImageView.setVisibility(View.GONE);
             }
+
+            private void updateWithNewText(String text) {
+                descriptionTv.setText(text);
+                descriptionTv.getViewTreeObserver()
+                        .addOnGlobalLayoutListener(new ViewTreeObserver
+                                .OnGlobalLayoutListener() {
+
+                            @Override
+                            public void onGlobalLayout() {
+                                if (isTextUnlimited()) {
+                                    if (canBeCollapsed()) {
+                                        descriptionTv.setClickable(false);
+                                        descriptionTv.setEllipsize(null);
+                                    } else {
+                                        descriptionTv.setClickable(true);
+                                        descriptionTv.setEllipsize(TextUtils.TruncateAt.END);
+                                    }
+                                } else {
+                                    if (isTrimmedWithLimitLines()) {
+                                        descriptionTv.setClickable(false);
+                                        descriptionTv.setEllipsize(null);
+                                    } else {
+                                        descriptionTv.setClickable(true);
+                                        descriptionTv.setEllipsize(TextUtils.TruncateAt.END);
+                                    }
+                                }
+                                descriptionTv.getViewTreeObserver()
+                                        .removeOnGlobalLayoutListener(this);
+                            }
+                        });
+            }
+
+            private boolean isTextUnlimited() {
+                return descriptionTv.getMaxLines() == Integer.MAX_VALUE;
+            }
+
+            private boolean canBeCollapsed() {
+                return descriptionTv.getLineCount() <= MAX_LINES_COLLAPSED;
+            }
+
+            private boolean isTrimmedWithLimitLines() {
+                return descriptionTv.getLineCount() <= descriptionTv.getMaxLines();
+            }
+
+            private void applyLayoutTransition() {
+                LayoutTransition transition = new LayoutTransition();
+                transition.setDuration(300);
+                transition.enableTransitionType(LayoutTransition.CHANGING);
+                mediaInfoCl.setLayoutTransition(transition);
+
+                transition.addTransitionListener(new LayoutTransition.TransitionListener() {
+                    @Override
+                    public void startTransition(LayoutTransition transition,
+                                                ViewGroup container, View view, int transitionType) {
+                    }
+
+                    @Override
+                    public void endTransition(LayoutTransition transition,
+                                              ViewGroup container, View view, int transitionType) {
+                        if (COLLAPSING_ANIMATION_STATE == mCurrentAnimationState) {
+                            descriptionTv.setMaxLines(MAX_LINES_COLLAPSED);
+                        }
+                        mCurrentAnimationState = IDLE_ANIMATION_STATE;
+                    }
+                });
+            }
+
+            private boolean isIdle() {
+                return mCurrentAnimationState == IDLE_ANIMATION_STATE;
+            }
+
+            private boolean isRunning() {
+                return !isIdle();
+            }
         }
     }
 
@@ -695,6 +895,18 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             } else {
                 HelperError.showSnackMessage(getString(R.string.file_not_download_yet), false);
             }
+        }
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_NEW_MEDIA_MESSAGE_RECEIVED && (long) args[0] == room.id) {
+            G.runOnUiThread(() -> {
+                List<RealmRoomMessage> roomMessages = getRoomMediaMessages(FragmentShowContent.this.getArguments());
+                mAdapter.setRoomMessages(roomMessages);
+                contentNumberTv.setText(MessageFormat.format("{0} {1} {2}", viewPager.getCurrentItem() + 1, G.fragmentActivity.getResources().getString(R.string.of), roomMessages.size()));
+                setViewPagerListener(roomMessages);
+            });
         }
     }
 }

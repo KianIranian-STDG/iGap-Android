@@ -35,6 +35,7 @@ public class DataStorageViewModel extends ViewModel {
     private MutableLiveData<String[]> showClearCashDialog = new MutableLiveData<>();
     private MutableLiveData<Boolean> showClearAllDialog = new MutableLiveData<>();
     private MutableLiveData<Boolean> showActiveSDCardDialog = new MutableLiveData<>();
+    private MutableLiveData<Boolean> needToGetStoragePermission = new MutableLiveData<>();
     private ObservableInt keepMediaTime = new ObservableInt(R.string.keep_media_forever);
     private ObservableBoolean isSdkEnable = new ObservableBoolean(false);
     private ObservableBoolean isAutoGif = new ObservableBoolean(false);
@@ -122,6 +123,10 @@ public class DataStorageViewModel extends ViewModel {
         return clearCacheSize;
     }
 
+    public MutableLiveData<Boolean> getNeedToGetStoragePermission() {
+        return needToGetStoragePermission;
+    }
+
     public ObservableInt getShowLayoutSdk() {
         return showLayoutSdk;
     }
@@ -171,7 +176,7 @@ public class DataStorageViewModel extends ViewModel {
     public void onClickAutoDownloadData() {
         showAutoDownloadDataDialog.setValue(new Integer[]{
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1),
-                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, 1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1),
@@ -216,7 +221,7 @@ public class DataStorageViewModel extends ViewModel {
     public void onClickAutoDownloadWifi() {
         showAutoDownloadWifiDialog.setValue(new Integer[]{
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1),
-                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, 1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1),

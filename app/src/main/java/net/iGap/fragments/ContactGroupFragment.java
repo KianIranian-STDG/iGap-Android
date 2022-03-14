@@ -36,6 +36,7 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.ui.components.ProgressDialog;
 import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
@@ -76,7 +77,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private List<StructContactInfo> contacts = new ArrayList<>();
     public static List<StructContactInfo> selectedContacts = new ArrayList<>();
     private boolean isRemove = true;
-
+    private ProgressDialog progressDialog;
 
     public static ContactGroupFragment newInstance() {
         selectedContacts.clear();
@@ -92,6 +93,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressDialog = new ProgressDialog(getContext());
 
         // to disable swipe in channel creation mode
         if (typeCreate != null) {
@@ -131,9 +134,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
 
         //todo:// use material chips
-        if (G.themeColor == Theme.DARK){
+        if (G.themeColor == Theme.DARK) {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
-        }else {
+        } else {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
         }
 
@@ -217,12 +220,12 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
             @Override
             public void onChipRemoved(ChipInterface chip, int newSize) {
-
-                ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
-                notifyAdapter(contactInfo, fastAdapter.getPosition((Long) chip.getId()));
-                isRemove = false;
-
-                selectedContacts.remove(contactInfo.mContact);
+                if (chip.getId() != null) {
+                    ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
+                    notifyAdapter(contactInfo, fastAdapter.getPosition((Long) chip.getId()));
+                    isRemove = false;
+                    selectedContacts.remove(contactInfo.mContact);
+                }
             }
 
             @Override
@@ -380,30 +383,41 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
     @Override
     public void onRightIconClickListener(View view) {
-
         fixChipsLayoutShowingState();
-        if (typeCreate.equals("CHANNEL")) { // addMemberChannel
+
+        if (typeCreate.equals("CHANNEL")) {
             G.onChannelAddMember = new OnChannelAddMember() {
                 @Override
                 public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
-                    countAddMemberResponse++;
-                    countMember++;
-                    if (countAddMemberResponse == countAddMemberRequest) {
+                    G.runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        countAddMemberResponse++;
                         addMember(RoomId, ProtoGlobal.Room.Type.CHANNEL);
-                    }
+                        countMember++;
+                        if (countAddMemberResponse == countAddMemberRequest) {
+                            addMember(RoomId, ProtoGlobal.Room.Type.CHANNEL);
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(int majorCode, int minorCode) {
-                    countAddMemberResponse++;
-                    if (countAddMemberResponse == countAddMemberRequest) {
-                        addMember(roomId, ProtoGlobal.Room.Type.CHANNEL);
-                    }
+                    G.runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        countAddMemberResponse++;
+                        if (countAddMemberResponse == countAddMemberRequest) {
+                            addMember(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                        }
+                        HelperError.showSnackMessage(requireContext().getResources().getString(R.string.error), false);
+                    });
                 }
 
                 @Override
                 public void onTimeOut() {
-
+                    G.runOnUiThread(() -> {
+                        progressDialog.dismiss();
+                        HelperError.showSnackMessage(requireContext().getResources().getString(R.string.time_out), false);
+                    });
                 }
             };
 
@@ -411,6 +425,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             if (list.size() > 0) {
                 for (long peerId : list) {
                     new RequestChannelAddMember().channelAddMember(roomId, peerId);
+                    progressDialog.show();
+                    progressDialog.setCancelable(false);
                 }
             } else {
                 if (isAdded()) {
@@ -420,7 +436,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                     }
                 }
             }
-        } else if (typeCreate.equals("GROUP")) { // addMemberGroup
+
+        } else if (typeCreate.equals("GROUP")) {
 
             if (roomId == -127) {
                 if (getActivity() != null) {
@@ -493,7 +510,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private void fixChipsLayoutShowingState() {
 
         //this code added for close chips layout
-        if (chipsInput != null) {
+        if (chipsInput != null && chipsInput.getSelectedChipList().size() > 0) {
             try {
                 chipsInput.addChip("", "");
                 chipsInput.removeChipByLabel("");
@@ -501,7 +518,5 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 e.printStackTrace();
             }
         }
-
     }
-
 }

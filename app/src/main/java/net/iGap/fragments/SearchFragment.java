@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,6 +60,8 @@ import java.util.TimerTask;
 import io.realm.Case;
 import io.realm.RealmResults;
 
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
+
 public class SearchFragment extends BaseFragment {
 
     private FastAdapter fastAdapter;
@@ -67,7 +69,7 @@ public class SearchFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private ImageView imvNothingFound;
-    private TextView txtEmptyListComment;
+    private TextView txtSearchHint;
     private long index = 500;
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
@@ -136,12 +138,12 @@ public class SearchFragment extends BaseFragment {
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find1);
-        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtSearchHint = view.findViewById(R.id.txt_search_hint);
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 imvNothingFound.setVisibility(View.VISIBLE);
-                txtEmptyListComment.setVisibility(View.VISIBLE);
+                txtSearchHint.setVisibility(View.VISIBLE);
             }
         }, 150);
 
@@ -154,21 +156,18 @@ public class SearchFragment extends BaseFragment {
         itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
 
-        fastAdapter.withOnClickListener(new OnClickListener<IItem>() {
-            @Override
-            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+        fastAdapter.withOnClickListener((OnClickListener<IItem>) (v, adapter, currentItem, position) -> {
 
-                if (currentItem instanceof SearchItemHeader) {
+            if (currentItem instanceof SearchItemHeader) {
 
-                } else {
-                    SearchItem si = (SearchItem) currentItem;
-                    goToRoom(si.item.id, si.item.type, si.item.messageId, si.item.userName);
+            } else {
+                SearchItem si = (SearchItem) currentItem;
+                goToRoom(si.item.id, si.item.type, si.item.messageId, si.item.userName);
 
-                    hideKeyboard();
-                }
-
-                return false;
+                hideKeyboard();
             }
+
+            return false;
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -180,11 +179,18 @@ public class SearchFragment extends BaseFragment {
         if (text != null) {
             searchTxt = text;
         }
-        if (text.trim().length() < 2) {
+        if (text.trim().length() < 1) {
             cancelSearchTimer();
             fillList("");
             preventRepeatSearch = "";
-            return;
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    imvNothingFound.setVisibility(View.VISIBLE);
+                    txtSearchHint.setText(R.string.at_least_5_characters_are_required_for_a_global_search);
+                    txtSearchHint.setVisibility(View.VISIBLE);
+                }
+            }, 150);
         }
         startOrReStartSearchTimer();
     }
@@ -192,32 +198,21 @@ public class SearchFragment extends BaseFragment {
     public void onOpenSearchKeyboard() {
 
     }
+
     private void fillList(String text) {
 
         itemAdapter.clear();
+        if (fastAdapter == null) {
+            initRecycleView();
+        }
         fastAdapter.clearTypeInstance();
 
         int strSize = text.length();
-
-
-//        if (strSize < 3) {
-//
-//            txtEmptyListComment.setVisibility(View.VISIBLE);
-//            txtEmptyListComment.setText(R.string.empty_message3);
-//            imvNothingFound.setVisibility(View.VISIBLE);
-//            return;
-//
-//        }
 
         if (text.startsWith("#")) {
             fillListItemHashtag(text);
             return;
         }
-//        else if (Character.getDirectionality(text.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-//            fillListItemGlobal(text);
-//            return;
-//        }
-
 
         if (strSize >= 5) {
             if (getRequestManager().isUserLogin()) {
@@ -241,7 +236,6 @@ public class SearchFragment extends BaseFragment {
         } else {
             preventRepeatSearch = "";
         }
-
 
         G.onClientSearchUserName = new IClientSearchUserName() {
             @Override
@@ -294,7 +288,6 @@ public class SearchFragment extends BaseFragment {
         updateAdapter();
 
     }
-
 
     private void fillListItemAtsign(String text) {
 
@@ -359,6 +352,9 @@ public class SearchFragment extends BaseFragment {
 
                     if (realmRoom != null) { // room exist
                         item.name = realmRoom.getTitle();
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom().isVerified() || realmRoom.getType() == CHAT && realmRoom.getChatRoom().isVerified()) {
+                            item.isVerified = true;
+                        }
                         item.initials = realmRoom.getInitials();
                         item.color = realmRoom.getColor();
                         item.roomType = realmRoom.getType();
@@ -389,16 +385,17 @@ public class SearchFragment extends BaseFragment {
         }
 
         if (items.size() > 0) {
-            txtEmptyListComment.setVisibility(View.GONE);
+            txtSearchHint.setVisibility(View.GONE);
             imvNothingFound.setVisibility(View.GONE);
         } else {
-            txtEmptyListComment.setVisibility(View.VISIBLE);
-            txtEmptyListComment.setText(R.string.there_is_no_any_result);
+            txtSearchHint.setVisibility(View.VISIBLE);
+            txtSearchHint.setText(R.string.there_is_no_any_result);
             imvNothingFound.setVisibility(View.VISIBLE);
         }
 
         itemAdapter.clear();
         itemAdapter.add(items);
+        fastAdapter.notifyAdapterDataSetChanged();
     }
 
     private void fillRoomListGroup(String text) {
@@ -414,7 +411,7 @@ public class SearchFragment extends BaseFragment {
 
             if (results != null) {
 
-                if (results.size() > 0)
+                if (results.size() > 0 && getContext() != null)
                     addHeader(getContext().getString(R.string.Groups));
 
 
@@ -424,6 +421,9 @@ public class SearchFragment extends BaseFragment {
 
                     item.roomType = realmRoom.getType();
                     item.name = realmRoom.getTitle();
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom().isVerified() || realmRoom.getType() == CHAT && realmRoom.getChatRoom().isVerified()) {
+                        item.isVerified = true;
+                    }
                     item.time = realmRoom.getUpdatedTime();
                     item.id = realmRoom.getId();
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
@@ -472,6 +472,9 @@ public class SearchFragment extends BaseFragment {
 
                     item.roomType = realmRoom.getType();
                     item.name = realmRoom.getTitle();
+                    if (realmRoom.getChannelRoom() != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom().isVerified() || realmRoom.getType() == CHAT && realmRoom.getChatRoom().isVerified()) {
+                        item.isVerified = true;
+                    }
                     item.time = realmRoom.getUpdatedTime();
                     item.id = realmRoom.getId();
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
@@ -520,6 +523,7 @@ public class SearchFragment extends BaseFragment {
                     StructSearch item = new StructSearch();
 
                     item.name = contact.getDisplayName();
+                    item.isVerified = contact.isVerified();
                     item.time = contact.getLastSeen();
                     item.userName = contact.getUsername();
                     item.comment = "";
@@ -556,6 +560,7 @@ public class SearchFragment extends BaseFragment {
                     StructSearch item = new StructSearch();
 
                     item.name = contact.getDisplayName();
+                    item.isVerified = contact.isVerified();
                     item.time = contact.getLastSeen();
                     item.userName = contact.getUsername();
                     item.comment = "";
@@ -595,6 +600,7 @@ public class SearchFragment extends BaseFragment {
 
                     item.name = contact.getDisplay_name();
                     item.time = contact.getLast_seen();
+                    item.isVerified = contact.isVerified();
                     item.comment = str;
                     item.userName = contact.getUsername();
                     item.id = contact.getId();
@@ -635,12 +641,17 @@ public class SearchFragment extends BaseFragment {
 
                     if (realmRoom != null) { // room exist
                         item.name = realmRoom.getTitle();
+
                         item.initials = realmRoom.getInitials();
                         item.color = realmRoom.getColor();
                         item.roomType = realmRoom.getType();
                         item.avatar = realmRoom.getAvatar();
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom().isVerified() || realmRoom.getType() == CHAT && realmRoom.getChatRoom().isVerified()) {
+                            item.isVerified = true;
+                        }
                         if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
                             item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+
                         } else {
 
                             if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
@@ -648,7 +659,6 @@ public class SearchFragment extends BaseFragment {
 
                             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
                                 item.userName = realmRoom.getChannelRoom().getUsername();
-
                             }
 
                             item.idDetectAvatar = realmRoom.getId();
@@ -696,17 +706,14 @@ public class SearchFragment extends BaseFragment {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
                 public void onReady(ProtoGlobal.Room room) {
-                    DbManager.getInstance().doRealmTransaction(realm -> {
+                    G.runOnUiThread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
                         RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
                         room2.setDeleted(true);
-                    });
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.refreshRealmUi();
-                            new GoToChatActivity(room.getId()).setPeerID(id).setMessageID(messageId).startActivity(getActivity());
-                        }
-                    });
+                    }));
+
+                    if (getActivity() != null && getActivity().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED))
+                        new GoToChatActivity(room.getId()).setPeerID(id).setMessageID(messageId).startActivity(getActivity());
+
                 }
 
                 @Override
@@ -739,6 +746,7 @@ public class SearchFragment extends BaseFragment {
         public String comment = "";
         public String userName = "";
         public String initials;
+        public boolean isVerified = false;
         public String color;
         public long time = 0;
         public long id = 0;
@@ -752,39 +760,32 @@ public class SearchFragment extends BaseFragment {
 
     private Timer mTimerSearch;
     private TimerTask mTimerTaskSearch;
-    private byte mSearchCurrentTime = 0;
 
     private void startOrReStartSearchTimer() {
 
-        mSearchCurrentTime = 0;
         cancelSearchTimer();
 
-        if (mTimerSearch == null) {
-
-            mTimerTaskSearch = new TimerTask() {
-                @Override
-                public void run() {
-
-                    //search after 0.5 sec
-                    if (mSearchCurrentTime > 0) {
-                        String text = searchTxt.trim();
-                        G.handler.post(() -> fillList(text));
-                        cancelSearchTimer();
-                    } else {
-                        mSearchCurrentTime++;
+        mTimerTaskSearch = new TimerTask() {
+            @Override
+            public void run() {
+                String text = searchTxt.trim();
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillList(text);
                     }
-                }
-            };
+                });
+            }
+        };
 
-            mTimerSearch = new Timer();
-            mTimerSearch.schedule(mTimerTaskSearch, 500, 5);
-        }
+        mTimerSearch = new Timer();
+        mTimerSearch.schedule(mTimerTaskSearch, 500);
     }
 
     private void cancelSearchTimer() {
 
         if (mTimerSearch != null) {
-            mSearchCurrentTime = 0;
+            mTimerTaskSearch.cancel();
             mTimerSearch.cancel();
             mTimerTaskSearch = null;
             mTimerSearch = null;

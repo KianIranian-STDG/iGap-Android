@@ -11,7 +11,9 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.proto.ProtoClientJoinByInviteLink;
 import net.iGap.proto.ProtoError;
+import net.iGap.realm.RealmRoom;
 
 public class ClientJoinByInviteLinkResponse extends MessageHandler {
 
@@ -30,9 +32,10 @@ public class ClientJoinByInviteLinkResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
+        ProtoClientJoinByInviteLink.ClientJoinByInviteLinkResponse.Builder response = (ProtoClientJoinByInviteLink.ClientJoinByInviteLinkResponse.Builder) message;
+        RealmRoom.joinByInviteLink(response.getRoomId());
         if (G.onClientJoinByInviteLink != null) {
-            G.onClientJoinByInviteLink.onClientJoinByInviteLinkResponse();
+            G.onClientJoinByInviteLink.onClientJoinByInviteLinkResponse(response.getRoomId());
         }
     }
 

@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -93,18 +94,18 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
 
-    private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/[^\\s]*)";
-    private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
-    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?!\\s|[\\u0600-\\u06FF]|\\.|$)(?:[a-zA-Z0-9\\u0600-\\u06FF\\u2000-\\u200F\\&\\%\\(\\).\\/\\?\\:@\\-_+=#])*)";
-    private static final String BOT_LINK = "(\\/\\w+)";
-    private static final String IGAP_RESOLVE = "(igap://resolve?)";
+    private static final String IGAP_LINK_PATTERN = "((?:https?://(?:u\\.i|profile\\.i|i)|(?:u\\.i|profile\\.i|i))+?gap.net\\/[^\\s]*)";
+    private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap://discovery/[^\\s]*)|(?:(?:https?://(?:u\\.i|i)|(?:u\\.i|i))+?gap.net\\/d:[^\\s]*))";
+    private static final String WEB_LINK = "((?:(?:(?:http|ftp|https):\\/\\/)?(?:[\\w_-]+(?:(?:\\.[\\w_-]+)+))+(?:[\\w.,\\u0600-\\u06FF\\u2000-\\u200F\\(\\)!@?^=%&:\\/~+#-\\.]*[\\w@?^=%&\\/~+#-])|(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])))";
+    private static final String BOT_LINK = "((?:\\B\\/\\w+))";
+    private static final String IGAP_RESOLVE = "(igap://resolve\\?[^\\s]*)";
     private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
-    private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_]+\\b)";
+    private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_.]+\\b)";
     private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
 
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
-    public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
+    public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?([^\\s]*\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
     public static Pattern patternMessageLink2 = Pattern.compile("igap://resolve\\?domain=(.*)&post=([0-9]*)");
 
     public static Pattern patternRoom1 = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)");
@@ -112,7 +113,7 @@ public class HelperUrl {
     public static Pattern patternRoom3 = Pattern.compile("igap://join\\?domain=(.*)");
 
     private static boolean isIgapLink(String text) {
-        return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
+        return text.matches("((?:https?://(?:[^\\s]*\\.i|i)|(?:[^\\s]*\\.i|i))+?gap.net\\/[^\\s]*)");
     }
 
     public static SpannableStringBuilder setUrlLink(FragmentActivity activity, String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
@@ -155,7 +156,7 @@ public class HelperUrl {
         if (matcher2.find()) {
             String username = matcher2.group(1);
             long messageId = Long.parseLong(matcher2.group(2));
-            checkUsernameAndGoToRoomWithMessageId(activity, username, HelperUrl.ChatEntry.profile, messageId);
+            checkUsernameAndGoToRoomWithMessageId(activity, username, HelperUrl.ChatEntry.profile, messageId, 0);
             return true;
         } else if (matcher4.find()) {
             checkUsernameAndGoToRoom(activity, matcher4.group(1), HelperUrl.ChatEntry.profile);
@@ -168,7 +169,7 @@ public class HelperUrl {
     }
 
     public static boolean isTextLink(String text) {
-        Pattern p = Pattern.compile("((http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.([a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_=#])*");
+        Pattern p = Pattern.compile(WEB_LINK);
         Matcher m = p.matcher(text);
         if (m.find()) {
             String[] strings = new String[]{
@@ -381,7 +382,7 @@ public class HelperUrl {
                         if (matcher.find()) {
                             String username = matcher.group(6);
                             long messageId = Long.parseLong(matcher.group(8));
-                            checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
+                            checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId, 0);
                         } else {
                             checkUsernameAndGoToRoom(activity, token, ChatEntry.profile);
                         }
@@ -442,7 +443,7 @@ public class HelperUrl {
                 if (matcher2.find()) {
                     String username = matcher2.group(1);
                     long messageId = Long.parseLong(matcher2.group(2));
-                    checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
+                    checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId, 0);
                 } else {
                     try {
                         Uri path = Uri.parse(url);
@@ -505,9 +506,12 @@ public class HelperUrl {
 
                 if (activity == null)
                     return;
+                String[] strings = strBuilder.toString().split("/");
+
 
                 String deepLink = strBuilder.toString().trim().substring(start, end).toLowerCase().replace("igap://", "");
-
+                if (strings[strings.length - 1].toLowerCase().startsWith("d:"))
+                    deepLink = "discovery/" + deepLink;
                 if (!deepLink.equals("")) {
                     FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
@@ -767,8 +771,8 @@ public class HelperUrl {
         String newText = text.toLowerCase();
 
         Matcher igapMatcher = Pattern.compile(
-                IGAP_LINK_PATTERN + "|" + //1- igap link
-                        IGAP_DEEP_LINK_PATTERN + "|" + //2- igap deep link
+                IGAP_DEEP_LINK_PATTERN + "|" + //2- igap deep link
+                        IGAP_LINK_PATTERN + "|" + //1- igap link
                         WEB_LINK + "|" + //3- web link
                         BOT_LINK + "|" + //4- bot link
                         IGAP_RESOLVE + "|" + //5- igap resolve
@@ -780,9 +784,9 @@ public class HelperUrl {
 
         while (igapMatcher.find()) {
             if (igapMatcher.group(1) != null) {
-                linkInfo.append(igapMatcher.start(1)).append("_").append(igapMatcher.end(1)).append("_").append(linkType.igapLink.toString()).append("@");
+                linkInfo.append(igapMatcher.start(1)).append("_").append(igapMatcher.end(1)).append("_").append(linkType.igapDeepLink.toString()).append("@");
             } else if (igapMatcher.group(2) != null) {
-                linkInfo.append(igapMatcher.start(2)).append("_").append(igapMatcher.end(2)).append("_").append(linkType.igapDeepLink.toString()).append("@");
+                linkInfo.append(igapMatcher.start(2)).append("_").append(igapMatcher.end(2)).append("_").append(linkType.igapLink.toString()).append("@");
             } else if (igapMatcher.group(3) != null) {
                 linkInfo.append(igapMatcher.start(3)).append("_").append(igapMatcher.end(3)).append("_").append(linkType.webLink.toString()).append("@");
             } else if (igapMatcher.group(4) != null) {
@@ -893,17 +897,19 @@ public class HelperUrl {
         if (!room.getIsParticipant()) {
             activity.runOnUiThread(() -> {
                 closeDialogWaiting();
-                new JoinDialogFragment().setData(room, new JoinDialogFragment.JoinDialogListener() {
-                    @Override
-                    public void onJoinClicked() {
-                        joinToRoom(activity, token, room);
-                    }
+                if (activity.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    new JoinDialogFragment().setData(room, new JoinDialogFragment.JoinDialogListener() {
+                        @Override
+                        public void onJoinClicked() {
+                            joinToRoom(activity, token, room);
+                        }
 
-                    @Override
-                    public void onCancelClicked() {
-                        RealmRoom.deleteRoom(room.getId());
-                    }
-                }).show(activity.getSupportFragmentManager(), "JoinDialogFragment");
+                        @Override
+                        public void onCancelClicked() {
+                            RealmRoom.deleteRoom(room.getId());
+                        }
+                    }).show(activity.getSupportFragmentManager(), "JoinDialogFragment");
+                }
             });
         }
     }
@@ -915,25 +921,21 @@ public class HelperUrl {
 
             G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
                 @Override
-                public void onClientJoinByInviteLinkResponse() {
-
+                public void onClientJoinByInviteLinkResponse(long roomId) {
                     closeDialogWaiting();
-                    RealmRoom.joinByInviteLink(room.getId());
-
-                    new RequestClientGetRoom().clientGetRoom(room.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-
-                    if (room.getId() != FragmentChat.lastChatRoomId) {
-                        new GoToChatActivity(room.getId()).startActivity(activity);
+                    new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+                    if (roomId != FragmentChat.lastChatRoomId) {
+                        new GoToChatActivity(roomId).startActivity(activity);
                     }
-
+                    G.onClientJoinByInviteLink = null;
                 }
 
                 @Override
                 public void onError(int majorCode, int minorCode) {
                     closeDialogWaiting();
+                    G.onClientJoinByInviteLink = null;
                 }
             };
-
             new RequestClientJoinByInviteLink().clientJoinByInviteLink(token);
         } else {
             closeDialogWaiting();
@@ -982,7 +984,7 @@ public class HelperUrl {
 
     public static void checkUsernameAndGoToRoom(FragmentActivity activity,
                                                 final String userName, final ChatEntry chatEntery) {
-        checkUsernameAndGoToRoomWithMessageId(activity, userName, chatEntery, 0);
+        checkUsernameAndGoToRoomWithMessageId(activity, userName, chatEntery, 0, 0);
     }
 
 
@@ -993,7 +995,7 @@ public class HelperUrl {
      */
 
     public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity,
-                                                             final String username, final ChatEntry chatEntry, final long messageId) {
+                                                             final String username, final ChatEntry chatEntry, final long messageId, final long documentId) {
         if (username == null || username.length() < 1) return;
 
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
@@ -1005,7 +1007,7 @@ public class HelperUrl {
                     if (messageId == 0 || type == ProtoClientResolveUsername.ClientResolveUsernameResponse.Type.USER) {
                         openChat(activity, username, type, user, room, user.getBot() ? ChatEntry.chat : chatEntry, messageId);
                     } else {
-                        resolveMessageAndOpenChat(activity, messageId, username, user.getBot() ? ChatEntry.chat : chatEntry, type, user, room);
+                        resolveMessageAndOpenChat(activity, messageId, documentId, username, user.getBot() ? ChatEntry.chat : chatEntry, type, user, room);
                     }
                 }
 
@@ -1028,7 +1030,7 @@ public class HelperUrl {
      * if message isn't exist in Realm resolve from server and then open chat
      */
     private static void resolveMessageAndOpenChat(FragmentActivity activity,
-                                                  final long messageId, final String username, final ChatEntry chatEntry,
+                                                  final long messageId, final long documentId, final String username, final ChatEntry chatEntry,
                                                   final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type,
                                                   final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
         DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
@@ -1038,7 +1040,7 @@ public class HelperUrl {
                 if (rm != null) {
                     openChat(activity, username, type, user, room, chatEntry, messageId);
                 } else {
-                    new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                    new RequestClientGetRoomHistory().getRoomHistory(room.getId(), documentId, messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
                         @Override
                         public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
                             if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
@@ -1060,7 +1062,7 @@ public class HelperUrl {
                                     }
                                 });
 
-                                RealmRoomMessage.setGap(messageList.get(0).getMessageId());
+                                RealmRoomMessage.setGap(messageList.get(0).getMessageId(), messageList.get(0).getDocumentId());
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -1433,11 +1435,11 @@ public class HelperUrl {
             if (matcher.find()) {
                 String username = matcher.group(6);
                 long messageId = Long.parseLong(matcher.group(8));
-                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
+                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId, 0);
             } else if (matcher2.find()) {
                 String username = matcher2.group(1);
                 long messageId = Long.parseLong(matcher2.group(2));
-                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId);
+                checkUsernameAndGoToRoomWithMessageId(activity, username, ChatEntry.profile, messageId, 0);
             } else {
                 getToRoom(activity, path);
             }
@@ -1470,26 +1472,26 @@ public class HelperUrl {
                     items.add(R.string.add_to_contact);
                     items.add(R.string.verify_register_sms);
 
-                    new BottomSheetFragment().setListDataWithResourceId(activity,items, -1, new BottomSheetItemClickCallback() {
+                    new BottomSheetFragment().setListDataWithResourceId(activity, items, -1, new BottomSheetItemClickCallback() {
                         @Override
                         public void onClick(int position) {
-                            if (items.get(position)==R.string.copy_item_dialog) {
+                            if (items.get(position) == R.string.copy_item_dialog) {
                                 ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("Copied Text", text);
                                 clipboard.setPrimaryClip(clip);
                                 Toast.makeText(activity, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                            } else if (items.get(position)==R.string.verify_register_call) {
+                            } else if (items.get(position) == R.string.verify_register_call) {
                                 String uri = "tel:" + text;
                                 Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 activity.startActivity(intent);
-                            } else if (items.get(position)==R.string.add_to_contact) {
+                            } else if (items.get(position) == R.string.add_to_contact) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance(
                                         text, FragmentAddContact.ContactMode.ADD
                                 );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                            } else if (items.get(position)==R.string.verify_register_sms) {
+                            } else if (items.get(position) == R.string.verify_register_sms) {
                                 String uri = "smsto:" + text;
                                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                                 intent.setData(Uri.parse(uri));
@@ -1510,34 +1512,30 @@ public class HelperUrl {
 
     public static void openLinkDialog(FragmentActivity fa, String mUrl) {
         String url = mUrl;
-        List<String> items = new ArrayList<>();
-        items.add(fa.getString(R.string.copy_item_dialog));
+        List<Integer> items = new ArrayList<>();
+        items.add(R.string.copy_item_dialog);
 
         if (isTextEmail(url)) {
-            items.add(fa.getString(R.string.email));
+            items.add(R.string.email);
         } else {
             if (!url.startsWith("https://") && !url.startsWith("http://")) {
                 url = "http://" + mUrl;
             }
-            items.add(fa.getString(R.string.open_url));
+            items.add(R.string.open_url);
         }
 
         String finalUrl = url;
-        new BottomSheetFragment().setTitle(url).setData(items, -1, new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                if (items.get(position).equals(fa.getString(R.string.copy_item_dialog))) {
 
-                    ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(fa, R.string.copied, Toast.LENGTH_SHORT).show();
-
-                } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
-                    openWebBrowser(fa, finalUrl);
-                } else if (items.get(position).equals(fa.getString(R.string.email))) {
-                    openEmail(fa, finalUrl);
-                }
+        new BottomSheetFragment().setListDataWithResourceId(fa, items, -1, position -> {
+            if (items.get(position) == R.string.copy_item_dialog) {
+                ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(fa, R.string.copied, Toast.LENGTH_SHORT).show();
+            } else if (items.get(position) == R.string.open_url) {
+                openWebBrowser(fa, finalUrl);
+            } else if (items.get(position) == R.string.email) {
+                openEmail(fa, finalUrl);
             }
         }).show(fa.getSupportFragmentManager(), "bottom sheet");
     }

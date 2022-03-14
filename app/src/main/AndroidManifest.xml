@@ -7,11 +7,14 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
     <uses-permission android:name="android.permission.MICROPHONE" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CAMERA2" />
+    <uses-permission
+        android:name="android.permission.USE_BIOMETRIC"
+        android:requiredFeature="false" />
     <uses-permission android:name="android.webkit.PermissionRequest" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -115,12 +118,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+
+                <!--                <data-->
+                <!--                    android:host="igap.net"-->
+                <!--                    android:scheme="http" />-->
                 <data
-                    android:host="igap.net"
+                    android:host="u.igap.net"
                     android:scheme="http" />
                 <data
-                    android:host="igap.net"
+                    android:host="u.igap.net"
                     android:scheme="https" />
+                <data
+                    android:host="profile.igap.net"
+                    android:scheme="http" />
+                <data
+                    android:host="profile.igap.net"
+                    android:scheme="https" />
+                <!--                <data-->
+                <!--                    android:host="igap.net"-->
+                <!--                    android:scheme="https" />-->
                 <data
                     android:host="resolve"
                     android:scheme="igap" />
@@ -203,18 +219,17 @@
         </activity>
         <activity
             android:name=".activities.ActivityRegistration"
-            android:launchMode="singleTask"
-            android:configChanges="uiMode"/>
+            android:configChanges="uiMode"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.CallActivity"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
-            android:screenOrientation="locked"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="locked" />
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.Launcher"
-            >
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -253,12 +268,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-        <service android:name=".libs.notification.NotificationService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -345,8 +354,8 @@
         <service android:name=".module.webrtc.CallService" />
 
         <service
-            android:exported="false"
-            android:name=".api.webservice.JobServiceReconnect">
+            android:name=".api.webservice.JobServiceReconnect"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
@@ -359,6 +368,13 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
-    </application>
 
+    </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 </manifest>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     public static int numberOfVisible = 0;
     protected MyAppBarLayout appBarLayout;
     protected TextView titleTextView;
-    protected TextView menu_item1;
+    protected ImageView menu_item1;
     protected boolean isSwipeBackEnable = true;
 
     @Nullable
@@ -54,7 +55,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext() , R.font.main_font));
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
         menu_item1 = view.findViewById(R.id.menu_item1);
-        menu_item1.setVisibility(View.GONE);
+        menu_item1.setVisibility(View.VISIBLE);
 
         RippleView rippleBackButton = view.findViewById(R.id.chl_ripple_back_Button);
         rippleBackButton.setOnClickListener(this::onBackButtonClicked);

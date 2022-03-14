@@ -95,6 +95,7 @@
     <!--general color-->
     <attr name="rootBackgroundColor" format="reference|color" />
     <attr name="iGapTitleTextColor" format="reference|color" />
+    <attr name="iGapIconTextColor" format="reference|color" />
     <attr name="iGapVoiceCallIconColor" format="reference|color"/>
     <attr name="iGapVideoCallIconColor" format="reference|color"/>
     <attr name="iGapSubtitleTextColor" format="reference|color" />

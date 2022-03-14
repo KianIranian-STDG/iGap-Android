@@ -75,7 +75,6 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_scan_code_q_r_code_payment, container, false);
         mBinding.setLifecycleOwner(this);
         mBinding.setViewModel(mViewModel);
-        checkCameraPermission();
         initObservers();
         return mBinding.getRoot();
     }
@@ -89,9 +88,7 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mCodeScanner != null) {
-            initCodeScanner();
-        }
+        checkCameraPermission();
     }
 
     @Override
@@ -103,24 +100,38 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
         super.onPause();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mCodeScanner != null){
+            mCodeScanner = null;
+        }
+    }
+
     private void checkCameraPermission() {
         PackageManager packageManager = context.getPackageManager();
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+            popBackStackFragment();
             return;
         }
         try {
             HelperPermission.getCameraPermission(context, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    mCodeScanner = new CodeScanner(getActivity(), mBinding.codeScanner);
-                    initCodeScanner();
+                    if (getActivity() != null) {
+                        if(mCodeScanner == null) {
+                            mCodeScanner = new CodeScanner(getActivity(), mBinding.codeScanner);
+                        }
+                        initCodeScanner();
+                    }
                 }
 
                 @Override
                 public void deny() {
-                    getActivity().onBackPressed();
+                    if (ScanCodeQRCodePaymentFragment.this.isAdded()) {
+                        popBackStackFragment();
+                    }
                 }
             });
         } catch (IOException e) {

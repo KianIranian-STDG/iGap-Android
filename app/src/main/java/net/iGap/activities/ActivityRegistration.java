@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -36,12 +37,14 @@ public class ActivityRegistration extends ActivityEnhanced {
 
     private RegistrationViewModel viewModel;
 
+    private boolean isStop = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        isOnGetPermission = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
+        isStop = false;
+        isOnGetPermission = true;
         G.updateResources(getBaseContext());
 
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
@@ -177,13 +180,16 @@ public class ActivityRegistration extends ActivityEnhanced {
     }
 
     public void loadFragment(Fragment fragment, boolean addToBackStack) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (addToBackStack) {
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+
+        if (!isStop) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            if (addToBackStack) {
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            fragmentTransaction.replace(R.id.registrationFrame, fragment, fragment.getClass().getName())
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                    .commit();
         }
-        fragmentTransaction.replace(R.id.registrationFrame, fragment, fragment.getClass().getName())
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
-                .commit();
     }
 
     private void removeAllFragment() {
@@ -198,4 +204,33 @@ public class ActivityRegistration extends ActivityEnhanced {
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isStop = false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isStop = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isStop = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isStop = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isStop = true;
+    }
 }

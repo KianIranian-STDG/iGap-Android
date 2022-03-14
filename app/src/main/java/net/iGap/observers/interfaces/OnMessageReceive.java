@@ -20,8 +20,8 @@ public interface OnMessageReceive {
     /**
      * message that reached from server
      */
-    void onMessage(long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> list, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
+    void onMessage(long roomId, long startMessageId, long startDocumentId, long endMessageId, long endDocumentId, List<RealmRoomMessage> list, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 
-    void onError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
+    void onError(int majorCode, int minorCode, long messageIdGetHistory, long documentIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction);
 
 }

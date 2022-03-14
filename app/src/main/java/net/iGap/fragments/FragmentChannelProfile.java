@@ -29,7 +29,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.controllers.RoomController;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -44,6 +43,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.realm.RealmRoomAccess;
 import net.iGap.request.RequestChannelKickAdmin;
@@ -62,7 +62,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 
-public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarDelete {
+public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarDelete, EventManager.EventDelegate {
 
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
@@ -376,6 +376,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         setAvatar();
@@ -387,6 +393,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     public void onStop() {
         super.onStop();
         viewModel.onStop();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE, this);
     }
 
     @Override
@@ -473,6 +480,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             currentRoomAccess.removeChangeListener(roomAccessChangeListener);
             currentRoomAccess = null;
             roomAccessChangeListener = null;
+        }
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if(id == EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE && (long)args[0] == roomId ) {
+            viewModel.subscribersCountSet();
         }
     }
 }

@@ -3,11 +3,11 @@ package net.iGap.viewmodel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
@@ -19,7 +19,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
@@ -27,7 +26,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
@@ -41,6 +40,9 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
@@ -88,13 +90,7 @@ import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
-import net.iGap.request.RequestWalletGetAccessToken;
-import net.iGap.story.storyviews.FragmentStoryViews;
-import net.iGap.story.viewPager.StoryViewFragment;
-
-import org.jetbrains.annotations.NotNull;
-//import org.paygear.model.Card;
-//import org.paygear.web.Web;
+import net.iGap.structs.AttachmentObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -102,11 +98,6 @@ import java.util.Collections;
 import java.util.Locale;
 
 import io.realm.Realm;
-//import ir.radsense.raadcore.model.Auth;
-//import ir.radsense.raadcore.web.WebBase;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
@@ -242,9 +233,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
-            if (userInfo.getUserId() != 0)
-                userId = userInfo.getUserId();
 
+            userId = (userInfo != null && userInfo.getUserId() != 0) ? userInfo.getUserId() : AccountManager.getInstance().getCurrentUser().getId();
             currentCredit.set(userInfo.getWalletAmount());
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             userPhoneNumber.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(phoneNumber) : phoneNumber);
@@ -684,14 +674,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showLoading.set(View.VISIBLE);
         retryRequestTime++;
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userInfo.getUserId()).findFirst();
+            long userId = (userInfo != null && userInfo.getUserId() > 0) ? userInfo.getUserId() : AccountManager.getInstance().getCurrentUser().getId();
+            return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userId).findFirst();
         });
         if (realmRoom != null) {
             showLoading.set(View.GONE);
             goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
         } else {
             if (retryRequestTime < 3) {
-                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId(), new RequestChatGetRoom.OnChatRoomReady() {
+                new RequestChatGetRoom().chatGetRoom((userInfo != null && userInfo.getUserId() > 0) ? userInfo.getUserId() : AccountManager.getInstance().getCurrentUser().getId(), new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
                     public void onReady(ProtoGlobal.Room room) {
                         RealmRoom.putOrUpdate(room);
@@ -988,7 +979,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             if (realmWallpaper != null) {
                 RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
-                String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                String bigImagePath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + pf.getCacheId() + "_" + DownloadObject.extractMime(pf.getName());
+
                 changeUserProfileWallpaperPath.postValue(bigImagePath);
 
             } else {
@@ -1007,19 +999,27 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
-                    String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                    String bigImagePath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + pf.getCacheId() + "_" + DownloadObject.extractMime(pf.getName());
                     if (!new File(bigImagePath).exists()) {
-                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(String mPath, final int progress) {
-                                if (progress == 100) {
-                                    changeUserProfileWallpaperPath.postValue(bigImagePath);
+                        DownloadObject downloadObject = DownloadObject.createForRoomMessage(AttachmentObject.create(pf), ProtoGlobal.RoomMessageType.IMAGE.getNumber());
+                        Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
+                            if (arg.status == Status.SUCCESS && arg.data != null) {
+                                String filepath = arg.data.getFilePath();
+                                String fileToken = arg.data.getToken();
+
+                                if (!(new File(filepath).exists())) {
+                                    HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                 }
+
+
+                                DbManager.getInstance().doRealmTransaction(db -> {
+                                    for (RealmAvatar realmAvatar1 : db.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
+                                        realmAvatar1.getFile().setLocalFilePath(filepath);
+                                    }
+                                });
+                                changeUserProfileWallpaperPath.postValue(bigImagePath);
                             }
 
-                            @Override
-                            public void OnError(String token) {
-                            }
                         });
                     } else {
                         changeUserProfileWallpaperPath.postValue(bigImagePath);
@@ -1207,14 +1207,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                         getUserCredit();
                         retryConnectToWallet = 0;
                     });
-
-                    break;
-
-                case SocketMessages.FAILED:
-                    if (retryConnectToWallet < 3) {
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
-                        retryConnectToWallet++;
-                    }
 
                     break;
             }

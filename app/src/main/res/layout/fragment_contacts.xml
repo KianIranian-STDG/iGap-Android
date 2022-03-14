@@ -95,46 +95,6 @@
         app:layout_constraintWidth_percent=".9" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/secretChatIcon"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/contact_icon_size"
-        android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/icon_secret_chat"
-        app:layout_constraintBottom_toBottomOf="@id/secretChatTitle"
-        app:layout_constraintEnd_toStartOf="@id/secretChatTitle"
-        app:layout_constraintStart_toStartOf="@id/menu_layout_btn_secret_chat"
-        app:layout_constraintTop_toTopOf="@id/secretChatTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/secretChatTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp10"
-        android:layout_marginLeft="@dimen/dp10"
-        android:gravity="start|center_vertical"
-        android:padding="@dimen/dp10"
-        android:singleLine="true"
-        android:text="@string/secret_chat"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/standardTextSize"
-        app:layout_constraintEnd_toEndOf="@id/menu_layout_btn_secret_chat"
-        app:layout_constraintStart_toEndOf="@id/secretChatIcon"
-        app:layout_constraintTop_toTopOf="@id/menu_layout_btn_secret_chat" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/menu_layout_btn_secret_chat"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:visibility="gone"
-        app:constraint_referenced_ids="secretChatIcon,secretChatTitle"
-        app:layout_constraintBottom_toBottomOf="@id/secretChatTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_group"
-        app:layout_constraintWidth_percent=".9" />
-
-    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupCallIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -171,7 +131,7 @@
         app:layout_constraintBottom_toBottomOf="@id/newGroupCallTitle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_secret_chat"
+        app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_group"
         app:layout_constraintWidth_percent=".9" />
 
     <androidx.appcompat.widget.AppCompatTextView

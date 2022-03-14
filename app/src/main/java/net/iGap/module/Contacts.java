@@ -193,7 +193,7 @@ public class Contacts {
         String startContactId = ">=" + localPhoneContactId;
         String selection = ContactsContract.Contacts._ID + startContactId;
 
-        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null,selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         if (cursor != null) {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
@@ -201,13 +201,13 @@ public class Contacts {
                         return;
                     }
                     String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    localPhoneContactId = Integer. parseInt(contactId) + 1;//plus for fetch next contact in future query
-                    Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
-                    if (phones != null){
+                    localPhoneContactId = Integer.parseInt(contactId) + 1;//plus for fetch next contact in future query
+                    Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                    if (phones != null) {
                         while (phones.moveToNext()) {
                             String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
+                            if (number != null && !tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
                                 StructListOfContact itemContact = new StructListOfContact();
                                 itemContact.setDisplayName(name);
                                 itemContact.setPhone(number);

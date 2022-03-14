@@ -1,8 +1,11 @@
 package net.iGap.helper;
 
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.view.View;
+
+import net.iGap.G;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,30 +40,26 @@ public class HelperScreenShot {
             return false;
         }
 
-        OutputStream out = null;
-        File dir = getDownloadStorageDir("Payment_Receipt");
-        File imageFile = new File(dir, filename);
-
+        OutputStream out;
         try {
+            File dir = getDownloadStorageDir("ScreenShots");
+            File imageFile = new File(dir, filename + ".jpg");
+            if (!imageFile.exists()) {
+                imageFile.createNewFile();
+            }
             out = new FileOutputStream(imageFile);
             // choose JPEG format
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            MediaScannerConnection.scanFile(G.context, new String[]{imageFile.getAbsolutePath()}, null, null);
             out.flush();
+            out.close();
+            return true;
         } catch (FileNotFoundException e) {
             // manage exception ...
             return false;
         } catch (IOException e) {
             // manage exception ...
             return false;
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                return true;
-            } catch (Exception exc) {
-                return false;
-            }
         }
     }
 
@@ -79,13 +78,16 @@ public class HelperScreenShot {
 
     private static File getDownloadStorageDir(String fileName) {
         // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), fileName);
-        if (file.isDirectory())
-            return file;
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
 
-        if (!file.mkdirs()) {
-            return null;
+        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).exists()) {
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath()).mkdirs();
         }
-        return file;
+
+        if (!storageDir.exists()) {
+            storageDir.mkdir();
+        }
+
+        return storageDir;
     }
 }

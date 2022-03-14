@@ -1,5 +1,8 @@
 package net.iGap.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,10 +12,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,14 +27,21 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentStorageDataBinding;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.DataStorageViewModel;
+
+import java.io.IOException;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -51,12 +64,18 @@ public class DataStorageFragment extends BaseFragment {
         }).get(DataStorageViewModel.class);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_storage_data, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        try {
+            getPermission();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
         return binding.getRoot();
     }
 
@@ -72,7 +91,8 @@ public class DataStorageFragment extends BaseFragment {
                 case -1:
                     if (getActivity() != null) {
                         getActivity().onBackPressed();
-                    }popBackStackFragment();
+                    }
+                    popBackStackFragment();
                     break;
             }
         });
@@ -107,7 +127,7 @@ public class DataStorageFragment extends BaseFragment {
                         .title(R.string.title_auto_download_data)
                         .items(R.array.auto_download_data)
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(getResources().getString(R.string.B_ok))
-                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverData(dialog.getSelectedIndices()))
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverData(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(getResources().getString(R.string.B_cancel))
                         .show();
             }
@@ -119,19 +139,19 @@ public class DataStorageFragment extends BaseFragment {
                         .title(R.string.title_auto_download_wifi)
                         .items(R.array.auto_download_data)
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
-                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverWifi(dialog.getSelectedIndices()))
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverWifi(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(R.string.cancel)
                         .show();
             }
         });
 
-        viewModel.getShowAutoDownloadRoamingDialog().observe(this, values -> {
+        viewModel.getShowAutoDownloadRoamingDialog().observe(getViewLifecycleOwner(), values -> {
             if (getContext() != null && values != null) {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_roaming)
                         .items(R.array.auto_download_data)
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
-                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverRoaming(dialog.getSelectedIndices()))
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverRoaming(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(R.string.B_cancel)
                         .show();
             }
@@ -264,6 +284,52 @@ public class DataStorageFragment extends BaseFragment {
                         .content(R.string.change_storage_place)
                         .positiveText(R.string.B_ok)
                         .onPositive((dialog, which) -> viewModel.setActiveSDCard()).show();
+            }
+        });
+
+        viewModel.getNeedToGetStoragePermission().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                try {
+                    getPermission();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        /**Following condition do not affect on app flow temporary
+         *because Environment.isExternalStorageManager always return false*/
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+//            if (Environment.isExternalStorageManager()) {
+//                new FileUtils().getFileTotalSize(size -> viewModel.getClearCacheSize().set(size));
+//            }
+//        }
+
+        if(ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            new FileUtils().getFileTotalSize(size -> viewModel.getClearCacheSize().set(size));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void getPermission() throws IOException {
+
+        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
+            @Override
+            public void Allow() throws IOException {
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.R)
+            @Override
+            public void deny() {
+                HelperPermission.showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
             }
         });
     }

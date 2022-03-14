@@ -14,12 +14,13 @@ import net.iGap.proto.ProtoClientSearchRoomHistory;
 
 public class RequestClientSearchRoomHistory {
 
-    public void clientSearchRoomHistory(long roomId, long messageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
+    public void clientSearchRoomHistory(long roomId, long messageId, long documentId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
 
         ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Builder builder = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.newBuilder();
         builder.setRoomId(roomId);
         builder.setFilter(filter);
         builder.setOffsetMessageId(messageId);
+        builder.setOffsetDocumentId(documentId);
 
         RequestWrapper requestWrapper = new RequestWrapper(605, builder, filter);
         try {

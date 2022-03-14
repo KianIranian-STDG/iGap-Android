@@ -430,14 +430,13 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void openImageForEdit(String path) {
-        FragmentEditImage.itemGalleryList.clear();
-        FragmentEditImage.textImageList.clear();
-
         if (!isReturnResultDirectly) {
 
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
             fragmentEditImage.setIsReOpenChatAttachment(false);
-            ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+            ImageHelper imageHelper = new ImageHelper();
+
+            imageHelper.correctRotateImage(path, true, new OnRotateImage() {
                 @Override
                 public void startProcess() {
 
@@ -446,9 +445,11 @@ public class FragmentGallery extends BaseFragment {
                 @Override
                 public void success(String newPath) {
                     G.handler.post(() -> {
-                        FragmentEditImage.insertItemList(newPath, "", false);
-                        if (getActivity() != null)
+                        if (getActivity() != null) {
+                            FragmentEditImage.checkItemGalleryList();
+                            FragmentEditImage.insertItemList(newPath, "", false);
                             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                        }
                     });
                 }
             });
@@ -467,9 +468,7 @@ public class FragmentGallery extends BaseFragment {
 
     private void sendSelectedPhotos(List<GalleryItemModel> selectedPhotos) {
         if (getActivity() == null || selectedPhotos.size() == 0) return;
-
-        FragmentEditImage.itemGalleryList.clear();
-        FragmentEditImage.textImageList.clear();
+        FragmentEditImage.checkItemGalleryList();
         for (GalleryItemModel photo : selectedPhotos) {
             FragmentEditImage.insertItemList(photo.getAddress(), "", false);
         }

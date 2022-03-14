@@ -23,6 +23,7 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.liststories.StoryFragment;
 
 public class UserContactsImportResponse extends MessageHandler {
 
@@ -58,8 +59,7 @@ public class UserContactsImportResponse extends MessageHandler {
 
         if (G.onQueueSendContact != null) {
             G.onQueueSendContact.sendContact();
-        }
-        else{
+        } else {
             Contacts.isSendingContactToServer = false;
         }
 
@@ -69,9 +69,9 @@ public class UserContactsImportResponse extends MessageHandler {
             new RequestUserContactsGetList().userContactGetList();
         }
 
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            MessageController.getInstance(AccountManager.selectedAccount).getStories(realm.where(RealmContacts.class).findAll().size());
-        });
+
+        MessageController.getInstance(AccountManager.selectedAccount).getStories(0);
+
     }
 
     @Override

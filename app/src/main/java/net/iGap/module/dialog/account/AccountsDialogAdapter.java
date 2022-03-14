@@ -122,7 +122,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
             if (userId != AccountManager.getInstance().getCurrentUser().getId()) {
                 new RequestUserInfo().userInfoWithCallBack(new OnComplete() {
                     @Override
-                    public void complete(boolean result, String messageOne, String MessageTow) {
+                    public void complete(boolean result, String messageOne, String MessageTwo) {
                         mAvatarHandler.getAvatar(new ParamWithAvatarType(userAvatar, userId).avatarType(AvatarHandler.AvatarType.USER).showMain(), false);
                     }
                 }, userId, userId + "");

@@ -61,6 +61,7 @@
                 android:text="@={fragmentPassCodeViewModel.edtSetPasswordText}"
                 android:textSize="@dimen/dp15" />
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -90,17 +91,17 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/dp32"
-                app:normalStateColor="?attr/colorPrimary"
-                app:correctStateColor="@color/green"
-                app:wrongStateColor="@color/red"
-                app:dotAnimationDuration="150"
-                app:pathEndAnimationDuration="100"
-                app:dotCount="4"
-                app:dotNormalSize="@dimen/dp22"
-                app:dotSelectedSize="@dimen/dp32"
-                app:pathWidth="@dimen/pattern_lock_path_width"
                 app:aspectRatioEnabled="true"
-                app:aspectRatio="height_bias" />
+                app:correctStateColor="@color/green"
+                app:dotAnimationDuration="150"
+                app:dotCount="3"
+                app:dotNormalSize="@dimen/dp10"
+                app:dotSelectedSize="@dimen/dp20"
+                app:normalStateColor="?iGapPrimaryIconTextColor"
+                app:pathEndAnimationDuration="200"
+                app:pathWidth="@dimen/pattern_lock_path_width"
+                app:wrongStateColor="@color/red" />
+
 
         </LinearLayout>
 
@@ -187,6 +188,23 @@
 
                 </LinearLayout>
 
+                <RelativeLayout
+                    android:id="@+id/pass_code_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityDescription) ,default= visible}">
+
+                    <com.uncopt.android.widget.text.justify.JustifiedTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/main_font"
+                        android:padding="@dimen/dp14"
+                        android:text="@string/set_pass_code_description"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:textSize="@dimen/dp12" />
+
+                </RelativeLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
@@ -244,21 +262,6 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityDescription) ,default= visible}">
-
-                    <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/main_font"
-                        android:padding="@dimen/dp14"
-                        android:text="@string/set_pass_code_description"
-                        android:textColor="?iGapSubtitleTextColor"
-                        android:textSize="@dimen/dp12" />
-
-                </RelativeLayout>
 
             </LinearLayout>
 
@@ -271,39 +274,54 @@
                 android:visibility="@{safeUnbox(fragmentPassCodeViewModel.rootSettingPassword) ,default= gone}">
 
                 <LinearLayout
-                    android:id="@+id/vgToggleFingerPrint"
+                    android:id="@+id/vgToggleBiometricPassword"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
-                    android:onClick="@{fragmentPassCodeViewModel::onClickChangeVgToggleFingerPrint}"
+                    android:onClick="@{fragmentPassCodeViewModel::onBiometricEntranceClick}"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/dp16"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingEnd="@dimen/dp16"
-                    android:paddingRight="@dimen/dp16"
-                    android:visibility="@{safeUnbox(fragmentPassCodeViewModel.vgToggleFingerPrintVisibility)}">
+                    android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        android:id="@+id/st_txt_st_toggle_FingerPrint"
+                        android:id="@+id/st_txt_st_toggle_Biometric"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
-                        android:text="@string/unlock_with_fingerPrint"
+                        android:text="@string/biometric_unlock"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
                     <net.iGap.module.CustomToggleButton
-                        android:id="@+id/st_toggle_FingerPrint"
+                        android:id="@+id/st_toggle_Biometric"
                         android:layout_width="@dimen/toggles_width"
                         android:layout_height="@dimen/toggles_height"
-                        android:checked="@{safeUnbox(fragmentPassCodeViewModel.isFingerPrint)}"
-                        android:onClick="@{fragmentPassCodeViewModel::onClickChangeVgToggleFingerPrint}"
+                        android:checked="@{safeUnbox(fragmentPassCodeViewModel.isToggleBiometricPassword)}"
                         android:textOff=""
                         android:textOn="" />
 
+
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/enable_biometric_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.uncopt.android.widget.text.justify.JustifiedTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/main_font"
+                        android:padding="@dimen/dp14"
+                        android:text="@string/biometric_password_description"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:textSize="@dimen/dp12" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/st_layout_autoLock"

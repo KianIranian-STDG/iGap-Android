@@ -69,7 +69,9 @@ public class RealmRoom extends RealmObject {
     public boolean isPinned;
     public long pinId;
     public long pinMessageId;
+    public long pinDocumentId;
     public long pinMessageIdDeleted;
+    public long pinMessageDocumentIdDeleted;
     public int priority;
     public boolean isFromPromote;
     public long promoteId;
@@ -96,6 +98,7 @@ public class RealmRoom extends RealmObject {
      */
     private boolean keepRoom = false;
     private long lastScrollPositionMessageId;
+    private long lastScrollPositionDocumentId;
     private int lastScrollPositionOffset;
 
     public RealmRoom() {
@@ -156,6 +159,7 @@ public class RealmRoom extends RealmObject {
 
         if (room.getPinnedMessage() != null) {
             realmRoom.setPinMessageId(room.getPinnedMessage().getMessageId());
+            realmRoom.setPinDocumentId(room.getPinnedMessage().getDocumentId());
         }
 
         realmRoom.setActionState(null, 0);
@@ -708,18 +712,6 @@ public class RealmRoom extends RealmObject {
         });
     }
 
-    public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
-        new Thread(() -> {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setLastScrollPositionMessageId(messageId);
-                    realmRoom.setLastScrollPositionOffset(offset);
-                }
-            });
-        }).start();
-    }
-
     public static void clearAllScrollPositions() {
         DbManager.getInstance().doRealmTask(realm -> {
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
@@ -732,6 +724,7 @@ public class RealmRoom extends RealmObject {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             realmRoom.setLastScrollPositionMessageId(0);
+            realmRoom.setLastScrollPositionDocumentId(0);
             realmRoom.setLastScrollPositionOffset(0);
         }
     }
@@ -1136,12 +1129,28 @@ public class RealmRoom extends RealmObject {
         this.pinMessageId = pinMessageId;
     }
 
+    public long getPinDocumentId() {
+        return pinDocumentId;
+    }
+
+    public void setPinDocumentId(long pinDocumentId) {
+        this.pinDocumentId = pinDocumentId;
+    }
+
     public long getPinMessageIdDeleted() {
         return pinMessageIdDeleted;
     }
 
     public void setPinMessageIdDeleted(long pinMessageIdDeleted) {
         this.pinMessageIdDeleted = pinMessageIdDeleted;
+    }
+
+    public long getPinMessageDocumentIdDeleted() {
+        return pinMessageDocumentIdDeleted;
+    }
+
+    public void setPinMessageDocumentIdDeleted(long pinMessageDocumentIdDeleted) {
+        this.pinMessageDocumentIdDeleted = pinMessageDocumentIdDeleted;
     }
 
     public int getPriority() {
@@ -1170,11 +1179,12 @@ public class RealmRoom extends RealmObject {
             final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
             if (room != null) {
                 room.setPinMessageIdDeleted(reset ? 0 : room.getPinMessageId());
+                room.setPinMessageDocumentIdDeleted(reset ? 0 : room.getPinDocumentId());
             }
         });
     }
 
-    public static long hasPinedMessage(Realm realm, long roomId) {
+    public static long hasPinedMessage(Realm realm, long roomId, boolean needDocumentId) {
         long result = 0;
         RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
         if (room != null) {
@@ -1182,7 +1192,7 @@ public class RealmRoom extends RealmObject {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
                         equalTo("messageId", room.getPinMessageId()).findFirst();
                 if (roomMessage == null) {
-                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), room.getPinDocumentId(), new OnClientGetRoomMessage() {
                         @Override
                         public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
                             G.handler.postDelayed(new Runnable() {
@@ -1205,7 +1215,12 @@ public class RealmRoom extends RealmObject {
                             equalTo("messageId", room.getPinMessageId()).notEqualTo("messageId", room.getPinMessageIdDeleted()).
                             equalTo("deleted", false).equalTo("showMessage", true).findFirst();
                     if (roomMessage1 != null) {
-                        result = roomMessage1.getMessageId();
+                        if (needDocumentId) {
+                            result = roomMessage1.getDocumentId();
+                        } else {
+                            result = roomMessage1.getMessageId();
+                        }
+
                     }
                 }
             }
@@ -1252,6 +1267,14 @@ public class RealmRoom extends RealmObject {
 
     public void setLastScrollPositionMessageId(long lastScrollPositionMessageId) {
         this.lastScrollPositionMessageId = lastScrollPositionMessageId;
+    }
+
+    public long getLastScrollPositionDocumentId() {
+        return lastScrollPositionDocumentId;
+    }
+
+    public void setLastScrollPositionDocumentId(long lastScrollPositionDocumentId) {
+        this.lastScrollPositionDocumentId = lastScrollPositionDocumentId;
     }
 
     public int getLastScrollPositionOffset() {

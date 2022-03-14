@@ -23,8 +23,8 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 
+import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
@@ -44,12 +44,10 @@ import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
+public class MessagesAdapter<Item extends net.iGap.adapter.items.chat.AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
@@ -60,7 +58,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     public CompositeDisposable compositeDisposable;
 
     private boolean allowAction = true;
-    private Timer timer;
 
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
@@ -134,7 +131,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             }
         });
 
-        timer = new Timer();
     }
 
     public int findPositionByMessageId(long messageId) {
@@ -389,16 +385,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     }
 
     private void runTimer() {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                allowAction = true;
-            }
+        G.handler.postDelayed(() -> {
+            allowAction = true;
         }, 1000);
 
     }
 
-    public void onBotButtonClicked(AbstractMessage.OnAllowBotCommand onAllowBotCommand) {
+    public void onBotButtonClicked(net.iGap.adapter.items.chat.AbstractMessage.OnAllowBotCommand onAllowBotCommand) {
         if (allowAction) {
             allowAction = false;
             runTimer();

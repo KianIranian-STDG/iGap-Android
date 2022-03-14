@@ -326,6 +326,9 @@ public class CallManager {
 
     public void onError(int actionId, int major, int minor) {
         G.runOnUiThread(() -> {
+
+
+
             HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
             int messageID = R.string.e_call_permision;
             switch (major) {
@@ -615,6 +618,25 @@ public class CallManager {
         return isMicEnable;
     }
 
+    private static void pauseSoundIfPlay() {
+
+        if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+
+            MusicPlayer.pauseSound();
+            MusicPlayer.stopSound();
+            MusicPlayer.pauseSoundFromCall = true;
+
+        }
+    }
+
+    public static void hangUp() {
+        CallManager.getInstance().holdCall(true);
+        WebRTC.getInstance().toggleSound(false);
+        WebRTC.getInstance().pauseVideoCapture();
+        CallManager.getInstance().setUserInSimCall(true);
+        CallManager.getInstance().endCall();
+    }
+
     public boolean isVoiceCall() {
         return CallManager.getInstance().getCallType() == ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING;
     }
@@ -651,91 +673,27 @@ public class CallManager {
         return waitForEndCall;
     }
 
-    public static class MyPhoneStateListener extends PhoneStateListener {
-        /**
-         * in this function we observe phone's state changes. and we manage two things:
-         * 1- manage music player state when phone state changes
-         * 2- manage call state (video or voice) when phone state changes
-         *
-         * @param state
-         * @param incomingNumber
-         */
-        public void onCallStateChanged(int state, String incomingNumber) {
-
-            // managing music player state
-            ConnectivityManager connectivityManager = (ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeInfo = connectivityManager.getActiveNetworkInfo();
-
-            if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    pauseSoundIfPlay();
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    if (MusicPlayer.pauseSoundFromCall) {
-                        MusicPlayer.pauseSoundFromCall = false;
-                        MusicPlayer.playSound();
-                    }
-                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    pauseSoundIfPlay();
-                }
-            }
-            // if last phone state does not change so there is nothing to do: preventing from multiple calls to proto and server
-            if (lastPhoneState == state)
-                return;
-            else
-                lastPhoneState = state;
-
-            if (CallManager.getInstance().isCallActive) {
-
-                if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    CallManager.getInstance().holdCall(true);
-                    WebRTC.getInstance().toggleSound(false);
-                    WebRTC.getInstance().pauseVideoCapture();
-                    CallManager.getInstance().setUserInSimCall(true);
-                    CallManager.getInstance().endCall();
-                } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                        CallManager.getInstance().endCall();
-                    }
-                    CallManager.getInstance().setUserInSimCall(false);
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                        CallManager.getInstance().holdCall(false);
-                        WebRTC.getInstance().toggleSound(true);
-                        WebRTC.getInstance().startVideoCapture();
-                    }
-                    CallManager.getInstance().setUserInSimCall(false);
-                }
-            }
-        }
-
-        private void pauseSoundIfPlay() {
-
-            if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-
-                MusicPlayer.pauseSound();
-                MusicPlayer.pauseSoundFromCall = true;
-
-            }
-        }
-    }
 
     public static class MyPhoneStateService extends BroadcastReceiver {
-        TelephonyManager telephony;
-        private MyPhoneStateListener phoneListener;
+
         /**
          * use when start or finish ringing
          */
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            phoneListener = new MyPhoneStateListener();
-            telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            telephony.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+            if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) {
+                pauseSoundIfPlay();
+                String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+                if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+                    hangUp();
+                }
+            }
+
         }
 
         public void onDestroy() {
-            telephony.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
         }
     }
 }
+

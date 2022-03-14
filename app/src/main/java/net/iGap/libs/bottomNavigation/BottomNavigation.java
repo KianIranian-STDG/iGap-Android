@@ -113,10 +113,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         for (int i = 0; i < getChildCount(); i++) {
             TabItem tabItem;
             if (isForStoryFragment) {
-                tabItem = (TabItem) getChildAt(BottomNavigationFragment.CONTACT_FRAGMENT);
+                tabItem = (TabItem) getChildAt(BottomNavigationFragment.STORY_FRAGMENT);
                 tabItem.updateBadge(unreadCount, false);
             } else {
-                if (i != BottomNavigationFragment.CONTACT_FRAGMENT) {
+                if (i != BottomNavigationFragment.STORY_FRAGMENT) {
                     tabItem = (TabItem) getChildAt(i);
                     tabItem.updateBadge(unreadCount, true);
                 }

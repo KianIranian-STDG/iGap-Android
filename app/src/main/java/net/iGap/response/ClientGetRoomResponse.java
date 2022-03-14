@@ -15,9 +15,11 @@ import android.os.Looper;
 
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetUserInfo;
 import net.iGap.helper.HelperLogMessage;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetUserInfo;
 import net.iGap.proto.ProtoClientGetRoom;
@@ -137,7 +139,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                 }, 500);
             }
         });
-
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).storySetDisplayName(clientGetRoom.getRoom().getId(), clientGetRoom.getRoom().getTitle(), clientGetRoom.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL && clientGetRoom.getRoom().getChannelRoomExtra().getVerified());
         // update chat message header forward after get user or room info
         if (AbstractMessage.updateForwardInfo != null) {
             if (AbstractMessage.updateForwardInfo.containsKey(clientGetRoom.getRoom().getId())) {

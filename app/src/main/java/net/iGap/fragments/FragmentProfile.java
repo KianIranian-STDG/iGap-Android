@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.BuildConfig;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
@@ -39,6 +40,7 @@ import net.iGap.viewmodel.UserProfileViewModel;
 import java.io.IOException;
 
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class FragmentProfile extends BaseFragment {
     private FragmentProfileBinding binding;
@@ -118,6 +120,7 @@ public class FragmentProfile extends BaseFragment {
 
                         @Override
                         public void deny() {
+                            showDeniedPermissionMessage(G.context.getString(R.string.permission_camera));
                         }
                     });
                 } catch (IOException e) {
@@ -137,6 +140,7 @@ public class FragmentProfile extends BaseFragment {
 
                         @Override
                         public void deny() {
+                            showDeniedPermissionMessage(G.context.getString(R.string.permission_location));
                         }
                     });
                 } catch (IOException e) {

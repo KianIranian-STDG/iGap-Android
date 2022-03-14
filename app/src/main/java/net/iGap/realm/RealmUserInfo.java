@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.firebase1.NotificationCenter;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
 import net.iGap.module.accountManager.DbManager;
@@ -18,6 +19,7 @@ import net.iGap.request.RequestClientRegisterDevice;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import ir.metrix.Metrix;
 
 public class RealmUserInfo extends RealmObject {
 
@@ -27,6 +29,7 @@ public class RealmUserInfo extends RealmObject {
     private int gender;
     private int selfRemove;
     private String token;
+    private String moduleToken;
     private String authorHash;
     private String pushNotificationToken;
     private String representPhoneNumber;
@@ -92,7 +95,8 @@ public class RealmUserInfo extends RealmObject {
                 if (realmUserInfo == null) {
                     realmUserInfo = realm.createObject(RealmUserInfo.class);
                 }
-                realmUserInfo.setPushNotificationToken(pushToken);
+                realmUserInfo.setModuleToken(pushToken);
+                sendPushNotificationToServer();
             });
         }).start();
 
@@ -102,10 +106,14 @@ public class RealmUserInfo extends RealmObject {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
-                String token = realmUserInfo.getPushNotificationToken();
+                String token = realmUserInfo.getModuleToken();
                 if (token != null && token.length() > 0) {
                     new RequestClientRegisterDevice().clientRegisterDevice(token);
                 } else {
+                    NotificationCenter.getInstance().setOnTokenReceived(moduleToken -> {
+                        RealmUserInfo.setPushNotification(moduleToken);
+                        Metrix.setPushToken(moduleToken);
+                    });
                     HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
                 }
             }
@@ -242,6 +250,14 @@ public class RealmUserInfo extends RealmObject {
         this.pushNotificationToken = pushNotificationToken;
     }
 
+    public String getModuleToken() {
+        return moduleToken;
+    }
+
+    public void setModuleToken(String moduleToken) {
+        this.moduleToken = moduleToken;
+    }
+
     public String getRepresentPhoneNumber() {
         return representPhoneNumber;
     }
@@ -286,16 +302,6 @@ public class RealmUserInfo extends RealmObject {
 
     // Kuknos seed key save and get process
 
-/*
-
-    public RealmKuknos getKuknosM() {
-        return kuknosM;
-    }
-
-    public void setKuknosM(RealmKuknos kuknosM) {
-        this.kuknosM = kuknosM;
-    }
-*/
 
     /*public static void updateKuknos(RealmKuknos kuknosM) {
         DbManager.getInstance().doRealmTransaction(realm -> {
@@ -306,32 +312,6 @@ public class RealmUserInfo extends RealmObject {
         });
     }*/
 
-   /* public void createKuknos() {
-        if (kuknosM == null) {
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setKuknosM(realm.createObject(RealmKuknos.class));
-                    }
-                });
-            }).start();
-        }
-    }
-
-    public void deleteKuknos() {
-        if (kuknosM != null) {
-            new Thread(() -> {
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.getKuknosM().deleteFromRealm();
-                    }
-                });
-            }).start();
-        }
-    }
-*/
     public boolean isWalletRegister() {
         return isWalletRegister;
     }

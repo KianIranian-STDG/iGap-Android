@@ -36,7 +36,9 @@ import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.electricity_bill.ElectricityBillMainFrag;
+import net.iGap.fragments.emoji.add.AddStickersFragment;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
@@ -53,16 +55,15 @@ import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
@@ -70,13 +71,12 @@ import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-//import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
+import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -144,7 +144,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case USERNAME_LINK:/** tested **/
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0, 0);
                 break;
             case TOPUP_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), ChargeFragment.newInstance()).setReplace(false).load();
@@ -175,20 +175,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 //                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case PARSLAND:
-               // new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case FUN_SERVICE:
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
-//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-             //   new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
-//                } else {
-//                    HelperError.showSnackMessage("", true);
-//                }
                 break;
             case VIRTUAL_GIFT_CARD:
-               // new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();
@@ -253,6 +246,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
                         @Override
                         public void deny() {
+                            showDeniedPermissionMessage(G.context.getString(R.string.permission_location));
                         }
                     });
                 } catch (IOException e) {
@@ -297,7 +291,42 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case STICKER_SHOP:/** tested **/
                 StickerRepository.getInstance().getUserStickersGroup();
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                if (discoveryField.value.isEmpty()) {
+                    new HelperFragment(activity.getSupportFragmentManager(), FragmentSettingAddStickers.newInstance("ALL")).setReplace(false).load();
+                } else {
+                    try {
+                        String title = "";
+                        JSONObject jsonObject = new JSONObject(discoveryField.value);
+                        if (jsonObject.has("title"))
+                            title = jsonObject.getString("title");
+                        if (jsonObject.has("group")) {
+                            String category = jsonObject.getString("group");
+                            if (!category.isEmpty()) {
+                                if (jsonObject.has("type")){
+                                    String type = jsonObject.getString("type");
+                                    new HelperFragment(activity.getSupportFragmentManager(), AddStickersFragment.newInstance(category,type,title)).setReplace(false).load();
+                                } else {
+                                    new HelperFragment(activity.getSupportFragmentManager(), AddStickersFragment.newInstance(category, "ALL",title)).setReplace(false).load();
+                                }
+                            }
+                        } else if (jsonObject.has("type")) {
+                            String type = jsonObject.getString("type");
+                            new HelperFragment(activity.getSupportFragmentManager(), FragmentSettingAddStickers.newInstance(type)).setReplace(false).load();
+                        } else if (jsonObject.has("id")){
+                            String id = jsonObject.getString("id");
+                            StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(id);
+                            dialogFragment.show(activity.getSupportFragmentManager(),"BaseViewHolder");
+                        }
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                }
                 break;
             case CARD_TO_CARD:
                 CardToCardHelper.CallCardToCard(activity);
@@ -319,10 +348,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case NONE:
                 break;
             case POLL:
-                new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), PollFragment.newInstance(Integer.parseInt(HelperString.isNumeric(discoveryField.value) ? discoveryField.value : "0"))).setReplace(false).load();
                 break;
             case POLL_RESULT:
-                new HelperFragment(activity.getSupportFragmentManager(), ChartFragment.newInstance(Integer.valueOf(discoveryField.value))).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), ChartFragment.newInstance(Integer.parseInt(HelperString.isNumeric(discoveryField.value) ? discoveryField.value : "0"))).setReplace(false).load();
                 break;
             case FAVORITE_CHANNEL:
                 if (discoveryField.value.equals(""))
@@ -389,6 +418,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
                         @Override
                         public void deny() {
+                            showDeniedPermissionMessage(G.context.getString(R.string.permission_contact));
 
                         }
                     });

@@ -32,11 +32,14 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.HttpRequest;
+import net.iGap.observers.eventbus.EventManager;
 
-public class TextEditorDialogFragment extends DialogFragment {
+public class TextEditorDialogFragment extends DialogFragment implements EventManager.EventDelegate {
     public static final String TAG = TextEditorDialogFragment.class.getSimpleName();
     private FrameLayout rootView;
     private TextView doneTextView;
@@ -87,6 +90,11 @@ public class TextEditorDialogFragment extends DialogFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_TEXT_EDITOR_CLOSE, TextEditorDialogFragment.this);
+    }
 
     @Nullable
     @Override
@@ -135,6 +143,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_TEXT_EDITOR_CLOSE, this);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         verticalSlideColorPicker.setOnColorChangeListener(new VerticalSlideColorPicker.OnColorChangeListener() {
@@ -159,6 +168,7 @@ public class TextEditorDialogFragment extends DialogFragment {
                 inputMethodManager.hideSoftInputFromWindow(addTextEditTExt.getWindowToken(), 0);
                 String inputText = addTextEditTExt.getText().toString();
                 if (!TextUtils.isEmpty(inputText) && onTextEditorListener != null) {
+                    EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_TEXT_EDITOR_CLOSE, TextEditorDialogFragment.this);
                     onTextEditorListener.onDone(inputText, colorCode, addTextEditTExt.getWidth());
                 }
                 dismiss();
@@ -204,6 +214,13 @@ public class TextEditorDialogFragment extends DialogFragment {
 
     public void setOnTextEditorListener(OnTextEditorListener onTextEditorListener) {
         this.onTextEditorListener = onTextEditorListener;
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.STORY_TEXT_EDITOR_CLOSE) {
+            G.runOnUiThread(() -> dismiss());
+        }
     }
 
     public interface OnTextEditorListener {

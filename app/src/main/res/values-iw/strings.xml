@@ -410,8 +410,8 @@
     <string name="buy_internet_package_daily_filter_title">گون %.0f</string>
     <string name="buy_internet_package_month_filter_title">آی %.0f</string>
     <string name="buy_internet_package_title">اینترنت بسته سی آلماق </string>
-    <string name="buy_internet_package_volume_filter_gb_title">گیگا بایت %.0f</string>
-    <string name="buy_internet_package_volume_filter_mb_title">مگا بایت %.0f</string>
+    <string name="buy_internet_package_volume_filter_gb_title">گیگابایت %.0f</string>
+    <string name="buy_internet_package_volume_filter_mb_title">مگابایت %.0f</string>
     <string name="buy_internet_package_volume_type_title">حجم</string>
     <string name="buy_internet_package_weekly_filter_title">هفته %.0f</string>
     <string name="buy_internet_package_year_filter_title">ایل %.0f</string>
@@ -1467,7 +1467,7 @@
     <string name="six_day">آلتی گون اونجه </string>
     <string name="six_number">۶</string>
     <string name="size">اؤلچولر</string>
-    <string name="slide_to_cancel_en">لغو اوچون چکین</string>
+    <string name="slide_to_cancel_en">لغو اوچون چکین&#160;&gt;</string>
     <string name="solid_colors">پس زمینه رنگ لری </string>
     <string name="source_bank">مبدا بانک</string>
     <string name="source_card">مبدا کارت</string>
@@ -1623,7 +1623,7 @@
     <string name="two_step_verification_title">ایکی مرحله لی فعاللاشدیرماق</string>
     <string name="txt_draft">پیش نویس:</string>
     <string name="txt_you">"سیز"</string>
-    <string name="type_message">پیغام ...</string>
+    <string name="type_message">پیغام</string>
     <string name="typing">یازماقدادیر...</string>
     <string name="un_answered">جوابسیز </string>
     <string name="un_block_user">مخاطبین ارتباطینین مسدودیتینی رفع ائتمک</string>
@@ -1634,7 +1634,7 @@
     <string name="unknown_artist">غیرمعین هنرمند</string>
     <string name="unknown_message">بو پیغام پشتیبانی اولونمور!</string>
     <string name="unknown_type">بو نوع کارت پشتیبانی ائدیلمیر</string>
-    <string name="unlock_with_fingerPrint">بارماق ایزی ایله قفل آچماق </string>
+    <string name="biometric_unlock">بارماق ایزی ایله قفل آچماق </string>
     <string name="unmute">سس لی</string>
     <string name="unpin">سانجاقلانمایان</string>
     <string name="unread_message">پیغام اوخوندو</string>
@@ -1978,9 +1978,11 @@
     <string name="status_title">لحظه</string>
     <string name="my_status">لحظه من</string>
     <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
+    <string name="add_status_update">مدیریت لحظه ها</string>
     <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
     <string name="recent_updates">بروز رسانی های اخیر</string>
     <string name="your_status_updates_will_disappear_after_24_hours">لحظه های شما پس از ۲۴ ساعت حذف می شوند.</string>
+    <string name="my_channel_moments">لحظه کانال های من</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
@@ -1994,4 +1996,8 @@
     <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
     <string name="moments_string">لحظه ها</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
+    <string name="minimizeAmount">درخواست شما برای این مبلغ ممکن نیست</string>
+    <string name="faild_payment">متاسفانه خطایی رخ داده مجدد تلاش کنید</string>
+    <string name="load_sticker_types_error_message">מסנן סוגי לא נטען</string>
+    <string name="select_sticker_type">בחר סוג מדבקה</string>
 </resources>

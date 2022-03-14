@@ -113,6 +113,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         intentFilter.addAction("android.intent.action.PHONE_STATE");
         myPhoneStateService = new CallManager.MyPhoneStateService();
         registerReceiver(myPhoneStateService, intentFilter);
+        showInCallNotification();
     }
 
     @Override
@@ -131,6 +132,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         userId = intent.getLongExtra(USER_ID, -1);
         isVoiceCall = callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         isIncoming = intent.getBooleanExtra(IS_INCOMING, false);
+        showInCallNotification();
 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);
@@ -156,7 +158,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
             }
         } else {
             CallManager.getInstance().startCall(userId, callType);
-            showInCallNotification();
             Intent activityIntent = new Intent(this, CallActivity.class);
             activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(activityIntent);

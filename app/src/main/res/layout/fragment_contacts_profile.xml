@@ -534,21 +534,6 @@
                     app:layout_constraintTop_toBottomOf="@id/background" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/secretChat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onSecretChatClick()}"
-                    android:text="@string/secret_chat"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
-                    app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
-                    app:layout_constraintTop_toBottomOf="@id/line5" />
-
-                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/clearChat"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -560,7 +545,7 @@
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
-                    app:layout_constraintTop_toBottomOf="@id/secretChat" />
+                    app:layout_constraintTop_toBottomOf="@id/line5" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/report"

@@ -12,7 +12,9 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,21 +27,29 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
@@ -52,12 +62,14 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmStory;
 import net.iGap.request.RequestChannelAvatarDelete;
 import net.iGap.request.RequestChannelAvatarGetList;
 import net.iGap.request.RequestGroupAvatarDelete;
 import net.iGap.request.RequestGroupAvatarGetList;
 import net.iGap.request.RequestUserAvatarDelete;
 import net.iGap.request.RequestUserAvatarGetList;
+import net.iGap.structs.AttachmentObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -281,7 +293,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
     private void initViewPager() {
 
-        mAdapter = new FragmentShowAvatars.AdapterViewPager();
+        mAdapter = new AdapterViewPager();
         viewPager.setAdapter(mAdapter);
 
         avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
@@ -293,8 +305,7 @@ public class FragmentShowAvatars extends BaseFragment {
                     avatarListSize = element.size();
 
                     if (avatarListSize > 0) {
-                        mAdapter = new AdapterViewPager();
-                        viewPager.setAdapter(mAdapter);
+                        mAdapter.notifyDataSetChanged();
                         txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
                         if (HelperCalander.isPersianUnicode) {
                             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
@@ -542,7 +553,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public int getCount() {
-            return avatarList.size();
+            return avatarListSize;
         }
 
         @Override
@@ -587,29 +598,38 @@ public class FragmentShowAvatars extends BaseFragment {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
                     long fileSize = 0;
+                    boolean big = false;
 
                     if (ra.getSmallThumbnail() != null) {
                         selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                         fileSize = ra.getSmallThumbnail().getSize();
+                        big = false;
                     } else if (ra.getLargeThumbnail() != null) {
                         selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
                         fileSize = ra.getLargeThumbnail().getSize();
+                        big = true;
                     }
 
                     if (selector != null && fileSize > 0) {
-                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(final String path, int progress) {
+                        DownloadObject downloadObject = DownloadObject.createForThumb(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.IMAGE.getNumber(), big);
+                        Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
+                            if (arg.status == Status.SUCCESS && arg.data != null) {
+                                String filepath = arg.data.getFilePath();
+                                String fileToken = arg.data.getToken();
 
-                                if (progress == 100) {
-                                    G.currentActivity.runOnUiThread(() -> loadImage(zoomableImageView, path));
+                                if (!(new File(filepath).exists())) {
+                                    HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                 }
+
+
+                                DbManager.getInstance().doRealmTransaction(realm -> {
+                                    for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
+                                        realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                    }
+                                });
+                                G.fragmentActivity.runOnUiThread(() -> loadImage(zoomableImageView, filepath));
                             }
 
-                            @Override
-                            public void OnError(String token) {
-
-                            }
                         });
                     }
                 }
@@ -644,7 +664,8 @@ public class FragmentShowAvatars extends BaseFragment {
         }
 
         private void loadImage(PhotoView img, String path) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
+            Glide.with(G.fragmentActivity).load(AndroidUtils.suitablePath(path)).centerCrop().fitCenter().into(img);
+//            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
             img.setVisibility(View.VISIBLE);
         }
 
@@ -652,38 +673,50 @@ public class FragmentShowAvatars extends BaseFragment {
             final RealmAttachment ra = avatarList.get(position).getFile();
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
+            progress.withOnProgress(() -> G.fragmentActivity.runOnUiThread(() -> {
                 progress.withProgress(0);
                 progress.setVisibility(View.GONE);
                 zoomableImageView.setZoomable(true);
             }));
 
+            DownloadObject downloadObject = DownloadObject.createForRoomMessage(AttachmentObject.create(ra), ProtoGlobal.RoomMessageType.IMAGE.getNumber());
+            Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
+                if (arg.status == Status.SUCCESS && arg.data != null) {
+                    progress.withProgress(arg.data.getProgress());
+                    String filepath = arg.data.getFilePath();
+                    String fileToken = arg.data.getToken();
 
-            HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progres) {
-                    G.currentActivity.runOnUiThread(() -> {
-                        progress.withProgress(progres);
-                        if (progres == 100) {
-                            loadImage(zoomableImageView, path);
+                    if (!(new File(filepath).exists())) {
+                        HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                    }
+
+
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
+                            realmAvatar1.getFile().setLocalFilePath(filepath);
                         }
                     });
-
-                }
-
-                @Override
-                public void OnError(String token) {
-                    G.currentActivity.runOnUiThread(() -> {
+                    G.fragmentActivity.runOnUiThread(() -> loadImage(zoomableImageView, filepath));
+                } else if (arg.status == Status.LOADING && arg.data != null) {
+                    G.runOnUiThread(() -> progress.withProgress(arg.data.getProgress()));
+                } else if (arg.status == Status.ERROR) {
+                    G.fragmentActivity.runOnUiThread(() -> {
                         progress.withProgress(0);
                         progress.withDrawable(R.drawable.ic_download, true);
                     });
                 }
+
             });
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return PagerAdapter.POSITION_NONE;
         }
     }
 }

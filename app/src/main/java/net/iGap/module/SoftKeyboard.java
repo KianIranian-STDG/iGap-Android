@@ -91,8 +91,12 @@ public class SoftKeyboard implements View.OnFocusChangeListener {
     }
 
     private int getLayoutCoordinates() {
-        layout.getLocationOnScreen(coords);
-        return coords[1] + layout.getHeight();
+        if (coords != null) {
+            layout.getLocationOnScreen(coords);
+            return coords[1] + layout.getHeight();
+        } else {
+            return 0;
+        }
     }
 
     private void keyboardHideByDefault() {

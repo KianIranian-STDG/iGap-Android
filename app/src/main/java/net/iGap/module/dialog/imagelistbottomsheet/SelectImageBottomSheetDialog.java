@@ -290,7 +290,9 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
         }
 
         fastItemAdapter.clear();
-
+        if(FragmentEditImage.itemGalleryList == null){
+            FragmentEditImage.itemGalleryList = new ArrayList<>();
+        }
         if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() <= 1) {
 
             FragmentEditImage.itemGalleryList.clear();
@@ -299,7 +301,7 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
             }
 
             try {
-                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         FragmentEditImage.itemGalleryList = getAllShownImagesPath(getActivity());
@@ -317,7 +319,6 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
         } else {
             checkCameraAndLoadImage();
         }
-
     }
 
     private void checkCameraAndLoadImage() {

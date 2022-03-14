@@ -81,9 +81,17 @@ public class StoryGalleryFragment extends BaseFragment {
     private AdapterGallery adapterGalleryPhoto;
     private OnRVScrolled onRVScrolled;
     private Typeface tfMain;
+    private boolean isForRoom;
+    private long roomId;
+    private int listMode;
+    private String roomTitle;
 
-    public StoryGalleryFragment(OnRVScrolled onRVScrolled) {
+    public StoryGalleryFragment(OnRVScrolled onRVScrolled, boolean isForRoom, long roomId, int listMode, String roomTitle) {
         this.onRVScrolled = onRVScrolled;
+        this.isForRoom = isForRoom;
+        this.roomId = roomId;
+        this.listMode = listMode;
+        this.roomTitle = roomTitle;
     }
 
     @Override
@@ -215,26 +223,22 @@ public class StoryGalleryFragment extends BaseFragment {
 
     private void sendSelectedPhotos(List<GalleryItemModel> selectedPhotos) {
         if (getActivity() == null || selectedPhotos.size() == 0) return;
-
-        FragmentEditImage.itemGalleryList.clear();
-        FragmentEditImage.textImageList.clear();
+        FragmentEditImage.checkItemGalleryList();
         for (GalleryItemModel photo : selectedPhotos) {
             FragmentEditImage.insertItemList(photo.getAddress(), "", false);
         }
 
-        PhotoViewer photoViewer = PhotoViewer.newInstance((ArrayList<GalleryItemModel>) selectedPhotos);
+        PhotoViewer photoViewer = PhotoViewer.newInstance((ArrayList<GalleryItemModel>) selectedPhotos, isForRoom, roomId, listMode, roomTitle);
         new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();
 
 
     }
 
     private void openImageForEdit(String path) {
-        FragmentEditImage.itemGalleryList.clear();
-        FragmentEditImage.textImageList.clear();
-
         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
         fragmentEditImage.setIsReOpenChatAttachment(false);
-        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+        ImageHelper imageHelper = new ImageHelper();
+        imageHelper.correctRotateImage(path, true, new OnRotateImage() {
             @Override
             public void startProcess() {
 
@@ -243,7 +247,8 @@ public class StoryGalleryFragment extends BaseFragment {
             @Override
             public void success(String newPath) {
                 G.handler.post(() -> {
-                    PhotoViewer photoViewer = PhotoViewer.newInstance(newPath);
+                    FragmentEditImage.checkItemGalleryList();
+                    PhotoViewer photoViewer = PhotoViewer.newInstance(newPath, isForRoom, roomId, listMode, roomTitle);
                     FragmentEditImage.insertItemList(newPath, "", false);
                     if (getActivity() != null) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();

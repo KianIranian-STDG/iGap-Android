@@ -11,7 +11,7 @@
 package net.iGap.observers.interfaces;
 
 public interface OnClientJoinByInviteLink {
-    void onClientJoinByInviteLinkResponse();
+    void onClientJoinByInviteLinkResponse(long roomId);
 
     void onError(int majorCode, int minorCode);
 }

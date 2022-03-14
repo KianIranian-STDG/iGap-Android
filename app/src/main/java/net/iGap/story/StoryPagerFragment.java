@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import net.iGap.R;
-import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -24,6 +23,22 @@ import java.io.IOException;
 public class StoryPagerFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked, StoryGalleryFragment.OnRVScrolled {
     ViewPager2 viewPager2;
     private static String[] REQUIRED_PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private boolean isForRoom;
+    private long roomId;
+    private int listMode;
+    private String roomTitle;
+
+
+    public StoryPagerFragment(boolean isForRoom, long roomId, int listMode, String roomTitle) {
+        this.isForRoom = isForRoom;
+        this.roomId = roomId;
+        this.listMode = listMode;
+        this.roomTitle = roomTitle;
+    }
+
+    public StoryPagerFragment(boolean isForRoom) {
+        this.isForRoom = isForRoom;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,35 +80,38 @@ public class StoryPagerFragment extends Fragment implements CameraStoryFragment.
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_story, container, false);
         viewPager2 = view.findViewById(R.id.pager);
-        if (allPermissionsGranted()) {
-            viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-            viewPager2.setOffscreenPageLimit(2);
-            viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
-        } else {
-            try {
-                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
-                    @Override
-                    public void Allow() {
+        if (getActivity() != null) {
+            if (allPermissionsGranted()) {
+                viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+                viewPager2.setOffscreenPageLimit(2);
+                viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), this.isForRoom, this.roomId, this.listMode, this.roomTitle, StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
+            } else {
+                try {
+                    HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                        @Override
+                        public void Allow() {
 
-                        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-                        viewPager2.setOffscreenPageLimit(2);
-                        viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
+                            viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+                            viewPager2.setOffscreenPageLimit(2);
+                            viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), isForRoom, roomId, listMode, roomTitle, StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
 
 
-                    }
+                        }
 
-                    @Override
-                    public void deny() {
-                        showDeniedPermissionMessage();
-                        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-                        viewPager2.setOffscreenPageLimit(2);
-                        viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
+                        @Override
+                        public void deny() {
+                            showDeniedPermissionMessage();
+                            viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+                            viewPager2.setOffscreenPageLimit(2);
+                            viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), isForRoom, roomId, listMode, roomTitle, StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
         return view;
     }
 

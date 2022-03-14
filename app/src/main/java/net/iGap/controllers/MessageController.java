@@ -25,6 +25,7 @@ import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.response.UserLoginResponse;
 import net.iGap.story.StoryObject;
+import net.iGap.story.liststories.StoryFragment;
 import net.iGap.structs.MessageObject;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public class MessageController extends BaseController implements EventManager.Ev
     private String lastUploadedAvatarId;
     private long lastUploadedAvatarRoomId;
     public static boolean isSendingStory = false;
+    public static boolean isSendingRoomStory = false;
     private static volatile MessageController[] instance = new MessageController[AccountManager.MAX_ACCOUNT_COUNT];
     private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
 
@@ -106,6 +108,8 @@ public class MessageController extends BaseController implements EventManager.Ev
             onUserDeletedStoryResponse(object, true);
         } else if (object instanceof IG_RPC.Res_Story_Add_View) {
             onUserStoryAddViewResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_Room_Add_New) {
+            onRoomAddStoryResponse(object, true);
         }
     }
 
@@ -120,18 +124,20 @@ public class MessageController extends BaseController implements EventManager.Ev
         return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
     }
 
-    public void sendUpdateStatus(int roomType, long roomId, long messageId, int roomMessageStatus) {
+    public void sendUpdateStatus(int roomType, long roomId, long messageId, long documentId, int roomMessageStatus) {
         AbstractObject req = null;
         if (roomType == CHAT_VALUE) {
             IG_RPC.Chat_Update_Status chatUpdateStatusReq = new IG_RPC.Chat_Update_Status();
             chatUpdateStatusReq.roomId = roomId;
             chatUpdateStatusReq.messageId = messageId;
+            chatUpdateStatusReq.documentId = documentId;
             chatUpdateStatusReq.roomMessageStatus = ProtoGlobal.RoomMessageStatus.forNumber(roomMessageStatus);
             req = chatUpdateStatusReq;
         } else if (roomType == GROUP_VALUE) {
             IG_RPC.Group_Update_Status groupUpdateStatusReq = new IG_RPC.Group_Update_Status();
             groupUpdateStatusReq.roomId = roomId;
             groupUpdateStatusReq.messageId = messageId;
+            groupUpdateStatusReq.documentId = documentId;
             groupUpdateStatusReq.roomMessageStatus = ProtoGlobal.RoomMessageStatus.forNumber(roomMessageStatus);
             req = groupUpdateStatusReq;
         }
@@ -146,6 +152,7 @@ public class MessageController extends BaseController implements EventManager.Ev
     public void addMyStory(List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects) {
         isSendingStory = true;
         HttpUploader.isMultiUpload = false;
+        HttpUploader.isRoomMultiUpload = false;
         AbstractObject request = null;
         IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
         story_user_addNew.storyAddRequests = storyObjects;
@@ -166,16 +173,46 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     }
 
+
+    public void addMyRoomStory(List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects, long roomId) {
+        isSendingRoomStory = true;
+        HttpUploader.isMultiUpload = false;
+        HttpUploader.isRoomMultiUpload = false;
+        AbstractObject request = null;
+        IG_RPC.Story_Room_Add_New story_room_add_new = new IG_RPC.Story_Room_Add_New();
+        story_room_add_new.storyAddRequests = storyObjects;
+        story_room_add_new.roomId = roomId;
+        request = story_room_add_new;
+        getRequestManager().sendRequest(request, (response, error) -> {
+
+            if (error == null) {
+                IG_RPC.Res_Story_Room_Add_New res = (IG_RPC.Res_Story_Room_Add_New) response;
+                getMessageDataStorage().updateRoomAddedStory(res.stories);
+                MessageController.isSendingRoomStory = false;
+
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                MessageController.isSendingRoomStory = false;
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED));
+            }
+        });
+
+    }
+
+
     public void getStories(int contactCount) {
         AbstractObject req = null;
         IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
         get_stories.offset = 0;
         get_stories.limit = contactCount;
         req = get_stories;
-        RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(req, (response, error) -> {
+        getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
-                getMessageDataStorage().updateUserAddedStoryWithStoryObjects(res.stories);
+                if (res.stories.size() > 0) {
+                    getMessageDataStorage().updateUserAddedStoryWithStoryObjects(res.stories);
+                }
+
             } else {
 
             }
@@ -200,16 +237,21 @@ public class MessageController extends BaseController implements EventManager.Ev
         getMessageDataStorage().updateUserAddedStory(res.stories);
     }
 
+    private void onRoomAddStoryResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_Room_Add_New res = (IG_RPC.Res_Story_Room_Add_New) response;
+        getMessageDataStorage().updateRoomAddedStory(res.stories);
+    }
+
     private void onMessageStatusResponse(AbstractObject response, boolean update) {
         if (response instanceof IG_RPC.Res_Chat_Update_Status) {
             IG_RPC.Res_Chat_Update_Status res = (IG_RPC.Res_Chat_Update_Status) response;
-            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
+            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.documentId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
             if (res.statusValue == ProtoGlobal.RoomMessageStatus.SEEN) {
                 HelperNotification.getInstance().cancelNotification(res.roomId);
             }
         } else if (response instanceof IG_RPC.Res_Group_Update_Status) {
             IG_RPC.Res_Group_Update_Status res = (IG_RPC.Res_Group_Update_Status) response;
-            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
+            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.documentId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
         }
     }
 
@@ -304,25 +346,28 @@ public class MessageController extends BaseController implements EventManager.Ev
         getMessageDataStorage().resetRoomLastMessage(roomId, message.id);
     }
 
-    public void editMessage(long messageId, long roomId, String newMessage, int chatType) {
+    public void editMessage(long messageId, long documentId, long roomId, String newMessage, int chatType) {
         AbstractObject req = null;
 
         if (chatType == CHAT_VALUE) {
             IG_RPC.Chat_edit_message req_chat_edit = new IG_RPC.Chat_edit_message();
             req_chat_edit.message = newMessage;
             req_chat_edit.messageId = messageId;
+            req_chat_edit.documentId = documentId;
             req_chat_edit.roomId = roomId;
             req = req_chat_edit;
         } else if (chatType == GROUP_VALUE) {
             IG_RPC.Group_edit_message req_group_edit = new IG_RPC.Group_edit_message();
             req_group_edit.message = newMessage;
             req_group_edit.messageId = messageId;
+            req_group_edit.documentId = documentId;
             req_group_edit.roomId = roomId;
             req = req_group_edit;
         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
             IG_RPC.Channel_edit_message req_channel_edit = new IG_RPC.Channel_edit_message();
             req_channel_edit.message = newMessage;
             req_channel_edit.messageId = messageId;
+            req_channel_edit.documentId = documentId;
             req_channel_edit.roomId = roomId;
             req = req_channel_edit;
         }
@@ -345,6 +390,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
         long roomId;
         long messageId;
+        long documentId;
         int messageType;
         long messageVersion;
         String newMessage;
@@ -355,6 +401,7 @@ public class MessageController extends BaseController implements EventManager.Ev
             newMessage = res.newMessage;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             messageVersion = res.messageVersion;
             messageType = res.messageType;
         } else if (response instanceof IG_RPC.Res_Group_Edit_Message) {
@@ -363,6 +410,7 @@ public class MessageController extends BaseController implements EventManager.Ev
             newMessage = res.newMessage;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             messageVersion = res.messageVersion;
             messageType = res.messageType;
         } else {
@@ -372,26 +420,29 @@ public class MessageController extends BaseController implements EventManager.Ev
             newMessage = res.newMessage;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             messageVersion = res.messageVersion;
             messageType = res.messageType;
         }
 
-        getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
+        getMessageDataStorage().updateEditedMessage(roomId, messageId, documentId, messageVersion, messageType, newMessage, isUpdate);
         G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage, isUpdate));
 
     }
 
-    public void pinMessage(long roomId, long messageId, int chatType) {
+    public void pinMessage(long roomId, long messageId, long documentId, int chatType) {
         AbstractObject req = null;
 
         if (chatType == GROUP_VALUE) {
             IG_RPC.Group_pin_message group_pin_message = new IG_RPC.Group_pin_message();
             group_pin_message.roomId = roomId;
             group_pin_message.messageId = messageId;
+            group_pin_message.documentId = documentId;
             req = group_pin_message;
         } else if (chatType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
             IG_RPC.Channel_pin_message channel_pin_message = new IG_RPC.Channel_pin_message();
             channel_pin_message.messageId = messageId;
+            channel_pin_message.documentId = documentId;
             channel_pin_message.roomId = roomId;
             req = channel_pin_message;
         }
@@ -412,47 +463,53 @@ public class MessageController extends BaseController implements EventManager.Ev
         }
         long roomId = 0;
         long messageId = 0;
+        long documentId = 0;
 
         if (response instanceof IG_RPC.Group_pin_message_response) {
             IG_RPC.Group_pin_message_response res = (IG_RPC.Group_pin_message_response) response;
             roomId = res.roomId;
             messageId = res.pinnedMessage.getMessageId();
+            documentId = res.pinnedMessage.getDocumentId();
         } else if (response instanceof IG_RPC.Channel_pin_message_response) {
             IG_RPC.Channel_pin_message_response res = (IG_RPC.Channel_pin_message_response) response;
             roomId = res.roomId;
             messageId = res.pinnedMessage.getMessageId();
+            documentId = res.pinnedMessage.getDocumentId();
         }
 
-        getMessageDataStorage().updatePinnedMessage(roomId, messageId);
+        getMessageDataStorage().updatePinnedMessage(roomId, messageId, documentId);
     }
 
-    public void deleteSelectedMessage(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
+    public void deleteSelectedMessage(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> documentIds, ArrayList<Long> bothMessageIds) {
         AbstractObject req = null;
         boolean bothDelete = false;
 
-        for (long messageId : messageIds) {
+        for (int i = 0; i < messageIds.size(); i++) {
 
-            if (bothMessageIds != null && bothMessageIds.contains(messageId)) {
+            if (bothMessageIds != null && bothMessageIds.contains(messageIds.get(i))) {
                 bothDelete = true;
             }
 
             if (roomType == CHAT_VALUE) {
                 IG_RPC.Chat_Delete_Message chat_delete_message = new IG_RPC.Chat_Delete_Message();
                 chat_delete_message.roomId = roomId;
-                chat_delete_message.messageId = messageId;
+                chat_delete_message.messageId = messageIds.get(i);
+                chat_delete_message.documentId = documentIds.get(i);
                 chat_delete_message.both = bothDelete;
                 req = chat_delete_message;
 
             } else if (roomType == GROUP_VALUE) {
                 IG_RPC.Group_Delete_Message group_delete_message = new IG_RPC.Group_Delete_Message();
                 group_delete_message.roomId = roomId;
-                group_delete_message.messageId = messageId;
+                group_delete_message.messageId = messageIds.get(i);
+                group_delete_message.documentId = documentIds.get(i);
                 req = group_delete_message;
 
             } else if (roomType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
                 IG_RPC.Channel_Delete_Message channel_delete_message = new IG_RPC.Channel_Delete_Message();
                 channel_delete_message.roomId = roomId;
-                channel_delete_message.messageId = messageId;
+                channel_delete_message.messageId = messageIds.get(i);
+                channel_delete_message.documentId = documentIds.get(i);
                 req = channel_delete_message;
 
             }
@@ -461,7 +518,7 @@ public class MessageController extends BaseController implements EventManager.Ev
                 if (response != null) {
                     onDeleteMessageResponse(response, false);
                 } else {
-                    IG_RPC.Error e = new IG_RPC.Error();
+                    IG_RPC.Error e = (IG_RPC.Error) error;
                     FileLog.e("Delete Message -> Major:" + e.major + "Minor:" + e.minor);
                 }
             });
@@ -472,24 +529,28 @@ public class MessageController extends BaseController implements EventManager.Ev
 
         long roomId = 0;
         long messageId = 0;
+        long documentId = 0;
         long deleteVersion = 0;
 
         if (response instanceof IG_RPC.Res_Chat_Delete_Message) {
             IG_RPC.Res_Chat_Delete_Message res = (IG_RPC.Res_Chat_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             deleteVersion = res.deleteVersion;
 
         } else if (response instanceof IG_RPC.Res_Group_Delete_Message) {
             IG_RPC.Res_Group_Delete_Message res = (IG_RPC.Res_Group_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             deleteVersion = res.deleteVersion;
 
         } else if (response instanceof IG_RPC.Res_Channel_Delete_Message) {
             IG_RPC.Res_Channel_Delete_Message res = (IG_RPC.Res_Channel_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
+            documentId = res.documentId;
             deleteVersion = res.deleteVersion;
         }
 
@@ -499,6 +560,7 @@ public class MessageController extends BaseController implements EventManager.Ev
     public void channelAddMessageVote(MessageObject messageObject, int reaction) {
         final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
         req.messageId = messageObject.id;
+        req.documentId = messageObject.documentId;
         req.roomId = messageObject.roomId;
         req.reaction = ProtoGlobal.RoomMessageReaction.forNumber(reaction);
 
@@ -508,7 +570,7 @@ public class MessageController extends BaseController implements EventManager.Ev
                 getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
                 G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction));
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
             }
         });
@@ -537,7 +599,7 @@ public class MessageController extends BaseController implements EventManager.Ev
                 RealmChannelExtra.updateMessageStats(res.states);
                 G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_GET_VOTE, res.states));
             } else {
-                IG_RPC.Error e = new IG_RPC.Error();
+                IG_RPC.Error e = (IG_RPC.Error) error;
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
             }
         });

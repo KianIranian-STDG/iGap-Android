@@ -13,6 +13,7 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperMobileBank;
 import net.iGap.helper.HelperNumerical;
+import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.Debit;
@@ -122,21 +123,20 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         new BillsAPIRepository().serviceInquiry(info, this, new ResponseCallback<ElectricityResponseModel<ServiceDebit>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
+                String price;
                 progressVisibilityData.set(View.GONE);
                 debit = new Debit<ServiceDebit>();
                 debit.setData(data.getData());
 
                 billID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getBillID()));
                 billPayID.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getPaymentIDConverted()));
-                if (info.getBillType() == BillInfo.BillType.ELECTRICITY)
-                    billPrice.set(
-                            HelperMobileBank.checkNumbersInMultiLangs(
-                                    new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
-                                            data.getData().getTotalBillDebtConverted())) + " ریال"));
-                else
-                    billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(
-                            new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(
-                                    data.getData().getTotalGasBillDebt())) + " ریال"));
+
+                if (info.getBillType() == BillInfo.BillType.ELECTRICITY) {
+                    price = HelperString.isNumeric(data.getData().getTotalBillDebtConverted()) ? new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebtConverted())) + "ریال" : data.getData().getTotalBillDebtConverted();
+                } else {
+                    price = HelperString.isNumeric(data.getData().getTotalGasBillDebt()) ? new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalGasBillDebt())) + " ریال" : data.getData().getTotalGasBillDebt();
+                }
+                billPrice.set(HelperMobileBank.checkNumbersInMultiLangs(price));
                 billTime.set(HelperMobileBank.checkNumbersInMultiLangs(data.getData().getPaymentDeadLineDate()));
             }
 

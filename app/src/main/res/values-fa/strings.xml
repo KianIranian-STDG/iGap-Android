@@ -135,7 +135,7 @@
     <string name="device_dosenot_support">"دستگاه شما برنامه ای برای انجام این کار ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
     <string name="select_picture_en">"انتخاب تصویر"</string>
-    <string name="slide_to_cancel_en">"برای لغو بکشید"</string>
+    <string name="slide_to_cancel_en">"برای لغو کردن نوار را بکشید"&#160;&gt;</string>
     <string name="video_duration" formatted="false">"%s (%s)"</string>
 
 
@@ -454,8 +454,8 @@
     <string name="Ringtone">آهنگ زنگ</string>
     <string name="DISCARD">رد کردن</string>
     <string name="unknown">ناشناس</string>
-    <string name="add_to_list_contact">افزودن به مخاطبین</string>
-    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره را به مخاطبین اضافه کنید؟</string>
+    <string name="add_to_list_contact">افزودن به مخاطبین گوشی</string>
+    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره را به مخاطبین گوشی اضافه کنید؟</string>
 
     <string name="delete_account_text">آیا از حذف این حساب کاربری اطمینان دارید؟</string>
     <string name="dialog_readonly_chat">متأسفانه امکان ارسال پیام در گفتگو برای شما وجود ندارد.</string>
@@ -496,7 +496,7 @@
     <string name="music_name">عنوان موسیقی</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
-    <string name="type_message">پیام...</string>
+    <string name="type_message">پیام</string>
     <string name="place">مکان</string>
     <string name="channel_link">پیوند کانال</string>
     <string name="iran">ایران</string>
@@ -641,6 +641,8 @@
     <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
     <string name="permission_record_audio">میکروفن را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
+    <string name="to_use_this_section_you_need_to_obtain_permissions">برای استفاده از این بخش، باید اجازه استفاده از %s.</string>
+
 
     <string name="channel_public_hint_revoke">لینک عمومی کانال</string>
     <string name="self_destructs">خود تخریبی</string>
@@ -887,7 +889,7 @@
 
     <string name="two_step_pass_code">قفل ورود به برنامه</string>
 
-    <string name="unlock_with_fingerPrint">قفل گشایی با اثرانگشت</string>
+    <string name="biometric_unlock">قفل گشایی بیومتریک</string>
     <string name="change_pass_code">تغییر رمز</string>
     <string name="auto_lock">قفل خودکار</string>
     <string name="allow_screen_capture">قابلیت گرفتن اسکرین شات</string>
@@ -897,7 +899,7 @@
     <string name="Fingerprint_not_recognized">اثر انگشت شما شناسایی و تأیید نشد. لطفاً مجدداً تلاش کنید</string>
     <string name="Auto_lock_description">بعد از هریک از زمان های انتخابی از میان لیست، برنامه قفل شده و برای ورود به برنامه باید رمز یا کد قفل گشا را وارد کنید.</string>
     <string name="Allow_Screen_Capture_description">در صورتیکه این گزینه فعال شود، می توانید از هر قسمت در برنامه اسکرین شات بگیرید، اما فراموش نکنید که حتی با فعال بودن قابلیت قفل برنامه، سیستم همچنان چت های شما را در قسمت برنامه های در حال اجرا در بک گراند نمایش می دهد. شاید برای فعالسازی این قابلیت مجبور شوید یک بار برنامه را بسته و مجدداً باز کنید.</string>
-    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.\nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. همچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
+    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.\nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. \nهمچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
 
 
     <string name="forgot_pin_desc">در صورتیکه رمز خود را فرامش کرده اید تنها می توانید یک بار از برنامه خارج شده و بار دیگر وارد شوید. آیا مایل به ادامه این کار هستید؟</string>
@@ -2218,9 +2220,11 @@
     <string name="status_title">لحظه</string>
     <string name="my_status">لحظه من</string>
     <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
+    <string name="add_status_update">مدیریت لحظه ها</string>
     <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
     <string name="recent_updates">بروز رسانی های اخیر</string>
     <string name="your_status_updates_will_disappear_after_24_hours">لحظه های شما پس از ۲۴ ساعت حذف می شوند.</string>
+    <string name="my_channel_moments">لحظه کانال های من</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
@@ -2338,5 +2342,27 @@
     <string name="code_length_is_10_digit">کد ورودی باید ۱۰ رقم باشد!</string>
     <string name="the_amount_can_not_be_more_than_500_million_rials">مبلغ نمی تواند از ۵۰۰ میلیون ریال بزرگتر باشد</string>
     <string name="invalid_qr_code">بارکد نامعتبر است</string>
+    <string name="are_you_sure_add_follower">از اضافه کردن دنبال کننده ها اطمینان دارید؟</string>
+    <string name="minimizeAmount">درخواست شما برای این مبلغ ممکن نیست</string>
+    <string name="forbidden_pin_room">شما اجازه سنجاق کردن این گفتگو را ندارید</string>
+    <string name="pin_up_to_5_chat">حداکثر ۵ گفتگو را می توانید سنجاق کنید!</string>
+    <string name="read_more">بیشتر</string>
+    <string name="faild_payment">متاسفانه خطایی رخ داده مجدد تلاش کنید</string>
+    <string name="at_least_5_characters_are_required_for_a_global_search">برای جستجوی عمومی حداقل ۵ کاراکتر مورد نیاز است</string>
+    <string name="biometric_password_description">با فعال کردن این گزینه رمز عبور بیومتریک فعال گوشی شما (اثر انگشت، تشخیص چهره یا اسکن عنبیه) روی اپلیکیشن اعمال می شود.</string>
+    <string name="biometric_password">رمز عبور بیومتریک</string>
+    <string name="set_now">اکنون تنظیم کنید</string>
+    <string name="no_biometric_password_set_on_your_phone">رمز بیومتریک روی گوشی شما تنظیم نشده است</string>
+    <string name="authentication_failed">احراز هویت ناموفق</string>
+    <string name="authentication_succeeded">احراز هویت موفق</string>
+    <string name="authentication_error">خطای احراز هویت: </string>
+    <string name="biometric_login">احراز هویت هوشمند</string>
+    <string name="use_biometric_authentication">از رمز عبور هوشمند خود استفاده کنید</string>
+    <string name="send_current_location">ارسال موقعیت مکانی فعلی:\n</string>
+    <string name="send_selected_location">ارسال موقعیت مکانی انتخاب شده:\n</string>
+    <string name="select_sticker_type">نوع استیکر را انتخاب کنید</string>
+    <string name="load_sticker_types_error_message">فیلتر نوع استیکر بارگذاری نشده است</string>
+    <string name="locating">در حال دریافت موقعیت فعلی…</string>
+    <string name="enable_sending_non_media_file_soon">امکان ارسال فایل های غیر مدیا به زودی فعال می شود</string>
 
 </resources>

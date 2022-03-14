@@ -11,5 +11,5 @@
 package net.iGap.observers.interfaces;
 
 public interface OnComplete {
-    void complete(boolean result, String messageOne, String MessageTow);
+    void complete(boolean result, String messageOne, String MessageTwo);
 }

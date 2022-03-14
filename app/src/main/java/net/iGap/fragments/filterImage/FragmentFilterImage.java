@@ -322,7 +322,8 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
 
     public static Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
         File image = new File(fileName);
-        return ImageHelper.decodeFile(image);
+        ImageHelper imageHelper = new ImageHelper();
+        return imageHelper.decodeFile(image);
     }
 
     private class FilterImageTask extends AsyncTask<Filter, Integer, Bitmap> {

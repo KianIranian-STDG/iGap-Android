@@ -6,16 +6,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import net.iGap.fragments.FragmentGallery;
-
 public class CameraPagerAdapater extends FragmentStateAdapter {
     private CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked;
     private StoryGalleryFragment.OnRVScrolled onRVScrolled;
+    private int listMode;
+    private boolean isForRoom;
+    private long roomId;
+    private String roomTitle;
 
-    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity, CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked, StoryGalleryFragment.OnRVScrolled onRVScrolled) {
+    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity, boolean isForRoom, long roomId, int listMode, String roomTitle, CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked, StoryGalleryFragment.OnRVScrolled onRVScrolled) {
         super(fragmentActivity);
         this.onGalleryIconClicked = onGalleryIconClicked;
         this.onRVScrolled = onRVScrolled;
+        this.isForRoom = isForRoom;
+        this.roomId = roomId;
+        this.roomTitle = roomTitle;
+        this.listMode = listMode;
     }
 
     @NonNull
@@ -23,11 +29,11 @@ public class CameraPagerAdapater extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return CameraStoryFragment.newInstance(onGalleryIconClicked);
+                return CameraStoryFragment.newInstance(onGalleryIconClicked, this.isForRoom,this.roomId,this.listMode,this.roomTitle);
             case 1:
-                return new StoryGalleryFragment(onRVScrolled);
+                return new StoryGalleryFragment(onRVScrolled, this.isForRoom,this.roomId,this.listMode,this.roomTitle);
             default:
-                return CameraStoryFragment.newInstance(onGalleryIconClicked);
+                return CameraStoryFragment.newInstance(onGalleryIconClicked, this.isForRoom,this.roomId,this.listMode,this.roomTitle);
         }
     }
 
