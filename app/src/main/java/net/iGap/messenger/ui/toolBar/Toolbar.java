@@ -5,13 +5,22 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,14 +33,16 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.Theme;
 import net.iGap.realm.RealmRoom;
 
+import static net.iGap.module.AndroidUtils.statusBarHeight;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 
 public class Toolbar extends FrameLayout {
@@ -52,10 +63,14 @@ public class Toolbar extends FrameLayout {
     private CircleImageView circleImageView;
     private TextView muteIcon;
     private TextView verifiedChannelsIcon;
+    private boolean castShadows = true;
+    private boolean addToContainer = true;
+    public BaseFragment parentFragment;
+    private boolean occupyStatusBar = Build.VERSION.SDK_INT >= 21;
 
     public Toolbar(@NonNull Context context) {
         super(context);
-        setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
+        setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
     }
 
     public void setTitle(CharSequence title) {
@@ -68,6 +83,7 @@ public class Toolbar extends FrameLayout {
         titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         titleTextView.setMarqueeRepeatLimit(-1);
         titleTextView.setSelected(true);
+        titleTextView.setTextColor(Theme.getColor(Theme.key_white));
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
     }
 
@@ -107,7 +123,7 @@ public class Toolbar extends FrameLayout {
         muteIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         muteIcon.setText(R.string.icon_mute);
         muteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        muteIcon.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        muteIcon.setTextColor(Theme.getColor(Theme.key_white));
     }
 
     public TextView addVerifiedChannelsIcon() {
@@ -122,7 +138,7 @@ public class Toolbar extends FrameLayout {
         verifiedChannelsIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         verifiedChannelsIcon.setText(R.string.icon_blue_badge);
         verifiedChannelsIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        verifiedChannelsIcon.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verifiedChannelsIcon.setTextColor(getContext().getResources().getColor(R.color.nightBlueTheme));
     }
 
     public void setTitle(@StringRes int title) {
@@ -166,10 +182,11 @@ public class Toolbar extends FrameLayout {
         });
         if (drawable instanceof BackDrawable) {
             BackDrawable backDrawable = (BackDrawable) drawable;
-            backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+            backDrawable.setRotatedColor(Theme.getColor(Theme.key_white));
         }
     }
 
+    @SuppressLint("ResourceType")
     public void setBackIcon(@StringRes int iconRes) {
         setBackIcon(getResources().getDrawable(iconRes));
     }
@@ -262,7 +279,7 @@ public class Toolbar extends FrameLayout {
         }
 
         titleTextView = new TextView(getContext());
-        titleTextView.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_white));
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setSingleLine();
@@ -276,7 +293,7 @@ public class Toolbar extends FrameLayout {
         }
 
         subTitleTextView = new TextView(getContext());
-        subTitleTextView.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        subTitleTextView.setTextColor(Theme.getColor(Theme.key_white));
         subTitleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         subTitleTextView.setGravity(Gravity.LEFT);
         subTitleTextView.setSingleLine();
@@ -492,8 +509,8 @@ public class Toolbar extends FrameLayout {
             public boolean onTouchEvent(MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     float x = event.getX();
-                    if (x < backIcon.getWidth()) {
-                        return false;
+                    if (backIcon != null){
+                        return !(x < backIcon.getWidth());
                     }
                 }
                 return true;
@@ -502,7 +519,7 @@ public class Toolbar extends FrameLayout {
 
         actionItems.isActionMode = true;
         actionItems.setClickable(true);
-        actionItems.setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(getContext()));
+        actionItems.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
         addView(actionItems, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
         actionItems.setVisibility(INVISIBLE);
 
@@ -541,7 +558,7 @@ public class Toolbar extends FrameLayout {
         actionModeAnimation.playTogether(
                 ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f, 1.0f),
                 ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f, 0.0f),
-                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarBackgroundColor(getContext()), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()))
+                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_dark_theme_color))
         );
         actionModeAnimation.setDuration(100);
         actionModeAnimation.addListener(new AnimatorListenerAdapter() {
@@ -603,7 +620,7 @@ public class Toolbar extends FrameLayout {
         actionModeAnimation.playTogether(
                 ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f),
                 ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f),
-                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext()))
+                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getColor(Theme.key_dark_theme_color), Theme.getColor(Theme.key_toolbar_background))
         );
         actionModeAnimation.setDuration(100);
         actionModeAnimation.addListener(new AnimatorListenerAdapter() {
@@ -641,14 +658,27 @@ public class Toolbar extends FrameLayout {
         }
     }
 
-    public void setActionModeColor(int color) {
+    public boolean getCastShadows() {
+        return castShadows;
+    }
+
+    public boolean shouldAddToContainer() {
+        return addToContainer;
+    }
+
+    public void setOccupyStatusBar(boolean value) {
+        occupyStatusBar = value;
         if (actionItems != null) {
-            actionItems.setBackgroundColor(color);
+            actionItems.setPadding(0, occupyStatusBar ? statusBarHeight : 0, 0, 0);
         }
     }
 
-    public ToolbarItems getActionMode() {
-        return actionItems;
+    public void onMenuButtonPressed() {
+        if (isActionModeShowed()) {
+            return;
+        }
+        if (items != null) {
+            items.onMenuButtonPressed();
+        }
     }
-
 }

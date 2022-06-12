@@ -31,6 +31,7 @@ import net.iGap.libs.codescanner.AutoFocusMode;
 import net.iGap.libs.codescanner.CodeScanner;
 import net.iGap.libs.codescanner.DecodeCallback;
 import net.iGap.libs.codescanner.ScanMode;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.qrCodePayment.MerchantInfo;
@@ -82,6 +83,7 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.getRootView().setBackgroundColor(Theme.getColor(Theme.key_window_background));
         initToolbar();
     }
 
@@ -164,7 +166,6 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
         mCodeScanner.setAutoFocusEnabled(true);
         mCodeScanner.setFlashEnabled(false);
         mCodeScanner.startPreview();
-
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
@@ -204,7 +205,9 @@ public class ScanCodeQRCodePaymentFragment extends BaseFragment {
                 });
             }
         });
-
+        mBinding.codeScanner.setAutoFocusButtonColor(Theme.getColor(Theme.key_button_background));
+        mBinding.codeScanner.setFlashButtonColor(Theme.getColor(Theme.key_button_background));
+        mBinding.codeScanner.setFrameColor(Theme.getColor(Theme.key_button_background));
         mBinding.codeScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,6 @@
 package net.iGap.module.dialog.account;
 
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.AccountUser;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.accountManager.AccountManager;
@@ -29,8 +32,10 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
     private int currentUserPosition;
+    private Context context;
 
-    public AccountsDialogAdapter(AvatarHandler mAvatarHandler, AccountDialogListener listener) {
+    public AccountsDialogAdapter(AvatarHandler mAvatarHandler, AccountDialogListener listener, Context context) {
+        this.context = context;
         int freeAccount = 3;
         for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
             if (AccountManager.getInstance().getUserAccountList().get(i).isAssigned()) {
@@ -60,12 +65,11 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AccountViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_dilog_account, parent, false));
+        return new AccountViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_dilog_account, parent, false), parent.getContext());
     }
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
-
         holder.username.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         if (currentUserPosition == position) {
             holder.currentUserView.setVisibility(View.VISIBLE);
@@ -90,7 +94,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
             }
             holder.messageUnreadCount.setText(t);
         } else {
-            holder.userAvatar.setImageResource(R.drawable.add_chat_background);
+            holder.userAvatar.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.add_chat_background), context, Theme.getColor(Theme.key_theme_color)));
             holder.username.setText(R.string.add_new_account);
             holder.messageUnreadCount.setVisibility(View.INVISIBLE);
         }
@@ -107,15 +111,21 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
         private CircleImageView userAvatar;
         private AppCompatTextView username;
         private AppCompatTextView messageUnreadCount;
-        private View currentUserView;
+        private AppCompatTextView currentUserView;
+        private Context context;
 
-        AccountViewHolder(@NonNull View itemView) {
+        AccountViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
+            this.context = context;
 
             userAvatar = itemView.findViewById(R.id.avatar);
             username = itemView.findViewById(R.id.name);
+            username.setTextColor(Theme.getColor(Theme.key_default_text));
             messageUnreadCount = itemView.findViewById(R.id.unreadMessageCount);
+            messageUnreadCount.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.background_badge), context, Theme.getColor(Theme.key_button_background)));
+            messageUnreadCount.setTextColor(Theme.getColor(Theme.key_button_text));
             currentUserView = itemView.findViewById(R.id.checked);
+            currentUserView.setTextColor(Theme.getColor(Theme.key_default_text));
         }
 
         private void getOtherAccountUserId(long userId) {

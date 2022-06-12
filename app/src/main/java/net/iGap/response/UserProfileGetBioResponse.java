@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
 import net.iGap.proto.ProtoUserProfileGetBio;
 import net.iGap.realm.RealmRegisteredInfo;
 
@@ -33,11 +34,17 @@ public class UserProfileGetBioResponse extends MessageHandler {
         super.handler();
         ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder builder = (ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder) message;
         RealmRegisteredInfo.updateBio(AccountManager.getInstance().getCurrentUser().getId(), builder.getBio());
+        if (identity instanceof OnUserProfileSetBioResponse) {
+            ((OnUserProfileSetBioResponse) identity).onUserProfileBioResponse(builder.getBio());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (identity instanceof OnUserProfileSetBioResponse) {
+            ((OnUserProfileSetBioResponse) identity).timeOut();
+        }
     }
 
     @Override

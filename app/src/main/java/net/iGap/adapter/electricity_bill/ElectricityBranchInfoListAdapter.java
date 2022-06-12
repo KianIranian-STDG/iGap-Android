@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.GasBranchData;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
@@ -68,7 +69,9 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
             super(itemView);
 
             title = itemView.findViewById(R.id.billTitle);
+            title.setTextColor(Theme.getColor(Theme.key_title_text));
             desc = itemView.findViewById(R.id.billValue);
+            desc.setTextColor(Theme.getColor(Theme.key_title_text));
         }
 
         void initViewElec(int position) {

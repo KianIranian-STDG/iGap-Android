@@ -15,6 +15,7 @@ import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
@@ -63,7 +65,6 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
         //holder.checkBoxSelect.setChecked(true);
         holder.topLine.setVisibility(View.GONE);
 
@@ -124,14 +125,20 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         protected CustomTextViewMedium subtitle;
         protected View topLine;
         protected CheckBox checkBoxSelect;
+        protected LinearLayout mainContainer;
 
         public ViewHolder(View view) {
             super(view);
 
+            mainContainer = (LinearLayout) view.findViewById(R.id.mainContainer);
+            mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             image = (CircleImageView) view.findViewById(R.id.imageView);
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
+            title.setTextColor(Theme.getColor(Theme.key_default_text));
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
+            subtitle.setTextColor(Theme.getColor(Theme.key_subtitle_text));
             topLine = view.findViewById(R.id.topLine);
+            topLine.setBackgroundColor(Theme.getColor(Theme.key_line));
             checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
 
         }

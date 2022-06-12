@@ -11,12 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.cell.TextCell;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.dialog.BaseBottomSheet;
@@ -45,7 +47,7 @@ public class BottomSheetStory extends BaseBottomSheet {
 
         lineView = new View(getContext());
         lineView.setBackgroundColor(Color.GRAY);
-        lineView.setBackground(getContext().getResources().getDrawable(R.drawable.bottom_sheet_dialog_line_dark));
+        lineView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
         frameLayout.addView(lineView, LayoutCreator.createFrame(30, 3, Gravity.TOP | Gravity.CENTER_HORIZONTAL, padding, padding, padding, padding));
 
         textView = new TextView(getContext());
@@ -67,7 +69,7 @@ public class BottomSheetStory extends BaseBottomSheet {
         return frameLayout;
     }
 
-    public class Adapter extends RecyclerListView.ItemAdapter {
+    public class Adapter extends RecyclerListView.SelectionAdapter {
 
         public void setRow() {
             rowSize = 0;
@@ -76,11 +78,6 @@ public class BottomSheetStory extends BaseBottomSheet {
             HideStoryRow = rowSize++;
             ViewProfileRow = rowSize++;
             notifyDataSetChanged();
-        }
-
-        @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
-            return true;
         }
 
 
@@ -96,17 +93,17 @@ public class BottomSheetStory extends BaseBottomSheet {
             TextCell textCell = (TextCell) holder.itemView;
             switch (position) {
                 case 0:
-                    textCell.setText(getContext().getResources().getString(R.string.block));
-                    textCell.setTextColor(getContext().getResources().getColor(R.color.red));
+                    textCell.setText(getContext().getResources().getString(R.string.block), true);
+                    textCell.setTextColor(Theme.getColor(Theme.key_red));
                     break;
                 case 1:
-                    textCell.setText(getContext().getResources().getString(R.string.remove_follower));
+                    textCell.setText(getContext().getResources().getString(R.string.remove_follower), true);
                     break;
                 case 2:
-                    textCell.setText(getContext().getResources().getString(R.string.hide_story));
+                    textCell.setText(getContext().getResources().getString(R.string.hide_story), true);
                     break;
                 case 3:
-                    textCell.setText(getContext().getResources().getString(R.string.view_profile));
+                    textCell.setText(getContext().getResources().getString(R.string.view_profile), true);
                     break;
             }
         }
@@ -114,6 +111,11 @@ public class BottomSheetStory extends BaseBottomSheet {
         @Override
         public int getItemCount() {
             return rowSize;
+        }
+
+        @Override
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            return true;
         }
     }
 }

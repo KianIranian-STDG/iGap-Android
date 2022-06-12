@@ -16,6 +16,7 @@
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -36,7 +37,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/rg_confirm_text_register"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="16sp"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toTopOf="@id/rg_btn_choseCountry"
@@ -52,7 +52,6 @@
                 android:enabled="@{fragmentRegisterViewModel.btnChoseCountryEnable}"
                 android:onClick="@{()-> fragmentRegisterViewModel.onClickChoseCountry()}"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
-                app:cardBackgroundColor="?attr/iGapCardViewColor"
                 app:cardCornerRadius="20dp"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="8dp"
@@ -83,7 +82,6 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="@{fragmentRegisterViewModel.callbackBtnChoseCountry}"
-                        android:textColor="?attr/iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         app:layout_constraintLeft_toRightOf="@id/t1"
                         app:layout_constraintRight_toLeftOf="@id/countryFlag"
@@ -94,7 +92,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="..."
-                        android:textColor="?attr/iGapTitleTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +100,6 @@
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/phoneNumber"
-                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:afterTextChanged="@{(phoneNumber)->fragmentRegisterViewModel.onTextChanged(phoneNumber.toString())}"
@@ -133,7 +129,6 @@
                 android:padding="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@{fragmentRegisterViewModel.callbackEdtCodeNumber}"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textDirection="ltr"
                 android:textIsSelectable="false"
                 android:textSize="@dimen/dp14"
@@ -148,8 +143,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/check_box_background"
-                android:textColor="?attr/iGapTitleTextColor"
-                android:textColorLink="?attr/colorPrimary"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@id/registerButton"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +154,6 @@
                 android:id="@+id/conditionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/conditionCheckBox"
                 app:layout_constraintStart_toEndOf="@id/conditionCheckBox"
@@ -183,7 +175,6 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:text="@string/retry"
-                android:textColor="?attr/iGapSubtitleTextColor"
                 android:textSize="@dimen/largeTextSize"
                 android:visibility="@{fragmentRegisterViewModel.showRetryView}"
                 app:layout_constraintBottom_toBottomOf="@id/loading"
@@ -193,7 +184,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/registerButton"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:enabled="@{fragmentRegisterViewModel.btnStartEnable }"
@@ -209,11 +200,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/scanBarcodeButton"
-                style="@style/iGapOutlinedButton"
+                style="@style/BaseIGapStrokeButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:onClick="@{()->fragmentRegisterViewModel.onClickQrCode()}"
-                android:text="@string/register_with_barcode_scan"
+                android:text="@string/BarcodeScan"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
@@ -78,7 +79,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
         ProgressBar loadingProgress = rootView.findViewById(R.id.pb_beepTunes_loading);
         LinearLayout toolBar = rootView.findViewById(R.id.tb_beepTunes);
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_beepTunes_main);
-
+        recyclerView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
         initToolBar(toolBar);

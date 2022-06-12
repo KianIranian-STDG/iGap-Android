@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
     app:contentPadding="@dimen/dp4"
-    app:cardElevation="3dp"
-    app:cardBackgroundColor="?attr/iGapCardViewColor">
+    app:cardElevation="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,7 +29,7 @@
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:text="@string/icon_sent"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@id/themeColor"
             app:layout_constraintEnd_toEndOf="@id/themeColor"
             app:layout_constraintStart_toStartOf="@id/themeColor"

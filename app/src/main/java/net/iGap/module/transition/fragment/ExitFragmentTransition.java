@@ -22,6 +22,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -30,6 +31,7 @@ import androidx.fragment.app.FragmentManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.transition.core.MoveData;
 import net.iGap.module.transition.core.TransitionAnimation;
 
@@ -154,8 +156,8 @@ public class ExitFragmentTransition {
 
     private void animateClose(final View v) {
 
-        int colorFrom = G.context.getResources().getColor(R.color.black);
-        int colorTo = G.context.getResources().getColor(R.color.transparent);
+        int colorFrom = Theme.getColor(Theme.key_black);
+        int colorTo = Color.TRANSPARENT;
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(300); // milliseconds
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

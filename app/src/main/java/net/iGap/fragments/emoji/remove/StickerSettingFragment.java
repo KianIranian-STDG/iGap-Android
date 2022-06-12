@@ -19,6 +19,7 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.observers.rx.ObserverFragment;
 import net.iGap.viewmodel.sticker.RemoveStickerViewModel;
@@ -35,6 +36,7 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
     @Override
     public void setupViews() {
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_removeSticker);
+        recyclerView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         LinearLayout linearLayout = rootView.findViewById(R.id.ll_stickerSetting_toolBar);
 
         HelperToolbar helperToolbar = HelperToolbar.create()
@@ -88,30 +90,39 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
         viewModel.getRemoveStickerLiveData().observe(getViewLifecycleOwner(), removedItemPosition -> adapter.removeItem(removedItemPosition));
 
         TextView removeRecentTv = rootView.findViewById(R.id.tv_stickerSetting_clearRecent);
+        removeRecentTv.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        removeRecentTv.setTextColor(Theme.getColor(Theme.key_red));
         removeRecentTv.setOnClickListener(v -> onClearRecentStickerClicked());
 
         ProgressBar progressBar = rootView.findViewById(R.id.pb_stickerSetting_clearRecent);
         viewModel.getClearRecentStickerLiveData().observe(getViewLifecycleOwner(), progressBar::setVisibility);
 
         TextView clearInternalStorage = rootView.findViewById(R.id.tv_stickerSetting_clearStorage);
+        clearInternalStorage.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        clearInternalStorage.setTextColor(Theme.getColor(Theme.key_red));
         clearInternalStorage.setOnClickListener(v -> viewModel.clearStickerFromInternalStorage());
 
         TextView storageSize = rootView.findViewById(R.id.tv_stickerSetting_clearStorageSize);
+        storageSize.setTextColor(Theme.getColor(Theme.key_title_text));
         viewModel.getStickerFileSizeLiveData().observe(getViewLifecycleOwner(), storageSize::setText);
 
         TextView clearFavoriteStickerTv = rootView.findViewById(R.id.tv_stickerSetting_clearFavorite);
+        clearFavoriteStickerTv.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        clearFavoriteStickerTv.setTextColor(Theme.getColor(Theme.key_red));
         clearFavoriteStickerTv.setOnClickListener(v -> onClearFavoriteStickerClicked());
 
         ProgressBar clearFavoriteStickerPb = rootView.findViewById(R.id.pb_stickerSetting_clearFavorite);
 
         TextView clearRecentEmojiTv = rootView.findViewById(R.id.tv_stickerSetting_clearEmoji);
+        clearRecentEmojiTv.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        clearRecentEmojiTv.setTextColor(Theme.getColor(Theme.key_red));
         clearRecentEmojiTv.setOnClickListener(v -> onClearRecentEmojiClicked());
 
 
         ImageView emptyIv = rootView.findViewById(R.id.iv_stickerSetting_empty);
         TextView emptyTv = rootView.findViewById(R.id.tv_stickerSetting_empty);
         TextView headerTv = rootView.findViewById(R.id.tv_stickerSetting_header);
-
+        headerTv.setTextColor(Theme.getColor(Theme.key_title_text));
         viewModel.getEmptyRecentStickerLiveData().observe(getViewLifecycleOwner(), visibility -> {
             emptyIv.setVisibility(visibility);
             emptyTv.setVisibility(visibility);

@@ -21,16 +21,16 @@
                 android:id="@+id/cameraView"
                 android:layout_width="@dimen/dp100"
                 android:layout_height="@dimen/dp100"
-                android:background="@color/black90"
+                android:background="@android:color/black"
                 android:tag="cameraTest" />
 
             <TextView
                 android:id="@+id/txtIconCamera"
                 android:layout_width="@dimen/dp100"
                 android:layout_height="@dimen/dp100"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:text="@string/icon_camera"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/dp32" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

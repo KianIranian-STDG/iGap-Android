@@ -5,10 +5,9 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_back"
+    android:background="@color/key_light_gray"
     android:orientation="vertical"
-    android:clickable="true"
-    tools:context="org.paygear.fragment.ScannerFragment">
+    android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/root_current"
@@ -21,7 +20,6 @@
             android:id="@+id/balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/green"
             android:gravity="center_horizontal"
             android:padding="@dimen/dp14"
             android:textColor="@android:color/white"

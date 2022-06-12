@@ -13,8 +13,9 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.ThemeModel;
-import net.iGap.module.Theme;
+import net.iGap.module.DeprecatedTheme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAdapter.ViewHolder> {
+
 
     private List<ThemeModel> items;
     private int selectedThemePosition = -1;
@@ -44,7 +46,9 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.custome_row_theme_color, parent, false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custome_row_theme_color, parent, false);
+        view.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        return new ViewHolder(view);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
             holder.checkTheme.setText(R.string.empty_error_message);
         }
 
-        setChatReceivedChatBubble(holder.themeColor, new Theme().getColor(items.get(position).getThemeId()));
+        setChatReceivedChatBubble(holder.themeColor, new DeprecatedTheme().getColor(items.get(position).getThemeId()));
         holder.themeName.setText(items.get(position).getThemeNameRes());
         holder.itemView.setOnClickListener(v -> {
             if (selectedThemePosition != holder.getAdapterPosition()) {

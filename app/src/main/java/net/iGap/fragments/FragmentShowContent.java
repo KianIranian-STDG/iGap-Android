@@ -50,7 +50,6 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
@@ -67,12 +66,10 @@ import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.IDownloader;
-import net.iGap.module.downloader.Status;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -316,24 +313,24 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener, 
     }
 
     public void popUpMenuTopSheet(RealmRoomMessage roomMessage) {
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.save_to_gallery);
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.save_to_gallery));
         MessageObject messageObject = MessageObject.create(roomMessage);
         ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            items.add(R.string.share_video_file);
+            items.add(getString(R.string.share_video_file));
         } else {
-            items.add(R.string.share_image);
+            items.add(getString(R.string.share_image));
         }
         if (RoomObject.isRoomPublic(room)) {
             if (MessageObject.canSharePublic(messageObject)) {
-                items.add(R.string.share_file_link);
+                items.add(getString(R.string.share_file_link));
             }
         }
-        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
-            if (items.get(position) == R.string.save_to_gallery) {
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.save_to_gallery))) {
                 saveToGallery(messageObject);
-            } else if (items.get(position) == R.string.share_file_link) {
+            } else if (items.get(position).equals(getString(R.string.share_file_link))) {
                 shareMediaLink(messageObject);
             } else {
                 shareContent(messageObject);
@@ -556,44 +553,33 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener, 
                             // if thumbnail does not exist then download it
                             ProtoFileDownload.FileDownload.Selector selector = null;
                             long fileSize = 0;
-                            boolean big = false;
 
                             if (messageObject.attachment.smallThumbnail != null) {
                                 selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                                 fileSize = messageObject.attachment.smallThumbnail.size;
-                                big = false;
                             } else if (messageObject.attachment.largeThumbnail != null) {
                                 selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
                                 fileSize = messageObject.attachment.largeThumbnail.size;
-                                big = true;
                             }
                             final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(messageObject.attachment.cacheId, messageObject.attachment.name, G.DIR_TEMP, true);
 
                             if (selector != null && fileSize > 0) {
-                                DownloadObject downloadObject = DownloadObject.createForThumb(messageObject.attachment, ProtoGlobal.RoomMessageType.IMAGE.getNumber(), big);
-                                Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
-                                    if (arg.status == Status.SUCCESS && arg.data != null) {
-                                        String filepath = arg.data.getFilePath();
-                                        String fileToken = arg.data.getToken();
-
-                                        if (!(new File(filepath).exists())) {
-                                            HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                                HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType), System.currentTimeMillis() + "", messageObject.attachment.token, messageObject.attachment.publicUrl, messageObject.attachment.cacheId, messageObject.attachment.name, fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                                    @Override
+                                    public void OnProgress(final String path, int progress) {
+                                        if (progress == 100) {
+                                            G.currentActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
+                                                }
+                                            });
                                         }
-
-
-                                        DbManager.getInstance().doRealmTransaction(realm -> {
-                                            for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
-                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                            }
-                                        });
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, filepath);
-                                            }
-                                        });
                                     }
 
+                                    @Override
+                                    public void OnError(String token) {
+                                    }
                                 });
                             }
                         }

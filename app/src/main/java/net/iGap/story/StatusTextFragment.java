@@ -61,21 +61,18 @@ import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.libs.photoEdit.SaveSettings;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.EventEditText;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.story.liststories.MyStatusStoryListFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
@@ -215,7 +212,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         layoutRootView.addView(bottomLyoutPannel, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.LEFT | Gravity.CENTER, 16, 0, 0, 0));
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56),Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_send);
@@ -228,7 +225,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         palletTextView = new MaterialDesignTextView(context);
         palletTextView.setGravity(Gravity.CENTER);
         palletTextView.setBackground(context.getResources().getDrawable(R.drawable.ic_palete));
-        palletTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        palletTextView.setTextColor(Theme.getColor(Theme.key_white));
         palletTextView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         palletTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32);
         bottomLyoutPannel.addView(palletTextView, LayoutCreator.createLinear(32, 32, 0, 0, 0, 10));
@@ -239,7 +236,7 @@ public class StatusTextFragment extends BaseFragment implements NotifyFrameLayou
         emoji.setText(R.string.icon_emoji_smile);
         emoji.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32);
         emoji.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
-        emoji.setTextColor(context.getResources().getColor(R.color.white));
+        emoji.setTextColor(Theme.getColor(Theme.key_white));
         bottomLyoutPannel.addView(emoji, LayoutCreator.createLinear(30, 30, 0, 0, 12, 10));
 
 

@@ -495,7 +495,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         //For Android 5.0+
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
             try {
-                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         HelperPermission.getCameraPermission(getContext(), new OnGetPermission() {

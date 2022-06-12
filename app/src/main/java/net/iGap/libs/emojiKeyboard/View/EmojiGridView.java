@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.adapter.EmojiAdapter;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener {
     private AppCompatTextView emojiGroupNameTv;
@@ -33,7 +33,7 @@ public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener 
         boolean isRtl = G.isAppRtl;
 
         emojiGroupNameTv = new AppCompatTextView(getContext());
-        emojiGroupNameTv.setTextColor(Theme.getInstance().getSubTitleColor(getContext()));
+        emojiGroupNameTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         emojiGroupNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         emojiGroupNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         emojiGroupNameTv.setLines(1);

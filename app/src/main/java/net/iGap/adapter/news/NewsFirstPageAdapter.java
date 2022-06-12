@@ -1,13 +1,16 @@
 package net.iGap.adapter.news;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +21,7 @@ import com.smarteist.autoimageslider.SliderView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsFPList;
 import net.iGap.model.news.NewsFirstPage;
 import net.iGap.model.news.NewsMainBTN;
@@ -36,6 +40,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter {
         this.mData = mData;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -129,6 +134,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter {
         SliderViewHolder(@NonNull View itemView) {
             super(itemView);
             sliderView = itemView.findViewById(R.id.imageSlider);
+            sliderView.setIndicatorSelectedColor(Theme.getColor(Theme.key_theme_color));
         }
 
         void initSlider(int position) {
@@ -164,10 +170,13 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter {
         private Button btn1;
         private Button btn2;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         DoubleBtnHolder(@NonNull View itemView) {
             super(itemView);
             btn1 = itemView.findViewById(R.id.btn1);
+            btn1.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
             btn2 = itemView.findViewById(R.id.btn2);
+            btn2.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
         }
 
         void initDoubleBTN(int position) {
@@ -196,9 +205,11 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter {
 
         private Button btn1;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         SingleBtnHolder(@NonNull View itemView) {
             super(itemView);
             btn1 = itemView.findViewById(R.id.btn1);
+            btn1.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
         }
 
         void initSingleBTN(int position) {

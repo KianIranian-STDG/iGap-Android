@@ -43,7 +43,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="فارسی"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
@@ -51,7 +50,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_fatsi"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -79,7 +78,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="English"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/englishLanguage"
@@ -87,7 +85,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_english"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -115,7 +113,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="العربی"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/arabicLanguage"
@@ -123,7 +120,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ar"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -151,7 +148,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Français"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/franceLanguage"
@@ -159,7 +155,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_fr"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -190,7 +186,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Español"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible"
@@ -199,7 +194,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_es"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -230,7 +225,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Russian"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible"
@@ -239,7 +233,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ru"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -268,7 +262,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="کوردی"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible"
@@ -277,7 +270,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ku"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -306,7 +299,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="آذری"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="visible"
@@ -314,8 +306,8 @@
             app:layout_constraintTop_toTopOf="@id/azeriLanguage" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/st_icon_ps"
-            style="@style/primaryIconTextViewStyle"
+            android:id="@+id/st_icon_az"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_sent"
@@ -324,42 +316,6 @@
             app:layout_constraintBottom_toBottomOf="@id/azeriLanguage"
             app:layout_constraintEnd_toEndOf="@id/azeriLanguage"
             app:layout_constraintTop_toTopOf="@id/azeriLanguage" />
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/pashtoLanguage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp16"
-            android:background="?attr/selectableItemBackground"
-            android:onClick="@{()->viewModel.onClickPashto()}"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@id/txtLanguagePs"
-            app:layout_constraintEnd_toEndOf="@id/persianLanguage"
-            app:layout_constraintStart_toStartOf="@id/persianLanguage"
-            app:layout_constraintTop_toBottomOf="@id/azeriLanguage" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtLanguagePs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dp8"
-            android:text="پشتو"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/dp15"
-            android:textStyle="normal"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@id/pashtoLanguage"
-            app:layout_constraintTop_toTopOf="@id/pashtoLanguage" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/st_icon_PS"
-            style="@style/primaryIconTextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/icon_sent"
-            android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.isPashto}"
-            app:layout_constraintBottom_toBottomOf="@id/pashtoLanguage"
-            app:layout_constraintEnd_toEndOf="@id/pashtoLanguage"
-            app:layout_constraintTop_toTopOf="@id/pashtoLanguage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

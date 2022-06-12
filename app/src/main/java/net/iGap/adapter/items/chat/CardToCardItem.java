@@ -26,6 +26,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.FontIconTextView;
 import net.iGap.observers.interfaces.IMessageItem;
@@ -91,7 +92,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardToCardAmountTv = new TextView(view.getContext());
             cardIcon = new FontIconTextView(view.getContext());
 
-            messageTv.setTextColor(theme.getReceivedMessageColor(messageTv.getContext()));
+            messageTv.setTextColor(Theme.getColor(Theme.key_default_text));
             setTextSize(messageTv, R.dimen.smallTextSize);
             setTypeFace(messageTv);
 
@@ -99,10 +100,10 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             payButton.setText(getResources().getString(R.string.pay));
             setTextSize(payButton, R.dimen.standardTextSize);
             setTypeFace(payButton);
-            payButton.setTextColor(getColor(R.color.white));
+            payButton.setTextColor(Theme.getColor(Theme.key_white));
 
 
-            cardToCardAmountTv.setTextColor(theme.getReceivedMessageColor(cardToCardAmountTv.getContext()));
+            cardToCardAmountTv.setTextColor(Theme.getColor(Theme.key_default_text));
             cardToCardAmountTv.setGravity(Gravity.CENTER);
             setTextSize(cardToCardAmountTv, R.dimen.standardTextSize);
             setTypeFace(cardToCardAmountTv, Typeface.BOLD);
@@ -110,10 +111,10 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardIcon.setId(R.id.cardToCard_icon);
             cardIcon.setText(getResources().getString(R.string.icon_card_to_card));
             setTextSize(cardIcon, R.dimen.dp32);
-            cardIcon.setTextColor(ContextCompat.getColor(cardIcon.getContext(), R.color.white));
+            cardIcon.setTextColor(Theme.getColor(Theme.key_white));
 
             lineView = new View(getContext());
-            lineView.setBackgroundColor(getColor(R.color.gray_9d));
+            lineView.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
 
             innerLayout.setOrientation(LinearLayout.VERTICAL);
             innerLayout.setId(R.id.cardToCard_innerLayout);
@@ -124,9 +125,9 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 //                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
 //            }
 
-            innerLayout.setBackgroundResource(theme.getCardToCardBackground(innerLayout.getContext()));
-            payButton.setBackgroundResource(theme.getCardToCardButton(payButton.getContext()));
-            cardIcon.setBackgroundResource(theme.getCardToCardIconBackground(cardIcon.getContext()));
+            innerLayout.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.background_item_card_to_card), getContext(), Theme.getColor(Theme.key_theme_color)));
+            payButton.setBackgroundResource(R.drawable.background_card_to_card_green);
+            cardIcon.setBackgroundResource(R.drawable.background_card_to_card_icon_green);
 
             set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainWidth(payButton.getId(), ConstraintSet.MATCH_CONSTRAINT);

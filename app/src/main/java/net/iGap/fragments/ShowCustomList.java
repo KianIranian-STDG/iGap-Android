@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,9 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,9 +47,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.ContactChip;
 import net.iGap.module.ScrollingLinearLayoutManager;
-import net.iGap.module.Theme;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnSelectedList;
@@ -92,6 +95,20 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ConstraintLayout mainContainer= view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        LinearLayout fcg_layout_toolbar= view.findViewById(R.id.fcg_layout_toolbar);
+        fcg_layout_toolbar.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        LinearLayout fcg_layout_search= view.findViewById(R.id.fcg_layout_search);
+        fcg_layout_search.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        TextView add_member = view.findViewById(R.id.fcg_lbl_add_member);
+        add_member.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        View fcg_splitter_add_member =  view.findViewById(R.id.fcg_splitter_add_member);
+        fcg_splitter_add_member.setBackgroundColor(Theme.getColor(Theme.key_line));
+
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             dialogShowing = bundle.getBoolean("DIALOG_SHOWING");
@@ -122,14 +139,14 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
 
         //todo:// use material chips
-        if (G.themeColor == Theme.DARK) {
+        if (Theme.isDark() || Theme.isNight()) {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
         } else {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
         }
 
         chipsInput = view.findViewById(R.id.chips_input);
-
+        chipsInput.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         final ItemAdapter itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
         fastAdapter.withSelectable(true);
@@ -271,7 +288,14 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
     private void showDialog(ProtoGlobal.Room.Type roomType) {
         if (roomType == ProtoGlobal.Room.Type.GROUP) {
 
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity)
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .title(R.string.show_message_count)
+                    .items(R.array.numberCountGroup)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
+                    .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                    .itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -308,7 +332,9 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
                             break;
                         case 3:
                             dialog.dismiss();
-                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            new MaterialDialog.Builder(G.fragmentActivity)
+                                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                    .title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(Theme.getColor(Theme.key_toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     if (onSelectedList != null) {
@@ -342,8 +368,9 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
 
             new MaterialDialog.Builder(G.fragmentActivity)
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
                     .items(G.context.getResources().getString(R.string.are_you_sure_add_follower))
-                    .itemsColorAttr(R.attr.iGapTitleTextColor)
+                    .itemsColor(Theme.getColor(Theme.key_title_text))
                     .itemsGravity(GravityEnum.START)
                     .buttonsGravity(GravityEnum.CENTER)
                     .positiveText(R.string.yes)
@@ -357,7 +384,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
                             popBackStackFragment();
                         }
                     }).negativeText(R.string.no)
-                    .negativeColorAttr(R.attr.iGapSubtitleTextColor)
+                    .negativeColor(Theme.getColor(Theme.key_subtitle_text))
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

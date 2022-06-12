@@ -29,6 +29,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -41,11 +42,11 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
@@ -64,7 +65,6 @@ import static androidx.constraintlayout.widget.ConstraintSet.RIGHT;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 
@@ -1253,6 +1253,7 @@ public class HelperToolbar {
 
                     //online call view
                     callLayout = inflater.inflate(R.layout.chat_sub_layout_strip_call, this, false);
+                    callLayout.getRootView().setBackgroundColor(Theme.getColor(Theme.key_theme_color));
                     callLayout.setId(R.id.view_toolbar_layout_strip_call);
                     setLayoutParams(callLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.toolbar_search_box_size));
                     callLayout.setVisibility(GONE);
@@ -1287,11 +1288,8 @@ public class HelperToolbar {
                 mainConstraint = new ConstraintLayout(getContext());
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
 
-                if (isRoundBackground) {
-                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawable(mContext));
-                } else {
-                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawableSharpe(mContext));
-                }
+
+                mainConstraint.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_toolbar_background), getContext(), Theme.getColor(Theme.key_toolbar_background)));
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);
                 setRoot.connect(mainConstraint.getId(), START, PARENT_ID, START);
@@ -1310,7 +1308,7 @@ public class HelperToolbar {
                     logo.setText(R.string.app_name);
                     logo.setGravity(Gravity.CENTER);
                     Utils.setTextSize(logo, R.dimen.standardTextSize);
-                    logo.setTextColor(getContext().getResources().getColor(R.color.white));
+                    logo.setTextColor(Theme.getColor(Theme.key_white));
                     logo.setTypeface(tfFontIcon);
                     logo.setPadding(0, 0, 0, i_Dp(R.dimen.dp4));
                     InputFilter[] fArray = new InputFilter[1];
@@ -1461,7 +1459,7 @@ public class HelperToolbar {
                     tvSearch.setGravity(Gravity.CENTER);
                     tvSearch.setVisibility(VISIBLE);
                     tvSearch.setTypeface(tfMain);
-                    tvSearch.setTextColor(new Theme().getTitleTextColor(tvSearch.getContext()));
+                    tvSearch.setTextColor(Theme.getColor(Theme.key_default_text));
                     Utils.setTextSize(tvSearch, R.dimen.smallTextSize);
                     setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
                     searchLayout.addView(tvSearch);
@@ -1490,20 +1488,12 @@ public class HelperToolbar {
                     lp.addRule(RelativeLayout.CENTER_VERTICAL, searchLayout.getId());
                     tvClearSearch.setLayoutParams(lp);
                     searchLayout.addView(tvClearSearch);
-
-                    if (isDark) {
-                        searchLayout.setBackgroundResource(R.drawable.shape_toolbar_search_box_dark);
-                        tvClearSearch.setTextColor(getContext().getResources().getColor(R.color.white));
-                        edtSearch.setTextColor(getContext().getResources().getColor(R.color.white));
-                        edtSearch.setHintTextColor(getContext().getResources().getColor(R.color.gray_f2));
-                        tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_f2));
-                    } else {
-                        searchLayout.setBackgroundResource(R.drawable.shape_toolbar_search_box);
-                        tvClearSearch.setTextColor(getContext().getResources().getColor(R.color.black));
-                        edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
-                        edtSearch.setHintTextColor(getContext().getResources().getColor(R.color.gray_9d));
-                        tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_9d));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        searchLayout.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.shape_toolbar_search_box),getContext(),Theme.getColor(Theme.key_popup_background)));
                     }
+                    tvClearSearch.setTextColor(Theme.getColor(Theme.key_default_text));
+                    edtSearch.setTextColor(Theme.getColor(Theme.key_default_text));
+                    edtSearch.setHintTextColor(Theme.getColor(Theme.key_default_text));
 
                     if (isBigSearchBox) {
                         Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
@@ -1540,7 +1530,7 @@ public class HelperToolbar {
                     civAvatar.setId(R.id.view_toolbar_user_chat_avatar);
                     civCloud.setId(R.id.view_toolbar_user_cloud_avatar);
 
-                    civCloud.setImageResource(R.drawable.ic_cloud_space_blue);
+                    civCloud.setImageResource(R.drawable.cloud);
 
                     setLayoutParams(civAvatar, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT, 0, 0, 0);
                     setLayoutParams(civCloud, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT, 0, 0, 0);
@@ -1593,14 +1583,14 @@ public class HelperToolbar {
                     tvChatName.setHorizontalScrollBarEnabled(true);
                     tvChatName.setSelected(true);
                     tvChatName.setGravity(Gravity.LEFT);
-                    tvChatName.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvChatName.setTextColor(Theme.getColor(Theme.key_white));
                     setLayoutParams(tvChatName, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     tvChatName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
                     layoutChatName.addView(tvChatName);
 
                     //verify icon
                     iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify, R.string.icon_blue_badge);
-                    iconChatVerify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+                    iconChatVerify.setTextColor(getContext().getResources().getColor(R.color.verify));
                     Utils.setTextSize(iconChatVerify, R.dimen.smallTextSize);
                     iconChatVerify.setVisibility(GONE);
                     iconChatVerify.setPadding(i_Dp(R.dimen.dp4), 0, 0, 0);
@@ -1619,7 +1609,7 @@ public class HelperToolbar {
                     tvChatStatus = new TextView(getContext());
                     tvChatStatus.setId(R.id.view_toolbar_chat_txt_seen_status);
                     tvChatStatus.setTypeface(tfMain);
-                    tvChatStatus.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvChatStatus.setTextColor(Theme.getColor(Theme.key_white));
                     tvChatStatus.setSingleLine();
                     tvChatStatus.setGravity(Gravity.LEFT);
                     Utils.setTextSize(tvChatStatus, R.dimen.verySmallTextSize);
@@ -1668,7 +1658,7 @@ public class HelperToolbar {
                     tvProfileName.setGravity(Gravity.LEFT);
                     tvProfileName.setSingleLine();
                     Utils.setTextSize(tvProfileName, R.dimen.largeTextSize);
-                    tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvProfileName.setTextColor(Theme.getColor(Theme.key_white));
                     mainConstraint.addView(tvProfileName);
 
                     set.constrainWidth(tvProfileName.getId(), MATCH_CONSTRAINT);
@@ -1684,7 +1674,7 @@ public class HelperToolbar {
                     tvProfileMemberCount.setGravity(Gravity.LEFT);
                     tvProfileMemberCount.setSingleLine();
                     Utils.setTextSize(tvProfileMemberCount, R.dimen.largeTextSize);
-                    tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvProfileMemberCount.setTextColor(Theme.getColor(Theme.key_white));
                     mainConstraint.addView(tvProfileMemberCount);
 
                     set.constrainWidth(tvProfileMemberCount.getId(), MATCH_CONSTRAINT);
@@ -1746,7 +1736,7 @@ public class HelperToolbar {
                     tvProfileMemberCount.setGravity(Gravity.LEFT);
                     tvProfileMemberCount.setSingleLine();
                     Utils.setTextSize(tvProfileMemberCount, R.dimen.smallTextSize);
-                    tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvProfileMemberCount.setTextColor(Theme.getColor(Theme.key_white));
                     addView(tvProfileMemberCount);
 
                     setRoot.constrainWidth(tvProfileMemberCount.getId(), MATCH_CONSTRAINT);
@@ -1762,7 +1752,7 @@ public class HelperToolbar {
                     tvProfileName.setGravity(Gravity.LEFT);
                     tvProfileName.setSingleLine();
                     Utils.setTextSize(tvProfileName, R.dimen.standardTextSize);
-                    tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
+                    tvProfileName.setTextColor(Theme.getColor(Theme.key_white));
                     addView(tvProfileName);
 
                     setRoot.constrainWidth(tvProfileName.getId(), MATCH_CONSTRAINT);
@@ -2018,7 +2008,7 @@ public class HelperToolbar {
         private void setIconStyle(AppCompatTextView view) {
 
             view.setTypeface(tfFontIcon);
-            view.setTextColor(getContext().getResources().getColor(R.color.white));
+            view.setTextColor(Theme.getColor(Theme.key_white));
             Utils.setTextSize(view, R.dimen.dp22);
 
         }
@@ -2064,7 +2054,7 @@ public class HelperToolbar {
 
         private void setupDefaults() {
 
-            isDark = G.themeColor == Theme.DARK;
+            isDark = Theme.isDark() || Theme.isNight();
 
             VALUE_1DP = i_Dp(R.dimen.dp1);
             VALUE_4DP = i_Dp(R.dimen.dp4);

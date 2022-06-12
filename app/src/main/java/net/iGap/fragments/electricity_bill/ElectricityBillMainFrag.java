@@ -2,6 +2,7 @@ package net.iGap.fragments.electricity_bill;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +29,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM;
@@ -67,6 +70,15 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        binding.cardHolder.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.billTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billTypeTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billIdET.setTextColor(Theme.getColor(Theme.key_title_text));
+        RadioButton mode_phoneBill = view.findViewById(R.id.mode_phoneBill);
+        mode_phoneBill.setTextColor(Theme.getColor(Theme.key_icon));
+        RadioButton mode_serviceBill = view.findViewById(R.id.mode_serviceBill);
+        mode_serviceBill.setTextColor(Theme.getColor(Theme.key_icon));
+
         HelperTracker.sendTracker(HelperTracker.TRACKER_BILL_PAGE);
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -94,16 +106,18 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag<ElectricityBillMain
                     case 0:
                         viewModel.setType(BillInfo.BillType.ELECTRICITY);
                         binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint));
+                        binding.billIdHolder.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
                         binding.billIdHolder.setCounterMaxLength(13);
                         binding.billQRscan.setEnabled(true);
-                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray));
+                        binding.billQRscan.setTextColor(Theme.getColor(Theme.key_icon));
                         break;
                     case 1:
                         viewModel.setType(BillInfo.BillType.GAS);
                         binding.billIdHolder.setHint(getResources().getString(R.string.elecBill_main_billIDHint3));
+                        binding.billIdHolder.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
                         binding.billIdHolder.setCounterMaxLength(12);
                         binding.billQRscan.setEnabled(false);
-                        binding.billQRscan.setTextColor(getResources().getColor(R.color.gray_300));
+                        binding.billQRscan.setTextColor(Theme.getColor(Theme.key_icon));
                         break;
                 }
             }

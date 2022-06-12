@@ -12,14 +12,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?iGapToolbarBackgroundSharp">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_title"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             style="@style/TextAppearance.AppCompat.Headline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

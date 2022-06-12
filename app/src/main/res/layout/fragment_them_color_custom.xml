@@ -30,7 +30,6 @@
                 android:id="@+id/asn_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:background="?attr/iGapToolbarBackground"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"
@@ -58,7 +57,7 @@
                             android:gravity="center"
                             android:text="@string/icon_back"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -68,7 +67,7 @@
                         android:fontFamily="@font/main_font_bold"
                         android:gravity="left|center"
                         android:text="@string/app_theme"
-                        android:textColor="@color/whit_background"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
                         android:visibility="visible" />
@@ -91,7 +90,7 @@
                             android:gravity="center"
                             android:text="@string/icon_check_ok"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
 
                     </net.iGap.libs.rippleeffect.RippleView>
 
@@ -121,7 +120,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -140,7 +139,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/app_theme"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -159,7 +157,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -178,7 +176,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/app_notif_color"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -199,7 +196,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine"
+                        android:background="@color/key_light_gray"
                         android:visibility="gone" />
 
                     <LinearLayout
@@ -221,7 +218,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/toggle_botton_color"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -240,7 +236,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -259,7 +255,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/send_and_attach_botton_color"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -278,7 +273,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -297,7 +292,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/default_header_font_color"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -316,7 +310,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
 
                     <LinearLayout
@@ -336,7 +330,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/default_progress_color"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp15"
                             android:textStyle="normal" />
 
@@ -355,7 +348,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -61,8 +62,8 @@ public class DownloadQualityFragment extends DialogFragment {
             } else
                 quality = 320;
 
-            confirmTv.setTextColor(getContext().getResources().getColor(R.color.green));
-            checkBox.setTextColor(getContext().getResources().getColor(R.color.black));
+            confirmTv.setTextColor(getContext().getResources().getColor(R.color.dayGreenTheme));
+            checkBox.setTextColor(Theme.getColor(Theme.key_black));
             checkBox.setEnabled(true);
         });
 

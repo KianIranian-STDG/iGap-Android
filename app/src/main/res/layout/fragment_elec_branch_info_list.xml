@@ -51,7 +51,6 @@
                     android:layout_marginEnd="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_error_listView"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="center"
                     android:ellipsize="end"
@@ -65,7 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/addNewBill"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

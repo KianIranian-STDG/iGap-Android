@@ -1,18 +1,20 @@
 package net.iGap.adapter.payment.internetpackage;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.InternetPackage;
-import net.iGap.module.Theme;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -43,6 +45,7 @@ public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackage
         this.selectedListener = selectedListener;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @NonNull
     @Override
     public ProposalPackageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +53,7 @@ public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackage
         return new ProposalPackageViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull ProposalPackageViewHolder holder, int position) {
         if (data != null)
@@ -80,12 +84,15 @@ public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackage
         private TextView packageSize;
         private TextView packagePrice;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         ProposalPackageViewHolder(@NonNull View itemView) {
             super(itemView);
             clParent = itemView.findViewById(R.id.clParent);
+            clParent.setBackground(Theme.tintDrawable(itemView.getContext().getDrawable(R.drawable.shape_payment_internet_light),itemView.getContext(),Theme.getColor(Theme.key_popup_background)));
             packageSize = itemView.findViewById(R.id.internet_package);
+            packageSize.setTextColor(Theme.getColor(Theme.key_default_text));
             packagePrice = itemView.findViewById(R.id.package_price);
-
+            packagePrice.setTextColor(Theme.getColor(Theme.key_default_text));
             clParent.setOnClickListener(v -> {
                 if (selectedListener != null) {
                     selectedListener.onItemSelected(internetPackage);
@@ -97,6 +104,7 @@ public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackage
             });
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         void bindProposalPackage(InternetPackage internetPackage) {
             this.internetPackage = internetPackage;
             packageSize.setText(internetPackage.getDescription());
@@ -106,12 +114,9 @@ public class InternetPackageAdapter extends RecyclerView.Adapter<InternetPackage
             packagePrice.setText(String.format("%s %s", price, itemView.getContext().getResources().getString(R.string.rial)));
 
             if (getAdapterPosition() == currentlySelectedPosition) {
-                clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_selected));
+                clParent.setBackground(Theme.tintDrawable(itemView.getContext().getDrawable(R.drawable.shape_payment_internet_selected),itemView.getContext(),Theme.getColor(Theme.key_dark_theme_color)));
             } else {
-                if (G.themeColor == Theme.DARK)
-                    clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_dark));
-                else
-                    clParent.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_payment_internet_light));
+                clParent.setBackground(Theme.tintDrawable(itemView.getContext().getDrawable(R.drawable.shape_payment_internet_light),itemView.getContext(),Theme.getColor(Theme.key_popup_background)));
             }
         }
     }

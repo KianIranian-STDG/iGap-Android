@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 public class StoryProgress extends FrameLayout {
 
@@ -20,6 +21,7 @@ public class StoryProgress extends FrameLayout {
     private boolean isStarted = false;
     private View frontProgressView;
     private View maxProgressView;
+    private View backProgress;
     private PausableScaleAnimation animation;
     private Callback callback;
 
@@ -27,7 +29,11 @@ public class StoryProgress extends FrameLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(getContext()).inflate(R.layout.pausable_progress, this);
         frontProgressView = findViewById(R.id.front_progress);
+        frontProgressView.setBackgroundColor(Theme.getColor(Theme.key_white));
         maxProgressView = findViewById(R.id.max_progress);
+        maxProgressView.setBackgroundColor(Theme.getColor(Theme.key_white));
+        backProgress = findViewById(R.id.back_progress);
+        backProgress.setBackgroundColor(Theme.getColor(Theme.key_gray));
     }
 
     public void setDuration(long duration) {
@@ -56,7 +62,7 @@ public class StoryProgress extends FrameLayout {
 
     public void setMinWithoutCallback() {
         if (maxProgressView != null) {
-            maxProgressView.setBackgroundResource(R.color.gray);
+            maxProgressView.setBackgroundColor(Theme.getColor(Theme.key_gray));
             maxProgressView.setVisibility(VISIBLE);
             if (animation != null) {
                 animation.setAnimationListener(null);
@@ -67,7 +73,7 @@ public class StoryProgress extends FrameLayout {
 
     public void setMaxWithoutCallback() {
         if (maxProgressView != null) {
-            maxProgressView.setBackgroundResource(R.color.white);
+            maxProgressView.setBackgroundColor(Theme.getColor(Theme.key_white));
             maxProgressView.setVisibility(VISIBLE);
             if (animation != null) {
                 animation.setAnimationListener(null);
@@ -78,7 +84,7 @@ public class StoryProgress extends FrameLayout {
 
     private void finishProgress(boolean isMax) {
         if (isMax)
-            maxProgressView.setBackgroundResource(R.color.white);
+            maxProgressView.setBackgroundColor(Theme.getColor(Theme.key_white));
         maxProgressView.setVisibility(isMax ? VISIBLE : GONE);
         if (animation != null) {
             animation.setAnimationListener(null);

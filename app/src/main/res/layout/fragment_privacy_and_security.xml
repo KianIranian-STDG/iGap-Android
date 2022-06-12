@@ -54,7 +54,6 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        android:background="?attr/iGapToolbarBackground"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
 
@@ -70,14 +69,14 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
-                        android:textColor="@color/black_register"
+                        android:textColor="@android:color/black"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine" />
+                        android:background="@color/key_light_gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -93,7 +92,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/Last_Seen"
-                            android:textColor="@color/black_register"
+                            android:textColor="@android:color/black"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -105,7 +104,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:background="?attr/iGapToolbarBackground"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -123,7 +121,7 @@
                             android:paddingLeft="@dimen/dp16"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/Groups"
-                            android:textColor="@color/black_register"
+                            android:textColor="@android:color/black"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -135,7 +133,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:background="?attr/iGapToolbarBackground"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -156,7 +153,6 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -171,7 +167,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -193,7 +188,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_can_see_my_avatar"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -206,7 +200,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
-                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -229,7 +222,6 @@
                             android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_channel_s"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -265,7 +257,6 @@
                             android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_group_s"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -300,7 +291,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_voice_call"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -335,7 +325,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_video_call"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -370,7 +359,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/last_seen"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -398,7 +386,7 @@
                     android:layout_marginTop="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:layout_marginBottom="@dimen/dp10"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -413,7 +401,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Passcode_Lock"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
@@ -426,7 +413,6 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp8"
                         android:text="@string/Security"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -434,7 +420,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="?iGapDividerLine"
+                        android:background="@color/key_light_gray"
                         android:visibility="gone" />
 
                     <TextView
@@ -445,7 +431,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Two_Step_Verification"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
@@ -460,7 +445,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_pass_code"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -475,7 +459,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_verification"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -489,8 +472,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
-                        android:text="@string/Active_Sessions"
-                        android:textColor="?iGapTitleTextColor"
+                        android:text="@string/ActiveSessions"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -503,7 +485,7 @@
                     android:layout_marginTop="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:layout_marginBottom="@dimen/dp10"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -518,7 +500,6 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/Account_Self_destruction"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal"
                         android:background="?attr/selectableItemBackground"/>
@@ -540,7 +521,6 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/if_you_are_away_for"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -562,7 +542,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
-                        android:textColor="?iGapSubtitleTextColor"
                         android:fontFamily="@font/main_font"
                         android:padding="@dimen/dp16"
                         android:text="@string/desc_self_destroy"

@@ -236,7 +236,7 @@
 
     <string name="st_title_Clear_Cache">"مسح الذاكرة الخفية"</string>
 
-    <string name="st_title_Privacy_Security">"الأمان و الخصوصية"</string>
+    <string name="PrivacySettings">"الأمان و الخصوصية"</string>
 
     <string name="st_title_message">"غرفة الرسالة "</string>
 
@@ -331,7 +331,7 @@
 
     <string name="Two_Step_Verification">"التأكيد بمرحلتين"</string>
 
-    <string name="Active_Sessions">"الجلسات النشطة "</string>
+    <string name="ActiveSessions">"الجلسات النشطة "</string>
 
     <string name="Account_Self_destruction">"التدمير الذاتي للحساب"</string>
 
@@ -763,9 +763,9 @@
 
     <string name="please_wait">إنتظر .</string>
 
-    <string name="Invite_Friends">دعوة الأصدقاء</string>
+    <string name="InviteFriends">دعوة الأصدقاء</string>
 
-    <string name="iGap_FAQ">‫الأسئلة الشائعة لآیکب</string>
+    <string name="iGapFAQ">‫الأسئلة الشائعة لآیکب</string>
     ‬‬‬‬‬‬
     <string name="Documents">الوثاشق</string>
 
@@ -882,9 +882,7 @@
 
     <string name="create_time">تم الإنشاء في :</string>
 
-    <string name="last_connectivity">آخر اتصال:</string>
-
-    <string name="ip">الرمز: </string>
+    <string name="ip">الرمز </string>
 
     <string name="current_session">الجلسة الحالية </string>
 
@@ -1152,7 +1150,6 @@
     <string name="to_use_this_section_you_need_to_obtain_permissions">أنت بحاجة إلى السماح %s</string>
 
 
-
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
 
     <string name="self_destructs">التدمير الذاتي </string>
@@ -1307,7 +1304,7 @@
 
     <string name="map">الخريطة </string>
 
-    <string name="igap_nearby">أصدقاء الجوار </string>
+    <string name="iGapNearBy">أصدقاء الجوار </string>
 
     <string name="No_messages_here_yet">لا توجد رسالة حالياً </string>
 
@@ -1531,7 +1528,7 @@
 
     <string name="audio">الملف الصوتي</string>
 
-    <string name="data_storage">تخزين البيانات</string>
+    <string name="DataSettings">تخزين البيانات</string>
 
     <string name="limit_for_set_username">المحدودية الزمنية لتغيير اسم المستخدم</string>
 
@@ -1575,7 +1572,7 @@
 
     <string name="show_line_pattern">إظهار نمط الخط</string>
 
-    <string name="biometric_unlock">فتح البيومترية</string>
+    <string name="unlock_with_fingerPrint">فتح القفل بواسطة البصمة</string>
 
     <string name="change_pass_code">تغيير الرمز </string>
 
@@ -1681,7 +1678,7 @@
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
 
-    <string name="st_dark_theme">موضوع الظلام</string>
+    <string name="st_dark_theme">الوضع المظلم للنظام</string>
     <string name="dont_ask_again">حصلت عليه</string>
     <string name="attention">اهتمام</string>
     <string name="content_attention_dialog">ملاحظة: تجدر الإشارة إلى أن الأفراد على الخريطة سيتم عرض مع وجود خطأ من 500 متر. لذلك لا تقلق</string>
@@ -1862,7 +1859,7 @@
     <string name="start">بداية</string>
     <string name="bot">بوت</string>
     <string name="back_to_menu">العودة إلى القائمة الرئيسية</string>
-    <string name="igap_update">تحديث</string>
+    <string name="iGapUpdate">تحديث</string>
     <string name="empty_text_dr_bot">مرحبا! آی‌کب مساعدك الذكي</string>
     <string name="deprecated">تم إيقاف الإصدار الرجاء التحديث لاستخدامه</string>
     <string name="new_version_avilable">الإصدار الجديد متاح</string>
@@ -2093,7 +2090,7 @@
     <string name="enter_your_card_number">أدخل رقم بطاقتك</string>
     <string name="enter_your_sheba_number">أدخل شبا رقمك</string>
 
-    <string name="language">لغة التطبيق</string>
+    <string name="Language">لغة التطبيق</string>
     <string name="app_version">إصدار التطبيق</string>
     <string name="logout">خروج</string>
 
@@ -2208,7 +2205,7 @@
     <string name="fag">التعليمات</string>
 
     <string name="add_new_subscriber">إضافة المشترك</string>
-    <string name="cloud">غيم</string>
+    <string name="UserCloud">غيم</string>
     <string name="score">أحرز هدفا</string>
     <string name="Credit">ائتمان</string>
     <string name="read_all">اقرأ كل شيء</string>
@@ -2234,7 +2231,7 @@
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
     <string name="groups_in_common">المجموعات المشتركة</string>
-    <string name="register_with_barcode_scan">تسجيل الدخول مع مسح الباركود</string>
+    <string name="BarcodeScan">تسجيل الدخول مع مسح الباركود</string>
     <string name="one_number">١</string>
     <string name="two_number">٢</string>
     <string name="three_number">٣</string>
@@ -2434,6 +2431,7 @@
     <string name="elecBill_error_zeroResultSearch">النتيجة: لا توجد فواتير.</string>
     <string name="elecBill_error_zeroResultBill">لا توجد فواتير مسجلة باسمك.</string>
     <string name="elecBill_success_title">نجاح</string>
+    <string name="success_title">عملية ناجحة</string>
     <string name="elecBill_success_pay">الدفع ناجح</string>
     <string name="add_new_account">أضف حساب جديد</string>
     <string name="profile">الشخصي</string>
@@ -2557,7 +2555,7 @@
     <string name="file_manager_image_desc">لإرسال ملف الصور</string>
     <string name="file_manager_video_desc">لإرسال ملف الفيديو</string>
     <string name="file_manager_music">لإرسال ملف صوتيات</string>
-    <string name="folder">مجلد</string>
+    <string name="Filters">مجلد</string>
     <string name="internal_storage">التخزين الداخلي</string>
     <string name="external_storage">تخزين خارجي</string>
     <string name="file_manager">مدير الملفات</string>
@@ -2608,6 +2606,7 @@
     <string name="mic">ميكروفون</string>
     <string name="hold">معلق</string>
     <string name="payment_userScore">درجاتك</string>
+    <string name="UserScore">درجاتك</string>
     <string name="Increase_score">زيادة درجاتك الآن!</string>
     <string name="refund_token">رمز الاسترداد</string>
     <string name="kuknos_submit_count">العد</string>
@@ -2635,14 +2634,11 @@
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
     <string name="remind_me_later">ذكرني لاحقا</string>
     <string name="score_request_text">هل ترغب في تقييم التطبيق؟</string>
-    <string name="please_try_later">يرجى المحاولة لاحقًا</string>
     <string name="name_error">لم يتم التحقق من الاسم</string>
     <string name="user_name_error">اسم المستخدم غير مؤكد</string>
-    <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
     <string name="gender_error">لم يتم تأكيد الجنس</string>
     <string name="access_folder">مجلد غير مصرح به</string>
     <string name="restrict_folder">الوصول إلى هذا المجلد مقيد.</string>
-    <string name="update_lock_error">"درخواست خارج از تعداد"</string>
     <string name="seted_gender">تم تأكيد الجنس</string>
     <string name="seted_name">تم تأكيد الاسم</string>
     <string name="email_added">تمت إضافة عنوان البريد الإلكتروني</string>
@@ -2673,7 +2669,6 @@
     <string name="credit_pocket">جيب الائتمان</string>
     <string name="cards_pocket">بطاقات الجيب</string>
     <string name="currency_pocket">جيب العملة</string>
-    <string name="faq">أسئلة مكررة</string>
     <string name="you_have_not_added_any_cards_yet">لم تقم بإضافة أي بطاقات حتى الآن</string>
     <string name="please_select_the_desired_amount_or_enter_it_manually">يرجى تحديد المبلغ المطلوب أو إدخاله يدويًا</string>
     <string name="the_amount_is_in_rials">المبلغ بالريال</string>
@@ -2705,7 +2700,6 @@
     <string name="Stop">قف</string>
 
 
-
     <string name="my_status">لحظتي</string>
     <string name="status">لحظات</string>
     <string name="status_title">لحظه</string>
@@ -2735,6 +2729,73 @@
     <string name="pin_up_to_5_chat">يمكنك تثبيت ما يصل إلى 5 محادثات!</string>
     <string name="at_least_5_characters_are_required_for_a_global_search">يتطلب البحث العالمي 5 أحرف على الأقل</string>
     <string name="faild_payment">عذرا ، حدث خطأ وحاول مرة أخرى</string>
+
+    <string name="UserWallet">محفظتك</string>
+    <string name="ManageCloud">إدارة السحابة الخاصة بك</string>
+    <string name="AccDescrMoreOptions">المزيد من الخيارات</string>
+    <string name="Done">فعله</string>
+    <string name="UsernamePlaceholder">اسم المستخدم الخاص بك</string>
+    <string name="NamePlaceholder">اسم الخاص بك</string>
+    <string name="UsernameHelp">إذا اخترت اسم مستخدم ، فسيتمكن الأشخاص الآخرون من العثور عليك من خلال اسم المستخدم هذا والاتصال بك دون معرفة رقم هاتفك. \ n \ n يمكنك استخدام ** a – z ** و ** 0–9 ** والشرطات السفلية. الحد الأدنى للطول ** 5 ** أحرف.</string>
+    <string name="UsernameInvalid">عذرا ، اسم المستخدم هذا غير صالح.</string>
+    <string name="UsernameInvalidStartNumber">عذرًا ، لا يمكن أن يبدأ اسم المستخدم برقم.</string>
+    <string name="UsernameInvalidLong">يجب ألا يتجاوز اسم المستخدم 32 حرفًا.</string>
+    <string name="NameInvalidLong">يجب ألا يتجاوز اسم  32 حرفًا.</string>
+    <string name="UsernameAvailable">%1$s متاح.</string>
+    <string name="UsernameChecking">التحقق من اسم المستخدم ...</string>
+    <string name="NameChecking">التحقق من اسم ...</string>
+    <string name="OK">موافق</string>
+    <string name="UsernameInvalidShort">يجب أن يتكون اسم المستخدم من 5 أحرف على الأقل.</string>
+    <string name="UsernameInUse">عذرا، اسم المستخدم هذا مأخوذ من قبل.</string>
+    <string name="UserBioInfo">يمكنك إضافة بضعة أسطر عن نفسك. أي شخص يفتح ملف التعريف الخاص بك سيرى هذا النص.</string>
+    <string name="NotificationsOn">تشغيل</string>
+    <string name="NotificationsOff">إيقاف</string>
+    <string name="last_connectivity">آخر اتصال:</string>
+    <string name="privacy_group_channel">غيّر من يمكنه إضافتك إلى المجموعات والقنوات.</string>
+    <string name="privacy_active_session">تحكم في جلساتك على الأجهزة الأخرى.</string>
+    <string name="AccDescrUserOption">خيارات المستخدم</string>
+    <string name="BlockUser">مستخدم محضور</string>
+    <string name="block_desc">لن يتمكن المستخدمون المحظورون من الاتصال بك ولن يروا وقت آخر ظهور لك.</string>
+    <string name="Unblock">رفع الحظر</string>
+    <string name="blocked_users">%d مستخدمين محجوبين</string>
+    <string name="Enable">تشغيل</string>
+    <string name="block_users">مستخدمين محجوبين</string>
+    <string name="NoResult">لا نتيجة</string>
+    <string name="EnabledPasswordText">لقد قمت بتمكين التحقق بخطوتين. \ n ستحتاج إلى كلمة المرور التي قمت بإعدادها هنا لتسجيل الدخول إلى حساب iGap الخاص بك.</string>
+    <string name="user_name_added">تم تأكيد اسم المستخدم</string>
+    <string name="bio_added">تم التحقق من السيرة الذاتية</string>
+    <string name="bio_error">لم يتم التحقق من السيرة الذاتية</string>
+    <string name="icon_delete">حذف</string>
+    <string name="NoOtherSessions">لا توجد جلسات نشطة أخرى</string>
+    <string name="NoOtherSessionsInfo">يمكنك تسجيل الدخول إلى iGap من أجهزة الجوال والأجهزة اللوحية وأجهزة سطح المكتب الأخرى ، باستخدام نفس رقم الهاتف. ستتم مزامنة جميع بياناتك على الفور.</string>
+    <string name="AreYouSureSessions">هل أنت متأكد أنك تريد إنهاء جميع الجلسات الأخرى؟</string>
+    <string name="AreYouSureSessionsTitle">إنهاء الجلسات</string>
+    <string name="Terminate">إنهاء</string>
+    <string name="Cancel">يلغي</string>
+    <string name="TerminateSessionText">هل أنت متأكد أنك تريد إنهاء هذه الجلسة؟</string>
+    <string name="AreYouSureSessionTitle">إنهاء الجلسة</string>
+    <string name="TerminateAllSessions">إنهاء جميع الجلسات الأخرى</string>
+    <string name="AuthAnotherClient">مسح رمز الاستجابة السريعة</string>
+    <string name="ClearOtherSessionsHelp">يسجل خروج جميع الأجهزة باستثناء هذا الجهاز.</string>
+    <string name="TerminateSessionInfo">اضغط على جلسة لإنهاء</string>
+    <string name="LoginAttemptsInfo">الأجهزة المذكورة أعلاه لا يمكنها الوصول إلى رسائلك. تم إدخال الرمز بشكل صحيح ، ولكن لم يتم إعطاء كلمة مرور صحيحة.</string>
+    <string name="CurrentSession">الجلسة الحالية</string>
+    <string name="OtherSessions">جلسات نشطة</string>
+    <string name="LoginAttempts">محاولات تسجيل الدخول غير المكتملة</string>
+    <string name="Online">متصل</string>
+    <string name="UnofficialApp">تطبيق غير رسمي</string>
+    <string name="please_try_later">يرجى المحاولة لاحقًا</string>
+    <string name="selectLanguage">اختار اللغة</string>
+    <string name="score_icloud">نقاطي والسحابة</string>
+    <string name="iGap_features">آیکب ميزات </string>
+    <string name="set_Email">أدخل بريدك الإلكتروني</string>
+    <string name="gender">أدخل جنسك</string>
+    <string name="set_referral_code">أدخل الهاتف الخليوي الخاص بك الإحالة</string>
+    <string name="day">يوم</string>
+    <string name="night">ليل</string>
+    <string name="dark">داكن</string>
+    <string name="cyan">ازرق سماوي</string>
+    <string name="biometric_unlock">فتح البيومترية</string>
     <string name="biometric_password_description">من خلال تنشيط هذا الخيار ، سيتم تطبيق كلمة المرور الحيوية النشطة على هاتفك (بصمة الإصبع أو التعرف على الوجه أو مسح قزحية العين) على التطبيق</string>
     <string name="biometric_password">كلمة المرور البيومترية</string>
     <string name="set_now">تعيين الآن</string>
@@ -2749,6 +2810,28 @@
     <string name="load_sticker_types_error_message">أنواع مرشح غير محملة</string>
     <string name="select_sticker_type">حدد نوع الملصق</string>
     <string name="locating">استقبال الموقف الحالي …</string>
-    <string name="enable_sending_non_media_file_soon">سيتم تمكين القدرة على إرسال ملفات غير الوسائط قريبًا</string>
+    <string name="send_message">إرسال رسالة</string>
+    <string name="convert_to_text">تتحويل إلى نص</string>
+    <string name="convert_voice_message">تحويل الرسالة الصوتية إلى نص</string>
+    <string name="convert_text_message">تحويل الرسالة النصية إلى صوت</string>
+    <string name="convert_error">این پیام قابل تحلیل نمی باشد</string>
+    <string name="convert_text_to_voice" >تبدیل به صوت</string>
+    <string name="permission_to_this_section_temporarily_denied">الوصول إلى المجلدات من هذا القسم مقيد مؤقتًا</string>
+    <string name="uploading_file_to">تحميل الملف إلى</string>
+    <string name="upload_canceled">تم إلغاء الرفع</string>
+    <string name="upload_failed">التحميل فشل</string>
+    <string name="upload_finished">انتهى التحميل</string>
+    <string name="igap_is_uploading_file">آیگب يقوم بتحميل الملف</string>
+    <string name="you_are_in_uploading_state">أنت تقوم بتحميل ملف ولا يمكن تغيير حسابك.\n توقف عن التحميل لتغيير الحساب</string>
+    <string name="change_phone_number">تم تغيير رقم الهاتف</string>
+    <string name="invalid_phone_number">رقم الهاتف مستخدم في حساب آخر</string>
+    <string name="changePhoneNumber">غير رقم الهاتف</string>
 
+    <string name="set_owner">نقل الملكية</string>
+    <string name="change_owner_message">هل أنت متأكد من هذا الطلب؟</string>
+    <string name="change_phone_description">يمكنك تغيير رقم iGap الخاص بك. بعد تغيير جميع محتويات السحابة وجهات الاتصال والقنوات والمجموعة سيتم نقلها إلى الرقم الجديد. لاحظ أنه لا يمكن تغيير الرقم إذا كان الرقم المدخل يحتوي على iGap</string>
+    <string name="sound_empty">الصوت فارغ</string>
+    <string name="ai_error">تم إرسال الرسالة صوتيًا بسبب خطأ في الخادم</string>
+    <string name="powered_by_aipaa">Powered by AIPAA</string>
+    <string name="Powered_by_aipa">"Reading message "</string>
 </resources>

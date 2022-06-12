@@ -13,7 +13,7 @@ package net.iGap.response;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.proto.ProtoGeoGetConfiguration;
 import net.iGap.realm.RealmGeoGetConfiguration;
 
@@ -38,7 +38,7 @@ public class GeoGetConfigurationResponse extends MessageHandler {
         final ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder builder = (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder) message;
 
         for (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.TileServer tileServer : builder.getTileServerList()) {
-            FragmentiGapMap.mapUrls.add(tileServer.getBaseUrl());
+            NearbyFragment.mapUrls.add(tileServer.getBaseUrl());
         }
 
         if (builder.getTileServerList().size() == 0) {

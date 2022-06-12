@@ -4,13 +4,14 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent">
+    android:background="@android:color/transparent"
+    app:ignore="NamespaceTypo">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -64,7 +65,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@android:color/white"
             android:orientation="vertical">
 
 
@@ -248,11 +249,6 @@
 
     </LinearLayout>
 
-    <ir.radsense.raadcore.widget.ProgressLayout
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white" />
 
 
 </FrameLayout>

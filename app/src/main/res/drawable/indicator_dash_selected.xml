@@ -4,6 +4,6 @@
     <size
         android:height="3dp"
         android:width="12dp" />
-    <solid android:color="@color/default_indicator_color_selected" />
+    <solid android:color="@color/key_light_gray" />
     <corners android:radius="1dp" />
 </shape>

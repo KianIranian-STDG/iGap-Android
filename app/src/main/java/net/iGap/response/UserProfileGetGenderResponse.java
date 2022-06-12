@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.proto.ProtoUserProfileGetGender;
 import net.iGap.realm.RealmUserInfo;
 
@@ -17,9 +19,9 @@ public class UserProfileGetGenderResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserProfileGetGenderResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileGetGenderResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.actionId = actionId;
@@ -32,11 +34,17 @@ public class UserProfileGetGenderResponse extends MessageHandler {
         super.handler();
         ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder builder = (ProtoUserProfileGetGender.UserProfileGetGenderResponse.Builder) message;
         RealmUserInfo.updateGender(builder.getGender());
+        if (identity instanceof OnUserProfileSetGenderResponse) {
+            ((OnUserProfileSetGenderResponse) identity).onUserProfileGenderResponse(builder.getGender(),builder.getResponse());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (identity instanceof OnUserProfileSetGenderResponse) {
+            ((OnUserProfileSetGenderResponse) identity).onTimeOut();
+        }
     }
 
     @Override

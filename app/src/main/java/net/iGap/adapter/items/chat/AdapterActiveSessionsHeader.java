@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.structs.StructSessions;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +59,7 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
 
     @Override
     public void bindView(@NotNull ViewHolder holder, @NotNull List payloads) {
+        holder.root.setTextColor(Theme.getColor(Theme.key_red));
         super.bindView(holder, payloads);
     }
 

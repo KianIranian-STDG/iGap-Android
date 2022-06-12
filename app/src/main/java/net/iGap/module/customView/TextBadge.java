@@ -15,6 +15,7 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
 
@@ -40,7 +41,7 @@ public class TextBadge extends FrameLayout {
     private void init() {
         textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(getContext().getResources().getColor(R.color.white));
+        textView.setTextColor(Theme.getColor(Theme.key_white));
         setTextSize(textView, R.dimen.dp10);
         addView(textView);
     }

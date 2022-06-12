@@ -4,8 +4,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_back"
-    tools:context="org.paygear.fragment.CashOutRequestFragment">
+    android:background="@color/key_light_gray">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,7 +28,6 @@
                     android:id="@+id/limit1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="16sp" />
 
                 <TextView
@@ -107,7 +105,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button"
-                        style="@style/iGapButton"
+                        style="@style/BaseIGapButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:gravity="center"
@@ -156,12 +154,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-    <ir.radsense.raadcore.widget.ProgressLayout
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white" />
 
 </FrameLayout>

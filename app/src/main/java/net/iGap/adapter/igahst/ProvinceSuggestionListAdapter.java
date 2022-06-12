@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.igasht.IGashtProvince;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +37,10 @@ public class ProvinceSuggestionListAdapter extends ArrayAdapter<IGashtProvince> 
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.custom_row_igasht_province_suggestion_list, null);
+            v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         }
         TextView customerNameLabel = v.findViewById(R.id.item_title);
+        customerNameLabel.setTextColor(Theme.getColor(Theme.key_title_text));
         if (customerNameLabel != null) {
             customerNameLabel.setText(getProvinceTitle(items.get(position)));
         }
@@ -89,8 +92,6 @@ public class ProvinceSuggestionListAdapter extends ArrayAdapter<IGashtProvince> 
         switch (G.selectedLanguage) {
             case "en":
                 return province.getEnglishName();
-            case "fa":
-                return province.getProvinceName();
             default:
                 return province.getProvinceName();
         }

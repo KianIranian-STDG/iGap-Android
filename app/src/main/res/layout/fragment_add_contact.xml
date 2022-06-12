@@ -31,7 +31,6 @@
 
         <EditText
             android:id="@+id/ac_edt_firstName"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="56dp"
@@ -54,7 +53,6 @@
 
         <EditText
             android:id="@+id/ac_edt_lastName"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="56dp"
@@ -75,7 +73,6 @@
 
         <EditText
             android:id="@+id/ac_txt_codeCountry"
-            style="@style/iGapEditTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
@@ -87,7 +84,6 @@
             android:paddingRight="16dp"
             android:singleLine="true"
             android:text="@{viewModel.countryCode}"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textDirection="ltr"
             android:textIsSelectable="false"
             android:textSize="@dimen/dp14"
@@ -97,7 +93,6 @@
 
         <com.vicmikhailau.maskededittext.MaskedEditText
             android:id="@+id/ac_edt_phoneNumber"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -126,7 +121,6 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textColor="@color/red"
             android:textDirection="locale"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintEnd_toEndOf="@id/ac_edt_phoneNumber"

@@ -1,15 +1,18 @@
 package net.iGap.adapter.igahst;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.igasht.IGashtTicketDetail;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
 
@@ -19,9 +22,11 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
 
     private List<IGashtTicketDetail> items;
     private BottomSheetItemClickCallback clickCallback;
+    private Context context;
 
-    public PlaceHistoryAdapter(BottomSheetItemClickCallback clickCallback) {
+    public PlaceHistoryAdapter(BottomSheetItemClickCallback clickCallback,Context context) {
         this.clickCallback = clickCallback;
+        this.context = context;
     }
 
     public void setItems(List<IGashtTicketDetail> items) {
@@ -37,6 +42,7 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.barCode.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_igasht_yellow), context, Theme.getColor(Theme.key_theme_color)));
         viewHolder.itemView.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
         viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getTicketInfo().getCreated(), false));
         viewHolder.detail.setText(items.get(i).getTicketInfo().getLocationNameWithLanguage());
@@ -51,13 +57,15 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
 
         private AppCompatTextView date;
         private AppCompatTextView detail;
-        /*private AppCompatTextView barCode;*/
+        private AppCompatTextView barCode;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             detail = itemView.findViewById(R.id.itemDetail);
-            /*barCode = itemView.findViewById(R.id.barCode);*/
+            detail.setTextColor(Theme.getColor(Theme.key_title_text));
+            barCode = itemView.findViewById(R.id.barCode);
             date = itemView.findViewById(R.id.itemDate);
+            date.setTextColor(Theme.getColor(Theme.key_title_text));
         }
     }
 }

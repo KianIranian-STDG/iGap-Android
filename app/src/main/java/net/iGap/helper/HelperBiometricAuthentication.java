@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 
 import java.util.Objects;
@@ -53,11 +54,13 @@ public class HelperBiometricAuthentication {
 
     public static void showEnrollBiometricPasswordDialog(Fragment fragment){
         MaterialDialog materialDialog = new MaterialDialog.Builder(fragment.requireContext())
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
                 .content(R.string.no_biometric_password_set_on_your_phone)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .contentGravity(GravityEnum.START)
-                .contentColorAttr(R.attr.iGapTitleTextColor)
+                .contentColor(Theme.getColor(Theme.key_default_text))
                 .positiveText(R.string.set_now)
-                .positiveColorAttr(R.attr.colorAccent)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -71,7 +74,7 @@ public class HelperBiometricAuthentication {
                     }
                 })
                 .negativeText(R.string.cancel)
-                .negativeColorAttr(R.attr.iGapSubtitleTextColor)
+                .negativeColor(Theme.getColor(Theme.key_dark_red))
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

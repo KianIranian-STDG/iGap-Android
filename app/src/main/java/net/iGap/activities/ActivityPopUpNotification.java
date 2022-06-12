@@ -17,11 +17,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,11 +32,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -43,12 +49,12 @@ import net.iGap.R;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperRealm;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.UploadService;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.accountManager.AccountManager;
@@ -133,19 +139,30 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         super.onCreate(savedInstanceState);
-        setThemeSetting();
         setContentView(R.layout.activity_popup_notification);
+
+        MaterialDesignTextView apn_btn_smile_button = (MaterialDesignTextView)findViewById(R.id.apn_btn_smile_button);
+        apn_btn_smile_button.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        EditText apn_edt_chat = (EditText)findViewById(R.id.apn_edt_chat);
+        apn_edt_chat.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        MaterialDesignTextView apn_btn_mic = (MaterialDesignTextView)findViewById(R.id.apn_btn_mic);
+        apn_btn_mic.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        LinearLayout apn_ll_toolbar = findViewById(R.id.apn_ll_toolbar);
+        apn_ll_toolbar.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(this, R.drawable.shape_toolbar_background), this, Theme.getColor(Theme.key_theme_color)));
+
+        RelativeLayout mainContainer = findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
 
         mList = HelperNotification.getInstance().getMessageList();
         if (getIntent().getExtras() != null)
             userId = getIntent().getExtras().getLong(ActivityMain.userId);
-        new InitComponent();
-    }
 
-    private void setThemeSetting() {
-        this.setTheme(new Theme().getTheme(this));
+        new InitComponent();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +324,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
-            findViewById(R.id.lmr_layout_bottom).setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root_dark), ActivityPopUpNotification.this, R.attr.rootBackgroundColor));
+            viewMicRecorder.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+            findViewById(R.id.lmr_layout_bottom).setBackground(Theme.tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root), ActivityPopUpNotification.this,Theme.getColor(Theme.key_window_background)));
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
                 @Override
@@ -419,6 +437,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             edtChat = findViewById(R.id.apn_edt_chat);
+            edtChat.setHintTextColor(Theme.getColor(Theme.key_theme_color));
 
             edtChat.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -501,7 +520,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             btnSend = findViewById(R.id.apn_btn_send);
-            //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
+            btnSend.setTextColor(Theme.getColor(Theme.key_title_text));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -538,7 +557,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, container, false);
-
+            layout.getRootView().setBackgroundColor(Theme.getColor(Theme.key_light_theme_color));
             TextView txtMessage = layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(mList.get(position).message);
 

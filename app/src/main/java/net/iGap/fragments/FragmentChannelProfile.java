@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,13 +18,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.G;
@@ -36,10 +42,10 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -128,14 +134,52 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        CoordinatorLayout container = view.findViewById(R.id.container);
+        container.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        CollapsingToolbarLayout toolbar_layout_collapse = view.findViewById(R.id.toolbar_layout_collapse);
+        toolbar_layout_collapse.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
+        NestedScrollView mainContainer= view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         if (currentRoomAccess != null) {
             checkRoomAccess(currentRoomAccess);
             roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
             currentRoomAccess.addChangeListener(roomAccessChangeListener);
         }
+        binding.divider0.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider1.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider2.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider3.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider4.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.description.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.channelInfo.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.channelLinkStatus.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.channelLink.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.notification.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.members.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.subscribers.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.subscribersCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.administrators.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.administratorsCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.moderator.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.sharedContentTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.photo.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.photoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.video.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.videoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFiles.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFilesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessage.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessageCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gif.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gifCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.files.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.filesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.links.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.linksCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
+        binding.leaveChannel.setTextColor(Theme.getColor(Theme.key_red));
         imvChannelAvatar = binding.toolbarAvatar;
+        imvChannelAvatar.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
         imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
 
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
@@ -206,8 +250,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
-                edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtLink.setTextColor(Theme.getColor(Theme.key_title_text));
+                edtLink.setHintTextColor(Theme.getColor(Theme.key_light_gray));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);
                 edtLink.setSingleLine(true);
@@ -216,9 +260,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextView txtLink = new AppCompatTextView(getActivity());
                 txtLink.setText(link);
-                txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
+                txtLink.setTextColor(Theme.getColor(Theme.key_title_text));
 
-                viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                viewRevoke.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
@@ -310,6 +354,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     }
 
     private void initialToolbar() {
+
+        binding.toolbarAppbar.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background), context, Theme.getColor(Theme.key_theme_color)));
 
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
             int maxScroll = appBarLayout.getTotalScrollRange();
@@ -417,9 +463,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
     private void showPopUp() {
         if (getActivity() != null) {
-            List<Integer> items = new ArrayList<>();
-            items.add(R.string.add_to_home_screen);
-            new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, position -> {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.add_to_home_screen));
+            new TopSheetDialog(getActivity()).setListData(items, -1, position -> {
                 //ToDo: add code for add to home screen
             }).show();
         }

@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -23,6 +25,7 @@ import net.iGap.adapter.items.popularChannel.PopularMoreChannelAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
@@ -85,7 +88,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChann
         emptyTextView = view.findViewById(R.id.tv_popularChannel_emptyText);
         sliderCv = view.findViewById(R.id.cv_popularChannel_more);
         slider = view.findViewById(R.id.bs_popularChannel_more);
-
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4, GridLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(new PopularMoreChannelAdapter(new PopularMoreChannelAdapter.OnMoreChannelCallBack() {
             @Override
             public void onChannelClick(Channel channel) {
@@ -101,8 +104,9 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChann
         recyclerView.setNestedScrollingEnabled(false);
 
         swipeRefreshLayout.setOnRefreshListener(() -> viewModel.onSwipeRefresh());
-
-        view.findViewById(R.id.retryView).setOnClickListener(v -> viewModel.onSwipeRefresh());
+        AppCompatTextView retryView = view.findViewById(R.id.retryView);
+        retryView.setTextColor(Theme.getColor(Theme.key_title_text));
+        retryView.setOnClickListener(v -> viewModel.onSwipeRefresh());
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getActivity() != null && isGoBack != null && isGoBack) {

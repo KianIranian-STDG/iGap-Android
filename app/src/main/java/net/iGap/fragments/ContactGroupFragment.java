@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,24 +38,24 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.messenger.ui.components.ProgressDialog;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.OnChannelAddMember;
-import net.iGap.observers.interfaces.OnContactsGetList;
-import net.iGap.observers.interfaces.OnGroupAddMember;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.ProgressDialog;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.observers.interfaces.OnChannelAddMember;
+import net.iGap.observers.interfaces.OnContactsGetList;
+import net.iGap.observers.interfaces.OnGroupAddMember;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelAddMember;
@@ -93,8 +95,12 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         progressDialog = new ProgressDialog(getContext());
+
+        TextView add_member = view.findViewById(R.id.fcg_lbl_add_member);
+        add_member.setTextColor(Theme.getColor(Theme.key_title_text));
 
         // to disable swipe in channel creation mode
         if (typeCreate != null) {
@@ -123,7 +129,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 .setListener(this)
                 .setLogoShown(true);
 
-
         LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
 
@@ -134,7 +139,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
 
         //todo:// use material chips
-        if (G.themeColor == Theme.DARK) {
+        if (Theme.isDark() || Theme.isNight()) {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
         } else {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
@@ -145,6 +150,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         }
 
         chipsInput = view.findViewById(R.id.chips_input);
+        chipsInput.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+       /* PorterDuffColorFilter greyFilter = new PorterDuffColorFilter(Theme.getColor(Theme.key_window_background), PorterDuff.Mode.MULTIPLY);
+        chipsInput.getBackground().setColorFilter(greyFilter);*/
 
         //get our recyclerView and do basic setup
         RecyclerView rv = view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
@@ -332,8 +340,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (G.fragmentActivity != null) {
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.currentActivity != null) {
+                    G.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -343,8 +351,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (G.fragmentActivity != null) {
-                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.currentActivity != null) {
+                    G.currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -369,7 +377,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
 
     @Override
     public void onLeftIconClickListener(View view) {
-        G.fragmentActivity.onBackPressed();
+        G.currentActivity.onBackPressed();
     }
 
     @Override

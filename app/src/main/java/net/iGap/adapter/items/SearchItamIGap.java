@@ -12,6 +12,7 @@ package net.iGap.adapter.items;
 
 import android.graphics.Typeface;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -24,6 +25,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.proto.ProtoClientSearchUsername;
@@ -113,15 +115,21 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
         protected TextView txtIcon;
         protected TextView lastSeen;
         protected TextView txtTime;
+        protected LinearLayout mainContainer;
 
         public ViewHolder(View view) {
             super(view);
-
+            mainContainer = view.findViewById(R.id.mainContainer);
+            mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             avatar = view.findViewById(R.id.sfsl_imv_contact_avatar);
             name = view.findViewById(R.id.sfsl_txt_contact_name);
+            name.setTextColor(Theme.getColor(Theme.key_default_text));
             lastSeen = view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            lastSeen.setTextColor(Theme.getColor(Theme.key_default_text));
             txtIcon = view.findViewById(R.id.sfsl_txt_icon);
+            txtIcon.setTextColor(Theme.getColor(Theme.key_icon));
             txtTime = view.findViewById(R.id.sfsl_txt_time);
+            txtTime.setTextColor(Theme.getColor(Theme.key_default_text));
         }
     }
 }

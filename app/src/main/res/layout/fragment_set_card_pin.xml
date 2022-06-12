@@ -4,10 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_back"
+    android:background="@color/key_light_gray"
     android:id="@+id/rootView"
-    android:clickable="true"
-    tools:context="org.paygear.fragment.SetCardPinFragment">
+    android:clickable="true">
 
     <LinearLayout
         android:id="@+id/toolbarLayout"
@@ -106,7 +105,7 @@
                 android:padding="16dp">
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:id="@+id/button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

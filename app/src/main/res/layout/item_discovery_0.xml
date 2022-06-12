@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/imageView5"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
@@ -27,8 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLines="1"
-        android:text="@string/payment_userScore"
-        android:textColor="?iGapSubtitleTextColor"
+        android:text="@string/UserScore"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintEnd_toStartOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
@@ -54,7 +53,6 @@
         android:id="@+id/view12"
         android:layout_width="1dp"
         android:layout_height="50dp"
-        android:background="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="@+id/imageView5" />

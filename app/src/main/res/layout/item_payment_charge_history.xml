@@ -15,7 +15,6 @@
         android:gravity="center_vertical|left"
         android:maxLength="15"
         android:text="100000 ریال"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/number_contact"
@@ -31,7 +30,6 @@
         android:ellipsize="end"
         android:gravity="clip_vertical|right"
         android:maxLength="15"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/amount_contact"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,9 +38,9 @@
         tools:text="091211111111" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:background="?iGapDividerLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

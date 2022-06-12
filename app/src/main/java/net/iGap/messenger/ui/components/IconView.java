@@ -21,6 +21,7 @@ public class IconView extends AppCompatTextView {
 
     public void setIconColor(int color) {
         setTextColor(color);
+        invalidate();
     }
 
     public void setIcon(int icon) {

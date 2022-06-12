@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -50,6 +51,7 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag<PopularChannelHo
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_popularChannel_home);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         swipeRefreshLayout = view.findViewById(R.id.sr_popularChannel_home);
         epmtyView = view.findViewById(R.id.emptyRecycle);
         Toolbar popularChannelsToolbar = new Toolbar(getContext());

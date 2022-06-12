@@ -37,6 +37,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -74,11 +75,16 @@ public abstract class FragmentOtpAuthentication extends BaseFragment implements 
         ((ViewGroup) view.findViewById(R.id.toolbar)).addView(toolbar.getView());
 
         smsCodeEditText = view.findViewById(R.id.smsCodeEditText);
+        smsCodeEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        smsCodeEditText.setTextColor(Theme.getColor(Theme.key_title_text));
 
         ViewGroup ltTime = view.findViewById(R.id.stda_layout_time);
         TextView txtPhoneNumber = view.findViewById(R.id.stda_txt_phoneNumber);
+        txtPhoneNumber.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView descriptionTextView = view.findViewById(R.id.description_authentication);
+        descriptionTextView.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView txtTimerLand = view.findViewById(R.id.stda_txt_time);
+        txtTimerLand.setTextColor(Theme.getColor(Theme.key_title_text));
 
         txtPhoneNumber.setText(requireArguments().getString("phone", getString(R.string.unknown)));
         descriptionTextView.setText(requireArguments().getString("description"));
@@ -213,12 +219,14 @@ public abstract class FragmentOtpAuthentication extends BaseFragment implements 
         if (getActivity() == null || getActivity().isFinishing())
             return;
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).backgroundColor(Theme.getColor(Theme.key_popup_background))
                 .title(title)
                 .positiveText(R.string.B_ok)
                 .negativeText(R.string.B_cancel)
                 .customView(R.layout.dialog_remind_time, true)
                 .canceledOnTouchOutside(false)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .autoDismiss(false)
                 .onNegative((dialog12, which) -> {
                     dialog12.dismiss();
@@ -232,8 +240,13 @@ public abstract class FragmentOtpAuthentication extends BaseFragment implements 
                 .show();
 
         View v = dialog.getCustomView();
-
+        v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         final TextView remindTime = v.findViewById(R.id.remindTime);
+        remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textReason = v.findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

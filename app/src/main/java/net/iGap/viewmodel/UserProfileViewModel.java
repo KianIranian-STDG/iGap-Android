@@ -3,12 +3,10 @@ package net.iGap.viewmodel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -17,32 +15,27 @@ import androidx.databinding.ObservableLong;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.downloader.DownloadObject;
-import net.iGap.module.downloader.Downloader;
-import net.iGap.module.downloader.Status;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
@@ -59,6 +52,7 @@ import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
+import net.iGap.observers.interfaces.OnUserProfileUpdateBio;
 import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
 import net.iGap.proto.ProtoFileDownload;
@@ -90,18 +84,14 @@ import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
-import net.iGap.structs.AttachmentObject;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
-
 import io.realm.Realm;
-
 import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
+import static net.iGap.messenger.ui.fragments.NearbyFragment.mapUrls;
 
 public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.EventDelegate, OnUserAvatarResponse {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
@@ -207,7 +197,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void init() {
         getUserCredit();
-        isDarkMode.set(G.themeColor == Theme.DARK);
+        isDarkMode.set(Theme.isDark() || Theme.isNight());
         if (!G.isAppRtl) {
             textsGravity.set(Gravity.LEFT);
         } else {
@@ -223,17 +213,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         };
         G.onUserAvatarResponse = this;
         getIVandScore();
-        new RequestUserProfileGetGender().userProfileGetGender();
-        new RequestUserProfileGetEmail().userProfileGetEmail();
-        new RequestUserProfileGetBio().getBio();
+       // new RequestUserProfileGetGender().userProfileGetGender();
+       // new RequestUserProfileGetEmail().userProfileGetEmail();
+       // new RequestUserProfileGetBio().getBio();
         if (G.isNeedToCheckProfileWallpaper) {
             getProfileWallpaperFromServer();
         }
     }
 
-    private void updateUserInfoUI() {
+    public void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
-
             userId = (userInfo != null && userInfo.getUserId() != 0) ? userInfo.getUserId() : AccountManager.getInstance().getCurrentUser().getId();
             currentCredit.set(userInfo.getWalletAmount());
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
@@ -270,7 +259,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             if (!currentUserName.equals(userName.get()))
                 sendRequestSetUsername();
             if (!currentBio.equals(bio.get()))
-                sendRequestSetBio();
+               // sendRequestSetBio();
             if (!currentUserEmail.equals(email.get()))
                 sendRequestSetEmail();
             if (currentGender != gender.get())
@@ -368,10 +357,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         });
     }
 
-    private void sendRequestSetBio() {
-        new RequestUserProfileSetBio().setBio(bio.get(), new OnUserProfileSetBioResponse() {
+/*    private void sendRequestSetBio() {
+        new RequestUserProfileSetBio().setBio(bio.get(), new OnUserProfileUpdateBio() {
             @Override
-            public void onUserProfileBioResponse(String bio) {
+            public void onUserProfileUpdateBio(String bio) {
                 G.handler.post(() -> {
                     showLoading.set(View.GONE);
                     currentBio = bio;
@@ -382,7 +371,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
 
             @Override
-            public void error(int majorCode, int minorCode) {
+            public void Error(int majorCode, int minorCode, int time) {
                 G.handler.post(() -> {
                     bio.set(currentBio);
                     showLoading.set(View.GONE);
@@ -404,7 +393,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
         });
 
-    }
+    }*/
 
     private void sendRequestSetEmail() {
         new RequestUserProfileSetEmail().setUserProfileEmail(email.get(), new OnUserProfileSetEmailResponse() {
@@ -674,8 +663,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showLoading.set(View.VISIBLE);
         retryRequestTime++;
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            long userId = (userInfo != null && userInfo.getUserId() > 0) ? userInfo.getUserId() : AccountManager.getInstance().getCurrentUser().getId();
-            return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userInfo.getUserId()).findFirst();
         });
         if (realmRoom != null) {
             showLoading.set(View.GONE);
@@ -781,16 +769,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(!isChecked);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         if (isDarkMode.get()) {
-            G.themeColor = Theme.DARK;
-            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);
+            G.themeColor = Theme.DARK_GREEN_THEME;
+            String themeColor = sharedPreferences.getString(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK_GREEN_THEME);
             sharedPreferences.edit().
-                    putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK).
-                    putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor).
+                    putString(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK_GREEN_THEME).
+                    putString(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor).
                     apply();
         } else {
-            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT);
+            String themeColor = sharedPreferences.getString(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DAY_GREEN_THEME);
             G.themeColor = themeColor;
-            sharedPreferences.edit().putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor).apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_THEME_COLOR, themeColor).apply();
         }
 
         updateNewTheme.setValue(true);
@@ -898,11 +886,23 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void dialogWaitTime(int title, long time) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive((dialog1, which) -> dialog1.dismiss()).show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .title(title).backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok)
+                .autoDismiss(false)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .canceledOnTouchOutside(false).onPositive((dialog1, which) -> dialog1.dismiss()).show();
 
         View v = dialog.getCustomView();
+        v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
 
         final TextView remindTime = v.findViewById(R.id.remindTime);
+        remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textReason = v.findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -979,8 +979,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             if (realmWallpaper != null) {
                 RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
-                String bigImagePath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + pf.getCacheId() + "_" + DownloadObject.extractMime(pf.getName());
-
+                String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
                 changeUserProfileWallpaperPath.postValue(bigImagePath);
 
             } else {
@@ -999,27 +998,19 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
-                    String bigImagePath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + pf.getCacheId() + "_" + DownloadObject.extractMime(pf.getName());
+                    String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
                     if (!new File(bigImagePath).exists()) {
-                        DownloadObject downloadObject = DownloadObject.createForRoomMessage(AttachmentObject.create(pf), ProtoGlobal.RoomMessageType.IMAGE.getNumber());
-                        Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
-                            if (arg.status == Status.SUCCESS && arg.data != null) {
-                                String filepath = arg.data.getFilePath();
-                                String fileToken = arg.data.getToken();
-
-                                if (!(new File(filepath).exists())) {
-                                    HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(String mPath, final int progress) {
+                                if (progress == 100) {
+                                    changeUserProfileWallpaperPath.postValue(bigImagePath);
                                 }
-
-
-                                DbManager.getInstance().doRealmTransaction(db -> {
-                                    for (RealmAvatar realmAvatar1 : db.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
-                                        realmAvatar1.getFile().setLocalFilePath(filepath);
-                                    }
-                                });
-                                changeUserProfileWallpaperPath.postValue(bigImagePath);
                             }
 
+                            @Override
+                            public void OnError(String token) {
+                            }
                         });
                     } else {
                         changeUserProfileWallpaperPath.postValue(bigImagePath);

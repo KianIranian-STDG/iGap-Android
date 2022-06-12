@@ -25,9 +25,9 @@ import net.iGap.R;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SerializationUtils;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
@@ -228,6 +228,9 @@ public class HelperLogMessage {
             case PINNED_MESSAGE:
                 messageID = R.string.pined_message;
                 break;
+            case CHANGE_PHONE_NUMBER:
+                messageID = R.string.change_phone_number;
+                break;
             case UNRECOGNIZED:
                 break;
         }
@@ -351,6 +354,7 @@ public class HelperLogMessage {
                 break;
             case USER_JOINED:
             case USER_DELETED:
+            case CHANGE_PHONE_NUMBER:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
@@ -359,6 +363,7 @@ public class HelperLogMessage {
                     insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                 }
                 break;
+
             case UNRECOGNIZED:
                 strBuilder.clear();
                 break;
@@ -407,7 +412,7 @@ public class HelperLogMessage {
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     //ToDo: fixed it and pass color to this function
-                    ds.linkColor = Theme.getInstance().getLinkColor(context);
+                    ds.linkColor = Theme.getColor(Theme.key_link_text);
                     super.updateDrawState(ds);
                 }
             };

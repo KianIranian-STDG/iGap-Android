@@ -1,174 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragments.FragmentMap">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <org.osmdroid.views.MapView
+        android:id="@+id/open_street_map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    </org.osmdroid.views.MapView>
 
-            >
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/new_map_fragment_progress_bar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <FrameLayout
-                android:id="@+id/mf_fragment_map_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"></FrameLayout>
+    <TextView
+        android:id="@+id/new_map_fragment_locating_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="@string/locating"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_map_fragment_progress_bar" />
 
+    <TextView
+        android:id="@+id/new_map_fragment_internet_not_connected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
+        android:text="Internet is not connected"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="@dimen/dp14"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_map_fragment_locating_text" />
 
-            <RelativeLayout
-                android:id="@+id/mf_rv_send_position"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="#FAFAFA"
-                android:gravity="bottom"
-                android:text="@string/send_position"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp18"
-                android:visibility="visible"
-                tools:ignore="MissingPrefix">
+    <net.iGap.module.CircleImageView
+        android:id="@+id/send_location"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="@dimen/dp10"
+        android:background="@drawable/circle_button_background"
+        android:clickable="true"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-                <RelativeLayout
-                    android:id="@+id/rv_icon"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+    <TextView
+        android:id="@+id/send_location_icon"
+        style="@style/baseFontIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:text="@string/icon_send"
+        android:textSize="@dimen/dp32"
+        app:layout_constraintBottom_toBottomOf="@id/send_location"
+        app:layout_constraintEnd_toEndOf="@id/send_location"
+        app:layout_constraintStart_toStartOf="@id/send_location"
+        app:layout_constraintTop_toTopOf="@id/send_location" />
 
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:background="@drawable/ic_circle_shape"
-                    android:gravity="center">
+    <TextView
+        android:id="@+id/address_strip"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:alpha=".8"
+        android:background="@color/white"
+        android:gravity="center_vertical|center"
+        android:paddingLeft="@dimen/dp14"
+        android:paddingRight="@dimen/dp80"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/dp12"
+        app:layout_constraintBottom_toBottomOf="@id/send_location"
+        app:layout_constraintTop_toTopOf="@id/send_location" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+    <net.iGap.module.CircleImageView
+        android:id="@+id/current_location"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dp20"
+        android:alpha=".7"
+        android:background="@drawable/circle_button_background"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@id/send_location"
+        app:layout_constraintLeft_toLeftOf="@id/send_location"
+        app:layout_constraintRight_toRightOf="@id/send_location" />
 
-                        app:srcCompat="@drawable/ic_location" />
+    <ImageView
+        android:id="@+id/current_location_icon"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:background="@drawable/drawable_icon_my_location_foreground"
+        android:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/current_location"
+        app:layout_constraintEnd_toEndOf="@id/current_location"
+        app:layout_constraintStart_toStartOf="@id/current_location"
+        app:layout_constraintTop_toTopOf="@id/current_location">
 
+    </ImageView>
 
-                </RelativeLayout>
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/send_icon_group"
+        android:layout_width="@dimen/dp70"
+        android:layout_height="@dimen/dp70"
+        app:constraint_referenced_ids="address_strip, current_location, current_location_icon, send_location, send_location_icon" />
 
-                <TextView
-                    android:id="@+id/mf_txt_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp52"
-                    android:layout_marginTop="@dimen/dp2"
-                    android:layout_marginRight="@dimen/dp52"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp6"
-                    android:text="@string/send_location_text"
-                    android:textSize="@dimen/dp16" />
+    <net.iGap.module.CircleImageView
+        android:id="@+id/drive_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/dp20"
+        android:alpha=".8"
+        android:background="@drawable/circle_button_background"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-                <TextView
-                    android:id="@+id/mf_txt_accuracy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mf_txt_message"
-                    android:layout_marginLeft="@dimen/dp52"
-                    android:layout_marginRight="@dimen/dp52"
-                    android:layout_marginBottom="@dimen/dp8"
-                    android:gravity="top"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp6"
+    <ImageView
+        android:id="@+id/car_icon"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/drawable_icon_car_foreground"
+        app:layout_constraintBottom_toBottomOf="@id/drive_icon"
+        app:layout_constraintEnd_toEndOf="@id/drive_icon"
+        app:layout_constraintStart_toStartOf="@id/drive_icon"
+        app:layout_constraintTop_toTopOf="@id/drive_icon">
 
-                    android:text="sfsaasdfasdf"
-                    android:textSize="@dimen/dp12" />
+    </ImageView>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/mf_rv_see_position"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="#FAFAFA"
-                android:gravity="bottom"
-                android:text="@string/send_position"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp18"
-                android:visibility="invisible"
-                tools:ignore="MissingPrefix">
-
-                <net.iGap.module.CircleImageView
-                    android:id="@+id/mf_imgProfile"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp8"
-                    android:layout_marginRight="@dimen/dp8"
-                    android:gravity="center"
-                    android:text="@string/icon_location"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@color/md_green_700"
-
-                    />
-
-
-                <TextView
-                    android:id="@+id/mf_txt_userName"
-                    android:layout_width="match_parent"
-
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginLeft="@dimen/dp52"
-                    android:layout_marginTop="@dimen/dp2"
-                    android:layout_marginRight="@dimen/dp52"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp6"
-                    android:textSize="@dimen/dp16" />
-
-                <TextView
-                    android:id="@+id/mf_txt_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mf_txt_userName"
-                    android:layout_marginLeft="@dimen/dp52"
-
-
-                    android:layout_marginRight="@dimen/dp52"
-                    android:layout_marginBottom="@dimen/dp4"
-                    android:paddingLeft="@dimen/dp6"
-                    android:paddingRight="@dimen/dp6"
-
-
-                    android:textSize="@dimen/dp12" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/mf_fab_openMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentBottom="true"
-
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"
-            android:layout_marginBottom="@dimen/dp22"
-
-            android:background="@android:color/white"
-            android:clickable="true"
-            app:backgroundTint="@android:color/white"
-            app:fabSize="normal"
-            app:layout_anchor="@id/mf_rv_see_position"
-            app:srcCompat="@drawable/ic_direction"
-            app:tint="@color/white" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <!--</LinearLayout>-->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/drive_icon_group"
+        android:layout_width="@dimen/dp70"
+        android:layout_height="@dimen/dp70"
+        android:visibility="gone"
+        app:constraint_referenced_ids="drive_icon, car_icon" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

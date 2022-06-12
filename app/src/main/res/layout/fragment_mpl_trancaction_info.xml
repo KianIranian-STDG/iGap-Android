@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/mainContainer">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sl_mplTransactionInfo"
@@ -34,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp8"
                     android:visibility="gone"
-                    app:cardBackgroundColor="?attr/iGapCardViewColor"
                     app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,6 @@
                             android:layout_gravity="center"
                             android:layout_marginBottom="4dp"
                             android:text="@string/desc"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:visibility="gone" />
 
@@ -74,7 +73,6 @@
                             android:layout_marginRight="16dp"
                             android:layout_marginBottom="30dp"
                             android:gravity="center"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:visibility="gone" />
 
@@ -93,7 +91,6 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:visibility="gone"
-                    app:cardBackgroundColor="?attr/iGapCardViewColor"
                     app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,26 +122,25 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="@string/icon_sent"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="25dp" />
 
                             <net.iGap.module.FontIconTextView
+                                android:id="@+id/icon1"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="@string/icon_copy"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="20dp" />
 
 
                             <net.iGap.module.FontIconTextView
+                                android:id="@+id/icon2"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:text="@string/icon_time"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="20dp" />
 
                         </LinearLayout>
@@ -167,7 +163,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="@dimen/smallTextSize" />
 
                             <TextView
@@ -176,7 +171,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="@dimen/smallTextSize" />
 
                             <TextView
@@ -185,7 +179,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="@dimen/smallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
@@ -211,7 +204,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mpl_transaction_empty"
-        android:textColor="?iGapTitleTextColor"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

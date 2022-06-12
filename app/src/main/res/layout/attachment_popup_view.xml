@@ -10,21 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?rootBackgroundColor"
         android:paddingBottom="@dimen/dp8"
         android:visibility="visible"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <TextView
             android:id="@+id/no_camera_permission_icon"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"
             android:fontFamily="@font/font_icons"
             android:gravity="center"
             android:text="@string/icon_camera"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/dp36"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +30,11 @@
 
         <TextView
             android:id="@+id/danger_icon"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/icon_danger"
-            android:textColor="@color/red"
             android:textSize="@dimen/dp20"
             app:layout_constraintBottom_toBottomOf="@id/no_camera_permission_icon"
             app:layout_constraintEnd_toStartOf="@id/no_camera_permission_icon"
@@ -49,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
             android:text="Tap to allow camera permission"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_margin="@dimen/dp4"
-            android:background="?iGapDividerLine"
+            android:background="@color/key_light_gray"
             app:layout_constraintBottom_toTopOf="@id/lyt_buttons"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -100,7 +96,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtCamera"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:layout_marginTop="@dimen/dp4"
@@ -115,7 +111,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/am_camera"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintLeft_toLeftOf="@id/txtCamera"
                 app:layout_constraintRight_toRightOf="@id/txtCamera"
@@ -133,7 +128,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textPicture"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_gallery"
@@ -148,7 +143,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/am_picture"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintLeft_toLeftOf="@id/textPicture"
                 app:layout_constraintRight_toRightOf="@id/textPicture"
@@ -166,7 +160,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtVideo"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_video_call"
@@ -180,7 +174,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/am_video"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintLeft_toLeftOf="@id/txtVideo"
                 app:layout_constraintRight_toRightOf="@id/txtVideo"
@@ -198,7 +191,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtMusic"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_music"
@@ -213,7 +206,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/am_music"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintLeft_toLeftOf="@id/txtMusic"
                 app:layout_constraintRight_toRightOf="@id/txtMusic"
@@ -231,7 +223,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtFile"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:layout_marginTop="@dimen/dp4"
@@ -246,7 +238,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp4"
                 android:text="@string/am_file"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/txtFile"
@@ -265,7 +256,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtContact"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_add_contact"
@@ -279,7 +270,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/am_contact"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintBottom_toBottomOf="@id/txtFile2"
                 app:layout_constraintLeft_toLeftOf="@id/txtContact"
@@ -298,7 +288,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtLocation"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_location"
@@ -313,7 +303,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/am_location"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintBottom_toBottomOf="@id/txtFile2"
                 app:layout_constraintLeft_toLeftOf="@id/txtLocation"
@@ -332,7 +321,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtSend"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:text="@string/icon_close"
@@ -347,7 +336,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/navigation_drawer_close"
-                android:textColor="?iGapPrimaryIconTextColor"
                 android:textSize="@dimen/dp10"
                 app:layout_constraintBottom_toBottomOf="@id/txtFile2"
                 app:layout_constraintLeft_toLeftOf="@id/txtSend"
@@ -358,7 +346,6 @@
                 android:id="@+id/close"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="@id/txtNumberItem"
                 app:layout_constraintLeft_toLeftOf="@id/txtSend"
                 app:layout_constraintRight_toRightOf="@id/txtSend"
@@ -371,7 +358,6 @@
             android:id="@+id/fl_attachment_privacyView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="?rootBackgroundColor"
             android:clickable="true"
             android:focusable="true"
             android:visibility="gone"
@@ -379,12 +365,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/restrictionMessage"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/restrictions_on_sending_multimedia_messages"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
         </FrameLayout>
 

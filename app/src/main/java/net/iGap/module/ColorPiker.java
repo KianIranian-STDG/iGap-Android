@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 
 /**
@@ -69,6 +70,7 @@ public class ColorPiker extends Dialog {
 
         btnOk = findViewById(R.id.button_ok);
         btnCancel = findViewById(R.id.button_cancel);
+        btnCancel.setBackgroundColor(Theme.getColor(Theme.key_red));
         ivLineColor = findViewById(R.id.imageView_line_color);
         ivSquareColor = findViewById(R.id.imageView_square_color);
 

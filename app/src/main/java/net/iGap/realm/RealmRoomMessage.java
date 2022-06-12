@@ -92,6 +92,7 @@ public class RealmRoomMessage extends RealmObject {
     public String linkInfo;
     public byte[] Logs;
     private int storyStatus;
+    private String textToVoicePath;
 
     /**
      * if has forward return that otherwise return enter value
@@ -896,6 +897,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
         roomMessage.setMessage(message);
         roomMessage.setRoomId(roomId);
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
         RealmAttachment realmAttachment = new RealmAttachment();
         realmAttachment.setId(messageId);
@@ -1296,5 +1298,13 @@ public class RealmRoomMessage extends RealmObject {
             }
         });
 
+    }
+
+    public void setTextToVoicePath(String textToVoicePath) {
+        this.textToVoicePath = textToVoicePath;
+    }
+
+    public String getTextToVoicePath() {
+        return textToVoicePath;
     }
 }

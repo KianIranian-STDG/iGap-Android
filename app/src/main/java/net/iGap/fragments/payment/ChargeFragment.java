@@ -1,5 +1,7 @@
 package net.iGap.fragments.payment;
 
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,9 +15,12 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,7 +62,6 @@ import net.iGap.model.paymentPackage.Operator;
 import net.iGap.model.paymentPackage.TopupChargeType;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.rx.IGSingleObserver;
@@ -76,6 +80,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import net.iGap.messenger.theme.Theme;
 
 import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
@@ -134,20 +139,43 @@ public class ChargeFragment extends BaseFragment {
         return LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_charge, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        AppCompatImageView iv_contact = view.findViewById(R.id.iv_contact);
+        AppCompatTextView textView2 = view.findViewById(R.id.textView2);
+        textView2.setTextColor(Theme.getColor(Theme.key_default_text));
+        iv_contact.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_contact_new),context,Theme.getColor(Theme.key_icon)));
+        AppCompatImageView iv_history = view.findViewById(R.id.iv_history);
+        iv_history.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_recent),context,Theme.getColor(Theme.key_icon)));
+        AppCompatTextView tv_contact =view.findViewById(R.id.tv_contact);
+        tv_contact.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView tv_history =view.findViewById(R.id.tv_history);
+        tv_history.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView operator_selection = view.findViewById(R.id.operator_selection);
+        operator_selection.setTextColor(Theme.getColor(Theme.key_default_text));
         scrollView = view.findViewById(R.id.scroll_payment);
         contactButton = view.findViewById(R.id.frame_contact);
+        contactButton.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.shape_payment_charge),getContext(),Theme.getColor(Theme.key_window_background)));
         historyButton = view.findViewById(R.id.frame_history);
+        historyButton.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.shape_payment_charge),getContext(),Theme.getColor(Theme.key_window_background)));
         buttonAmount = view.findViewById(R.id.choose_amount);
+        buttonAmount.setStrokeColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         buttonChargeType = view.findViewById(R.id.btn_charge_type);
+        buttonChargeType.setStrokeColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         amountPlusButton = view.findViewById(R.id.add_amount);
         amountMinesButton = view.findViewById(R.id.low_amount);
         editTextNumber = view.findViewById(R.id.phoneNumber);
+        editTextNumber.setTextColor(Theme.getColor(Theme.key_default_text));
+        editTextNumber.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        editTextNumber.requestFocus();
         buttonEnter = view.findViewById(R.id.btn_pay);
         progressBar = view.findViewById(R.id.loadingView);
         iconRemove = view.findViewById(R.id.btnRemoveSearch);
+        iconRemove.setTextColor(Theme.getColor(Theme.key_icon));
         recyclerViewOperator = view.findViewById(R.id.lstOperator);
         imageViewAvatar = view.findViewById(R.id.avatar);
         compositeDisposable = new CompositeDisposable();
@@ -172,11 +200,6 @@ public class ChargeFragment extends BaseFragment {
                 getActivity().onBackPressed();
             }
         });
-
-        if (G.themeColor == Theme.DARK) {
-            historyButton.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-            contactButton.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-        }
 
         paymentRepository = PaymentRepository.getInstance();
         paymentRepository.getConfigs(TokenContainer.getInstance().getToken(), config -> {
@@ -371,14 +394,18 @@ public class ChargeFragment extends BaseFragment {
             historyButton.setEnabled(false);
             closeKeyboard(editTextNumber);
 
-            favoriteNumberCall.enqueue(new Callback<GetFavoriteNumber>() {
+            favoriteNumberCall.clone().enqueue(new Callback<GetFavoriteNumber>() {
                 @Override
                 public void onResponse(@NonNull Call<GetFavoriteNumber> call, @NonNull Response<GetFavoriteNumber> response) {
                     progressBar.setVisibility(View.GONE);
                     historyButton.setEnabled(true);
                     if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                         if (response.body().getData().size() > 0) {
-                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                    .customView(R.layout.popup_paymet_history, false)
+                                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                                    .positiveColor(Theme.getColor(Theme.key_button_background)).build();
                             View historyDialogView = dialog.getCustomView();
                             if (historyDialogView != null) {
                                 RecyclerViewHistory = historyDialogView.findViewById(R.id.rv_history);
@@ -392,7 +419,11 @@ public class ChargeFragment extends BaseFragment {
                                     isHistorySelected(true);
                                     dialog.dismiss();
                                 });
-                                historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
+                                AppCompatTextView iv_close2 = historyDialogView.findViewById(R.id.iv_close2);
+                                iv_close2.setTextColor(Theme.getColor(Theme.key_default_text));
+                                iv_close2.setOnClickListener(v12 -> dialog.dismiss());
+                                AppCompatTextView txt_choose2 = historyDialogView.findViewById(R.id.txt_choose2);
+                                txt_choose2.setTextColor(Theme.getColor(Theme.key_default_text));
                             }
                             dialog.show();
                         } else {
@@ -414,7 +445,7 @@ public class ChargeFragment extends BaseFragment {
     private View.OnClickListener contactButtonClicked() {
         return v -> {
             hideKeyboard();
-            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
             closeKeyboard(editTextNumber);
             try {
                 HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
@@ -432,7 +463,11 @@ public class ChargeFragment extends BaseFragment {
                                 HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
                             } else {
                                 adapter.setContactNumbers(contactNumbers);
-                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
+                                MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                        .customView(R.layout.popup_paymet_contact, false)
+                                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                                        .positiveColor(Theme.getColor(Theme.key_button_background)).build();
                                 View contactDialogView = dialog.getCustomView();
                                 if (contactDialogView != null) {
                                     RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
@@ -520,7 +555,11 @@ public class ChargeFragment extends BaseFragment {
 
     private void choosePriceButtonClicked() {
         if (currentOperator != null) {
-            MaterialDialog dialog = new MaterialDialog.Builder(requireContext()).customView(R.layout.popup_paymet_amount, false).build();
+            MaterialDialog dialog = new MaterialDialog.Builder(requireContext())
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .customView(R.layout.popup_paymet_amount, false)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background)).build();
             View amountDialogView = dialog.getCustomView();
             if (amountDialogView != null) {
                 RecyclerViewAmount = amountDialogView.findViewById(R.id.rv_amount);
@@ -549,7 +588,11 @@ public class ChargeFragment extends BaseFragment {
 
     private void chooseChargeTypeClicked() {
         if (currentOperator != null) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_type, false).build();
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .customView(R.layout.popup_paymet_type, false)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background)).build();
             View typeDialogView = dialog.getCustomView();
             if (typeDialogView != null) {
                 typeDialogView.findViewById(R.id.close_view4).setOnClickListener(v1 -> dialog.dismiss());
@@ -578,7 +621,11 @@ public class ChargeFragment extends BaseFragment {
     private void saveChargeNumberInHistory(String chargeType, String phoneNumber, int price, String operator) {
         if (isSelectedFromHistory)
             return;
-        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(R.string.save_purchase)
+        MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(R.string.save_purchase)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
                 .positiveText(R.string.ok)
                 .onNegative((dialog1, which) -> dialog1.dismiss()).show();
@@ -607,7 +654,7 @@ public class ChargeFragment extends BaseFragment {
     }
 
     public void setDialogBackground(View view) {
-        if (G.themeColor == Theme.DARK) {
+        if (Theme.isNight()||Theme.isDark()) {
             view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.List;
@@ -63,8 +64,10 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
 
         public MoreChannelViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             channelAvatarIv = itemView.findViewById(R.id.circle_item_popular_rv_grid_linear);
             channelNameTv = itemView.findViewById(R.id.tv_item_popular_rv_grid_linear);
+            channelNameTv.setTextColor(Theme.getColor(Theme.key_title_text));
         }
 
         public void bindChannel(Channel channel) {

@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:gravity="center"
-            android:textColor="@color/bottom_navigation_text_color"
+            android:textColor="@color/white"
             android:textSize="@dimen/dp13"
             android:layout_marginTop="@dimen/dp6"
             android:layout_marginBottom="@dimen/dp10" />

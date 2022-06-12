@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@color/fragment_back"
-    tools:context="org.paygear.fragment.AddCardFragment">
+    android:background="@color/key_light_gray">
 
     <LinearLayout
         android:id="@+id/toolbarLayout"
@@ -181,7 +180,7 @@
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:id="@+id/button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

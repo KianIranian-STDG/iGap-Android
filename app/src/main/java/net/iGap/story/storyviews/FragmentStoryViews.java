@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.customView.RecyclerListView;
 
 public class FragmentStoryViews extends BaseFragment implements StoryCell.IconClicked {
@@ -46,16 +47,12 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
         });
     }
 
-    public class ListAdapter extends RecyclerListView.ItemAdapter {
-        @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
-            return true;
-        }
+    public class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new RecyclerListView.ItemViewHolder(new StoryCell(parent.getContext()), null);
+            return new RecyclerListView.Holder(new StoryCell(parent.getContext()));
         }
 
         @Override
@@ -63,7 +60,7 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
             StoryCell storyCell = (StoryCell) holder.itemView;
             storyCell.setText("topppppppppp", "bottommmm");
             storyCell.setIcons(R.string.icon_send, R.string.icon_other_vertical_dots);
-            storyCell.setImage(R.color.red,avatarHandler);
+            storyCell.setImage(Theme.getColor(Theme.key_red),avatarHandler);
         }
 
         @Override
@@ -75,6 +72,11 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
         public int getItemViewType(int position) {
 
             return super.getItemViewType(position);
+        }
+
+        @Override
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            return true;
         }
     }
 

@@ -20,14 +20,13 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp10"
             android:text="@string/icon_close"
-            style="@style/myIconTextViewStyleGray" />
+            style="@style/baseFontIcon" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             tools:text="Title"
             android:layout_marginLeft="@dimen/dp10"
@@ -55,7 +54,7 @@
             android:id="@+id/btnDeActive"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
-            style="@style/iGapButtonSecondary"
+            style="@style/BaseIGapButtonStyle"
             android:text="@string/cancel"
             android:textSize="@dimen/standardTextSize"
             android:layout_weight="3.5" />
@@ -64,7 +63,7 @@
             android:id="@+id/btnActive"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
-            style="@style/mobileBankButton"
+            style="@style/BaseIGapButtonStyle"
             android:text="@string/ok"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"

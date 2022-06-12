@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,7 +21,8 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.Theme;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.igasht.IGashtLocationDetailViewModel;
 
@@ -45,6 +48,15 @@ public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationD
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppCompatTextView item_title = view.findViewById(R.id.item_title);
+        item_title.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        AppCompatTextView itemAddress = view.findViewById(R.id.itemAddress);
+        itemAddress.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        AppCompatTextView itemLocation = view.findViewById(R.id.itemLocation);
+        itemLocation.setTextColor(Theme.getColor(Theme.key_title_text));
+
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -73,8 +85,10 @@ public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationD
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
 
-                binding.buyTicket.setTextColor(G.themeColor == Theme.DARK ? getResources().getColor(R.color.white) : (loadBuyTicketView ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black)));
-                binding.detail.setTextColor(G.themeColor == Theme.DARK ? getResources().getColor(R.color.white) : (loadBuyTicketView ? getResources().getColor(R.color.black) : getResources().getColor(R.color.white)));
+                binding.buyTicket.setBackground(Theme.createSimpleSelectorRoundRectDrawable(LayoutCreator.dp(18),Theme.getColor(Theme.key_light_gray),Theme.getColor(Theme.key_theme_color)));
+                binding.buyTicket.setTextColor(Theme.isDark() || Theme.isNight()? Theme.getColor(Theme.key_white) : (loadBuyTicketView ? Theme.getColor(Theme.key_white) : Theme.getColor(Theme.key_black)));
+                binding.detail.setTextColor(Theme.isDark() || Theme.isNight()? Theme.getColor(Theme.key_white) : (loadBuyTicketView ? Theme.getColor(Theme.key_black) : Theme.getColor(Theme.key_white)));
+                binding.detail.setBackground(Theme.createSimpleSelectorRoundRectDrawable(LayoutCreator.dp(18),Theme.getColor(Theme.key_light_gray),Theme.getColor(Theme.key_theme_color)));
 
                 if (loadBuyTicketView) {
                     fragment = fragmentManager.findFragmentByTag(IGashtBuyTicketFragment.class.getName());

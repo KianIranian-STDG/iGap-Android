@@ -11,10 +11,10 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/iGapWalletDarkerBackground"
         android:clipChildren="false"
         android:fillViewport="true"
         tools:context=".fragments.qrCodePayment.fragments.EnterCodeQRCodePaymentFragment">
@@ -35,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="?attr/iGapWalletLighterBackground"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
@@ -50,8 +49,6 @@
                 android:gravity="center"
                 android:hint="@string/enter_code"
                 android:inputType="number"
-                android:textColor="?attr/iGapTitleTextColor"
-                android:textColorHint="?attr/iGapHintTextColor"
                 app:layout_constraintBottom_toTopOf="@id/done_button"
                 app:layout_constraintEnd_toEndOf="@id/white_view"
                 app:layout_constraintStart_toStartOf="@id/white_view"
@@ -69,7 +66,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/done_button"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp16"

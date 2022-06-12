@@ -3,7 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp2"
-    android:background="?attr/iGapButtonSelector"
     android:orientation="vertical">
 
     <TextView
@@ -16,6 +15,5 @@
         android:paddingLeft="@dimen/dp6"
         android:paddingRight="@dimen/dp6"
         android:paddingTop="@dimen/dp2"
-        android:paddingBottom="@dimen/dp2"
-        android:textColor="?attr/iGapTitleTextColor" />
+        android:paddingBottom="@dimen/dp2"/>
 </LinearLayout>

@@ -75,6 +75,7 @@ public class RealmRoom extends RealmObject {
     public int priority;
     public boolean isFromPromote;
     public long promoteId;
+    public boolean isParticipant;
 
     public long getPromoteId() {
         return promoteId;
@@ -176,6 +177,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
                 realmRoom.getChannelRoom().setVerified(room.getChannelRoomExtra().getVerified());
                 realmRoom.getChannelRoom().setReactionStatus(room.getChannelRoomExtra().getReactionStatus());
+                realmRoom.setParticipant(room.getIsParticipant());
 
                 if (room.getPermission() != null) {
                     RealmRoomAccess.putOrUpdate(room.getPermission(), AccountManager.getInstance().getCurrentUser().getId(), room.getId(), realm);
@@ -199,6 +201,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
                 realmRoom.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 realmRoom.getGroupRoom().setInvite_token(room.getGroupRoomExtra().getPrivateExtra().getInviteToken());
+                realmRoom.setParticipant(room.getIsParticipant());
                 if (!room.getGroupRoomExtra().getPrivateExtra().getInviteLink().isEmpty()) {
                     realmRoom.getGroupRoom().setInvite_link(room.getGroupRoomExtra().getPrivateExtra().getInviteLink());
                 }
@@ -1089,6 +1092,14 @@ public class RealmRoom extends RealmObject {
 
     public void setSharedMediaCount(String sharedMediaCount) {
         this.sharedMediaCount = sharedMediaCount;
+    }
+
+    public boolean isParticipant() {
+        return isParticipant;
+    }
+
+    public void setParticipant(boolean participant) {
+        isParticipant = participant;
     }
 
     public String getActionState() {

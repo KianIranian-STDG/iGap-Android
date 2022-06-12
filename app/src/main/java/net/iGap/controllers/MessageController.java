@@ -1,6 +1,7 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
+import android.util.SparseArray;
 import android.util.Log;
 
 import net.iGap.G;
@@ -17,6 +18,7 @@ import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmCallLog;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
@@ -30,6 +32,7 @@ import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -44,6 +47,8 @@ public class MessageController extends BaseController implements EventManager.Ev
     public static boolean isSendingRoomStory = false;
     private static volatile MessageController[] instance = new MessageController[AccountManager.MAX_ACCOUNT_COUNT];
     private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
+    private SparseArray<List<RealmCallLog>> callLogsByType = new SparseArray<>();
+    private HashMap<Integer, Integer> userPrivacyHashMap = new HashMap<>();
 
     public static MessageController getInstance(int account) {
         MessageController localInstance = instance[account];
@@ -631,5 +636,18 @@ public class MessageController extends BaseController implements EventManager.Ev
                 lastUploadedAvatarRoomId = -1;
             }
         }
+    }
+
+    public List<RealmCallLog> getCallLogList(int type) {
+        if (callLogsByType == null) {
+            return new ArrayList<>();
+        }
+
+        List<RealmCallLog> finalList = callLogsByType.get(type);
+        if (finalList == null) {
+            finalList = new ArrayList<>();
+        }
+
+        return finalList;
     }
 }

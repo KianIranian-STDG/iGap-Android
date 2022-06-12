@@ -21,7 +21,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:cardCornerRadius="3dp"
         app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+        app:cardBackgroundColor="@color/key_light_gray">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,7 +34,6 @@
                 android:minHeight="@dimen/dp24"
                 android:text="Category"
                 android:textStyle="bold"
-                android:textColor="@color/news_red"
                 android:textSize="@dimen/dp12"
                 android:justificationMode="inter_word"
                 android:gravity="center|right"
@@ -48,7 +47,7 @@
             <View
                 android:layout_width="@dimen/dp1"
                 android:layout_height="0dp"
-                android:background="@color/black"
+                android:background="@android:color/black"
                 android:layout_marginTop="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
                 app:layout_constraintTop_toTopOf="parent"
@@ -68,7 +67,6 @@
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:visibility="gone"
                 app:layout_constraintRight_toLeftOf="@+id/category"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -105,7 +103,6 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
                 android:visibility="gone"
-                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image"
@@ -119,7 +116,7 @@
                 android:text="Title"
                 android:textSize="@dimen/dp12"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:maxLines="2"
                 android:lines="2"
                 android:ellipsize="end"
@@ -153,7 +150,7 @@
         app:layout_constraintDimensionRatio="4:5"
         app:cardCornerRadius="3dp"
         app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+        app:cardBackgroundColor="@color/key_light_gray">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -166,7 +163,6 @@
                 android:minHeight="@dimen/dp24"
                 android:text="Category"
                 android:textStyle="bold"
-                android:textColor="@color/news_red"
                 android:textSize="@dimen/dp12"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
@@ -179,7 +175,7 @@
             <View
                 android:layout_width="@dimen/dp1"
                 android:layout_height="0dp"
-                android:background="@color/black"
+                android:background="@android:color/black"
                 android:layout_marginTop="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
                 android:visibility="gone"
@@ -199,7 +195,6 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
                 android:visibility="gone"
-                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toLeftOf="@+id/category1"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -234,7 +229,6 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
                 android:visibility="gone"
-                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image1"
@@ -248,7 +242,7 @@
                 android:text="Title"
                 android:textSize="@dimen/dp12"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:maxLines="2"
                 android:lines="2"
                 android:ellipsize="end"

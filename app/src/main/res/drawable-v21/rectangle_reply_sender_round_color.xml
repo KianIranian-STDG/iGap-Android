@@ -6,5 +6,5 @@
         android:bottomRightRadius="0dp"
         android:topLeftRadius="12dp"
         android:topRightRadius="0dp" />
-    <solid android:color="?attr/iGapReceivedReplayColor" />
+    <solid android:color="#BCE480"/>
 </shape>

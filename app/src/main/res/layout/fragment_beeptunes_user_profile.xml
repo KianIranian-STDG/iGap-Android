@@ -43,7 +43,6 @@
             android:layout_marginRight="8dp"
             android:layoutDirection="ltr"
             android:text="Abolfazl Abbasi"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
@@ -64,7 +63,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/dp8"
             android:layout_marginTop="16dp"
-            android:background="@color/gray"
+            android:background="@color/key_gray"
             app:layout_constraintTop_toBottomOf="@+id/iv_userProfile_userImage"
             tools:layout_editor_absoluteX="8dp" />
 
@@ -83,13 +82,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_music"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/purchase"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -98,7 +97,6 @@
             android:layout_marginRight="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunes_purchase_song"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -118,13 +116,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_beeptunes_sync"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/sync"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -135,7 +133,6 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunes_sync_song"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -155,13 +152,13 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_beeptunes_like"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/favorite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -172,7 +169,6 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunesـfavorite_song"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

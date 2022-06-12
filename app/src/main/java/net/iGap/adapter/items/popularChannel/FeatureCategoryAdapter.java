@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.List;
@@ -62,7 +63,9 @@ public class FeatureCategoryAdapter extends RecyclerView.Adapter<FeatureCategory
             super(itemView);
             channelImage = itemView.findViewById(R.id.circle_item_popular_rv_linear);
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
+            channelTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             root = itemView.findViewById(R.id.card_item_pop_row);
+            root.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
         }
 
 

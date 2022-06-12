@@ -14,7 +14,6 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp18"
         tools:text="" />
 
@@ -31,7 +30,6 @@
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp14"
         tools:text="" />
 
@@ -42,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp18"
         tools:text="@string/price" />
 
@@ -53,13 +50,12 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp20"
         tools:text="" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pay"
-        style="@style/iGapButton"
+        style="@style/BaseIGapButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"

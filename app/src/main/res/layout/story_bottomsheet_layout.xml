@@ -12,7 +12,6 @@
         android:id="@+id/story_bottom_sheet_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"/>
 
 </LinearLayout>

@@ -93,7 +93,7 @@ public class LoginActions {
 
             @Override
             public void onLoginError(int majorCode, int minorCode) {
-
+                Log.i("shokoofe","majorCode : " + majorCode + " minorCode : " + minorCode);
             }
         };
         if (RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {

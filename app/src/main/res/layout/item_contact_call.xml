@@ -20,8 +20,7 @@
             android:id="@+id/iv_itemContactCall_profileImage"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
-            android:layout_gravity="center"
-            android:src="?attr/iGapAvatarBackground" />
+            android:layout_gravity="center" />
 
         <net.iGap.module.customView.CheckBox
             android:id="@+id/iv_itemContactCall_checkBox"
@@ -34,7 +33,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_itemContactCall_voiceCall"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp16"
@@ -55,7 +54,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:singleLine="true"
-        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactCall_userPhoneNumber"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemContactCall_voiceCall"
@@ -68,7 +66,6 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp20"
         android:singleLine="true"
-        android:textColor="?attr/iGapSubtitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemContactCall_userName"

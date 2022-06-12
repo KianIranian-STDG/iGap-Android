@@ -1,5 +1,6 @@
 package net.iGap.fragments.electricity_bill;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -24,6 +26,7 @@ import net.iGap.databinding.FragmentElecSearchListBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.electricity_bill.CompanyList;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -62,7 +65,10 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        binding.billSerial.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.billSerialET.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billCompanyTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.errorView.setTextColor(Theme.getColor(Theme.key_title_text));
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.icon_back)
@@ -79,6 +85,7 @@ public class ElectricityBillSearchListFrag extends BaseAPIViewFrag<ElectricityBi
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.billRecycler.setHasFixedSize(true);
+        binding.billRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.billCompanySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

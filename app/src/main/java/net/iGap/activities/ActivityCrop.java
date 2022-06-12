@@ -32,6 +32,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageHelper;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -105,8 +106,8 @@ public class ActivityCrop extends ActivityEnhanced {
                     String newPath = "file://" + path;
                     Uri uri = Uri.parse(newPath);
                     UCrop.Options options = new UCrop.Options();
-                    options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
-                    options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
+                    options.setStatusBarColor(Theme.getColor(Theme.key_black));
+                    options.setToolbarColor(Theme.getColor(Theme.key_black));
                     options.setCompressionQuality(80);
 
                     UCrop.of(uri, Uri.fromFile(new File(G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), nzmeFile)))

@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <solid android:color="@color/background_progress" />
+    <solid android:color="#5EBC45" />
     <padding
         android:bottom="@dimen/dp12"
         android:left="@dimen/dp12"

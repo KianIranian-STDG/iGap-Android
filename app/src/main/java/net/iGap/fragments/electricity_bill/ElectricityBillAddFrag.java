@@ -1,5 +1,6 @@
 package net.iGap.fragments.electricity_bill;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -17,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.R;
 import net.iGap.databinding.FragmentElecBillAddBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillAddVM;
@@ -61,6 +64,7 @@ public class ElectricityBillAddFrag extends BaseBottomSheet {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_elec_bill_add, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        binding.lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
         return binding.getRoot();
 
     }
@@ -69,7 +73,11 @@ public class ElectricityBillAddFrag extends BaseBottomSheet {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        binding.billName.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.billId.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.billDesc.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.billNameET.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.billidET.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
         switch (info.getBillType()) {
             case GAS:
                 binding.billId.setHint(getResources().getString(R.string.elecBill_main_billIDHint3));

@@ -36,7 +36,6 @@
             app:sliderIndicatorOrientation="horizontal"
             app:sliderIndicatorPadding="3dp"
             app:sliderIndicatorRadius="2dp"
-            app:sliderIndicatorSelectedColor="@color/iGapColor"
             app:sliderIndicatorUnselectedColor="#FFF"
             app:sliderScrollTimeInSec="4"
             app:sliderStartAutoCycle="true" />

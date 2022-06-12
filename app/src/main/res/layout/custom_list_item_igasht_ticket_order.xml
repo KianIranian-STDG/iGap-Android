@@ -7,9 +7,9 @@
     android:paddingBottom="@dimen/dp4">
 
     <View
+        android:id="@+id/buttonSelector"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/iGapButtonSelector"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/minusButton"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp32"
         android:layout_height="@dimen/dp32"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -30,7 +30,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/plusButton"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp32"
         android:layout_height="@dimen/dp32"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -46,7 +46,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:textColor="?iGapTitleTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/minusButton"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +57,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/minusButton"
         app:layout_constraintStart_toEndOf="@id/plusButton"
@@ -70,7 +68,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/plusButton"
         app:layout_constraintStart_toStartOf="parent"

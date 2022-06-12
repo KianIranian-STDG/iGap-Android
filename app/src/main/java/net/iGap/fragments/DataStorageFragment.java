@@ -1,14 +1,19 @@
 package net.iGap.fragments;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,13 +31,16 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.EvictingQueue;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentStorageDataBinding;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.FileUtils;
@@ -41,6 +49,7 @@ import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.DataStorageViewModel;
 
 import java.io.IOException;
+import java.security.acl.Permission;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -115,6 +124,9 @@ public class DataStorageFragment extends BaseFragment {
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.keepMedia)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallbackSingleChoice(selectedPosition, (dialog, itemView, which, text) -> false).positiveText(R.string.B_ok)
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog, which) -> viewModel.setKeepMediaTime(dialog.getSelectedIndex())).show();
@@ -126,6 +138,9 @@ public class DataStorageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_data)
                         .items(R.array.auto_download_data)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(getResources().getString(R.string.B_ok))
                         .onPositive((dialog, which) -> viewModel.setAutoDownloadOverData(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(getResources().getString(R.string.B_cancel))
@@ -138,6 +153,9 @@ public class DataStorageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_wifi)
                         .items(R.array.auto_download_data)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
                         .onPositive((dialog, which) -> viewModel.setAutoDownloadOverWifi(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(R.string.cancel)
@@ -150,6 +168,9 @@ public class DataStorageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_roaming)
                         .items(R.array.auto_download_data)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
                         .onPositive((dialog, which) -> viewModel.setAutoDownloadOverRoaming(Objects.requireNonNull(dialog.getSelectedIndices())))
                         .negativeText(R.string.B_cancel)
@@ -160,9 +181,12 @@ public class DataStorageFragment extends BaseFragment {
         viewModel.getShowClearCashDialog().observe(getViewLifecycleOwner(), data -> {
             if (getContext() != null && data != null && data.length == 7) {
                 MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
                         .title(R.string.st_title_Clear_Cache)
                         .customView(R.layout.st_dialog_clear_cach, true)
                         .positiveText(R.string.st_title_Clear_Cache)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .show();
 
                 View dialogView = dialog.getCustomView();
@@ -249,7 +273,12 @@ public class DataStorageFragment extends BaseFragment {
 
         viewModel.getShowClearAllDialog().observe(getViewLifecycleOwner(), isShow -> {
             if (getContext() != null && isShow != null && isShow) {
-                MaterialDialog inDialog = new MaterialDialog.Builder(getContext()).customView(R.layout.dialog_content_custom, true).build();
+                MaterialDialog inDialog = new MaterialDialog.Builder(getContext())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .customView(R.layout.dialog_content_custom, true)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .build();
                 View dialogView = inDialog.getCustomView();
                 inDialog.show();
 
@@ -265,7 +294,9 @@ public class DataStorageFragment extends BaseFragment {
                 txtContent.setText(R.string.do_you_want_to_clean_all_data_in_chat_rooms);
 
                 TextView txtCancel = dialogView.findViewById(R.id.txtDialogCancel);
+                txtCancel.setBackgroundColor(Theme.getColor(Theme.key_button_background));
                 TextView txtOk = dialogView.findViewById(R.id.txtDialogOk);
+                txtOk.setBackgroundColor(Theme.getColor(Theme.key_button_background));
 
                 txtOk.setOnClickListener(v -> {
                     viewModel.clearAll();
@@ -303,24 +334,17 @@ public class DataStorageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        /**Following condition do not affect on app flow temporary
-         *because Environment.isExternalStorageManager always return false*/
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-//            if (Environment.isExternalStorageManager()) {
-//                new FileUtils().getFileTotalSize(size -> viewModel.getClearCacheSize().set(size));
-//            }
-//        }
-
-        if(ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            new FileUtils().getFileTotalSize(size -> viewModel.getClearCacheSize().set(size));
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            if (Environment.isExternalStorageManager()) {
+                new FileUtils().getFileTotalSize(size -> viewModel.getClearCacheSize().set(size));
+            }
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void getPermission() throws IOException {
 
-        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
             @RequiresApi(api = Build.VERSION_CODES.R)
             @Override
             public void Allow() throws IOException {

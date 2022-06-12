@@ -18,7 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 public class TextImageView extends LinearLayout {
     private TextView titleView;
@@ -35,7 +35,7 @@ public class TextImageView extends LinearLayout {
 
         titleView = new AppCompatTextView(context);
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        titleView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        titleView.setTextColor(Theme.getColor(Theme.key_title_text));
         titleView.setGravity(Gravity.CENTER);
         titleView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         addView(titleView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));

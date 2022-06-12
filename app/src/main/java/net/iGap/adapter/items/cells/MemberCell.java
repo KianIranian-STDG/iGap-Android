@@ -15,7 +15,7 @@ import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,7 +33,7 @@ public class MemberCell extends FrameLayout {
         addView(avatarImage, LayoutCreator.createFrame(55, 55, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 16, 8, isRtl ? 16 : 0, 8));
 
         memberNameView = new TextView(getContext());
-        memberNameView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+        memberNameView.setTextColor(Theme.getColor(Theme.key_title_text));
         memberNameView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         memberNameView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         memberNameView.setLines(1);
@@ -44,7 +44,7 @@ public class MemberCell extends FrameLayout {
         addView(memberNameView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 0 : 82, 12, isRtl ? 82 : 0, 0));
 
         memberStatusView = new TextView(getContext());
-        memberStatusView.setTextColor(Theme.getInstance().getSubTitleColor(getContext()));
+        memberStatusView.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         memberStatusView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         memberStatusView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         memberStatusView.setLines(1);

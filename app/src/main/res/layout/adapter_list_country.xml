@@ -19,7 +19,6 @@
             android:layout_marginLeft="@dimen/dp40"
             android:padding="@dimen/dp10"
             android:text="@string/iran"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp14" />
 
         <View
@@ -35,7 +34,6 @@
             android:layout_marginRight="@dimen/dp28"
             android:padding="@dimen/dp10"
             android:text="@string/iran"
-            android:textColor="@color/ivand_green_text_color"
             android:textSize="@dimen/dp14" />
     </LinearLayout>
 </LinearLayout>

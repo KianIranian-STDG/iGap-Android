@@ -12,12 +12,11 @@
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:background="@drawable/background_multi_select_light"
         android:gravity="center"
         android:scaleType="centerCrop"
         android:text="@string/icon_attach"
-        android:textColor="@color/shared_media_music_list_icon_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="@dimen/dp10" />
@@ -48,8 +47,6 @@
         android:focusable="false"
         android:scrollbars="none"
         android:linksClickable="false"
-        android:textColorLink="?iGapTitleTextColor"
-        android:textColor="?iGapTitleTextColor"
         android:maxLines="3" />
 
     <LinearLayout
@@ -70,7 +67,7 @@
         android:id="@+id/splitter"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?iGapDividerLine"
+        android:background="@color/key_light_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/ivCover"
         app:layout_constraintEnd_toEndOf="@id/tvMessage"

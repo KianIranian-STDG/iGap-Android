@@ -6,7 +6,7 @@
             android:shape="ring"
             android:thickness="@dimen/dp2"
             android:useLevel="false">
-            <solid android:color="@color/rank_view_stroke" />
+            <solid android:color="#C95757" />
             <padding
                 android:bottom="@dimen/dp8"
                 android:left="@dimen/dp8"
@@ -16,7 +16,7 @@
     </item>
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/gray10" />
+            <solid android:color="@color/key_light_gray" />
         </shape>
     </item>
 

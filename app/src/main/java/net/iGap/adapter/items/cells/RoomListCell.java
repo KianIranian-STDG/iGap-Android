@@ -2,7 +2,6 @@ package net.iGap.adapter.items.cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -30,11 +29,11 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FontIconTextView;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.CheckBox;
 import net.iGap.module.customView.TextBadge;
@@ -42,8 +41,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -96,7 +93,7 @@ public class RoomListCell extends FrameLayout {
 
     public RoomListCell(@NonNull Context context) {
         super(context);
-        setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
+        setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_window_background)));
     }
 
     public void setData(RealmRoom room, AvatarHandler avatarHandler, boolean isSelectedMode) {
@@ -104,11 +101,11 @@ public class RoomListCell extends FrameLayout {
             if (!havePin) {
                 pinIcon = new IconView(getContext());
                 pinIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                pinIcon.setIconColor(Theme.getInstance().getSubTitleColor(getContext()));
+                pinIcon.setIconColor(Theme.getColor(Theme.key_theme_color));
                 pinIcon.setIcon(R.string.icon_pin_to_top2);
                 pinView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
+                pinView.setAlpha(Theme.isDark() || Theme.isNight() ? 0.2f : 0.6f);
                 addView(pinView, 0);
                 addView(pinIcon, 1);
                 havePin = true;
@@ -129,7 +126,7 @@ public class RoomListCell extends FrameLayout {
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
-                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+                avatarImageView.setImageResource(R.drawable.cloud);
 
             } else {
                 avatarHandler(room, avatarHandler);
@@ -141,7 +138,7 @@ public class RoomListCell extends FrameLayout {
 
             if (isMyCloud) {
                 avatarHandler.removeImageViewFromHandler(avatarImageView);
-                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+                avatarImageView.setImageResource(R.drawable.cloud);
 
             } else {
                 avatarHandler(room, avatarHandler);
@@ -155,7 +152,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getType() == ProtoGlobal.Room.Type.CHANNEL && room.getChannelRoom().isVerified() || room.getType() == CHAT && room.getChatRoom().isVerified()) {
             if (!roomVerified) {
                 verifyIconTv = new FontIconTextView(getContext());
-                verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+                verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify));
                 verifyIconTv.setText(R.string.icon_blue_badge);
                 setTextSize(verifyIconTv, R.dimen.standardTextSize);
                 addView(verifyIconTv);
@@ -169,7 +166,7 @@ public class RoomListCell extends FrameLayout {
         if (!haveDate) {
             messageDateTv = new AppCompatTextView(getContext());
             messageDateTv.setSingleLine(true);
-            messageDateTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDateTv.getContext()));
+            messageDateTv.setTextColor(Theme.getColor(Theme.key_default_text));
             setTextSize(messageDateTv, R.dimen.smallTextSize);
             setTypeFace(messageDateTv);
             addView(messageDateTv);
@@ -184,7 +181,7 @@ public class RoomListCell extends FrameLayout {
                 muteIconTv = new FontIconTextView(getContext());
                 muteIconTv.setText(R.string.icon_mute);
                 muteIconTv.setGravity(Gravity.RIGHT);
-                muteIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(getContext()));
+                muteIconTv.setTextColor(Theme.getColor(Theme.key_theme_color));
                 setTextSize(muteIconTv, R.dimen.dp13);
                 addView(muteIconTv);
                 isMute = true;
@@ -200,7 +197,7 @@ public class RoomListCell extends FrameLayout {
                 chatIconTv = new FontIconTextView(getContext());
                 setTextSize(chatIconTv, R.dimen.dp14);
                 addView(chatIconTv);
-                chatIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(chatIconTv.getContext()));
+                chatIconTv.setTextColor(Theme.getColor(Theme.key_theme_color));
                 haveChatIcon = true;
 
             }
@@ -222,7 +219,7 @@ public class RoomListCell extends FrameLayout {
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
             roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt(), -1, false));
-            roomNameTv.setTextColor(Theme.getInstance().getSendMessageTextColor(roomNameTv.getContext()));
+            roomNameTv.setTextColor(Theme.getColor(Theme.key_default_text));
             roomNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
             addView(roomNameTv);
             haveName = true;
@@ -235,6 +232,7 @@ public class RoomListCell extends FrameLayout {
                 lastMessageTv.setEllipsize(TextUtils.TruncateAt.END);
                 lastMessageTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
                 lastMessageTv.setSingleLine(true);
+                lastMessageTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
                 setTypeFace(lastMessageTv);
                 setTextSize(lastMessageTv, R.dimen.dp13);
                 addView(lastMessageTv);
@@ -254,9 +252,9 @@ public class RoomListCell extends FrameLayout {
                 haveBadge = true;
             }
             if (room.getMute()) {
-                badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));
+                badgeView.setBadgeColor(Theme.getColor(Theme.key_gray_background));
             } else {
-                badgeView.setBadgeColor(Theme.getInstance().getAccentColor(badgeView.getContext()));
+                badgeView.setBadgeColor(Theme.getColor(Theme.key_button_background));
             }
             badgeView.setText(getUnreadCount(room.getUnreadCount()));
             if (havePin) {
@@ -599,9 +597,7 @@ public class RoomListCell extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Theme.getInstance().getDividerColor(getContext()));
-        canvas.drawLine(isRtl ? 4 : avatarImageView.getRight(), getMeasuredHeight() - 1, isRtl ? avatarImageView.getLeft() : getWidth(), getMeasuredHeight(), paint);
+        canvas.drawLine(isRtl ? 4 : avatarImageView.getRight(), getMeasuredHeight() - 1, isRtl ? avatarImageView.getLeft() : getWidth(), getMeasuredHeight(), Theme.getDividerPaint());
         super.dispatchDraw(canvas);
     }
 
@@ -624,7 +620,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getActionState() != null && room.getActionStateUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
-            typingSpannableString.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
+            typingSpannableString.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_theme_color)), 0, room.getActionState().length(), 0);
 
             builder.append(typingSpannableString);
 
@@ -632,11 +628,11 @@ public class RoomListCell extends FrameLayout {
             String draft = getResources().getString(R.string.txt_draft) + " ";
 
             SpannableString redSpannable = new SpannableString(draft);
-            redSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(lastMessageTv.getContext(), R.color.red)), 0, draft.length(), 0);
+            redSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_dark_red)), 0, draft.length(), 0);
 
             String draftMessage = room.getDraft().getMessage();
             SpannableString message = new SpannableString(draftMessage);
-            message.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, message.length(), 0);
+            message.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_subtitle_text)), 0, message.length(), 0);
 
             builder.append(redSpannable);
             builder.append(message);
@@ -658,7 +654,7 @@ public class RoomListCell extends FrameLayout {
                 if (lastMessage.isDeleted()) {
                     String deletedMessage = getResources().getString(R.string.deleted_message);
                     SpannableString deletedSpannable = new SpannableString(deletedMessage);
-                    deletedSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, deletedMessage.length(), 0);
+                    deletedSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_subtitle_text)), 0, deletedMessage.length(), 0);
                     builder.append(deletedSpannable);
                     lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
                     return;
@@ -702,7 +698,7 @@ public class RoomListCell extends FrameLayout {
 
                         if (senderNameSpannable != null) {
                             haveSenderName = true;
-                            senderNameSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
+                            senderNameSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_theme_color)), 0, senderNameTag.length(), 0);
                         }
                     }
 
@@ -793,12 +789,12 @@ public class RoomListCell extends FrameLayout {
 
                     if (attachmentSpannable != null) {
                         haveAttachment = true;
-                        attachmentSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
+                        attachmentSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_theme_color)), 0, attachmentTag.length(), 0);
                     }
 
                     if (haveSenderName) {
                         senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
-                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getAccentColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
+                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_theme_color)), 0, senderNameQuoteSpannable.length(), 0);
                     }
                     String message;
                     if (lastMessage.getMessage().length() > 70) {
@@ -813,7 +809,7 @@ public class RoomListCell extends FrameLayout {
 //                        message = HelperCalander.convertToUnicodeFarsiNumber(message);
 
                     lastMessageSpannable = new SpannableString(/*subStringInternal(*/message/*)*/);
-                    lastMessageSpannable.setSpan(new ForegroundColorSpan(Theme.getInstance().getSendMessageTextColor(lastMessageTv.getContext())), 0, lastMessageSpannable.length(), 0);
+                    lastMessageSpannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_subtitle_text)), 0, lastMessageSpannable.length(), 0);
 
                     if (haveSenderName) {
                         if (haveAttachment) {

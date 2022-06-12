@@ -53,7 +53,6 @@
                     android:paddingRight="@dimen/dp20"
                     android:text="@string/text_empty_user_map"
                     android:textSize="@dimen/dp13"
-                    android:textColor="?iGapTitleTextColor"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -66,7 +65,6 @@
             android:fadeScrollbars="false"
             android:overScrollMode="never"
             android:scrollbarSize="5dp"
-            android:scrollbarThumbVertical="@color/toolbar_background"
             android:scrollbars="vertical" />
 
         <ProgressBar

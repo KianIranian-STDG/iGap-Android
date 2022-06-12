@@ -31,12 +31,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.module.dialog.BottomSheetListAdapter;
 
@@ -49,7 +51,6 @@ import java.util.List;
 public class TopSheetDialog extends AppCompatDialog {
 
     private List<String> itemList;
-    private List<Integer> itemListInt;
     private int range;
     private BottomSheetItemClickCallback bottomSheetItemClickCallback;
 
@@ -100,9 +101,10 @@ public class TopSheetDialog extends AppCompatDialog {
     }
 
     public TopSheetDialog setListDataWithResourceId(List<Integer> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
-        itemListInt = new ArrayList<>();
-            this.itemListInt.addAll(listItem);
-
+        itemList = new ArrayList<>();
+        for (int i = 0; i < listItem.size(); i++) {
+            this.itemList.add(getContext().getString(listItem.get(i)));
+        }
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         super.setContentView(wrapInTopSheet());
@@ -111,11 +113,16 @@ public class TopSheetDialog extends AppCompatDialog {
 
     private View wrapInTopSheet() {
         final CoordinatorLayout coordinator = (CoordinatorLayout) View.inflate(getContext(), R.layout.top_sheet_dialog, null);
+        View lineViewTop = coordinator.findViewById(R.id.lineViewTop);
+        lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_gray)));
         FrameLayout topSheet = coordinator.findViewById(R.id.design_top_sheet);
         TopSheetBehavior<FrameLayout> topSheetBehavior = TopSheetBehavior.from(topSheet);
         topSheetBehavior.setTopSheetCallback(mTopSheetCallback);
         RecyclerView recyclerView = topSheet.findViewById(R.id.bottomSheetList);
-        recyclerView.setAdapter(new BottomSheetListAdapter(range,itemListInt,  position -> {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(new BottomSheetListAdapter(itemList, range, position -> {
             dismiss();
             bottomSheetItemClickCallback.onClick(position);
         }));
@@ -127,7 +134,7 @@ public class TopSheetDialog extends AppCompatDialog {
                     }
                 });
 
-        ((GradientDrawable) coordinator.findViewById(R.id.design_top_sheet).getBackground()).setColor(new Theme().getRootColor(getContext()));
+        ((GradientDrawable) coordinator.findViewById(R.id.design_top_sheet).getBackground()).setColor(Theme.getColor(Theme.key_popup_background));
         return coordinator;
     }
 

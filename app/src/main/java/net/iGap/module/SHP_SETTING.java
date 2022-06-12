@@ -38,6 +38,7 @@ public class SHP_SETTING {
     public static final String KEY_KEYBOARD_HEIGHT_LAND = "keyboard_height_land";
     public static final String KEY_PLAY_SOUND_IN_CHAT = "play_sound_in_chat";
     public static final String KEY_THEME_DARK = "KEY_THEME_DARK";
+    public static final String KEY_SYSTEM_DARK_MODE = "KEY_SYSTEM_DARK_MODE";
     public static final String KEY_IS_DARK_BUTTON_SELECTED = "key_ia_dark_button_selected";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
@@ -125,6 +126,8 @@ public class SHP_SETTING {
 
 
     public static final String KEY_THEME_COLOR = "KEY_THEME_COLOR";
+    public static final String KEY_CONVERT_VOICE_MESSAGE = "KEY_CONVERT_VOICE_MESSAGE";
+    public static final String KEY_CONVERT_TEXT_MESSAGE = "KEY_CONVERT_TEXT_MESSAGE";
 
     public static final String KEY_APP_BAR_COLOR = "KEY_APP_BAR_COLOR";
     public static final String KEY_NOTIFICATION_COLOR = "KEY_NOTIFICATION_COLOR";
@@ -212,7 +215,15 @@ public class SHP_SETTING {
     public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
     public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
 
+    public static final String KEY_THEME = "KEY_THEME";
+    public static final String KEY_NIGHT_THEME = "KEY_NIGHT_THEME";
+    public static final String KEY_IS_NIGHT_MODE = "KEY_IS_NIGHT_MODE";
+    public static final String KEY_THEME_TYPE = "KEY_THEME_TYPE";
+
+    public static final String KEY_IS_NEARBY_FIRST_CLICK = "NEARBY_FIRST_CLICK";
     public static final String IS_ACTIVE_PHONE_BIOMETRIC_SECURITY = "is_active_phone_biometric_security";
+
+    public static final String KEY_IS_UPLOAD_SERVICE_RUN = "key_is_upload_service_run";
 
 }
 

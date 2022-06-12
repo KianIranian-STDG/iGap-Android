@@ -12,10 +12,12 @@ package net.iGap.fragments;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,12 +28,16 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentCreateChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.MEditText;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.FragmentCreateChannelViewModel;
@@ -76,9 +82,21 @@ public class FragmentCreateChannel extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        RelativeLayout fch_root = view.findViewById(R.id.fch_root);
+        fch_root.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        TextInputLayout channel_Link = view.findViewById(R.id.channelLink);
+        channel_Link.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         // to disable swipe in channel creation mode
         getSwipeBackLayout().setEnableGesture(false);
+
+        binding.publicChannel.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.description.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.privateChannel.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.description2.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.permanentLinkTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.description3.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        MEditText fch_edt_link = view.findViewById(R.id.fch_edt_link);
+        fch_edt_link.setTextColor(Theme.getColor(Theme.key_title_text));
 
         binding.fchLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())

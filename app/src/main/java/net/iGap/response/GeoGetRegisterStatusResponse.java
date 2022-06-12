@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.module.GPSTracker;
 import net.iGap.proto.ProtoGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -37,7 +37,7 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
 
 
         final ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder builder = (ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder) message;
-        FragmentiGapMap.mapRegistrationStatus = builder.getEnable();
+        NearbyFragment.mapRegistrationStatus = builder.getEnable();
 
         if (G.onMapRegisterState != null) {
             G.onMapRegisterState.onState(builder.getEnable());

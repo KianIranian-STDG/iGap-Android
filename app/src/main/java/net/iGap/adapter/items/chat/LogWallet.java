@@ -24,6 +24,7 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
@@ -121,8 +122,8 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.cardNumber.setText(cardNumber);
             holder.rrnNumber.setText(rrn);
             holder.titleTxt.setText(R.string.PAYMENT_TRANSFER_MONEY);
-            holder.payTime.setBackgroundColor(theme.getPrimaryColor(holder.payTime.getContext()));
-            holder.titleTxt.setBackgroundColor(theme.getPrimaryColor(holder.titleTxt.getContext()));
+            holder.payTime.setBackgroundColor(Theme.getColor(Theme.key_default_text));
+            holder.titleTxt.setBackgroundColor(Theme.getColor(Theme.key_default_text));
             fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.fromUserId);
             toDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.toUserId);
 

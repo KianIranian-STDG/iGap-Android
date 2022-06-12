@@ -12,8 +12,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="match_parent"/>
 
         <ProgressBar
             android:id="@+id/loader"
@@ -32,9 +31,9 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/noItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:text="@string/no_item"/>
 
@@ -43,7 +42,7 @@
                 android:layout_width="@dimen/dp44"
                 android:layout_height="@dimen/dp44"
                 android:background="@drawable/shape_file_manager_file_bg"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:text="@string/icon_back"
                 android:layout_marginTop="@dimen/dp6"/>
 

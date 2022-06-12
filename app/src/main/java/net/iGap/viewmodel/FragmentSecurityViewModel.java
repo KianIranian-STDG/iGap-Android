@@ -28,6 +28,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentSecurity;
 import net.iGap.helper.HelperError;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.CheckPasswordCallback;
 import net.iGap.observers.interfaces.RecoveryEmailCallback;
 import net.iGap.observers.interfaces.TwoStepVerificationChangeHintCallback;
@@ -623,7 +624,13 @@ public class FragmentSecurityViewModel extends ViewModel {
     private void dialogWaitTime(long time) {
         boolean wrapInScrollView = true;
 
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -632,8 +639,14 @@ public class FragmentSecurityViewModel extends ViewModel {
         }).show();
 
         View v = dialogWait.getCustomView();
+        v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
 
         final TextView remindTime = v.findViewById(R.id.remindTime);
+        remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textReason = v.findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

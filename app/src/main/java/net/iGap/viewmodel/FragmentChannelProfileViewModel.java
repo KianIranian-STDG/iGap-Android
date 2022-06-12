@@ -43,6 +43,7 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddModerator;
+import net.iGap.request.RequestClientRoomChangeOwner;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -431,6 +432,9 @@ public class FragmentChannelProfileViewModel extends ViewModel
         new RequestChannelAddAdmin().channelAddAdmin(roomId, peerId);
     }
 
+    private void setToOwner(Long userId) {
+        new RequestClientRoomChangeOwner().roomChangeOwner(roomId, userId);
+    }
     //********** set roles
 
     private void setToModerator(Long peerId) {
@@ -495,8 +499,11 @@ public class FragmentChannelProfileViewModel extends ViewModel
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
-                        case R.id.menu_setAdmin:
+                        case R.id.menu_setOwner:
                             setToAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_setAdmin:
+                            setToOwner(info.userID);
                             return true;
                         case R.id.menu_set_moderator:
                             setToModerator(info.peerId);

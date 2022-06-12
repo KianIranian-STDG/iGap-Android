@@ -11,6 +11,7 @@
 package net.iGap.adapter.items;
 
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.structs.StructContactInfo;
@@ -78,14 +80,19 @@ public class ContactItemNotRegister extends AbstractItem<ContactItemNotRegister,
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
+        protected LinearLayout mainContainer;
 
         public ViewHolder(View view) {
             super(view);
-
+            mainContainer = (LinearLayout) view.findViewById(R.id.mainContainer);
+            mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             image = (CircleImageView) view.findViewById(R.id.imageView);
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
+            title.setTextColor(Theme.getColor(Theme.key_title_text));
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
+            subtitle.setTextColor(Theme.getColor(Theme.key_subtitle_text));
             topLine = view.findViewById(R.id.topLine);
+            topLine.setBackgroundColor(Theme.getColor(Theme.key_line));
         }
     }
 }

@@ -17,7 +17,7 @@
             android:id="@+id/smslg_gif_view"
             android:layout_width="@dimen/dp120"
             android:layout_height="@dimen/dp120"
-            android:background="@color/gray_shared_media_items"
+            android:background="@color/key_light_gray"
             android:minHeight="@dimen/dp120"
             android:scaleType="centerCrop" />
 

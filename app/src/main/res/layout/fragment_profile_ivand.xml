@@ -105,7 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="status"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/ivand_profile_toolbar_txt_textSize"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_avatar_box"
         app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline" />
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="user name"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/fragment_ivand_profile_toolbar_status"
@@ -133,7 +133,7 @@
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_avatar_box"
-        app:srcCompat="@drawable/ic_wallet" />
+        app:srcCompat="@drawable/menu_wallet" />
 
     <TextView
         android:id="@+id/fragment_ivand_profile_lbl_credit"
@@ -144,7 +144,7 @@
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_img_credit"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:text="@string/wallet_Your_credit" />
 
@@ -154,7 +154,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="16,000 Toman"
-        android:textColor="@color/gray_4c"
+        android:textColor="@color/key_gray"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_credit"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,7 +170,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/increase_credit"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_img_credit"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_credit" />
@@ -179,7 +178,7 @@
         android:id="@+id/fragment_ivand_profile_credit_splitter"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp1"
-        android:background="@color/gray"
+        android:background="@color/key_gray"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_btn_increase_credit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +208,7 @@
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_img_score"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:text="@string/your_rate" />
 
@@ -219,7 +218,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="168"
-        android:textColor="@color/gray_4c"
+        android:textColor="@color/key_gray"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_score"
         app:layout_constraintEnd_toEndOf="parent"
@@ -235,7 +234,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/increase_score"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_img_score"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_score" />
@@ -244,7 +242,7 @@
         android:id="@+id/fragment_ivand_profile_score_splitter"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp1"
-        android:background="@color/gray"
+        android:background="@color/key_gray"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_btn_increase_score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -260,7 +258,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/your_rate"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_score_splitter" />
@@ -271,7 +269,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="20 point"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_inviteFriend"
         app:layout_constraintEnd_toEndOf="parent"
@@ -286,7 +283,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/payment"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_inviteFriend" />
@@ -297,7 +294,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="10 point"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_payment"
         app:layout_constraintEnd_toEndOf="parent"
@@ -312,7 +308,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/QrCode_Scan"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_payment" />
@@ -323,7 +319,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="50 point"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_scan_qrCode"
         app:layout_constraintEnd_toEndOf="parent"
@@ -338,7 +333,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/bots_and_channels"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_scan_qrCode" />
@@ -349,7 +344,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="150 point"
-        android:textColor="@color/ivand_green_text_color"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_bot_channels"
         app:layout_constraintEnd_toEndOf="parent"

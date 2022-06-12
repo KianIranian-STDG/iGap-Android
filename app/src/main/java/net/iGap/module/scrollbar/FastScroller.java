@@ -26,8 +26,8 @@ import com.mikepenz.fastadapter.IItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.items.ContactItemGroup;
+import net.iGap.messenger.theme.Theme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -165,9 +165,9 @@ public class FastScroller extends LinearLayout {
         } else {
             handleResId = R.drawable.fastscroll_bubble_light_right;
         }
-        textView.setTextColor(new Theme().getPrimaryTextColor(context));
-        handle.setBackgroundResource(new Theme().getFastScrollerBackground(context));
-        textView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(context, handleResId), context, R.attr.iGapButtonColor));
+        textView.setTextColor(Theme.getColor(Theme.key_default_text));
+        handle.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.fastscroll_handle), getContext(), Theme.getColor(Theme.key_light_theme_color)));
+        textView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, handleResId), context, Theme.getColor(Theme.key_button_background)));
     }
 
     private void setPosition(float y) {

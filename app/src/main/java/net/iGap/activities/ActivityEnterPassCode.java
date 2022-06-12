@@ -9,19 +9,21 @@ package net.iGap.activities;
  * All rights reserved.
  */
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.fingerprint.FingerprintManager;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,17 +34,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
 
+import net.iGap.helper.HelperAnimation;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
-import net.iGap.helper.HelperAnimation;
 import net.iGap.helper.HelperError;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.FingerPrint;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;
 
 import java.util.List;
@@ -52,6 +52,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced implements EventMana
     private ActivityEnterPassCodeViewModel viewModel;
     private ActivityEnterPassCodeBinding binding;
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +68,26 @@ public class ActivityEnterPassCode extends ActivityEnhanced implements EventMana
         binding = DataBindingUtil.setContentView(this, R.layout.activity_enter_pass_code);
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
+        binding.mainRootEnterPassword.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.passwordEditText.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.passwordEditText.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ColorStateList colorStateList = ColorStateList.valueOf(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(binding.passwordEditText, colorStateList);
+        binding.lockIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
+        binding.lockIcon.setTypeface(ResourcesCompat.getFont(getBaseContext(), R.font.font_icons));
+        binding.unlockTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.forgotPasswordButton.setTextColor(Theme.getColor(Theme.key_theme_color));
+        binding.biometricPasswordIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
+        binding.biometricPasswordIcon.setTypeface(ResourcesCompat.getFont(getBaseContext(), R.font.font_icons));
+        binding.fingerprintIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
+        binding.patternLockView.setNormalStateColor(Theme.getColor(Theme.key_theme_color));
+        binding.v.setBackgroundColor(Theme.getColor(Theme.key_default_text));
+        binding.icon.setOutlineSpotShadowColor(Theme.getColor(Theme.key_dark_theme_color));
+        binding.icon.setOutlineAmbientShadowColor(Theme.getColor(Theme.key_dark_theme_color));
 
         viewModel.getInitialPatternView().observe(this, isLinePattern -> {
             if (isLinePattern != null) {
+
                 binding.patternLockView.setViewMode(PatternLockView.PatternViewMode.CORRECT);       // Set the current view more
                 binding.patternLockView.setInStealthMode(isLinePattern);                            // Set the pattern in stealth mode (pattern drawing is hidden)
                 binding.patternLockView.setTactileFeedbackEnabled(true);                            // Enables vibration feedback when the pattern is drawn
@@ -81,8 +99,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced implements EventMana
                 binding.patternLockView.setPathWidth((int) getResources().getDimension(R.dimen.pattern_lock_path_width));
                 binding.patternLockView.setAspectRatioEnabled(true);
                 binding.patternLockView.setAspectRatio(PatternLockView.AspectRatio.ASPECT_RATIO_HEIGHT_BIAS);
-                binding.patternLockView.setCorrectStateColor(getResources().getColor(R.color.green));
-                binding.patternLockView.setWrongStateColor(getResources().getColor(R.color.red));
+                binding.patternLockView.setCorrectStateColor(Theme.getColor(Theme.key_dark_theme_color));
+                binding.patternLockView.setWrongStateColor(Theme.getColor(Theme.key_dark_red));
                 binding.patternLockView.setDotAnimationDuration(150);
                 binding.patternLockView.setPathEndAnimationDuration(200);
             }

@@ -1,6 +1,5 @@
 package net.iGap.story.liststories;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.items.cells.EmptyCell;
-import net.iGap.adapter.items.cells.ToggleButtonCell;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.cell.TextCheckCell;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.story.liststories.cells.CheckBoxCell;
@@ -58,7 +57,7 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
                 .getView();
 
         FrameLayout rootView = new FrameLayout(getContext());
-        rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_white));
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
         rootView.addView(recyclerListView = new RecyclerListView(getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
 
@@ -78,15 +77,11 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
     }
 
     @Override
-    public void onClick(View view, int position) {
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
+    public void onItemClick(View view, int position) {
 
     }
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter {
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -94,24 +89,24 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
             switch (viewType) {
                 case 0:
                     HeaderCell headerCell = new HeaderCell(context);
-                    headerCell.setBackgroundColor(Theme.getInstance().getRootColor(parent.getContext()));
+                    headerCell.setBackgroundColor(Theme.getColor(Theme.key_white));
                     cellView = headerCell;
                     break;
                 case 1:
                     TextCell textCell = new TextCell(parent.getContext());
                     textCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 24));
-                    textCell.setBackgroundColor(Theme.getInstance().getRootColor(parent.getContext()));
+                    textCell.setBackgroundColor(Theme.getColor(Theme.key_white));
                     cellView = textCell;
                     break;
                 case 2:
-                    ToggleButtonCell toggleButtonCell = new ToggleButtonCell(context, false);
-                    toggleButtonCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
-                    toggleButtonCell.setBackgroundColor(Theme.getInstance().getRootColor(parent.getContext()));
-                    cellView = toggleButtonCell;
+                    TextCheckCell textCheckCell = new TextCheckCell(context);
+                    textCheckCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
+                    textCheckCell.setBackgroundColor(Theme.getColor(Theme.key_white));
+                    cellView = textCheckCell;
                     break;
                 case 3:
                     CheckBoxCell checkBoxCell = new CheckBoxCell(context, false);
-                    checkBoxCell.setBackgroundColor(Theme.getInstance().getRootColor(parent.getContext()));
+                    checkBoxCell.setBackgroundColor(Theme.getColor(Theme.key_white));
                     checkBoxCell.setChecked(true);
                     cellView = checkBoxCell;
                     break;
@@ -123,7 +118,7 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
                     cellView = new View(parent.getContext());
                     break;
             }
-            return new RecyclerListView.ItemViewHolder(cellView, StorySettingFragment.this);
+            return new RecyclerListView.Holder(cellView);
         }
 
         @Override
@@ -148,12 +143,12 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
             } else if (viewType == 1) {
                 TextCell textCell = (TextCell) holder.itemView;
                 textCell.setTextSize(10);
-                textCell.setTextColor(Theme.getInstance().getSubTitleColor(context));
+                textCell.setTextColor(Theme.getColor(Theme.key_subtitle_text));
                 switch (position) {
                     case 1:
                         textCell.setValue("2  نفر");
                         textCell.setTextSize(14);
-                        textCell.setTextColor(Theme.getInstance().getTitleTextColor(context));
+                        textCell.setTextColor(Theme.getColor(Theme.key_title_text));
                         break;
                     case 2:
                         textCell.setValue(getString(R.string.hide_specific_people));
@@ -172,16 +167,16 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
                         break;
                 }
             } else if (viewType == 2) {
-                ToggleButtonCell toggleButtonCell = (ToggleButtonCell) holder.itemView;
+                TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                 switch (position) {
                     case 11:
-                        toggleButtonCell.setText(getString(R.string.save_gallery), false);
+                        textCheckCell.setTextAndCheck(getString(R.string.save_gallery),true, false);
                         break;
                     case 14:
-                        toggleButtonCell.setText(getString(R.string.resharing_story), false);
+                        textCheckCell.setTextAndCheck(getString(R.string.resharing_story),true, false);
                         break;
                     case 17:
-                        toggleButtonCell.setText(getString(R.string.allow_sharing), false);
+                        textCheckCell.setTextAndCheck(getString(R.string.allow_sharing),true, false);
                         break;
                 }
             } else if (viewType == 3) {
@@ -224,7 +219,7 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
         }
 
         @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
             return true;
         }
     }

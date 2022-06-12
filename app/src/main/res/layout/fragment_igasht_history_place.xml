@@ -28,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="@{viewModel.showMainView}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/igasht_empty_history_message"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showEmptyListMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +57,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/retryView"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:onClick="@{()->viewModel.onRetryClick()}"

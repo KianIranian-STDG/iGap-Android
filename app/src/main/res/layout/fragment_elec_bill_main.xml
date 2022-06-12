@@ -53,8 +53,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:cardBackgroundColor="?attr/iGapCardViewColor">
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -69,7 +68,6 @@
                             android:layout_marginEnd="@dimen/dp8"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_main_billTitle"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="center"
                             android:ellipsize="end"
@@ -96,7 +94,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:ellipsize="start"
-                                android:textColor="?iGapSubtitleTextColor"
                                 android:textSize="@dimen/standardTextSize"
                                 android:text="@string/elecBill_main_serviceMode"
                                 android:button="@drawable/check_box_background" />
@@ -107,7 +104,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:ellipsize="start"
-                                android:textColor="?iGapSubtitleTextColor"
                                 android:textSize="@dimen/standardTextSize"
                                 android:text="@string/elecBill_main_PhoneMode"
                                 android:button="@drawable/check_box_background" />
@@ -122,7 +118,6 @@
                             android:layout_marginEnd="@dimen/dp16"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_main_billTypeTitle"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:gravity="center"
                             android:ellipsize="end"
@@ -151,7 +146,6 @@
                             android:layout_marginEnd="@dimen/dp8"
                             android:minHeight="48dp"
                             android:hint="@string/elecBill_main_billIDHint"
-                            android:textColorHint="?iGapHintTextColor"
                             app:counterMaxLength="13"
                             app:counterEnabled="true"
                             app:errorText="@{viewmodel.billIDError}"
@@ -173,13 +167,12 @@
                                 android:lines="1"
                                 android:maxLines="1"
                                 android:text="@={viewmodel.billID}"
-                                android:textColor="?iGapTitleTextColor"
                                 android:textSize="@dimen/dp18" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/myIconTextViewStyleGray"
+                            style="@style/baseFontIcon"
                             android:id="@+id/billQRscan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -197,7 +190,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/payBill"
-                            style="@style/iGapButton"
+                            style="@style/BaseIGapButtonStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp16"
@@ -276,7 +269,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/KontorInfo"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:minHeight="58dp"

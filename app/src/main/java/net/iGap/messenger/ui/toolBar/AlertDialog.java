@@ -40,6 +40,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.LineProgressView;
 import net.iGap.module.customView.RadialProgressView;
 
@@ -68,7 +69,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private AnimatorSet[] shadowAnimation = new AnimatorSet[2];
     private int customViewOffset = 20;
 
-    private String dialogButtonColorKey = Theme.key_dialogButton;
+    private String dialogButtonColorKey = Theme.key_popup_background;
 
     private OnCancelListener onCancelListener;
 
@@ -145,12 +146,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public AlertDialogCell(Context context) {
             super(context);
 
-            setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getDefaultColor(Theme.key_dialogButtonSelector), 2));
+            setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_button_background), 2));
             setPadding(LayoutCreator.dp(23), 0, LayoutCreator.dp(23), 0);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getDefaultColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_icon), PorterDuff.Mode.MULTIPLY));
             addView(imageView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
@@ -158,7 +159,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             textView.setSingleLine(true);
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setTextColor(Theme.getDefaultColor(Theme.key_dialogTextBlack));
+            textView.setTextColor(Theme.getColor(Theme.key_black));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             addView(textView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
         }
@@ -195,7 +196,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         backgroundPaddings = new Rect();
         if (progressStyle != 3) {
             shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(getThemeColor(Theme.key_popup_background), PorterDuff.Mode.MULTIPLY));
             shadowDrawable.getPadding(backgroundPaddings);
         }
 
@@ -438,7 +439,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             titleTextView = new TextView(getContext());
             titleTextView.setText(title);
-            titleTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+            titleTextView.setTextColor(getThemeColor(Theme.key_black));
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
             titleTextView.setGravity((G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
@@ -448,7 +449,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (secondTitle != null && title != null) {
             secondTitleTextView = new TextView(getContext());
             secondTitleTextView.setText(secondTitle);
-            secondTitleTextView.setTextColor(getThemeColor(Theme.key_dialogTextGray3));
+            secondTitleTextView.setTextColor(getThemeColor(Theme.key_default_text));
             secondTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             secondTitleTextView.setGravity((G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
             titleContainer.addView(secondTitleTextView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 0, 21, 0, 0));
@@ -457,7 +458,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (subtitle != null) {
             subtitleTextView = new TextView(getContext());
             subtitleTextView.setText(subtitle);
-            subtitleTextView.setTextColor(getThemeColor(Theme.key_dialogIcon));
+            subtitleTextView.setTextColor(getThemeColor(Theme.key_icon));
             subtitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             subtitleTextView.setGravity((G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             containerView.addView(subtitleTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, items != null ? 14 : 10));
@@ -487,7 +488,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             };
             contentScrollView.setVerticalScrollBarEnabled(false);
-            setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(Theme.key_dialogScrollGlow));
+            setScrollViewEdgeEffectColor(contentScrollView, getThemeColor(Theme.key_light_gray));
             containerView.addView(contentScrollView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, 0, 0, 0, 0));
 
             scrollContainer = new LinearLayout(getContext());
@@ -496,10 +497,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         messageTextView = new TextView(getContext());
-        messageTextView.setTextColor(getThemeColor(Theme.key_dialogTextBlack));
+        messageTextView.setTextColor(getThemeColor(Theme.key_black));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setMovementMethod(new LinkMovementMethodMy());
-        messageTextView.setLinkTextColor(getThemeColor(Theme.key_dialogTextLink));
+        messageTextView.setLinkTextColor(getThemeColor(Theme.key_link_text));
         if (!messageTextViewClickable) {
             messageTextView.setClickable(false);
             messageTextView.setEnabled(false);
@@ -510,7 +511,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             containerView.addView(progressViewContainer, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 44, Gravity.LEFT | Gravity.TOP, 23, title == null ? 24 : 0, 23, 24));
 
             RadialProgressView progressView = new RadialProgressView(getContext());
-            progressView.setProgressColor(getThemeColor(Theme.key_dialogProgressCircle));
+            progressView.setProgressColor(getThemeColor(Theme.key_theme_color));
             progressViewContainer.addView(progressView, LayoutCreator.createFrame(44, 44, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP));
 
             messageTextView.setLines(1);
@@ -521,14 +522,14 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
             lineProgressView = new LineProgressView(getContext());
             lineProgressView.setProgress(currentProgress / 100.0f, false);
-            lineProgressView.setProgressColor(getThemeColor(Theme.key_dialogLineProgress));
-            lineProgressView.setBackColor(getThemeColor(Theme.key_dialogLineProgressBackground));
+            lineProgressView.setProgressColor(getThemeColor(Theme.key_theme_color));
+            lineProgressView.setBackColor(getThemeColor(Theme.key_popup_background));
             containerView.addView(lineProgressView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 4, Gravity.LEFT | Gravity.CENTER_VERTICAL, 24, 0, 24, 0));
 
             lineProgressViewPercent = new TextView(getContext());
             lineProgressViewPercent.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
             lineProgressViewPercent.setGravity((G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-            lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_dialogTextGray2));
+            lineProgressViewPercent.setTextColor(getThemeColor(Theme.key_default_text));
             lineProgressViewPercent.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             containerView.addView(lineProgressViewPercent, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 23, 4, 23, 24));
             updateLineProgressTextView();
@@ -537,11 +538,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             setCancelable(false);
 
             progressViewContainer = new FrameLayout(getContext());
-            progressViewContainer.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getDefaultColor(Theme.key_dialog_inlineProgressBackground)));
+            progressViewContainer.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), getThemeColor(Theme.key_dark_theme_color)));
             containerView.addView(progressViewContainer, LayoutCreator.createLinear(86, 86, Gravity.CENTER));
 
             RadialProgressView progressView = new RadialProgressView(getContext());
-            progressView.setProgressColor(getThemeColor(Theme.key_dialog_inlineProgress));
+            progressView.setProgressColor(getThemeColor(Theme.key_dark_theme_color));
             progressViewContainer.addView(progressView, LayoutCreator.createLinear(86, 86));
         } else {
             scrollContainer.addView(messageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, customView != null || items != null ? customViewOffset : 0));
@@ -1128,7 +1129,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     protected int getThemeColor(String key) {
-        return Theme.getDefaultColor(key);
+        return Theme.getColor(key);
     }
 
     public void showDelayed(long delay) {

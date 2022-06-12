@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsComment;
 
 import java.util.List;
@@ -64,15 +64,15 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         private void setColor() {
-            if (G.themeColor == Theme.DARK) {
+            if (Theme.isDark() || Theme.isNight()) {
                 changeToDark();
                 return;
             }
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_light_gray));
         }
 
         private void changeToDark() {
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.background_setting_dark));
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_dark_gray));
         }
     }
 

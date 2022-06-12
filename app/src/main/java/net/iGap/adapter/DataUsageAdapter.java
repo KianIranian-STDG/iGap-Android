@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.DataUsageListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.structs.DataUsageStruct;
@@ -133,6 +134,7 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             txtByteReceivedNum = itemView.findViewById(R.id.txtByteReceivedNum);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtSentNum = itemView.findViewById(R.id.txtSentNum);
+            txtSentNum.setTextColor(Theme.getColor(Theme.key_title_text));
             txtReceivedNum = itemView.findViewById(R.id.txtReceivedNum);
             txtByteSentNum = itemView.findViewById(R.id.txtByteSentNum);
             txtByteReceived = itemView.findViewById(R.id.txtByteReceived);
@@ -153,7 +155,7 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public TotalViewHolder(View itemView) {
             super(itemView);
             txtTotalSentByte = itemView.findViewById(R.id.txtTotalSentByte);
-
+            txtTotalSentByte.setTextColor(Theme.getColor(Theme.key_title_text));
             txtTotalReceivedByte = itemView.findViewById(R.id.txtTotalReceivedByte);
 
             txtTotalReceived = itemView.findViewById(R.id.txtTotalReceived);

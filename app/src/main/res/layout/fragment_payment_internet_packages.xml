@@ -43,7 +43,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/order_by"
-                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +50,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buy_internet_package_volume_type_title"
-                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_packageTime"
                 app:layout_constraintStart_toStartOf="@id/spinner_traffic"
                 app:layout_constraintTop_toTopOf="@+id/tv_packageTime" />
@@ -72,7 +70,6 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/background_cancel_money_action"
                 app:layout_constraintBottom_toBottomOf="@id/spinner_time"
                 app:layout_constraintEnd_toEndOf="@id/spinner_time"
                 app:layout_constraintStart_toStartOf="@id/spinner_time"
@@ -95,7 +92,6 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/background_cancel_money_action"
                 app:layout_constraintBottom_toBottomOf="@id/spinner_traffic"
                 app:layout_constraintEnd_toEndOf="@id/spinner_traffic"
                 app:layout_constraintStart_toStartOf="@id/spinner_traffic"
@@ -109,7 +105,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="@dimen/dp8"
                 android:text="@string/suggested_packages"
-                android:textColor="@color/green"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/spinner_traffic" />
@@ -133,7 +128,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:text="@string/all_packages"
-                android:textColor="@color/green"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/rv_proposalPackage"
                 app:layout_constraintTop_toBottomOf="@+id/rv_proposalPackage" />
@@ -156,7 +150,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_pay"
-        style="@style/iGapButton"
+        style="@style/BaseIGapButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

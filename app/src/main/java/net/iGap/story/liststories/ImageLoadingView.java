@@ -23,6 +23,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 
 import static android.graphics.Shader.TileMode.CLAMP;
@@ -57,7 +58,7 @@ public class ImageLoadingView extends CircleImageView {
     private ValueAnimator mRotateAnim;
     private ValueAnimator mCircleAnim;
     private ValueAnimator mTouchAnim;
-    private int mStartColor = getResources().getColor(R.color.green);
+    private int mStartColor = Theme.getColor(Theme.key_theme_color);
     private int mEndColor = getResources().getColor(R.color.md_yellow_A700);
     private float mScale = 1f;
     private Paint mBitmapPaint;

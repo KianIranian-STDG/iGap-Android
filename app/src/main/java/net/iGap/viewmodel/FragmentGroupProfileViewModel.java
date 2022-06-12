@@ -68,7 +68,7 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
     public MutableLiveData<String> groupName = new MutableLiveData<>();
     public MutableLiveData<String> groupNumber = new MutableLiveData<>();
     public MutableLiveData<Long> goToShowAvatarPage = new MutableLiveData<>();
-    public MutableLiveData<List<Integer>> showMenu = new MutableLiveData<>();
+    public MutableLiveData<List<String>> showMenu = new MutableLiveData<>();
     public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
     public MutableLiveData<String> goToShowMemberPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogConvertToPublic = new MutableLiveData<>();
@@ -240,13 +240,13 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
 
 
     public void onClickRippleMenu() {
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.clear_history);
+        List<String> items = new ArrayList<>();
+        items.add(G.fragmentActivity.getString(R.string.clear_history));
         if (role == GroupChatRole.OWNER) {
             if (isPrivate) {
-                items.add(R.string.group_title_convert_to_public);
+                items.add(G.fragmentActivity.getString(R.string.group_title_convert_to_public));
             } else {
-                items.add(R.string.group_title_convert_to_private);
+                items.add(G.fragmentActivity.getString(R.string.group_title_convert_to_private));
             }
         }
         showMenu.setValue(items);

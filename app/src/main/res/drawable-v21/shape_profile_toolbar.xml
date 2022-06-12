@@ -2,9 +2,9 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?attr/rootBackgroundColor" />
+            <solid android:color="#F9F8F8" />
         </shape>
     </item>
-    <item android:drawable="?iGapToolbarBackground">
+    <item android:drawable="@drawable/shape_toolbar_background">
     </item>
 </layer-list>

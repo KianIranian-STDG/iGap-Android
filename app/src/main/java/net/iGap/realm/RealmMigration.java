@@ -711,7 +711,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 43) {
-
             oldVersion++;
         }
 
@@ -765,12 +764,44 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 45) {
+            RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUser != null) {
+                realmUser.addField("nationalCode", String.class);
+            }
+
+            if (schema.contains("RealmStickers")) {
+                schema.remove("RealmStickers");
+            }
+
+            if (schema.contains("RealmStickersDetails")) {
+                schema.remove("RealmStickersDetails");
+            }
+
+            RealmObjectSchema realmStickerItem = schema.create(RealmStickerItem.class.getSimpleName())
+                    .addField("id", String.class)
+                    .addField("fileName", String.class)
+                    .addField("groupId", String.class)
+                    .addField("name", String.class)
+                    .addField("token", String.class)
+                    .addField("isFavorite", boolean.class)
+                    .addField("recentTime", long.class)
+                    .addField("fileSize", long.class);
+
+            schema.create(RealmStickerGroup.class.getSimpleName())
+                    .addField("id", String.class)
+                    .addField("name", String.class)
+                    .addField("type", String.class)
+                    .addField("avatarName", String.class)
+                    .addField("avatarToken", String.class)
+                    .addField("categoryId", String.class)
+                    .addField("isGiftable", boolean.class)
+                    .addField("avatarSize", long.class)
+                    .addRealmListField("stickerItems", realmStickerItem);
 
             oldVersion++;
         }
 
         if (oldVersion == 46) {
-
             oldVersion++;
         }
 
@@ -821,7 +852,6 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 49) {
-
             oldVersion++;
         }
 
@@ -955,6 +985,58 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 56) {
+            RealmObjectSchema realmRoomAccessSchema = schema.get(RealmRoomAccess.class.getSimpleName());
+
+
+            if (realmRoomAccessSchema != null) {
+                realmRoomAccessSchema.addField("canAddNewStory", boolean.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 57) {
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+
+
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("textToVoicePath", String.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 58) {
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("metrixToken", String.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == 59) {
+            RealmObjectSchema realmRoomSchema = schema.get(RealmRoom.class.getSimpleName());
+
+
+            if (realmRoomSchema != null) {
+                realmRoomSchema.addField("isParticipant", boolean.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 60) {
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("aiToken", String.class);
+            }
+            oldVersion++;
+        }
+
     }
 
     @Override

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.fragments.beepTunes.main.BeepTunesMainFragment;
 import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.Datum;
 import net.iGap.module.api.beepTunes.Slide;
@@ -120,6 +121,7 @@ public class BeepTunesMainAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             recyclerView = itemView.findViewById(R.id.rv_rowItem);
             headerTv = itemView.findViewById(R.id.tv_rowItem_header);
+            headerTv.setTextColor(Theme.getColor(Theme.key_title_text));
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(), LinearLayoutManager.HORIZONTAL, false));
             adapter = new BeepTunesAlbumAdapter();
             recyclerView.setAdapter(adapter);

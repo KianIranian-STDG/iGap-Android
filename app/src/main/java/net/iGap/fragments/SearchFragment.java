@@ -12,12 +12,15 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
@@ -26,7 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
@@ -35,18 +37,27 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
+import net.iGap.controllers.MessageController;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IClientSearchUserName;
+import net.iGap.proto.ProtoClientSearch;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
+import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientSearchUsername;
 
@@ -77,6 +88,7 @@ public class SearchFragment extends BaseFragment {
     private static final String SEARCH_AUTO = "isSearchAuto";
     private String searchTxt;
     private long roomId;
+    private RelativeLayout mainContainer;
 
     public static SearchFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -128,6 +140,8 @@ public class SearchFragment extends BaseFragment {
         if (searchTxt != null) {
             startOrReStartSearchTimer();
         }
+
+
     }
 
     private void initComponent(View view) {
@@ -137,8 +151,12 @@ public class SearchFragment extends BaseFragment {
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
+        mainContainer = view.findViewById(R.id.mainContainer);
         imvNothingFound.setImageResource(R.drawable.find1);
         txtSearchHint = view.findViewById(R.id.txt_search_hint);
+
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        txtSearchHint.setTextColor(Theme.getColor(Theme.key_default_text));
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -209,21 +227,27 @@ public class SearchFragment extends BaseFragment {
 
         int strSize = text.length();
 
-        if (text.startsWith("#")) {
-            fillListItemHashtag(text);
-            return;
-        }
+//        if (text.startsWith("#")) {
+//            fillListItemHashtag(text);
+//            return;
+//        }
 
         if (strSize >= 5) {
             if (getRequestManager().isUserLogin()) {
                 if ((!text.equals(preventRepeatSearch))) {
                     itemAdapter.clear();
-                    if (text.startsWith("@")) {
-                        new RequestClientSearchUsername().clientSearchUsername(text.substring(1));
+/*                    if (text.startsWith("@")) {
 
+                        search(text.substring(1));
+                        new RequestClientSearchUsername().clientSearchUsername(text.substring(1));
                     } else {
-                        new RequestClientSearchUsername().clientSearchUsername(text);
-                    }
+                        search(text);
+                      new RequestClientSearchUsername().clientSearchUsername(text);
+                    }*/
+
+                    search(text);
+
+
                     loadingProgressBar.setVisibility(View.VISIBLE);
                     preventRepeatSearch = text;
                 }
@@ -231,12 +255,12 @@ public class SearchFragment extends BaseFragment {
                 HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
         } else if (strSize >= 1 && strSize < 5) {
-            fillAfterResponse();
-            return;
+            fillListItemGlobal(text);
         } else {
             preventRepeatSearch = "";
         }
 
+/*
         G.onClientSearchUserName = new IClientSearchUserName() {
             @Override
             public void OnGetList(final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList) {
@@ -267,19 +291,190 @@ public class SearchFragment extends BaseFragment {
                 });
             }
         };
+*/
 
+    }
+
+    List<ProtoClientSearch.ClientSearchResponse.Info> infoMain = new ArrayList<>();
+    List<ProtoClientSearch.ClientSearchResponse.Info> infoGlobal = new ArrayList<>();
+
+    private void search(String text) {
+        IG_RPC.Client_search clientSearch = new IG_RPC.Client_search();
+        clientSearch.query = text;
+        getRequestManager().sendRequest(clientSearch, (response, error) -> {
+            if (error == null && response != null) {
+                IG_RPC.Res_client_search res = (IG_RPC.Res_client_search) response;
+
+                G.runOnUiThread(() -> loadingProgressBar.setVisibility(View.GONE));
+
+
+                if (res.infoList != null && res.infoList.size() > 0) {
+                    G.runOnUiThread(() -> loadingProgressBar.setVisibility(View.GONE));
+                    G.runOnUiThread(() -> txtSearchHint.setVisibility(View.GONE));
+                    G.runOnUiThread(() -> imvNothingFound.setVisibility(View.GONE));
+                    infoMain.clear();
+                    infoGlobal.clear();
+                    for (ProtoClientSearch.ClientSearchResponse.Info info : res.infoList) {
+                        switch (info.getCategory()) {
+                            case MINE:
+
+                                infoMain.add(info);
+
+                                break;
+                            case GLOBAL:
+
+                                infoGlobal.add(info);
+                                break;
+                        }
+                    }
+                    fillAfterResponse();
+                } else {
+                    G.runOnUiThread(() -> txtSearchHint.setVisibility(View.VISIBLE));
+                    G.runOnUiThread(() -> txtSearchHint.setText(R.string.there_is_no_any_result));
+                    G.runOnUiThread(() -> imvNothingFound.setVisibility(View.VISIBLE));
+                }
+
+
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+
+                FileLog.e("client Search error  ", "major: " + err.major + "  minor: " + err.minor);
+            }
+        });
     }
 
     private void fillAfterResponse() {
-        String text = searchTxt;
-        if (text.startsWith("@")) {
-            fillListItemAtsign(text.substring(1));
+        fileWithMainListGlobal(searchTxt);
+    }
 
-        } else {
-            fillListItemGlobal(text);
+    private void fileWithMainList() {
+        list.clear();
+        listProcessing(infoMain, getString(R.string.search_main));
+        updateAdapter();
+    }
+
+
+    private void fileWithMainListGlobal(String text) {
+
+        list.clear();
+        listProcessing(infoMain, getString(R.string.search_main));
+        listProcessing(infoGlobal, getString(R.string.search_global));
+
+//        fillChat(text);
+        updateAdapter();
+    }
+
+    private void listProcessing(List<ProtoClientSearch.ClientSearchResponse.Info> infoList, String header) {
+        if (infoList.size() > 0) addHeader(header);
+        for (ProtoClientSearch.ClientSearchResponse.Info info : infoList) {
+
+            switch (info.getType()) {
+                case ROOM:
+
+                    if (info.getRoom().hasChannelRoomExtra()) {
+                        StructSearch item = new StructSearch();
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmRoom room2 = RealmRoom.putOrUpdate(info.getRoom(), realm);
+                            item.avatar = room2.getAvatar();
+                            item.idDetectAvatar = room2.getId();
+                            item.time = room2.getUpdatedTime();
+
+                            room2.setDeleted(true);
+                        });
+
+
+                        item.roomType = info.getRoom().getType();
+                        item.name = info.getRoom().getTitle();
+                        item.isVerified = info.getRoom().getChannelRoomExtra().getVerified();
+                        item.participantsCount = info.getRoom().getChannelRoomExtra().getParticipantsCount();
+                        item.id = info.getRoom().getId();
+
+                        item.userName = info.getRoom().getChannelRoomExtra().getPublicExtra().getUsername();
+                        item.type = SearchType.room;
+                        item.initials = info.getRoom().getInitials();
+                        item.color = info.getRoom().getColor();
+                        list.add(item);
+
+
+                    } else if (info.getRoom().hasGroupRoomExtra()) {
+                        StructSearch item = new StructSearch();
+
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmRoom room2 = RealmRoom.putOrUpdate(info.getRoom(), realm);
+                            item.avatar = room2.getAvatar();
+                            item.idDetectAvatar = room2.getId();
+                            item.time = room2.getUpdatedTime();
+
+                            room2.setDeleted(true);
+                        });
+
+                        item.roomType = info.getRoom().getType();
+                        item.name = info.getRoom().getTitle();
+
+                        item.id = info.getRoom().getId();
+
+                        item.userName = info.getRoom().getGroupRoomExtra().getPublicExtra().getUsername();
+                        item.participantsCount = info.getRoom().getGroupRoomExtra().getParticipantsCount();
+
+                        item.idDetectAvatar = info.getRoom().getId();
+
+                        item.type = SearchType.room;
+                        item.initials = info.getRoom().getInitials();
+                        item.color = info.getRoom().getColor();
+
+
+                        list.add(item);
+
+
+                    }
+                    /*else if (info.getRoom().hasChatRoomExtra()){
+                        StructSearch item = new StructSearch();
+
+                        item.name = contact.getDisplayName();
+                        item.isVerified = contact.isVerified();
+                        item.time = info.getLastSeen();
+                        item.userName = contact.getUsername();
+                        item.comment = "";
+                        item.id = info.getRoom().getId();
+                        item.idDetectAvatar = info.getRoom().getId();
+                        item.type = SearchType.contact;
+                        item.initials = info.getRoom().getInitials();
+                        item.color = info.getRoom().getColor();
+                        item.avatar = contact.getLastAvatar(realm);
+                        list.add(item);
+                    }*/
+
+                    break;
+                case USER:
+
+
+                    StructSearch item = new StructSearch();
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmRegisteredInfo realmRoom = RealmRegisteredInfo.putOrUpdate(realm, info.getUser());
+                        item.avatar = realmRoom.getLastAvatar(realm);
+
+                        item.idDetectAvatar = realmRoom.getId();
+                        item.time = realmRoom.getLastSeen();
+                    });
+
+
+                    item.name = info.getUser().getDisplayName();
+                    item.isVerified = info.getUser().getVerified();
+                    item.time = info.getUser().getLastSeen();
+                    item.userName = info.getUser().getUsername();
+                    item.comment = "";
+                    item.id = info.getUser().getId();
+                    item.type = SearchType.contact;
+                    item.initials = info.getUser().getInitials();
+                    item.color = info.getUser().getColor();
+
+                    list.add(item);
+                    break;
+            }
 
         }
     }
+
 
     private void fillListItemHashtag(String text) {
 
@@ -289,18 +484,18 @@ public class SearchFragment extends BaseFragment {
 
     }
 
-    private void fillListItemAtsign(String text) {
+    /* private void fillListItemAtsign(String text) {
 
-        list.clear();
-        fillBot(text);
-        fillChat(text);
-        fillRoomListGroup(text);
-        fillRoomListChannel(text);
-        updateAdapter();
+         list.clear();
+         fillBot(text);
+         fillChat(text);
+         fillRoomListGroup(text);
+         fillRoomListChannel(text);
+         updateAdapter();
 
-    }
+     }
 
-
+ */
     private void fillListItemGlobal(String text) {
 
         list.clear();
@@ -393,9 +588,13 @@ public class SearchFragment extends BaseFragment {
             imvNothingFound.setVisibility(View.VISIBLE);
         }
 
-        itemAdapter.clear();
-        itemAdapter.add(items);
-        fastAdapter.notifyAdapterDataSetChanged();
+
+        G.runOnUiThread(() -> {
+            itemAdapter.clear();
+            itemAdapter.add(items);
+            fastAdapter.notifyAdapterDataSetChanged();
+        });
+
     }
 
     private void fillRoomListGroup(String text) {
@@ -444,6 +643,7 @@ public class SearchFragment extends BaseFragment {
                     item.initials = realmRoom.getInitials();
                     item.color = realmRoom.getColor();
                     item.avatar = realmRoom.getAvatar();
+                    item.participantsCount=realmRoom.groupRoom.participants_count;
 
                     list.add(item);
                 }
@@ -495,6 +695,7 @@ public class SearchFragment extends BaseFragment {
                     item.initials = realmRoom.getInitials();
                     item.color = realmRoom.getColor();
                     item.avatar = realmRoom.getAvatar();
+                    item.participantsCount=realmRoom.channelRoom!=null? realmRoom.channelRoom.participants_count:0;
 
                     list.add(item);
                 }
@@ -689,6 +890,7 @@ public class SearchFragment extends BaseFragment {
                     realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
                     goToRoomWithRealm(realmRoom, type, id, messageId);
                 }
+
             }
         });
     }
@@ -706,11 +908,10 @@ public class SearchFragment extends BaseFragment {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
                 public void onReady(ProtoGlobal.Room room) {
-                    G.runOnUiThread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
+                    DbManager.getInstance().doRealmTransaction(realm -> {
                         RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
                         room2.setDeleted(true);
-                    }));
-
+                    });
                     if (getActivity() != null && getActivity().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED))
                         new GoToChatActivity(room.getId()).setPeerID(id).setMessageID(messageId).startActivity(getActivity());
 
@@ -735,7 +936,7 @@ public class SearchFragment extends BaseFragment {
     }
 
 
-    //*********************************************************************************************
+//*********************************************************************************************
 
     public enum SearchType {
         header, room, contact, message, CHANNEL, GROUP
@@ -750,6 +951,7 @@ public class SearchFragment extends BaseFragment {
         public String color;
         public long time = 0;
         public long id = 0;
+        public long participantsCount = 0;
         public long idDetectAvatar = 0; // fill roomId for rooms and userId for contacts
         public long messageId = 0;
         public RealmAvatar avatar;

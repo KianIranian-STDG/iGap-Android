@@ -46,7 +46,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -595,12 +594,6 @@ public final class AndroidUtils {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             mediaScanIntent.setData(uri);
             G.context.sendBroadcast(mediaScanIntent);
-            G.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(G.fragmentActivity, R.string.save_ok, Toast.LENGTH_LONG).show();
-                }
-            });
         } catch (Exception e) {
             FileLog.e(e);
         }

@@ -25,8 +25,8 @@ import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsApiArg;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.util.Objects;
@@ -62,7 +62,9 @@ public class NewsGroupPagerFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        binding.collapsingToolbar.setContentScrimColor(Theme.getColor(Theme.key_theme_color));
+        TabLayout pager_tab_layout = binding.secondaryLayout.getRoot().findViewById(R.id.pager_tab_layout);
+        pager_tab_layout.setSelectedTabIndicatorColor(Theme.getColor(Theme.key_theme_color));
         Bundle arg = getArguments();
         String groupID = arg.getString("GroupID");
 
@@ -90,7 +92,6 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         ViewPager viewPager = binding.secondaryLayout.viewPager;
         tabLayout = binding.secondaryLayout.pagerTabLayout;
-     //   TabAdapter adapter = new TabAdapter(getFragmentManager());
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
@@ -111,17 +112,13 @@ public class NewsGroupPagerFrag extends BaseFragment {
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             });
         });
-       // adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
         frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.MOST_HITS));
-     //   adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
 
         NewsListFrag frag3 = new NewsListFrag();
         frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.CONTROVERSIAL_NEWS));
-        //adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
 
-     //   viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
         updateFontTabLayout();
@@ -138,10 +135,10 @@ public class NewsGroupPagerFrag extends BaseFragment {
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
 
-            if (G.themeColor == Theme.DARK) {
-                tv.setTextColor(G.context.getResources().getColor(R.color.white));
+            if (Theme.isDark() || Theme.isNight()) {
+                tv.setTextColor(Theme.getColor(Theme.key_white));
             } else {
-                tv.setTextColor(G.context.getResources().getColor(R.color.black));
+                tv.setTextColor(Theme.getColor(Theme.key_black));
             }
             Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tv);
         }

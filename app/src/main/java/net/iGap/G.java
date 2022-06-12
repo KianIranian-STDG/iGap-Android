@@ -25,7 +25,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.biometric.BiometricManager;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.multidex.MultiDex;
@@ -43,9 +42,9 @@ import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.accountManager.AccountManager;
@@ -88,6 +87,7 @@ public class G extends ApplicationContext {
     public static final String CHAT_BACKGROUND = "/.chat_background";
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
+    private static final String THEME = "./.themes";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static boolean ISRealmOK = true;
     public static boolean isCalling = false;
@@ -115,6 +115,7 @@ public class G extends ApplicationContext {
     public static File imageFile;
     public static String DIR_SDCARD_EXTERNAL = "";
     public static String DIR_APP = DIR_SDCARD + IGAP;
+    public static final String DIR_THEME = DIR_APP + THEME;
     public static String DIR_IMAGES = DIR_APP + IMAGES;
     public static String DIR_VIDEOS = DIR_APP + VIDEOS;
     public static String DIR_AUDIOS = DIR_APP + AUDIOS;
@@ -150,7 +151,7 @@ public class G extends ApplicationContext {
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
-    public static int themeColor;
+    public static String themeColor;
     public static int ivSize;
     public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
@@ -386,7 +387,7 @@ public class G extends ApplicationContext {
         } catch (Error e) {
             G.ISRealmOK = false;
         }
-
+        AccountManager.getInstance();
         LooperThreadHelper.getInstance();
 
         updateResources(context);
@@ -427,7 +428,6 @@ public class G extends ApplicationContext {
                         Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
                     }
                 });
-
     }
 
     @Override
@@ -441,6 +441,9 @@ public class G extends ApplicationContext {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateResources(this);
+
+        Theme.setThemeAccordingToConfiguration(newConfig);
+
         try {
             AndroidUtils.checkDisplaySize(G.context, newConfig);
         } catch (Exception e) {

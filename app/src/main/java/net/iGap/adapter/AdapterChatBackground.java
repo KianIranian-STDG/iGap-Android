@@ -11,7 +11,6 @@
 package net.iGap.adapter;
 
 import android.graphics.Color;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.messenger.ui.fragments.ChatBackgroundFragment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.StructWallpaper;
@@ -115,48 +115,33 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 ((ViewHolderImage) holder).messageProgress.setVisibility(View.VISIBLE);
                 ((ViewHolderImage) holder).imageView.setImageDrawable(null);
                 StructWallpaper wallpaper = mList.get(position - 1);
-                String path = "";
-                if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
+
+                if (wallpaper.getWallpaperType() == ChatBackgroundFragment.WallpaperType.proto) {
                     RealmAttachment pf = wallpaper.getProtoWallpaper().getFile();
 
-                    // final String path = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/"  + pf.getCacheId() + "_" + pf.getName();
-                    path = pf.getLocalFilePath() != null ? pf.getLocalFilePath() : "";
-                    File file = new File(path);
-                    if (file.exists()) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ((ViewHolderImage) holder).imageView);
-                    } else {
-                        path = pf.getLocalThumbnailPath() != null ? pf.getLocalThumbnailPath() : "";
-                        file = new File(path);
-                        if (file.exists()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ((ViewHolderImage) holder).imageView);
-                        } else {
-                            DownloadObject downloadObject = DownloadObject.createForRoomMessage(AttachmentObject.create(pf), ProtoGlobal.RoomMessageType.IMAGE.getNumber());
-                            Downloader.getInstance(AccountManager.selectedAccount).download(downloadObject, arg -> {
-                                if (arg.status == Status.SUCCESS && arg.data != null) {
-                                    String filepath = arg.data.getFilePath();
-                                    String fileToken = arg.data.getToken();
-
-                                    if (!(new File(filepath).exists())) {
-                                        HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
-                                    }
-
-
-                                    DbManager.getInstance().doRealmTransaction(realm -> {
-                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
-                                            realmAvatar1.getFile().setLocalFilePath(filepath);
+                    final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
+                    if (!new File(path).exists()) {
+                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(String mPath, int progress) {
+                                if (progress == 100) {
+                                    G.handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (((ViewHolderImage) holder).imageView != null) {
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ((ViewHolderImage) holder).imageView);
+                                            }
                                         }
                                     });
-
-                                    G.runOnUiThread(() -> G.handler.post(() -> {
-                                        if (((ViewHolderImage) holder).imageView != null) {
-                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(filepath), ((ViewHolderImage) holder).imageView);
-                                        }
-                                    }));
-
                                 }
+                            }
 
-                            });
-                        }
+                            @Override
+                            public void OnError(String token) {
+                            }
+                        });
+                    } else {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ((ViewHolderImage) holder).imageView);
                     }
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(wallpaper.getPath()), ((ViewHolderImage) holder).imageView);
@@ -164,7 +149,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 }
 
                 String bigImagePath;
-                bigImagePath = path;
+                if (wallpaper.getWallpaperType() == ChatBackgroundFragment.WallpaperType.proto) {
+                    RealmAttachment pf = wallpaper.getProtoWallpaper().getFile();
+                    bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                } else {
+                    bigImagePath = wallpaper.getPath();
+                }
 
                 if (new File(bigImagePath).exists()) {
                     ((ViewHolderImage) holder).messageProgress.setVisibility(View.GONE);

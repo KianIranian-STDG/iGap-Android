@@ -50,7 +50,7 @@
 
             <TextView
                 android:id="@+id/asi_txt_image_readMore"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -62,7 +62,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

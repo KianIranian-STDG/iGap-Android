@@ -53,9 +53,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentMediaPlayer;
+import net.iGap.fragments.FragmentMusicPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadObject;
@@ -147,6 +148,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static TextView btnCloseMusic;
     private static TextView txt_music_name;
     private static TextView txt_music_info;
+    private static TextView textView;
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
@@ -239,12 +241,19 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         });
 
         txt_music_time = layout.findViewById(R.id.mls_txt_music_time);
+        txt_music_time.setTextColor(Theme.getColor(Theme.key_light_theme_color));
 
         txt_music_time_counter = layout.findViewById(R.id.mls_txt_music_time_counter);
+        txt_music_time_counter.setTextColor(Theme.getColor(Theme.key_light_theme_color));
         txt_music_name = layout.findViewById(R.id.mls_txt_music_name);
+        txt_music_name.setTextColor(Theme.getColor(Theme.key_light_theme_color));
         txt_music_info = layout.findViewById(R.id.mls_txt_music_info);
 
+        textView = layout.findViewById(R.id.textView);
+        textView.setTextColor(Theme.getColor(Theme.key_light_theme_color));
+
         btnPlayMusic = layout.findViewById(R.id.mls_btn_play_music);
+        btnPlayMusic.setTextColor(Theme.getColor(Theme.key_light_theme_color));
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,6 +262,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         });
 
         btnCloseMusic = layout.findViewById(R.id.mls_btn_close);
+        btnCloseMusic.setTextColor(Theme.getColor(Theme.key_light_theme_color));
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,8 +386,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     private static void updateFastAdapter(String messageId) {
 
-        if (FragmentMediaPlayer.fastItemAdapter != null)
-            FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
+        if (FragmentMusicPlayer.fastItemAdapter != null)
+            FragmentMusicPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMusicPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
 
     }
 
@@ -527,7 +537,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
                 if (roomType != CHANNEL_VALUE && isVoice) {
-                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE,roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE,mediaList.get(selectedMedia).documentId);
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE, roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE, mediaList.get(selectedMedia).documentId);
                 }
             }
             if (FragmentChat.onMusicListener != null) {
@@ -773,8 +783,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
 
         if (MusicPlayer.downloadNextMusic(messageId)) {
-            if (FragmentMediaPlayer.fastItemAdapter != null) {
-                FragmentMediaPlayer.fastItemAdapter.notifyAdapterDataSetChanged();
+            if (FragmentMusicPlayer.fastItemAdapter != null) {
+                FragmentMusicPlayer.fastItemAdapter.notifyAdapterDataSetChanged();
             }
         }
 
@@ -1070,7 +1080,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                                 if (roomMessage.id == Long.parseLong(messageId)) {
                                     isOnListMusic = true;
                                 }
-                                if(roomMessage.attachment.isFileExistsOnLocal(roomMessage)){
+                                if (roomMessage.attachment.isFileExistsOnLocal(roomMessage)) {
                                     mediaList.add(roomMessage);
                                 }
                             } catch (Exception e) {

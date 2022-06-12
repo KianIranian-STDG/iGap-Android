@@ -10,15 +10,19 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
@@ -32,6 +36,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.controllers.MessageController;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.controllers.RoomController;
+import net.iGap.controllers.SharedManager;
 import net.iGap.controllers.UserController;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
@@ -39,10 +44,12 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
+import net.iGap.messenger.NotificationCenter;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.theme.ThemeDescriptor;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarLayout;
 import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.IDownloader;
@@ -51,17 +58,21 @@ import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 
-public class BaseFragment extends SwipeBackFragment {
+import java.util.List;
+
+public class BaseFragment extends SwipeBackFragment implements NotificationCenter.NotificationCenterDelegate{
 
     public boolean isNeedResume = false;
     protected Fragment currentFragment;
     public int currentAccount = AccountManager.selectedAccount;
     public AvatarHandler avatarHandler;
     protected Context context;
-    protected View fragmentView;
-    protected Toolbar toolbar;
-    protected Dialog currentDialog;
+    public View fragmentView;
+    public Toolbar toolbar;
+    public Dialog currentDialog;
     protected int fragmentUniqueId;
+    protected ToolbarLayout parentLayout;
+    public boolean inPreviewMode;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -94,13 +105,12 @@ public class BaseFragment extends SwipeBackFragment {
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
 
-        getSwipeBackLayout().setOnTouchListener((view, motionEvent) -> {
-            if (ActivityMain.disableSwipe) {
-                getSwipeBackLayout().setEnableGesture(false);
-            } else {
-                getSwipeBackLayout().setEnableGesture(true);
+        getSwipeBackLayout().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                getSwipeBackLayout().setEnableGesture(!ActivityMain.disableSwipe);
+                return false;
             }
-            return false;
         });
     }
 
@@ -119,18 +129,29 @@ public class BaseFragment extends SwipeBackFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("create", "onCreateView: " );
-        View toolBar = createToolBar(context);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
+
+        View view = createToolBar(context);
         View rootView = createView(context);
 
-        toolbar = (Toolbar) toolBar;
+        if (view instanceof Toolbar) {
+            toolbar = (Toolbar) view;
+        }
 
         if (toolbar != null) {
             fragmentView = rootView;
 
             FrameLayout frameLayout = new FrameLayout(context);
-            frameLayout.setBackgroundColor(Theme.getInstance().getRootColor(context));
             frameLayout.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 0, 0, 0, 0));
+            frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 60, 0, 0));
+
+            rootView = frameLayout;
+        } else if (view != null) {
+            fragmentView = rootView;
+
+            FrameLayout frameLayout = new FrameLayout(context);
+            frameLayout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+            frameLayout.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 0, 0, 0, 0));
             frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 60, 0, 0));
 
             rootView = frameLayout;
@@ -179,6 +200,10 @@ public class BaseFragment extends SwipeBackFragment {
 
     public View getFragmentView() {
         return fragmentView;
+    }
+
+    public Dialog showDialog(Dialog dialog) {
+        return showDialog(dialog, null);
     }
 
     public Dialog showDialog(Dialog dialog, final Dialog.OnDismissListener onDismissListener) {
@@ -377,4 +402,131 @@ public class BaseFragment extends SwipeBackFragment {
     public ChatSendMessageUtil getSendMessageUtil() {
         return ChatSendMessageUtil.getInstance(currentAccount);
     }
+
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.didSetNewTheme) {
+            if (getThemeDescriptor() != null) {
+                for (int i = 0; i < getThemeDescriptor().size(); i++) {
+                    getThemeDescriptor().get(i).setColor();
+                }
+            }
+        }
+    }
+
+    public List<ThemeDescriptor> getThemeDescriptor() {
+        return null;
+    }
+
+    public SharedManager getSharedManager() {
+        return SharedManager.getInstance();
+    }
+
+    @Override
+    public void onDestroyView() {
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewTheme);
+        super.onDestroyView();
+    }
+
+    public void setParentLayout(ToolbarLayout layout) {
+        if (parentLayout != layout) {
+            parentLayout = layout;
+            if (fragmentView != null) {
+                ViewGroup parent = (ViewGroup) fragmentView.getParent();
+                if (parent != null) {
+                    try {
+                        parent.removeViewInLayout(fragmentView);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+                if (parentLayout != null && parentLayout.getContext() != fragmentView.getContext()) {
+                    fragmentView = null;
+                }
+            }
+            if (toolbar != null) {
+                boolean differentParent = parentLayout != null && parentLayout.getContext() != toolbar.getContext();
+                if (toolbar.shouldAddToContainer() || differentParent) {
+                    ViewGroup parent = (ViewGroup) toolbar.getParent();
+                    if (parent != null) {
+                        try {
+                            parent.removeViewInLayout(toolbar);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                    }
+                }
+                if (differentParent) {
+                    toolbar = null;
+                }
+            }
+            if (parentLayout != null && toolbar == null) {
+                toolbar = (Toolbar) createToolBar(parentLayout.getContext());
+                toolbar.parentFragment = this;
+            }
+        }
+    }
+
+    public void setInPreviewMode(boolean value) {
+        inPreviewMode = value;
+        if (toolbar != null) {
+            if (inPreviewMode) {
+                toolbar.setOccupyStatusBar(false);
+            } else {
+                toolbar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21);
+            }
+        }
+    }
+
+    public void onBecomeFullyVisible() {
+        AccessibilityManager mgr = (AccessibilityManager) G.context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (mgr.isEnabled()) {
+            Toolbar toolbar = getToolbar();
+            if (toolbar != null) {
+                String title = toolbar.getTitleTextView().getText().toString();
+                if (!TextUtils.isEmpty(title)) {
+                    setParentActivityTitle(title);
+                }
+            }
+        }
+    }
+
+    private Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    protected void setParentActivityTitle(CharSequence title) {
+        Activity activity = getParentActivity();
+        if (activity != null) {
+            activity.setTitle(title);
+        }
+    }
+
+    public Activity getParentActivity() {
+        if (parentLayout != null) {
+            return parentLayout.parentActivity;
+        }
+        return null;
+    }
+
+    public boolean isSwipeBackEnabled(MotionEvent event) {
+        return true;
+    }
+
+    public boolean canBeginSlide() {
+        return true;
+    }
+
+    public void onBeginSlide() {
+        try {
+            if (currentDialog != null && currentDialog.isShowing()) {
+                currentDialog.dismiss();
+                currentDialog = null;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
 }

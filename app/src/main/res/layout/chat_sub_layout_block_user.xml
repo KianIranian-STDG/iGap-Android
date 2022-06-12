@@ -5,7 +5,6 @@
     android:clickable="true"
     android:paddingTop="@dimen/dp4"
     android:paddingBottom="@dimen/dp4"
-    android:background="?attr/iGapEditTxtColor"
     android:orientation="horizontal"
     android:visibility="visible">
 
@@ -21,12 +20,11 @@
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
         android:text="@string/block_user"
-        android:textColor="@color/red"
         android:textSize="@dimen/standardTextSize" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/chat_txt_close"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"

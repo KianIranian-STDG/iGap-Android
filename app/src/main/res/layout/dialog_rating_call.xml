@@ -34,8 +34,8 @@
             android:hint="@string/please_write_your_reasons"
             android:textSize="@dimen/dp13"
             android:maxLines="2"
-            android:textColor="@color/black90"
-            android:textColorHint="@color/gray"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/key_gray"
             android:visibility="gone" />
 
     </LinearLayout>

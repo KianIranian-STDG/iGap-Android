@@ -10,6 +10,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/mainContainer"
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,7 +45,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billIdIcon"
-                    style="@style/primaryIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="@dimen/dp48"
                     android:layout_marginTop="@dimen/dp20"
@@ -55,7 +56,6 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/billId"
-                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:afterTextChanged="@{(s)->viewModel.onTextChangedBillId(s.toString())}"
@@ -80,7 +80,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/payIdIcon"
-                    style="@style/primaryIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="@dimen/dp48"
                     android:layout_marginTop="@dimen/dp16"
@@ -92,7 +92,6 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/payId"
-                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"
@@ -114,7 +113,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/amountIcon"
-                    style="@style/primaryIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="@dimen/dp48"
                     android:layout_marginTop="@dimen/dp16"
@@ -127,7 +126,6 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/fpb_edt_price"
-                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"
@@ -159,7 +157,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/paymentButton"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
@@ -174,7 +172,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanBarcodeButton"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:enabled="@{viewModel.enabledPaymentButton}"

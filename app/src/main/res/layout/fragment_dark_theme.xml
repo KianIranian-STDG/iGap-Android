@@ -33,7 +33,6 @@
                 android:layout_height="@dimen/dp60"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
-                android:background="?attr/iGapToolbarBackground"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 >
@@ -61,7 +60,7 @@
                             android:gravity="center"
                             android:text="@string/icon_back"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -71,7 +70,7 @@
                         android:layout_weight="1"
                         android:gravity="left|center"
                         android:text="@string/Theme_Dark"
-                        android:textColor="@color/whit_background"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
                         android:visibility="visible" />
@@ -94,7 +93,7 @@
                             android:gravity="center"
                             android:text="@string/icon_check_ok"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
 
                     </net.iGap.libs.rippleeffect.RippleView>
 
@@ -119,7 +118,6 @@
                 android:paddingTop="@dimen/dp4"
                 android:paddingEnd="@dimen/dp16"
                 android:text="@string/disable"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -137,7 +135,6 @@
                 android:paddingRight="@dimen/dp16"
                 android:text="@string/icon_check_ok"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
-                android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp15"
                 android:visibility="@{safeUnbox(fragmentDarkThemeViewModel.isDisableDarkTheme) ,default = visible}" />
 
@@ -148,7 +145,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?iGapDividerLine" />
+            android:background="@color/key_light_gray" />
 
         <LinearLayout
             android:id="@+id/st_layout_scheduled"
@@ -167,7 +164,6 @@
                 android:paddingTop="@dimen/dp4"
                 android:paddingEnd="@dimen/dp16"
                 android:text="@string/scheduled"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"
 
@@ -187,7 +183,6 @@
                 android:paddingRight="@dimen/dp16"
                 android:text="@string/icon_check_ok"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
-                android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp15"
                 android:visibility="@{safeUnbox(fragmentDarkThemeViewModel.isScheduledDarkTheme) , default=gone}" />
 
@@ -198,7 +193,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?iGapDividerLine" />
+            android:background="@color/key_light_gray" />
 
         <LinearLayout
             android:id="@+id/st_layout_automatic"
@@ -217,7 +212,6 @@
                 android:paddingTop="@dimen/dp4"
                 android:paddingEnd="@dimen/dp16"
                 android:text="@string/automatic"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"
 
@@ -237,7 +231,6 @@
                 android:paddingRight="@dimen/dp16"
                 android:text="@string/icon_check_ok"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
-                android:textColor="@color/toolbar_background"
                 android:textSize="@dimen/dp15"
                 android:visibility="@{safeUnbox(fragmentDarkThemeViewModel.isAutoDarkTheme) , default=gone}"
 
@@ -260,7 +253,6 @@
                 android:paddingTop="@dimen/dp4"
                 android:paddingEnd="@dimen/dp16"
                 android:text="@string/scheduled"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -280,7 +272,6 @@
                     android:paddingStart="@dimen/dp16"
                     android:paddingEnd="@dimen/dp16"
                     android:text="@string/from_theme"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp15"
                     android:textStyle="normal" />
 
@@ -292,7 +283,6 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@{fragmentDarkThemeViewModel.callbackFromTime , default=22}"
-                    android:textColor="@color/toolbar_background"
                     android:textSize="@dimen/dp15"
                     android:textStyle="normal"
 
@@ -316,7 +306,6 @@
                     android:paddingTop="@dimen/dp4"
                     android:paddingEnd="@dimen/dp16"
                     android:text="@string/to_theme"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp15"
                     android:textStyle="normal" />
 
@@ -328,7 +317,6 @@
                     android:paddingLeft="@dimen/dp16"
                     android:paddingRight="@dimen/dp16"
                     android:text="@{fragmentDarkThemeViewModel.callbackToTime , default=8}"
-                    android:textColor="@color/toolbar_background"
                     android:textSize="@dimen/dp15"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -349,7 +337,6 @@
                 android:paddingTop="@dimen/dp4"
                 android:paddingEnd="@dimen/dp16"
                 android:text="@string/automatic_description_theme"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"
                 android:visibility="@{safeUnbox(fragmentDarkThemeViewModel.isAutoDarkTheme)  , default=gone}" />

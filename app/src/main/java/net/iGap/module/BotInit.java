@@ -32,6 +32,7 @@ import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.controllers.RoomController;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
@@ -296,6 +297,7 @@ public class BotInit implements MakeButtons.OnClickListener {
 
 //        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
         btnShowBot = rootView.findViewById(R.id.tv_chatRoom_botAction);
+        btnShowBot.setTextColor(Theme.getColor(Theme.key_dark_gray));
         btnShowBot.setVisibility(View.GONE);
 
         layoutBot = rootView.findViewById(R.id.layout_bot);
@@ -317,7 +319,7 @@ public class BotInit implements MakeButtons.OnClickListener {
 
 //        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
         btnShowBot = rootView.findViewById(R.id.tv_chatRoom_botAction);
-
+        btnShowBot.setTextColor(Theme.getColor(Theme.key_dark_gray));
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);
@@ -408,7 +410,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                     }.getType());
                     btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                    childLayout = MakeButtons.addButtons(Theme.getInstance(), btnEntery, buttonList.get(i).length(), 1f, childLayout, this);
+                    childLayout = MakeButtons.addButtons(btnEntery, buttonList.get(i).length(), 1f, childLayout, this);
                     //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -461,8 +463,8 @@ public class BotInit implements MakeButtons.OnClickListener {
         AppCompatButton btn = new AppCompatButton(G.context);
         btn.setLayoutParams(param);
         btn.setPadding(ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14), ViewMaker.dpToPixel(14));
-        btn.setTextColor(ContextCompat.getColor(G.context, R.color.start_color));
-        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.background_setting_light));
+        btn.setTextColor(Theme.getColor(Theme.key_gray));
+        btn.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
         btn.setText(name);
         btn.setAllCaps(false);
         btn.setGravity(Gravity.CENTER);

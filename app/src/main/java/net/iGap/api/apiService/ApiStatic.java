@@ -24,6 +24,7 @@ public class ApiStatic {
     public static final String PEC_QR_URL = BASE_URL + "pec-qr/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
+    static final String AI_BASE_URL = "https://ai.igap.net/";
     public static final String FILE = AppConfig.servicesBaseUrl + "/files/v1.0/";
 }
 

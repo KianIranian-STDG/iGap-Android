@@ -4,7 +4,7 @@
     android:id="@+id/ac_ll_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_register"
+    android:background="@android:color/black"
     android:clickable="true"
     android:layoutDirection="ltr">
 
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:layout_alignParentTop="true"
-        android:background="@color/colorEditImageBlack"
+        android:background="@android:color/black"
         android:layoutDirection="ltr"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp">
@@ -44,12 +44,12 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/pu_txt_agreeImage"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/icon_close"
-                        android:textColor="@color/whit_background" />
+                        android:textColor="@android:color/white" />
                 </net.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
                     android:text="@string/photo"
-                    android:textColor="@color/whit_background"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/dp16"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -70,7 +70,7 @@
                     android:layout_gravity="right"
                     android:gravity="center"
                     android:text="@string/icon_sent"
-                    android:textColor="@color/whit_background"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/dp22"
                     android:visibility="gone" />
 
@@ -81,7 +81,7 @@
                     android:layout_marginRight="@dimen/dp1"
                     android:gravity="right|center_vertical"
                     android:text="@string/photo"
-                    android:textColor="@color/whit_background"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/dp22"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -92,13 +92,11 @@
                     android:layout_height="@dimen/dp32"
                     android:layout_gravity="center|end|right"
                     android:layout_margin="@dimen/dp10"
-                    android:background="@drawable/background_check"
                     android:visibility="visible"
                     app:animDuration="100"
-                    app:checkedColor="?attr/iGapButtonColor"
                     app:lineColor="#fff"
                     app:lineWidth="1.2dp"
-                    app:unCheckColor="@color/background_checkbox_bottomSheet" />
+                    app:unCheckColor="@color/key_gray" />
 
             </LinearLayout>
 
@@ -110,7 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorEditImageBlack"
+        android:background="@android:color/black"
         android:orientation="vertical">
 
         <LinearLayout
@@ -125,7 +123,7 @@
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="center"
@@ -134,7 +132,7 @@
                 android:paddingRight="@dimen/dp8"
                 android:paddingBottom="@dimen/dp8"
                 android:text="@string/icon_emoji_smile"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/dp26" />
 
 
@@ -151,13 +149,13 @@
                 android:maxLines="4"
                 android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
-                android:textColor="@color/white"
-                android:textColorHint="@color/light_gray"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/key_light_gray"
                 android:textSize="@dimen/standardTextSize" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_ok_message"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="bottom"
@@ -166,7 +164,7 @@
                 android:paddingRight="@dimen/dp8"
                 android:paddingBottom="@dimen/dp8"
                 android:text="@string/icon_sent"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/dp26"
                 android:visibility="gone" />
 
@@ -187,33 +185,33 @@
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/pu_txt_crop"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:text="@string/icon_crop_picture"
-                android:textColor="@color/whit_background" />
+                android:textColor="@android:color/white" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/txtEditImage"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:text="@string/icon_edit_picture"
-                android:textColor="@color/whit_background" />
+                android:textColor="@android:color/white" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/txtPaintImage"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:text="@string/icon_edit"
-                android:textColor="@color/whit_background" />
+                android:textColor="@android:color/white" />
 
             <View
                 android:layout_width="0dp"
@@ -223,13 +221,13 @@
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/pu_txt_sendImage"
-                style="@style/myIconToolbarStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:text="@string/icon_send"
-                android:textColor="@color/whit_background"
+                android:textColor="@android:color/white"
                 android:visibility="gone" />
         </LinearLayout>
 

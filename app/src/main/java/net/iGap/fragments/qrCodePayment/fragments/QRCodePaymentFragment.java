@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,6 +37,7 @@ import net.iGap.fragments.qrCodePayment.viewModels.QRCodePaymentViewModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.payment.PaymentResult;
@@ -113,6 +115,9 @@ public class QRCodePaymentFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.getRootView().setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        EditText desire_amount = view.findViewById(R.id.desire_amount);
+        desire_amount.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         initToolbar();
     }
 

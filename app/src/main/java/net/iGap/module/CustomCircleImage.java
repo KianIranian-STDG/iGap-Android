@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 /**
  * circle button for indicate current page in fragment Introduce
@@ -56,12 +57,12 @@ public class CustomCircleImage extends View {
 
         fiiPain = new Paint();
         fiiPain.setStyle(Paint.Style.FILL);
-        fiiPain.setColor(new Theme().getDarkAccentColor(getContext()));
+        fiiPain.setColor(Theme.getColor(Theme.key_theme_color));
         fiiPain.setAntiAlias(true);
 
         strokePain = new Paint();
         strokePain.setStyle(Paint.Style.FILL);
-        strokePain.setColor(new Theme().getAccentColor(getContext()));
+        strokePain.setColor(Theme.getColor(Theme.key_line));
         strokePain.setAntiAlias(true);
 
         screenWidth = getResources().getDisplayMetrics().widthPixels;

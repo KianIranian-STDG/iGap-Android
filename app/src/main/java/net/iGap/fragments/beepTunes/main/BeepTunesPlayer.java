@@ -1,7 +1,9 @@
 package net.iGap.fragments.beepTunes.main;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.api.beepTunes.PlayingSong;
@@ -74,7 +78,7 @@ public class BeepTunesPlayer extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setUpViews();
-
+        view.findViewById(R.id.backgroundView).setBackgroundColor(Theme.getColor(Theme.key_dark_gray));
         songMutableLiveData.observe(getViewLifecycleOwner(), playingSong -> {
             if (playingSong != null) {
                 artistNameTv.setText(playingSong.getArtistName());
@@ -178,9 +182,9 @@ public class BeepTunesPlayer extends BaseFragment {
     private void checkFavorite(RealmDownloadSong realmDownloadSong) {
         if (realmDownloadSong != null && realmDownloadSong.getId() == songMutableLiveData.getValue().getSongId()) {
             if (realmDownloadSong.isFavorite()) {
-                favoriteTv.setTextColor(getContext().getResources().getColor(R.color.beeptunes_primary));
+                favoriteTv.setTextColor(Theme.getColor(Theme.key_theme_color));
             } else {
-                favoriteTv.setTextColor(getContext().getResources().getColor(R.color.gray));
+                favoriteTv.setTextColor(Theme.getColor(Theme.key_gray));
             }
         }
     }
@@ -228,8 +232,10 @@ public class BeepTunesPlayer extends BaseFragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setUpViews() {
         playTv = rootView.findViewById(R.id.tv_btPlayer_play);
+        playTv.setTextColor(Theme.getColor(Theme.key_theme_color));
         nextTv = rootView.findViewById(R.id.tv_btPlayer_nextSong);
         previousTv = rootView.findViewById(R.id.tv_ptPlayer_previous);
         artistNameTv = rootView.findViewById(R.id.tv_btPlayer_artistName);
@@ -237,6 +243,7 @@ public class BeepTunesPlayer extends BaseFragment {
         totalTimeTv = rootView.findViewById(R.id.tv_btPlayer_totalDuration);
         currentTimeTv = rootView.findViewById(R.id.tv_btPlayer_currentDuration);
         seekBar = rootView.findViewById(R.id.sb_ptPlayer);
+        seekBar.setThumbTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         songArtIv = rootView.findViewById(R.id.iv_btPlayer_songArt);
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
         favoriteTv = rootView.findViewById(R.id.tv_btPlayer_isFavorite);

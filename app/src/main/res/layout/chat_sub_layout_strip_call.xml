@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/green"
     android:clickable="true"
     android:layoutDirection="locale"
     android:orientation="horizontal"
@@ -17,7 +16,7 @@
         android:layout_weight="1"
         android:padding="5dp"
         android:text="@string/tab_to_return_to_call"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/dp16" />
 
 
@@ -27,6 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp10"
         android:padding="5dp"
-        android:textColor="@color/whit_background"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/dp16" />
 </LinearLayout>

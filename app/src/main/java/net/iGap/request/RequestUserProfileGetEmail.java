@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.proto.ProtoUserProfileGetEmail;
 
 public class RequestUserProfileGetEmail {
 
-    public void userProfileGetEmail() {
+    public void userProfileGetEmail(OnUserProfileSetEmailResponse onUserProfileSetEmailResponse) {
 
         ProtoUserProfileGetEmail.UserProfileGetEmail.Builder builder = ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(110, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(110, builder, onUserProfileSetEmailResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

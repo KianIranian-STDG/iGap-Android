@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,6 +19,7 @@ import net.iGap.fragments.inquiryBill.ShowBillInquiryFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +49,19 @@ public class FragmentPaymentInquiryTelephone extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        AppCompatEditText areaCodeEditText = view.findViewById(R.id.areaCodeEditText);
+        areaCodeEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        areaCodeEditText.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        AppCompatEditText telephoneEditText = view.findViewById(R.id.telephoneEditText);
+        telephoneEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        telephoneEditText.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        binding.areaCodeIcon.setTextColor(Theme.getColor(Theme.key_icon));
+        binding.telephoneNumberIcon.setTextColor(Theme.getColor(Theme.key_icon));
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())

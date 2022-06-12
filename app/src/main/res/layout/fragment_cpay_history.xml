@@ -29,7 +29,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_filter"
-            style="@style/iGapButtonStroke"
+            style="@style/BaseIGapStrokeButtonStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
             android:layout_margin="@dimen/dp10"
@@ -43,7 +43,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_today"
-            style="@style/iGapButtonStroke"
+            style="@style/BaseIGapStrokeButtonStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:onClick="@{()-> viewModel.onTodayClicked()}"
@@ -57,7 +57,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_fromFirst"
-            style="@style/iGapButtonStroke"
+            style="@style/BaseIGapStrokeButtonStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/dp10"
@@ -86,7 +86,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_item"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fch_rv_history"
             app:layout_constraintEnd_toEndOf="@id/fch_rv_history"

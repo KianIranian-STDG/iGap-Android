@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -327,6 +328,9 @@ public final class ContactUtils {
 
                     final MaterialDialog[] dialog = new MaterialDialog[1];
                     dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                            .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                            .negativeColor(Theme.getColor(Theme.key_button_background))
+                            .positiveColor(Theme.getColor(Theme.key_button_background))
                             .title(R.string.sync_contact)
                             .content(R.string.just_wait_en)
                             .progress(false, 0, true)

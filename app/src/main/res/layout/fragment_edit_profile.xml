@@ -24,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp16"
                 android:hint="@string/name"
-                android:textColorHint="?iGapHintTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +35,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.name}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -47,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/user_name"
-                android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.usernameErrorEnable}"
                 app:errorText="@{viewModel.usernameErrorMessage}"
                 app:layout_constraintEnd_toEndOf="@id/name"
@@ -60,7 +57,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.userName}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +67,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/st_bio"
-                android:textColorHint="?attr/iGapHintTextColor"
                 app:counterEnabled="true"
                 app:counterMaxLength="70"
                 app:layout_constraintEnd_toEndOf="@id/name"
@@ -85,7 +80,6 @@
                     android:inputType="text"
                     android:maxLength="70"
                     android:text="@={viewModel.bio}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -96,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/email"
-                android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.emailErrorEnable}"
                 app:errorText="@{viewModel.emailErrorMessage}"
                 app:layout_constraintEnd_toEndOf="@id/name"
@@ -109,7 +102,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:text="@={viewModel.email}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -122,7 +114,6 @@
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
                 android:paddingBottom="6dp"
                 android:text="@{viewModel.referralCountryCodeObservableField}"
-                android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/referralEditText"
                 app:layout_constraintLeft_toLeftOf="@id/name"
                 app:layout_constraintRight_toLeftOf="@id/referralEditText"
@@ -130,7 +121,6 @@
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/referralEditText"
-                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
@@ -143,7 +133,6 @@
                 android:maxLines="1"
                 android:text="@={viewModel.referralNumberObservableField}"
                 android:textAlignment="gravity"
-                android:textColorHint="?iGapHintTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintLeft_toRightOf="@id/countryCode"
                 app:layout_constraintRight_toRightOf="@id/name"
@@ -155,7 +144,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.referralError}"
-                android:textColor="@color/red"
                 android:textDirection="ltr"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintStart_toStartOf="@id/name"
@@ -171,7 +159,6 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingBottom="@dimen/dp32"
                 android:text="@string/set_gender"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/referralError" />
@@ -195,8 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"
-                    android:text="@string/male"
-                    android:textColor="?iGapSubtitleTextColor" />
+                    android:text="@string/male" />
 
                 <RadioButton
                     android:id="@+id/female"
@@ -204,9 +190,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"
-                    android:text="@string/female"
-                    android:textColor="?iGapSubtitleTextColor" />
+                    android:text="@string/female"/>
             </RadioGroup>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/changePhoneNumberButton"
+                style="@style/BaseIGapButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_number"
+                android:textSize="@dimen/dp14"
+                app:layout_constraintTop_toBottomOf="@+id/genderValue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent=".7" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

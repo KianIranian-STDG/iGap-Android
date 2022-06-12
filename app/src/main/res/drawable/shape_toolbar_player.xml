@@ -3,7 +3,7 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/toolbar_player_background" />
+            <solid android:color="@color/key_light_gray" />
         </shape>
     </item>
 

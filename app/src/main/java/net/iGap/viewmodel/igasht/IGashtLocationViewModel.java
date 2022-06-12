@@ -55,8 +55,6 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         switch (G.selectedLanguage) {
             case "en":
                 return repository.getSelectedProvince().getEnglishName();
-            case "fa":
-                return repository.getSelectedProvince().getProvinceName();
             default:
                 return repository.getSelectedProvince().getProvinceName();
         }

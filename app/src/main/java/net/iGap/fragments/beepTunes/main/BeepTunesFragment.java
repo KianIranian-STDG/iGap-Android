@@ -18,9 +18,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.api.beepTunes.PlayingSong;
 
 public class BeepTunesFragment extends BaseFragment {
@@ -56,13 +56,19 @@ public class BeepTunesFragment extends BaseFragment {
                 .setResourceContainer(R.id.fl_beepTunes_Container).setAddToBackStack(false).setReplace(false).load();
 
         TextView artistNameTv = rootView.findViewById(R.id.tv_btBehavior_artistName);
+        artistNameTv.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView songNameTv = rootView.findViewById(R.id.tv_btBehavior_songName);
+        songNameTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         TextView playIconTv = rootView.findViewById(R.id.tv_btBehavior_playIcon);
+        playIconTv.setTextColor(Theme.getColor(Theme.key_title_text));
         ImageView songImageIv = rootView.findViewById(R.id.iv_btBehavior_image);
         ImageView hidePlayerIv = rootView.findViewById(R.id.iv_btPlayer_hide);
         TextView playerToolBarPlayerTv = rootView.findViewById(R.id.tv_btPlayer_toolBarTitle);
+        playerToolBarPlayerTv.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView behaviorPlayerTime = rootView.findViewById(R.id.tv_btBehavior_timeDuration);
+        behaviorPlayerTime.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         LinearLayout playerLayout = rootView.findViewById(R.id.cl_beepTunesPlayer);
+        playerLayout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         progressBar = rootView.findViewById(R.id.pb_btBehavior_behavior);
         bottomPlayerCl = rootView.findViewById(R.id.cl_btPlayer_behavior);
         playerToolBarCl = rootView.findViewById(R.id.cl_btPlayer_toolBar);
@@ -156,7 +162,7 @@ public class BeepTunesFragment extends BaseFragment {
                 viewModel.seekBarProgressChanged(progress);
         });
 
-        progressBar.getProgressDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
+        progressBar.getProgressDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
 
     }
 

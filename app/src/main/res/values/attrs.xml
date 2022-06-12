@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="iGapReplyContentBackground" format="reference|color" />
+    <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.TopSheetDialog</item>
+        <item name="bottomSheetStyle">@style/Widget.Design.TopSheet.Modal</item>
+    </style>
+
     <declare-styleable name="VerticalSlideColorPicker">
         <attr name="borderColor" format="color" />
         <attr name="defaultColor" format="color" />
         <attr name="borderWidth" format="dimension" />
         <attr name="colors" format="reference" />
     </declare-styleable>
+
     <declare-styleable name="CollapsingImageBehavior">
         <attr name="collapsedTarget" format="reference" />
     </declare-styleable>
@@ -61,7 +67,6 @@
         <attr name="menu_config" format="boolean" />
     </declare-styleable>
 
-    <!--ripple library-->
     <declare-styleable name="RippleView">
         <attr name="rv_alpha" format="integer" />
         <attr name="rv_framerate" format="integer" />
@@ -87,68 +92,6 @@
         <attr name="touchTolerance" format="float" />
     </declare-styleable>
 
-    <!--=======================custom theme=====================-->
-    <attr name="colorPrimaryLight" format="reference|color" />
-    <attr name="colorAccentDark" format="reference|color" />
-    <attr name="toolbarBackgroundColor" format="reference|color" />
-    <attr name="toolbarActionModeBackgroundColor" format="reference|color" />
-    <!--general color-->
-    <attr name="rootBackgroundColor" format="reference|color" />
-    <attr name="iGapTitleTextColor" format="reference|color" />
-    <attr name="iGapIconTextColor" format="reference|color" />
-    <attr name="iGapVoiceCallIconColor" format="reference|color"/>
-    <attr name="iGapVideoCallIconColor" format="reference|color"/>
-    <attr name="iGapSubtitleTextColor" format="reference|color" />
-    <attr name="iGapPrimaryTextColor" format="reference|color" />
-    <attr name="iGapDividerLine" format="reference|color" />
-    <attr name="iGapHintTextColor" format="reference|color" />
-    <attr name="iGapButtonColor" format="reference|color" />
-    <attr name="iGapButtonTextColor" format="reference|color" />
-    <attr name="iGapPrimaryIconTextColor" format="reference|color" />
-    <attr name="iGapLogoutButtonColor" format="reference|color" />
-    <attr name="iGapCardViewColor" format="reference|color" />
-    <attr name="iGapEditTxtColor" format="reference|color" />
-    <attr name="iGapRadioButtonUncheckedColor" format="reference|color" />
-    <!--chat item color-->
-    <attr name="iGapReceivedMessageTextColor" format="reference|color" />
-    <attr name="iGapReceivedOtherTextColor" format="reference|color" />
-    <attr name="iGapReceivedReplayColor" format="reference|color" />
-    <attr name="iGapSendMessageTextColor" format="reference|color" />
-    <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
-    <attr name="iGapSendMessageBubbleColor" format="reference|color" />
-    <attr name="iGapSendReplayColor" format="reference|color" />
-    <attr name="iGapLinkColor" format="reference|color" />
-    <attr name="iGapDefaultChatBackground" format="reference|color" />
-    <!--bottom navigation item icon color-->
-    <attr name="iGapBottomNavigationIconStart" format="reference|color" />
-    <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
-    <!--for support theme under android version 21-->
-    <attr name="iGapToolbarBackground" format="reference" />
-    <attr name="iGapSpinnerShape" format="reference" />
-    <attr name="iGapToolbarBackgroundSharp" format="reference" />
-    <attr name="iGapAvatarBackground" format="reference" />
-    <attr name="iGapReceivedReplayBackground" format="reference" />
-    <attr name="iGapSendReplayBackground" format="reference" />
-    <attr name="iGapButtonSelector" format="reference" />
-    <attr name="iGapBottomSheetBackground" format="reference" />
-    <attr name="iGapTopRoundButtonPrimary" format="reference" />
-    <attr name="iGapCardToCardBackground" format="reference" />
-    <attr name="iGapCardToCardButtonBackground" format="reference" />
-    <attr name="iGapCardToCardButton" format="reference" />
-    <attr name="iGapCardToCardIconBackground" format="reference" />
-    <attr name="iGapBottomSheetHeaderLine" format="reference" />
-    <attr name="iGapScrollerHandler" format="reference" />
-    <attr name="iGapChatSendMessageBackground" format="reference" />
-    <attr name="iGapCheckButton" format="reference" />
-    <attr name="iGapProfileStroke" format="reference" />
-    <attr name="iGapProfileToolbar" format="reference" />
-    <attr name="iGapTimerPinter" format="reference" />
-    <attr name="iGapCallStripColor" format="reference|color" />
-    <attr name="iGapCallStripColorBlue" format="reference|color" />
-    <attr name="iGapMediaStripColor" format="reference|color" />
-
-    <!--=======================custom theme=====================-->
-
     <declare-styleable name="TabItem">
         <attr name="selected_icon" format="reference" />
         <attr name="unselected_icon" format="reference" />
@@ -165,27 +108,20 @@
         <attr name="pv_edit_mode" format="boolean" />
     </declare-styleable>
 
-    <!--circle-->
     <declare-styleable name="CircleSeekBar">
         <attr name="csb_progress" format="integer" />
         <attr name="csb_min" format="integer" />
         <attr name="csb_max" format="integer" />
         <attr name="csb_step" format="integer" />
-
         <attr name="csb_thumbDrawable" format="reference" />
         <attr name="csb_thumbSize" format="dimension" />
-
         <attr name="csb_progressColor" format="color" />
         <attr name="csb_progressWidth" format="dimension" />
-
         <attr name="csb_arcColor" format="color" />
         <attr name="csb_arcWidth" format="dimension" />
-
         <attr name="csb_textSize" format="dimension" />
         <attr name="csb_textColor" format="color" />
-
         <attr name="csb_isShowText" format="boolean" />
-
     </declare-styleable>
 
     <declare-styleable name="AudioWave">
@@ -234,6 +170,7 @@
         <attr name="riv_radius" format="dimension" />
         <attr name="riv_radius_right_side" format="boolean" />
     </declare-styleable>
+
     <declare-styleable name="PersianDatePicker">
         <attr name="minYear" format="integer" />
         <attr name="maxYear" format="integer" />
@@ -244,12 +181,6 @@
         <attr name="yearRange" format="integer" />
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
-    <attr name="numberPickerTheme" format="reference" />
-
-
-    <!--Wallet item color-->
-    <attr name="iGapWalletDarkerBackground" format="color"/>
-    <attr name="iGapWalletLighterBackground" format="color"/>
 
     <declare-styleable name="CodeScannerView">
         <attr format="color" name="maskColor"/>
@@ -266,9 +197,7 @@
         <attr format="float" name="frameSize"/>
     </declare-styleable>
 
-
     <declare-styleable name="StoriesProgressView">
         <attr name="progressCount" format="integer|reference" />
     </declare-styleable>
-
 </resources>

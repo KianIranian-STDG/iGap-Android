@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -61,19 +62,21 @@ import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.KeyboardUtils;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
@@ -103,6 +106,7 @@ import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -129,10 +133,10 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.R.id.st_fab_gps;
 
-//import org.osmdroid.tileprovider.MapTile;
-//import org.osmdroid.util.BoundingBoxE6;
-
 public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
+
+    private final static int done_button = 1;
+    private View doneButton;
 
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
@@ -283,7 +287,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             if (markerColor == MarkerColor.GREEN) {
                 firstBorderColor = Color.WHITE;
                 secondBoarderColor = Color.parseColor("#553dbcb3");
-                thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
+                thirdBoarderColor = Theme.getColor(Theme.key_light_theme_color);
 
                 firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
                 secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp18);
@@ -396,21 +400,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         return dstBitmap;
     }
 
-
-//    public void setTile(final boolean state) {
-//        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-//            @Override
-//            public String getTileURLString(long pMapTileIndex) {
-//                if (state)
-//                    return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + pMapTileIndex.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-//                else
-//                    return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-//                return null;
-//            }
-//
-//        });
-//    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -451,7 +440,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         attentionDialog();
         map = view.findViewById(R.id.map);
 
-        initToolbar(view);
         startMap(view);
         //clickDrawMarkActive();
 
@@ -478,7 +466,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
 
         btnOrginView = view.findViewById(R.id.ac_fab_orgin);
-        btnOrginView.setBackgroundTintList(ColorStateList.valueOf(new Theme().getPrimaryColor(getContext())));
+        btnOrginView.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_default_text)));
 
         btnOrginView.setOnClickListener(view12 -> {
 
@@ -506,7 +494,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         btnSatelliteView = view.findViewById(R.id.ac_fab_satellite);
-        btnSatelliteView.setBackgroundTintList(ColorStateList.valueOf(new Theme().getPrimaryColor(getContext())));
+        btnSatelliteView.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         btnSatelliteView.setOnClickListener(view1 -> {
             if (getActivity() != null && isAdded()) {
                 changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
@@ -707,115 +695,110 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         new RequestGeoGetComment().getComment(AccountManager.getInstance().getCurrentUser().getId());
     }
 
-    private void initToolbar(View view) {
-        mHelperToolbar = new Toolbar(getContext());
-        mHelperToolbar.setTitle(getString(R.string.igap_nearby));
-        mHelperToolbar.setBackIcon(new BackDrawable(false));
-        mHelperToolbar.addItem(toolbarDotsTag, R.string.icon_other_vertical_dots, Color.WHITE);
-        mHelperToolbar.setListener(i -> {
-                    switch (i) {
-                        case -1:
-                            // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
-                            if (getActivity() != null &&
-                                    getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
-                                    getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
-                            ) {
-                                return;
-                            }
+    @SuppressLint("ResourceType")
+    @Override
+    public View createToolBar(Context context) {
+        toolbar = new Toolbar(context);
+        toolbar.setTitle(context.getString(R.string.igap_nearby));
+        toolbar.setBackIcon(R.drawable.ic_ab_back);
+        ToolbarItems toolbarItems = toolbar.createToolbarItems();
+        doneButton = toolbarItems.addItem(done_button, R.string.icon_other_vertical_dots, Color.WHITE);
+        doneButton.setContentDescription(context.getString(R.string.Done));
+        toolbar.setListener(id -> {
+            if (id == -1) {
+                if (getActivity() != null &&
+                        getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1) != null &&
+                        getActivity().getSupportFragmentManager().getFragments().get(getActivity().getSupportFragmentManager().getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())
+                ) {
+                    return;
+                }
 
-                            if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
-                                rippleMoreMap.setVisibility(View.VISIBLE);
-                                fabGps.show();
-                                fabStateSwitcher.setVisibility(View.VISIBLE);
-                            }
-                            if (!isBackPress) {
-                                //getActivity().getSupportFragmentManager().popBackStack();
-                                G.fragmentActivity.onBackPressed();
-                            }
-                            closeKeyboard(view);
-                            isBackPress = false;
-                            page = pageiGapMap;
-                            break;
-                        case toolbarDotsTag:
-                            if (getActivity() != null) {
-                                List<Integer> items = new ArrayList<>();
-                                items.add(R.string.list_user_map);
-                                items.add(R.string.nearby);
-                                if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
-                                    items.add(R.string.map_registration);
-                                } else {
-                                    items.add(R.string.map_registration_enable);
+                if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
+                    rippleMoreMap.setVisibility(View.VISIBLE);
+                    fabGps.show();
+                    fabStateSwitcher.setVisibility(View.VISIBLE);
+                }
+                if (!isBackPress) {
+                    //getActivity().getSupportFragmentManager().popBackStack();
+                    G.fragmentActivity.onBackPressed();
+                }
+                isBackPress = false;
+                page = pageiGapMap;
+            } else if (id == done_button) {
+                if (getActivity() != null) {
+                    List<String> items = new ArrayList<>();
+                    items.add(getString(R.string.list_user_map));
+                    items.add(getString(R.string.nearby));
+                    if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
+                        items.add(getString(R.string.map_registration));
+                    } else {
+                        items.add(getString(R.string.map_registration_enable));
+                    }
+
+                    dialog = new TopSheetDialog(getActivity()).setListData(items, -1, new BottomSheetItemClickCallback() {
+                        @Override
+                        public void onClick(int position) {
+                            if (items.get(position).equals(getString(R.string.list_user_map))) {
+                                fabGps.hide();
+                                fabStateSwitcher.setVisibility(View.GONE);
+                                rippleMoreMap.setVisibility(View.GONE);
+                                page = pageUserList;
+                                try {
+                                    if (getActivity() != null) {
+                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                                    }
+                                } catch (Exception e) {
+                                    e.getStackTrace();
                                 }
-
-                                dialog = new TopSheetDialog(getActivity()).setListDataWithResourceId(items, -1, new BottomSheetItemClickCallback() {
+                            } else if (items.get(position).equals(getString(R.string.nearby))) {
+                                if (location != null && !isSendRequestGeoCoordinate) {
+                                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                    showProgress(true);
+                                    isSendRequestGeoCoordinate = true;
+                                }
+                            } else if (items.get(position).equals(getString(R.string.map_registration))) {
+                                new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
-                                    public void onClick(int position) {
-                                        if (items.get(position) == R.string.list_user_map) {
-                                            fabGps.hide();
-                                            fabStateSwitcher.setVisibility(View.GONE);
-                                            rippleMoreMap.setVisibility(View.GONE);
-                                            page = pageUserList;
-                                            try {
-                                                if (getActivity() != null) {
-                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
-                                                }
-                                            } catch (Exception e) {
-                                                e.getStackTrace();
-                                            }
-                                        } else if (items.get(position) == R.string.nearby) {
-                                            if (location != null && !isSendRequestGeoCoordinate) {
-                                                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                                                showProgress(true);
-                                                isSendRequestGeoCoordinate = true;
-                                            }
-                                        } else if (items.get(position) == R.string.map_registration) {
-                                            new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                                @Override
-                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                                    new RequestGeoRegister().register(false);
+                                        new RequestGeoRegister().register(false);
 
-                                                }
-                                            }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                                                @Override
-                                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    }
+                                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                                }
-                                            }).show();
-                                        } else if (items.get(position) == R.string.map_registration_enable) {
-                                            if (!isGpsOn) {
-                                                try {
-                                                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                                } catch (ActivityNotFoundException e) {
-                                                    e.printStackTrace();
-                                                }
+                                    }
+                                }).show();
+                            } else if (items.get(position).equals(getString(R.string.map_registration_enable))) {
+                                if (!isGpsOn) {
+                                    try {
+                                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    } catch (ActivityNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            if (getRequestManager().isUserLogin()) {
+                                                new RequestGeoRegister().register(true);
                                             } else {
-                                                new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                                    @Override
-                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                                        if (getRequestManager().isUserLogin()) {
-                                                            new RequestGeoRegister().register(true);
-                                                        } else {
-                                                            toggleGps.setChecked(false);
-                                                            showSnackBar(getString(R.string.please_check_your_connenction));
-                                                        }
-                                                    }
-                                                }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
+                                                toggleGps.setChecked(false);
+                                                showSnackBar(getString(R.string.please_check_your_connenction));
                                             }
                                         }
-                                    }
-                                });
-                                dialog.show();
+                                    }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
+                                }
                             }
-                            break;
-                    }
+                        }
+                    });
+                    dialog.show();
                 }
-        );
-
-        ViewGroup layoutToolbar = view.findViewById(R.id.fm_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
+            }
+        });
+        return toolbar;
     }
-
 
     private void attentionDialog() {
 
@@ -904,16 +887,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
                     .getBoolean("state", false);
 
-//            map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-//                @Override
-//                public String getTileURLString(MapTile aTile) {
-//                    if (!changeState)
-//                        return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-//                    else
-//                        return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-//                }
-//            });
-
 
             ViewGroup mapContainer = view.findViewById(R.id.mapContainer);
             mapContainer.setOnClickListener(v -> {
@@ -933,6 +906,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             txtTextTurnOnOffGps = view.findViewById(R.id.txtTextTurnOnOffGps);
             txtDescriptionMap = view.findViewById(R.id.txtDescriptionMap);
             edtMessageGps = view.findViewById(R.id.edtMessageGps);
+            edtMessageGps.setTextColor(Theme.getColor(Theme.key_title_text));
 
             edtMessageGps.setOnTouchListener((v, event) -> {
                 edtMessageGps.setSingleLine(false);
@@ -1092,7 +1066,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             fabGps = view.findViewById(st_fab_gps);
 
 
-            fabGps.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
+            fabGps.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)));
             fabGps.setColorFilter(Color.WHITE);
 
 
@@ -1105,7 +1079,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 }
             });
 
-            view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(new Theme().getPrimaryColor(getContext()));
+            view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Theme.getColor(Theme.key_theme_color));
 
             btnBack = view.findViewById(R.id.ripple_back_map);
 
@@ -1155,8 +1129,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         eastLimitation = bound[3];
         southLimitation = bound[0];
         westLimitation = bound[1];
-//        BoundingBoxE6 bBox = new BoundingBoxE6(bound[2] + extraBounding, bound[3] + extraBounding, bound[0] - extraBounding, bound[1] - extraBounding);
-//        map.setScrollableAreaLimit(bBox);
     }
 
     private double[] getBoundingBox(final double pLatitude, final double pLongitude, final int pDistanceInMeters) {
@@ -1222,8 +1194,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 InfoWindow infoWindow;
                 marker.setIcon(avatarMark(userIdR, MarkerColor.GRAY));
-                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, G.fragmentActivity, avatarHandler);
-                marker.setInfoWindow(infoWindow);
+                //infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, G.fragmentActivity, avatarHandler);
+                //marker.setInfoWindow(infoWindow);
 
                 markers.add(marker);
                 map.getOverlays().add(marker);

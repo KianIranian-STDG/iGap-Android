@@ -28,9 +28,12 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.EditTextBoldCursor;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.Theme;
+
+import static net.iGap.module.AndroidUtils.showKeyboard;
 
 @SuppressLint("ViewConstructor")
 public class ToolbarItem extends FrameLayout {
@@ -42,7 +45,7 @@ public class ToolbarItem extends FrameLayout {
     private IconView iconView;
     private FrameLayout searchContainer;
     private TextView searchClearButton;
-    private EditText searchEditText;
+    private EditTextBoldCursor searchEditText;
     private boolean isSearchBox;
     private boolean processedPopupClick;
     private int yOffset;
@@ -168,7 +171,7 @@ public class ToolbarItem extends FrameLayout {
         parentToolbarItem.addView(searchContainer, 0, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 6, 0, 0, 0));
 
         searchContainer.setVisibility(GONE);
-        searchEditText = new androidx.appcompat.widget.AppCompatEditText(getContext()) {
+        searchEditText = new EditTextBoldCursor(getContext()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, MeasureSpec.EXACTLY), heightMeasureSpec);
@@ -177,11 +180,11 @@ public class ToolbarItem extends FrameLayout {
         searchEditText.setHint(R.string.search);
         searchEditText.setSingleLine(true);
         searchEditText.setBackground(null);
-        searchEditText.setTextColor(Color.WHITE);
+        searchEditText.setTextColor(Theme.getColor(Theme.key_white));
         searchEditText.setEllipsize(TextUtils.TruncateAt.END);
         searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        searchEditText.setHintTextColor(Theme.getInstance().getDividerColor(getContext()));
-
+        searchEditText.setHintTextColor(Theme.getColor(Theme.key_white));
+        searchEditText.setCursorColor(Theme.getColor(Theme.key_white));
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -207,7 +210,7 @@ public class ToolbarItem extends FrameLayout {
         searchClearButton = new TextView(getContext());
         searchClearButton.setTextSize(22);
         searchClearButton.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
-        searchClearButton.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        searchClearButton.setTextColor(Theme.getColor(Theme.key_white));
         searchClearButton.setText(R.string.icon_close);
         searchClearButton.setVisibility(GONE);
         searchClearButton.setGravity(Gravity.CENTER);

@@ -35,10 +35,10 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
@@ -48,21 +48,12 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmStoryViewInfo;
-import net.iGap.request.RequestUserInfo;
 import net.iGap.story.liststories.ImageLoadingView;
 import net.iGap.story.storyviews.StoryCell;
-import net.iGap.story.viewPager.StoryDisplayFragment;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-
-import io.realm.RealmList;
 
 public class ViewUserDialogFragment extends BottomSheetDialogFragment implements RecyclerListView.OnItemClickListener, EventManager.EventDelegate, ToolbarListener {
 
@@ -142,16 +133,12 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             tfMain = ResourcesCompat.getFont(getContext(), R.font.main_font);
 
         rootView = new FrameLayout(getContext());
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
 
         dataRootView = new LinearLayout(getContext());
         dataRootView.setOrientation(LinearLayout.VERTICAL);
         rootView.addView(dataRootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
-
-        if (G.themeColor == Theme.DARK) {
-            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-        } else {
-            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-        }
 
         HelperToolbar helperToolbar = HelperToolbar.create();
         View toolBar = helperToolbar
@@ -323,17 +310,6 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
     }
 
     @Override
-    public void onClick(View view, int position) {
-
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
-    }
-
-
-    @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         Log.e("fdksdhfksdfhs", "onCancel: ");
@@ -374,11 +350,16 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
 
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+
+    }
+
     public interface ViewUserDialogState {
         void onCancel();
     }
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter {
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
         Context context;
 
         public void addRow() {
@@ -407,7 +388,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View cellView;
             cellView = new StoryCell(parent.getContext());
-            return new RecyclerListView.ItemViewHolder(cellView, ViewUserDialogFragment.this);
+            return new RecyclerListView.Holder(cellView);
         }
 
         @Override
@@ -431,9 +412,9 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
             return rowSize;
         }
 
-
         @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int viewType = holder.getItemViewType();
             return viewType != 2;
         }
     }

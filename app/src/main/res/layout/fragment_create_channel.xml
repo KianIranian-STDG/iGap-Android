@@ -52,16 +52,15 @@
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
                         android:text="@string/public_channel"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp8"
                         android:paddingRight="@dimen/dp8"
                         android:text="@string/desc_public_channel"
-                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
@@ -71,17 +70,16 @@
                         android:layout_marginTop="@dimen/dp8"
                         android:gravity="start|center"
                         android:text="@string/private_channel"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/description2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp8"
                         android:paddingLeft="@dimen/dp8"
                         android:paddingRight="@dimen/dp8"
                         android:text="@string/desc_private_channel"
-                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
                 </RadioGroup>
 
@@ -90,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     app:layout_constraintTop_toBottomOf="@id/channelTypeGroup" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -99,7 +97,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/permanent_link"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp15"
                     app:layout_constraintTop_toBottomOf="@id/divider" />
 
@@ -108,7 +105,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onClickTxtInputLink()}"
-                    android:textColorHint="?iGapHintTextColor"
                     app:errorText="@{viewModel.channelLinkErrorMessage}"
                     app:errorTextAppearance="@style/error_appearance"
                     app:layout_constraintTop_toBottomOf="@id/permanentLinkTitle">
@@ -124,18 +120,17 @@
                         android:layoutDirection="ltr"
                         android:singleLine="true"
                         android:text="@={viewModel.channelLink}"
-                        android:textColor="?iGapTitleTextColor"
                         android:textDirection="ltr"
                         android:textSize="@dimen/dp15" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/description3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp8"
                     android:text="@string/new_channels_rules"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintTop_toBottomOf="@id/channelLink" />
             </androidx.constraintlayout.widget.ConstraintLayout>

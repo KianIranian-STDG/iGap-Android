@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 
 import java.util.Locale;
 
@@ -55,13 +56,25 @@ public class CardToCardFragment extends Fragment {
         avatarHandler.getAvatar(new ParamWithAvatarType(view.findViewById(R.id.userAvatar), peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
 
         AppCompatTextView userNameTextView = view.findViewById(R.id.tv_cardToCard_transferTo);
+        userNameTextView.setTextColor(Theme.getColor(Theme.key_default_text));
         AppCompatTextView bankNameTv = view.findViewById(R.id.tv_chat_card_bankName);
+        bankNameTv.setTextColor(Theme.getColor(Theme.key_default_text));
         userNameTextView.setText(String.format(getString(R.string.money_request), userName));
-
+        AppCompatTextView amountText = view.findViewById(R.id.tv_chat_card_amountText);
+        amountText.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView cardNumberTv = view.findViewById(R.id.et_chat_card_cardNumberTv);
+        cardNumberTv.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView card_desc = view.findViewById(R.id.tv_chat_card_desc);
+        card_desc.setTextColor(Theme.getColor(Theme.key_default_text));
         AppCompatEditText cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
+        cardNumberEtCard.setTextColor(Theme.getColor(Theme.key_default_text));
+        cardNumberEtCard.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         AppCompatEditText amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
+        amountEtCard.setTextColor(Theme.getColor(Theme.key_default_text));
+        amountEtCard.setHintTextColor(Theme.getColor(Theme.key_default_text));
         AppCompatEditText descEtCard = view.findViewById(R.id.et_chat_card_desc);
-
+        descEtCard.setTextColor(Theme.getColor(Theme.key_default_text));
+        descEtCard.setHintTextColor(Theme.getColor(Theme.key_default_text));
         amountEtCard.addTextChangedListener(new TextWatcher() {
             boolean isSettingText;
 

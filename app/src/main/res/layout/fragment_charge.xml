@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?rootBackgroundColor"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:id="@+id/mainContainer">
 
     <FrameLayout
         android:id="@+id/charge_toolbar"
@@ -20,7 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,7 +38,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/topUp_title"
-                android:textColor="?iGapButtonTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +64,6 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/phoneNumber"
-                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
@@ -90,7 +88,6 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/icon_close"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp24"
                 app:layout_constraintBottom_toBottomOf="@+id/ll_editText"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +100,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/shape_payment_charge"
                 android:paddingStart="@dimen/dp8"
                 android:paddingTop="@dimen/dp2"
                 android:paddingEnd="@dimen/dp8"
@@ -117,15 +113,14 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_contact"
-                    android:layout_width="46dp"
-                    android:layout_height="29dp"
-                    android:layout_weight="1"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_contact_new" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -138,7 +133,6 @@
                     android:maxLines="1"
                     android:minWidth="@dimen/dp100"
                     android:text="@string/choose_frome_contacts"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_contact"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_contact"
@@ -149,7 +143,6 @@
                 android:id="@+id/frame_history"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_payment_charge"
                 android:paddingStart="@dimen/dp8"
                 android:paddingTop="@dimen/dp2"
                 android:paddingEnd="@dimen/dp8"
@@ -166,13 +159,12 @@
                     android:id="@+id/iv_history"
                     android:layout_width="@dimen/dp24"
                     android:layout_height="@dimen/dp24"
-                    android:layout_weight="1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_recent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -186,7 +178,6 @@
                     android:maxLines="1"
                     android:minWidth="@dimen/dp100"
                     android:text="@string/previousـpurchases"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_history"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_history"
@@ -194,12 +185,11 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/appCompatTextView"
+                android:id="@+id/operator_selection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/operator_selection"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintStart_toStartOf="@+id/frame_contact"
                 app:layout_constraintTop_toBottomOf="@+id/frame_contact" />
@@ -235,12 +225,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/choose_amount"
-                style="@style/iGapButtonStroke"
+                style="@style/BaseIGapStrokeButtonStyle"
                 android:layout_width="247dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:text="@string/select_the_amount"
-                android:textColor="?iGapButtonTextColor"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintEnd_toStartOf="@+id/add_amount"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -249,7 +238,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_charge_type"
-                style="@style/iGapButtonStroke"
+                style="@style/BaseIGapStrokeButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp48"
                 android:layout_marginStart="16dp"
@@ -259,7 +248,6 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="68dp"
                 android:text="@string/Select_the_type_of_charge"
-                android:textColor="?iGapButtonTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/btn_pay"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -268,12 +256,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_pay"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/payment_continue_title"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="@+id/btn_charge_type"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/btn_charge_type"
@@ -287,8 +275,8 @@
                 android:layout_marginRight="@dimen/dp16"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/frame_history"
-                app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
+                app:layout_constraintStart_toStartOf="@+id/operator_selection"
+                app:layout_constraintTop_toBottomOf="@+id/operator_selection"
                 tools:itemCount="1"
                 tools:listitem="@layout/adapter_operator" />
 
@@ -313,23 +301,22 @@
                 app:layout_constraintWidth_percent=".9">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp2"
                     android:layout_marginRight="@dimen/dp8"
                     android:text="@string/icon_error"
-                    android:textColor="@color/white" />
+                    android:textColor="@android:color/white" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?iGapSubtitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp2"
                     android:layout_marginLeft="@dimen/dp2"
                     android:maxLines="1"
                     android:text="@string/tarabord"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="10sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

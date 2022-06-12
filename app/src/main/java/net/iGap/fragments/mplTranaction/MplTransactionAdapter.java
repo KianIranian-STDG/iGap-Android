@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
@@ -65,9 +66,13 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
         public MplTransactionViewHolder(@NonNull View rootView) {
             super(rootView);
             transferActionTypeTv = rootView.findViewById(R.id.tv_itemMplTransAction_type);
+            transferActionTypeTv.setTextColor(Theme.getColor(Theme.key_title_text));
             transferActionDataTv = rootView.findViewById(R.id.tv_itemMplTransAction_date);
+            transferActionDataTv.setTextColor(Theme.getColor(Theme.key_title_text));
             transferActionTimeTv = rootView.findViewById(R.id.tv_itemMplTransAction_time);
+            transferActionTimeTv.setTextColor(Theme.getColor(Theme.key_title_text));
             transferActionOrderIdTv = rootView.findViewById(R.id.tv_itemMplTransAction_orderId);
+            transferActionOrderIdTv.setTextColor(Theme.getColor(Theme.key_title_text));
         }
 
         public void bindTransaction(ProtoGlobal.MplTransaction mplTransaction) {

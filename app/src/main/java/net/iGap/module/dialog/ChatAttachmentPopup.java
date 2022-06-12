@@ -3,7 +3,6 @@ package net.iGap.module.dialog;
 import android.Manifest;
 import android.animation.Animator;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,9 +20,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -38,8 +37,6 @@ import net.iGap.R;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.AdapterPopupOpenGallery;
 import net.iGap.adapter.items.BottomSheetItem;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
@@ -47,11 +44,13 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnClickCamera;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
@@ -172,7 +171,50 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
         mPopup.setOutsideTouchable(true);
 
         privacyView = viewRoot.findViewById(R.id.fl_attachment_privacyView);
+        privacyView.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
+        AppCompatTextView txtCamera2 = viewRoot.findViewById(R.id.txtCamera2);
+        txtCamera2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtCamera = viewRoot.findViewById(R.id.txtCamera);
+        txtCamera.setTextColor(Theme.getColor(Theme.key_icon));
 
+        AppCompatTextView textPicture2 = viewRoot.findViewById(R.id.textPicture2);
+        textPicture2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView textPicture = viewRoot.findViewById(R.id.textPicture);
+        textPicture.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtMusic2 = viewRoot.findViewById(R.id.txtMusic2);
+        txtMusic2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtMusic = viewRoot.findViewById(R.id.txtMusic);
+        txtMusic.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtFile2 = viewRoot.findViewById(R.id.txtFile2);
+        txtFile2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtFile = viewRoot.findViewById(R.id.txtFile);
+        txtFile.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtContact2 = viewRoot.findViewById(R.id.txtContact2);
+        txtContact2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtContact = viewRoot.findViewById(R.id.txtContact);
+        txtContact.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtLocation2 = viewRoot.findViewById(R.id.txtLocation2);
+        txtLocation2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtLocation = viewRoot.findViewById(R.id.txtLocation);
+        txtLocation.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtSend = viewRoot.findViewById(R.id.txtSend);
+        txtSend.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtVideo2 = viewRoot.findViewById(R.id.txtVideo2);
+        txtVideo2.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView txtVideo = viewRoot.findViewById(R.id.txtVideo);
+        txtVideo.setTextColor(Theme.getColor(Theme.key_icon));
+
+        AppCompatTextView txtNumberItem = viewRoot.findViewById(R.id.txtNumberItem);
+        txtNumberItem.setTextColor(Theme.getColor(Theme.key_icon));
+
+        TextView restrictionMessage = viewRoot.findViewById(R.id.restrictionMessage);
+        restrictionMessage.setTextColor(Theme.getColor(Theme.key_title_text));
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
             isShowing = false;
@@ -197,6 +239,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
+        contentView.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
         contentView.setVisibility(View.INVISIBLE);
 
         contentView.setOnClickListener(v -> {
@@ -204,7 +247,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            contentView.setBackgroundColor(new Theme().getRootColor(contentView.getContext()));
+            contentView.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
             return;
         } else {
             contentView.setElevation(0);
@@ -220,7 +263,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
         int height = getKeyboardHeight();
         if (height == 0 || (mFragment instanceof FragmentChat && !((FragmentChat) mFragment).isKeyboardViewOpen())) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_background), contentView.getContext(), R.attr.rootBackgroundColor));
+            contentView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_background), contentView.getContext(), Theme.getColor(Theme.key_popup_background)));
             contentView.setElevation(4);
 
             if ((contentView.getMeasuredHeight() + mChatBoxHeight) >= getDeviceScreenHeight()) {
@@ -235,7 +278,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
             lp.bottomMargin = mChatBoxHeight + 10;
 
         } else {
-            contentView.setBackgroundColor(new Theme().getRootColor(contentView.getContext()));
+            contentView.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
 
             if (contentView.getHeight() >= height) {
                 contentView.setMinimumHeight(height);
@@ -375,9 +418,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
         location.setOnClickListener(v -> {
             dismiss();
             try {
-                attachFile.requestGetPosition((result, messageOne, MessageTow) -> {
-                    mPopupListener.onAttachPopupLocation(messageOne);
-                }, mFragment);
+                attachFile.requestGetPosition();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -481,12 +522,16 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
     private void openPhotoGallery() {
         try {
 
-            HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
+            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     //clear at first time to load image gallery
-                    FragmentEditImage.itemGalleryList.clear();
-                    FragmentEditImage.textImageList.clear();
+                    if (FragmentEditImage.itemGalleryList != null) {
+                        FragmentEditImage.itemGalleryList.clear();
+                    }
+                    if (FragmentEditImage.textImageList != null) {
+                        FragmentEditImage.textImageList.clear();
+                    }
 
                     Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.PHOTO, () -> {
                         try {
@@ -513,7 +558,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
     private void openVideoGallery() {
         try {
 
-            HelperPermission.getStoragePermission(G.currentActivity, new OnGetPermission() {
+            HelperPermission.getStoragePermision(G.currentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
@@ -547,7 +592,7 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
 
     private void openMusicGallery() {
         try {
-            HelperPermission.getStoragePermission(G.currentActivity, new OnGetPermission() {
+            HelperPermission.getStoragePermision(G.currentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
@@ -645,35 +690,12 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
             if (FragmentEditImage.textImageList == null) {
                 FragmentEditImage.textImageList = new HashMap<>();
             }
-            if (isNewBottomSheet) {
+            if (isNewBottomSheet && FragmentEditImage.textImageList != null) {
                 FragmentEditImage.textImageList.clear();
             }
-            /**Following code commented for accepting google play policy for
-             * restrictions on MANAGE_EXTERNAL_STORAGE that do not allowed us to
-             * publish igap on google play with that permission*/
-            try {
 
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                    if (Environment.isExternalStorageManager()) {
-//                        getAllShownImagesPath(mFrgActivity, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
-//                            @Override
-//                            public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
-//                                FragmentEditImage.itemGalleryList = listOfAllImages;
-//                                if (rcvBottomSheet != null)
-//                                    rcvBottomSheet.setVisibility(View.VISIBLE);
-//                                G.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        checkCameraAndLoadImage();
-//                                    }
-//                                });
-//                            }
-//                        });
-//                    } else {
-//                        HelperPermission.showDeniedPermissionMessage(G.fragmentActivity.getString(R.string.permission_storage));
-//                    }
-//                } else {
-                HelperPermission.getStoragePermission(mFrgActivity, new OnGetPermission() {
+            try {
+                HelperPermission.getStoragePermision(mFrgActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         getAllShownImagesPath(mFrgActivity, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
@@ -698,13 +720,13 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
                         HelperPermission.showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
                     }
                 });
-//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             checkCameraAndLoadImage();
         }
+
 
     }
 
@@ -746,20 +768,20 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
     }
 
     private void loadItemsToRecycler() {
-        if (FragmentEditImage.itemGalleryList != null)
+        if (FragmentEditImage.itemGalleryList != null) {
             for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
                 addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
             }
-        if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
-            addItemToRecycler(new AdapterPopupOpenGallery(() -> {
-                dismiss();
-                openPhotoGallery();
-            }).withIdentifier(0));
+            if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
+                addItemToRecycler(new AdapterPopupOpenGallery(() -> {
+                    dismiss();
+                    openPhotoGallery();
+                }).withIdentifier(0));
+            }
         }
     }
 
     private void showPopup() {
-
         if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
             if (icoSend != null)
                 icoSend.setText(mFrgActivity.getResources().getString(R.string.icon_send));
@@ -991,8 +1013,6 @@ public class ChatAttachmentPopup implements EventManager.EventDelegate {
         void onAttachPopupShowed();
 
         void onAttachPopupDismiss();
-
-        void onAttachPopupLocation(String message);
 
         void onAttachPopupFilePicked(List<String> selectedPathList, String caption);
 

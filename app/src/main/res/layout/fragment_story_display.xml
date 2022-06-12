@@ -119,7 +119,8 @@
             android:orientation="horizontal"
 
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints">
 
             <net.iGap.story.ExpandableTextView
                 android:id="@+id/caption_text_sub_view"
@@ -129,7 +130,7 @@
                 android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@android:color/white" />
 
 
         </LinearLayout>
@@ -145,12 +146,12 @@
 
             <TextView
                 android:id="@+id/icon_replay"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:text="@string/icon_chevron_Down"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/dp32"
                 app:layout_constraintBottom_toTopOf="@+id/tv_replay"
                 app:layout_constraintEnd_toEndOf="@id/tv_replay"
@@ -164,7 +165,7 @@
                 android:layout_gravity="center|bottom"
                 android:layout_marginBottom="@dimen/dp8"
                 android:text="@string/replay"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -185,7 +186,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -204,7 +205,7 @@
                 android:fontFamily="@font/main_font"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold" />
 
@@ -245,7 +246,6 @@
         android:id="@+id/ll_replay_story"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/rootBackgroundColor"
         android:orientation="horizontal"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/layout_attach_story"
@@ -270,7 +270,6 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="Name"
-                android:textColor="?attr/iGapSendReplayColor"
                 android:textStyle="bold" />
 
             <TextView
@@ -283,13 +282,12 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="Description"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp12" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/story_image"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_gravity="top"
@@ -302,7 +300,6 @@
         android:id="@+id/layout_attach_story"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/iGapChatSendMessageBackground"
         android:orientation="horizontal"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/keyboardContainer"
@@ -311,7 +308,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/tv_story_emoji"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_gravity="bottom"
@@ -321,7 +318,6 @@
 
         <net.iGap.module.customView.EventEditText
             android:id="@+id/et_chatRoom_writeMessage"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -348,7 +344,7 @@
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/btn_chatRoom_send"
-                style="@style/primaryIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp44"
                 android:layout_height="@dimen/dp44"
                 android:layout_gravity="center"

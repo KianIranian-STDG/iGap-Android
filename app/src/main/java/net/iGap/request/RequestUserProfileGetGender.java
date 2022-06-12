@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.proto.ProtoUserProfileGetGender;
 
 public class RequestUserProfileGetGender {
 
-    public void userProfileGetGender() {
+    public void userProfileGetGender(OnUserProfileSetGenderResponse onUserProfileSetGenderResponse) {
 
         ProtoUserProfileGetGender.UserProfileGetGender.Builder builder = ProtoUserProfileGetGender.UserProfileGetGender.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(111, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(111, builder, onUserProfileSetGenderResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

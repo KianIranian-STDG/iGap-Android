@@ -1,162 +1,398 @@
-/*
- * This is the source code of iGap for Android
- * It is licensed under GNU AGPL v3.0
- * You should have received a copy of the license in this archive (see LICENSE).
- * Copyright © 2017 , iGap - www.iGap.net
- * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the Kianiranian Company - www.kianiranian.com
- * All rights reserved.
- */
-
 package net.iGap.fragments;
 
-import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
-import android.location.Criteria;
+import android.graphics.Canvas;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperSetAction;
-import net.iGap.helper.HelperString;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.module.Theme;
-import net.iGap.module.accountManager.DbManager;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRoom;
+import net.iGap.messenger.theme.Theme;
+
+import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
+import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
-import static net.iGap.G.isLocationFromBot;
-import static net.iGap.R.id.mf_fragment_map_view;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
+/**
+ * This is new fragment for showing and sending map based on osmdroid (open street map android api)
+ * The reason for this replacement is Google sanctions on the map service for Iranian app
+ */
 
-    public static String Latitude = "latitude";
-    public static String Longitude = "longitude";
-    public static String PosoitionMode = "positionMode";
+public class FragmentMap extends BaseFragment implements MapEventsReceiver {
 
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    private MapView mMapView;
+    private MapController mMapController;
+    private LocationManager mLocationManager;
+    private ShowMapType mShowMapType;
+    private GeoPoint mCurrentGeoPoint;
+    private GeoPoint mLastGeoPoint;
+    private Location mGpsLocation;
+    private Location mNetworkLocation;
+    private Marker marker;
+    private View mSendLocationButton;
+    private View mCurrentLocationButton;
+    private View mDriveButton;
+    private TextView mAddressStrip;
+    private MaterialProgressBar mProgressBar;
+    private TextView mLocatingText;
+    private TextView mInternetNotConnectedText;
+    private Group driveGroupIcon;
+    private Group sendGroupIcon;
+    private TextView send_location_icon;
 
-    public static String flagFragmentMap = "FragmentMap";
-    Marker marker;
-    private GoogleMap mMap;
-    private Double latitude;
-    private Double longitude;
-    private Mode mode;
-    private TextView accuracy, txtTitle, txtUserName, txtDistance;
-    private ImageView imgProfile;
-
-    private boolean showGPS = false;
-
-    private RelativeLayout rvSendPosition, rvSeePosition;
-    private FloatingActionButton fabOpenMap;
-    private Bundle bundle;
-    private RelativeLayout rvIcon;
-    private net.iGap.module.MaterialDesignTextView itemIcon;
-    private Location location;
-    private LocationManager locationManager;
-    private String provider;
-
-
-    public static FragmentMap getInsance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
-
-        FragmentMap fragmentMap = new FragmentMap();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        bundle.putLong("roomId", roomId);
-        bundle.putString("senderId", senderID);
-
-        bundle.putDouble(FragmentMap.Latitude, latitude);
-        bundle.putDouble(FragmentMap.Longitude, longitude);
-        bundle.putSerializable(PosoitionMode, mode);
-
-        fragmentMap.setArguments(bundle);
-        return fragmentMap;
+    public static FragmentMap newInstance() {
+        FragmentMap fragment = new FragmentMap();
+        return fragment;
     }
 
-    public static FragmentMap getInstance(Double latitude, Double longitude, Mode mode) {
-
-        FragmentMap fragmentMap = new FragmentMap();
-
-        Bundle bundle = new Bundle();
-        bundle.putDouble(FragmentMap.Latitude, latitude);
-        bundle.putDouble(FragmentMap.Longitude, longitude);
-        bundle.putSerializable(PosoitionMode, mode);
-
-        fragmentMap.setArguments(bundle);
-        return fragmentMap;
+    public static FragmentMap newInstance(Double latitude, Double longitude) {
+        FragmentMap fragment = new FragmentMap();
+        Bundle args = new Bundle();
+        args.putDouble(LATITUDE, latitude);
+        args.putDouble(LONGITUDE, longitude);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    public static String saveBitmapToFile(Bitmap bitmap) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        String result = "";
+        if (getArguments() != null && !getArguments().isEmpty()) {
+            mShowMapType = ShowMapType.READ_LOCATION;
+        } else {
+            mShowMapType = ShowMapType.SEND_LOCATION;
+        }
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.map_fragment, container, false);
+        findViews(view);
         try {
-            if (bitmap == null) return result;
+            initComponent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setListeners();
+        return view;
+    }
 
-            String fileName = "/location_" + HelperString.getRandomFileName(3) + ".png";
-            File file = new File(G.DIR_TEMP, fileName);
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-            OutputStream fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
-            result = file.getPath();
-        } catch (FileNotFoundException e) {
+    private void findViews(View view) {
+        mMapView = view.findViewById(R.id.open_street_map_view);
+        mSendLocationButton = view.findViewById(R.id.send_location);
+        mCurrentLocationButton = view.findViewById(R.id.current_location);
+        mAddressStrip = view.findViewById(R.id.address_strip);
+        driveGroupIcon = view.findViewById(R.id.drive_icon_group);
+        sendGroupIcon = view.findViewById(R.id.send_icon_group);
+        mDriveButton = view.findViewById(R.id.drive_icon);
+        mProgressBar = view.findViewById(R.id.new_map_fragment_progress_bar);
+        mLocatingText = view.findViewById(R.id.new_map_fragment_locating_text);
+        send_location_icon = view.findViewById(R.id.send_location_icon);
+        send_location_icon.setTextColor(Theme.getColor(Theme.key_white));
+        mInternetNotConnectedText = view.findViewById(R.id.new_map_fragment_internet_not_connected);
+    }
+
+    private void initComponent() throws IOException {
+        mMapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
+        Context ctx = getActivity().getApplicationContext();
+        Configuration.getInstance().load(ctx, android.preference.PreferenceManager.getDefaultSharedPreferences(ctx));
+        mMapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+        mMapView.setMultiTouchControls(true);
+        mMapView.setDrawingCacheEnabled(true);
+        marker = new Marker(mMapView);
+        mMapController = (MapController) mMapView.getController();
+        mMapController.setZoom(17);
+        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (isInternetConnected()) {
+            mLocatingText.setVisibility(View.VISIBLE);
+            mInternetNotConnectedText.setVisibility(View.GONE);
+
+            /**Here we request to get location with both Gps and Network provider to compare its later*/
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    mGpsLocation = location;
+                }
+            });
+
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    mNetworkLocation = location;
+                }
+            });
+
+            mGpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            mNetworkLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            compareGpsAndNetworkLocationAndSet();
+
+        } else {
+            mInternetNotConnectedText.setVisibility(View.VISIBLE);
+        }
+        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getActivity(), this);
+        mMapView.getOverlays().add(0, mapEventsOverlay);
+        ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(mMapView);
+        mMapView.getOverlays().add(scaleBarOverlay);
+
+    }
+
+
+    private void setListeners() {
+
+        mMapView.setMapListener(new MapListener() {
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+                Log.d("osm", "onScroll");
+                return true;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+                Log.d("osm", "onZoom");
+                return true;
+            }
+        });
+
+        mCurrentLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLastGeoPoint = mCurrentGeoPoint;
+                mMapController.animateTo(mCurrentGeoPoint);
+                setAddressStrip(mLastGeoPoint);
+                addMarker(mCurrentGeoPoint);
+            }
+        });
+
+        mSendLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = mMapView.getDrawingCache();
+
+                if (mLastGeoPoint.getLatitude() == 0 || mLastGeoPoint.getLongitude() == 0) {
+
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.set_position), false);
+
+                        }
+                    });
+                } else {
+
+                    try {
+
+                        String path = saveMapToFile(bitmap);
+                        popBackStackFragment();
+
+
+                        if (path.length() > 0) {
+                            //ActivityChat activity = (ActivityChat) mActivity;
+                            //activity.sendPosition(latitude, longitude, path);
+
+                            if (G.iSendPositionChat != null) {
+                                G.iSendPositionChat.send(mLastGeoPoint.getLatitude(), mLastGeoPoint.getLongitude(), path);
+                            }
+
+                        }
+                    } catch (Exception e) {
+                        popBackStackFragment();                        //ActivityChat activity = (ActivityChat) mActivity;
+                        //activity.sendPosition(latitude, longitude, null);
+
+                        if (G.iSendPositionChat != null) {
+                            G.iSendPositionChat.send(mLastGeoPoint.getLatitude(), mLastGeoPoint.getLongitude(), null);
+                        }
+                    }
+
+                }
+
+
+            }
+        });
+
+        mDriveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri location = Uri.parse("geo:" + mLastGeoPoint.getLatitude() + "," + mLastGeoPoint.getLongitude() + "?z=17");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+                startActivity(mapIntent);
+            }
+        });
+    }
+
+
+    public void addMarker(final GeoPoint center) {
+        marker.setPosition(center);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marker.setIcon(getResources().getDrawable(R.drawable.ic_location));
+        marker.setDraggable(true);
+
+        /**Following marker attributes use for set an information dialog above of
+         * marker that usually show selected address*/
+        marker.setTitle("Location:");
+        marker.setSubDescription(center.getLatitude() + " , " + center.getLongitude());
+
+
+//        marker.setInfoWindow(new CustomMarkerInfoWindow(mMapView));
+//        marker.setInfoWindowAnchor(marker.ANCHOR_CENTER, marker.ANCHOR_TOP);
+
+//        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker m, MapView mapView) {
+//                Log.i("Script","onMarkerClick");
+//                m.showInfoWindow();
+//                return true;
+//            }
+//        });
+
+        marker.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                Log.i("Script", "onMarkerDragStart()");
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                Log.i("Script", "onMarkerDragEnd()");
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                Log.i("Script", "onMarkerDrag()");
+            }
+        });
+
+        //osm.getOverlays().clear();
+        mMapView.getOverlays().add(new MapOverlay(getActivity()));
+        mMapView.getOverlays().add(marker);
+        mMapView.invalidate();
+
+    }
+
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p) {
+//        Toast.makeText(getActivity(), "Coordenadas:\nLatitude: ("+p.getLatitude() +"\nLongitude: " +
+//                ""+p.getLongitude()+")" , Toast.LENGTH_SHORT).show();
+//
+//        InfoWindow.closeAllInfoWindowsOn(mMapView); //Clicando em qualquer canto da tela, fecha o infowindow
+        return (true);
+    }
+
+    @Override
+    public boolean longPressHelper(GeoPoint p) {
+        return false;
+    }
+
+    /**
+     * For adding custom information window above of marker icon
+     */
+//    public class CustomMarkerInfoWindow extends MarkerInfoWindow {
+//
+//        public CustomMarkerInfoWindow(MapView mapView) {
+//            super(R.layout.bonuspack_bubble, mapView);
+//        }
+//
+//        @Override
+//        public void onOpen(Object item) {
+//
+//            Marker marker = (Marker) item;
+//
+//        }
+//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    class MapOverlay extends Overlay {
+        public MapOverlay(Context ctx) {
+            super(ctx);
+        }
+
+        @Override
+        public void draw(Canvas c, MapView osmv, boolean shadow) {
 
         }
 
-        return result;
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent me, MapView mv) {
+            Projection p = mMapView.getProjection();
+            GeoPoint gp = (GeoPoint) p.fromPixels((int) me.getX(), (int) me.getY());
+            mLastGeoPoint = gp;
+            setAddressStrip(mLastGeoPoint);
+            addMarker(gp);
+            return (true);
+        }
     }
 
     public String saveMapToFile(Bitmap bitmap) {
@@ -166,7 +402,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         try {
             if (bitmap == null) return result;
 
-            String fileName = "/location_" + latitude.toString().replace(".", "") + "_" + longitude.toString().replace(".", "") + ".png";
+            String fileName = "/location_" + String.valueOf(mLastGeoPoint.getLatitude()).replace(".", "") + "_" + String.valueOf(mLastGeoPoint.getLongitude()).replace(".", "") + ".png";
             File file = new File(G.DIR_TEMP, fileName);
 
             OutputStream fOut = new FileOutputStream(file);
@@ -180,526 +416,119 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         return result;
     }
 
-    public static void loadImageFromPosition(double latiude, double longitude, OnGetPicture listener) {
-
-        String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center=" + latiude + "," + longitude + "&zoom=16&size=480x240" + "&markers=color:red%7Clabel:S%7C" + latiude + "," + longitude + "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
-
-        new DownloadImageTask(listener).execute(urlstr);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.map_fragment, container, false));
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
-        super.onViewCreated(view, saveInctanceState);
-
-
-        /* *//**//* itemIcon = (MaterialDesignTextView) view.findViewById(R.id.mf_icon);*/
-
-
-        rvIcon = view.findViewById(R.id.rv_icon);
-
-        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_shape);
-        if (mDrawableSkip != null) {
-            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                rvIcon.setBackground(mDrawableSkip);
-            }
+    private String getLocationProvider() {
+        if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            return LocationManager.GPS_PROVIDER;
         }
-
-
-        imgProfile = view.findViewById(R.id.mf_imgProfile);
-
-        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
-        rvSeePosition = view.findViewById(R.id.mf_rv_see_position);
-
-        rvSendPosition.setEnabled(false);
-
-        accuracy = view.findViewById(R.id.mf_txt_accuracy);
-        accuracy.setText(getResources().getString(R.string.get_location_data));
-
-
-        txtTitle = view.findViewById(R.id.mf_txt_message);
-
-        txtUserName = view.findViewById(R.id.mf_txt_userName);
-        txtDistance = view.findViewById(R.id.mf_txt_distance);
-
-        txtDistance.setText(getResources().getString(R.string.calculation));
-
-        txtUserName.setTextColor(new Theme().getPrimaryColor(getContext()));
-
-        accuracy.setTextColor(new Theme().getPrimaryColor(getContext()));
-        txtDistance.setTextColor(new Theme().getPrimaryColor(getContext()));
-
-
-        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
-        txtTitle.setTextColor(new Theme().getPrimaryColor(getContext()));
-
-        fabOpenMap = view.findViewById(R.id.mf_fab_openMap);
-        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
-        fabOpenMap.setColorFilter(Color.WHITE);
-
-        bundle = getArguments();
-
-        if (bundle != null) {
-
-            latitude = bundle.getDouble(FragmentMap.Latitude);
-            longitude = bundle.getDouble(FragmentMap.Longitude);
-
-            mode = (Mode) bundle.getSerializable(PosoitionMode);
-
-            if (mode == Mode.sendPosition) {
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
-                }
-            }
-
-            initComponent(view, bundle.getInt("type", 0), bundle.getLong("roomId", 00), bundle.getString("senderId", null));
-        } else {
-            close();
-        }
+        return LocationManager.NETWORK_PROVIDER;
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        isLocationFromBot = false;
-        HelperSetAction.sendCancel(FragmentChat.messageId);
-    }
-
-    private void close() {
-        //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
-
-        popBackStackFragment();
-    }
-
-    private void initComponent(View view, int type, long roomId, String senderId) {
-
-        SupportMapFragment mapFragment = new SupportMapFragment();
-        if (getActivity() != null) {
-            new HelperFragment(getActivity().getSupportFragmentManager(), mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
-        }
-
-        mapFragment.getMapAsync(FragmentMap.this);
-
-
-        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
-
-
-        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
-
-        if (mode == Mode.sendPosition) {
-            fabOpenMap.hide();
-            rvSendPosition.setVisibility(View.VISIBLE);
-            rvSeePosition.setVisibility(View.GONE);
-            rvSendPosition.setOnClickListener(this);
-
-
-        } else if (mode == Mode.seePosition) {
-            rvSeePosition.setVisibility(View.VISIBLE);
-            fabOpenMap.show();
-            rvSendPosition.setVisibility(View.GONE);
-            fabOpenMap.setOnClickListener(this);
-
-            DbManager.getInstance().doRealmTask(realm -> {
-                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
-
-                if (HelperCalander.isPersianUnicode) {
-                    //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    params.anchorGravity = Gravity.LEFT | Gravity.BOTTOM;
-
-                    txtUserName.setGravity(Gravity.RIGHT);
-                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-                } else {
-                    //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    params.anchorGravity = Gravity.RIGHT | Gravity.BOTTOM;
-
-
-                    txtUserName.setGravity(Gravity.LEFT);
-                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
-                }
-
-                if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
-
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderId)).findFirst();
-                    txtUserName.setText(realmRegisteredInfo.getDisplayName());
-
-                    setAvatar(Long.parseLong(senderId));
-
-
-                } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-                    txtUserName.setText(realmRoom.getTitle());
-
-                    setAvatar(roomId);
-
-                }
-            });
-        }
-    }
-
-    private void setAvatar(long id) {
-        avatarHandler.getAvatar(new ParamWithAvatarType(imgProfile, id).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
-    }
-
-    //****************************************************************************************************
 
     /**
-     * This callback is triggered when the map is ready to be used.
-     * Manipulates the map once available.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * This method compares locations which obtain from Gps and Network providers and set whichever is more accurate
      */
+    private void compareGpsAndNetworkLocationAndSet() {
+        if (mGpsLocation == null) {
+            mProgressBar.setVisibility(View.GONE);
+            mLocatingText.setVisibility(View.GONE);
+            mCurrentGeoPoint = new GeoPoint(mNetworkLocation.getLatitude(), mNetworkLocation.getLongitude());
+            mLastGeoPoint = mCurrentGeoPoint;
+            adjustmentAccordingToMapType();
+            addMarker(mLastGeoPoint);
+            mMapController.animateTo(mLastGeoPoint);
 
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        mMap = googleMap;
-        final boolean[] updatePosition = {true};
-
-        //if device has not gps permision in androi 6+ return form map
-        if (ActivityCompat.checkSelfPermission(G.fragmentActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(G.fragmentActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        if (mode == Mode.seePosition || isLocationFromBot) {
-            mMap.setMyLocationEnabled(true);
-
-            mMap.getUiSettings().setZoomGesturesEnabled(true);
+        } else if (mNetworkLocation == null) {
+            mProgressBar.setVisibility(View.GONE);
+            mLocatingText.setVisibility(View.GONE);
+            mCurrentGeoPoint = new GeoPoint(mGpsLocation.getLatitude(), mGpsLocation.getLongitude());
+            mLastGeoPoint = mCurrentGeoPoint;
+            adjustmentAccordingToMapType();
+            addMarker(mLastGeoPoint);
+            mMapController.animateTo(mLastGeoPoint);
         } else {
-            mMap.getUiSettings().setZoomGesturesEnabled(false);
-            mMap.setMyLocationEnabled(false);
+            if (mGpsLocation.getAccuracy() < mNetworkLocation.getAccuracy()) {
+                mProgressBar.setVisibility(View.GONE);
+                mLocatingText.setVisibility(View.GONE);
+                mCurrentGeoPoint = new GeoPoint(mGpsLocation.getLatitude(), mGpsLocation.getLongitude());
+                mLastGeoPoint = mCurrentGeoPoint;
+                adjustmentAccordingToMapType();
+                addMarker(mLastGeoPoint);
+                mMapController.animateTo(mLastGeoPoint);
+            } else {
+                mProgressBar.setVisibility(View.GONE);
+                mLocatingText.setVisibility(View.GONE);
+                mCurrentGeoPoint = new GeoPoint(mNetworkLocation.getLatitude(), mNetworkLocation.getLongitude());
+                mLastGeoPoint = mCurrentGeoPoint;
+                adjustmentAccordingToMapType();
+                addMarker(mLastGeoPoint);
+                mMapController.animateTo(mLastGeoPoint);
+            }
         }
+    }
 
+    private void setAddressStrip(GeoPoint geoPoint) {
+        if (mLastGeoPoint.toString().equalsIgnoreCase(mCurrentGeoPoint.toString())) {
+            mAddressStrip.setText(getString(R.string.send_current_location) + geoPoint.getLatitude() + " , " + geoPoint.getLongitude());
+        } else {
+            mAddressStrip.setText(getString(R.string.send_selected_location) + geoPoint.getLatitude() + " , " + geoPoint.getLongitude());
+        }
+    }
 
-        LatLng latLng = new LatLng(latitude, longitude);
+    private void adjustmentAccordingToMapType() {
+        if (mShowMapType == ShowMapType.READ_LOCATION) {
+            mLastGeoPoint = new GeoPoint(getArguments().getDouble(LATITUDE), getArguments().getDouble(LONGITUDE));
+            sendGroupIcon.setVisibility(View.GONE);
+            driveGroupIcon.setVisibility(View.VISIBLE);
+        } else {
+            mLastGeoPoint = mCurrentGeoPoint;
+            setAddressStrip(mLastGeoPoint);
+        }
+    }
 
-        marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+    private boolean isInternetConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            return true;
+        } else
+            return false;
+    }
 
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        // Define the criteria how to select the locatioin provider -> use
-        // default
-        Criteria criteria = new Criteria();
-
+    public static void takeScreenshot(OnGetPicture listener) {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            provider = locationManager.getBestProvider(criteria, true);
-        } catch (Exception e) {
-            provider = locationManager.getBestProvider(criteria, false);
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View rootView = G.currentActivity.getWindow().getDecorView().getRootView();
+            rootView.setDrawingCacheEnabled(true);
+            Bitmap screenshot = Bitmap.createBitmap(rootView.getDrawingCache());
+            rootView.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            screenshot.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            listener.getBitmap(screenshot);
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
         }
-
-        location = locationManager.getLastKnownLocation(provider);
-        //locationManager.requestLocationUpdates(provider, 60, 10, this);
-        onLocationChanged(location);
-
-
-        if (mode == Mode.sendPosition) {
-
-
-            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-
-                @SuppressLint("MissingPermission")
-                public void onMyLocationChange(Location location) {
-
-
-                    updatePosition[0] = false;
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                    if (marker != null) {
-                        marker.remove();
-                    }
-
-                    LatLng la = new LatLng(latitude, longitude);
-
-                    marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
-
-                    try {
-                        accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    mMap.setOnMyLocationChangeListener(null);
-                }
-            });
-
-
-            mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @SuppressLint("MissingPermission")
-                @Override
-                public void onCameraChange(CameraPosition cameraPosition) {
-
-                    if (updatePosition[0]) {
-                        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
-
-                        LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
-                        latitude = mapCenter.latitude;
-                        longitude = mapCenter.longitude;
-
-
-                        mMap.getUiSettings().setCompassEnabled(true);
-
-
-                        accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
-
-                        if (marker != null) {
-                            marker.remove();
-
-                        }
-
-                        marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
-           /*             if (marker.getPosition().latitude == fixLat && marker.getPosition().longitude == fixLong) {
-                            mMap.setMyLocationEnabled(false);
-                        } else {
-                            mMap.setMyLocationEnabled(true);
-                        }*/
-
-                    } else {
-                        updatePosition[0] = true;
-                    }
-                }
-            });
-
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                public void onMapClick(LatLng latLng) {
-
-
-                    updatePosition[0] = false;
-                    latitude = latLng.latitude;
-                    longitude = latLng.longitude;
-
-                    if (marker != null) {
-                        marker.remove();
-                    }
-                    marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
-
-
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                }
-            });
-
-            mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                @SuppressLint("MissingPermission")
-                @Override
-                public boolean onMyLocationButtonClick() {
-
-                    Location location = mMap.getMyLocation();
-
-                    if (location == null) return false;
-
-                    updatePosition[0] = false;
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                    if (marker != null) {
-                        marker.remove();
-                    }
-
-                    LatLng la = new LatLng(latitude, longitude);
-
-                    marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
-
-
-                    return false;
-
-
-                }
-            });
-
-            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-                @SuppressLint("MissingPermission")
-                @Override
-                public void onCameraIdle() {
-                    try {
-                        if (mode == Mode.sendPosition) {
-
-                            Location loc1 = new Location("");
-                            loc1.setLatitude(marker.getPosition().latitude);
-                            loc1.setLongitude(marker.getPosition().longitude);
-
-                            Location loc2 = new Location("");
-                            loc2.setLatitude(location.getLatitude());
-                            loc2.setLongitude(location.getLongitude());
-
-                            if (loc1.distanceTo(loc2) > 35) {
-                                mMap.setMyLocationEnabled(true);
-                            } else {
-                                mMap.setMyLocationEnabled(false);
-                            }
-                        }
-                    } catch (Exception e) {
-                        mMap.setMyLocationEnabled(true);
-                    }
-
-                }
-            });
-
-            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                @Override
-                public void onMapLoaded() {
-                    rvSendPosition.setEnabled(true);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (latitude == null || longitude == null) {
-
-            G.currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.set_position), false);
-
-                }
-            });
-        } else {
-
-            switch (view.getId()) {
-                case R.id.mf_rv_send_position:
-                    try {
-
-                        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                            @Override
-                            public void onSnapshotReady(Bitmap bitmap) {
-
-                                String path = saveMapToFile(bitmap);
-
-                                close();
-
-                                if (path.length() > 0) {
-                                    //ActivityChat activity = (ActivityChat) mActivity;
-                                    //activity.sendPosition(latitude, longitude, path);
-
-                                    if (G.iSendPositionChat != null) {
-                                        G.iSendPositionChat.send(latitude, longitude, path);
-                                    }
-
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        close();
-                        //ActivityChat activity = (ActivityChat) mActivity;
-                        //activity.sendPosition(latitude, longitude, null);
-
-                        if (G.iSendPositionChat != null) {
-                            G.iSendPositionChat.send(latitude, longitude, null);
-                        }
-                    }
-
-                    break;
-
-                case R.id.mf_fab_openMap:
-                    try {
-                        String uri = "google.navigation:q=" + latitude + "," + longitude;
-                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-                        startActivityForResult(intent, 500);
-                    } catch (ActivityNotFoundException e) {
-                        //ignore
-                    }
-                    break;
-
-
-            }
-
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        try {
-            if (mode == Mode.seePosition) {
-                Location loc1 = new Location("");
-                loc1.setLatitude(marker.getPosition().latitude);
-                loc1.setLongitude(marker.getPosition().longitude);
-
-                Location loc2 = new Location("");
-                loc2.setLatitude(location.getLatitude());
-                loc2.setLongitude(location.getLongitude());
-
-
-                txtDistance.setText(String.format("%.1f", loc1.distanceTo(loc2)) + " " + getResources().getString(R.string.map_distance) + " ");
-
-
-            }
-
-        } catch (Exception e) {
-        }
-
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    public enum Mode {
-        sendPosition, seePosition
     }
 
     public interface OnGetPicture {
-
         void getBitmap(Bitmap bitmap);
     }
 
-    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        OnGetPicture listener;
-
-        public DownloadImageTask(OnGetPicture listener) {
-            this.listener = listener;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-
-            if (listener != null) {
-                listener.getBitmap(result);
-            }
-        }
+    enum ShowMapType {
+        SEND_LOCATION, READ_LOCATION
     }
+
 }

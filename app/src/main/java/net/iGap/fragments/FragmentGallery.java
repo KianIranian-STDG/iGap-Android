@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -29,6 +31,7 @@ import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.AttachFile;
@@ -112,6 +115,8 @@ public class FragmentGallery extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout rootView = view.findViewById(R.id.gallery_rootview);
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         if (getArguments() != null) {
             mGalleryMode = GalleryMode.valueOf(getArguments().getString(MODE_KEY));
             mFolderName = getArguments().getString(FOLDER_KEY, null);
@@ -264,7 +269,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setupGalleryWithVideoAdapter(View view, RecyclerView rvGallery) {
-        mGalleryVideoAdapter = new AdapterGalleryVideo(isSubFolder);
+        mGalleryVideoAdapter = new AdapterGalleryVideo(isSubFolder,getContext());
         rvGallery.setAdapter(mGalleryVideoAdapter);
         mGalleryVideoAdapter.setListener(new GalleryItemListener() {
             @Override
@@ -483,7 +488,9 @@ public class FragmentGallery extends BaseFragment {
 
     private void showNoItemInGallery(View rv, View view) {
         rv.setVisibility(View.GONE);
-        view.findViewById(R.id.tv_no_item).setVisibility(View.VISIBLE);
+        TextView tv_no_item = view.findViewById(R.id.tv_no_item);
+        tv_no_item.setTextColor(Theme.getColor(Theme.key_title_text));
+        tv_no_item.setVisibility(View.VISIBLE);
     }
 
     private void openGallerySubDirectory(GalleryMode mode, String path, String id) {
@@ -519,11 +526,11 @@ public class FragmentGallery extends BaseFragment {
     private void showSortDialog() {
         if (getContext() == null) return;
 
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.date);
-        items.add(R.string.name);
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.date));
+        items.add(getString(R.string.name));
 
-        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+        new TopSheetDialog(getActivity()).setListData(items, -1, position -> {
             switch (position) {
                 case 0:
                     if (!isMusicSortedByDate) {

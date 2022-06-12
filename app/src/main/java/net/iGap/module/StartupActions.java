@@ -20,11 +20,11 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.LookUpClass;
 import net.iGap.realm.RealmDataUsage;
@@ -41,6 +41,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import io.realm.CompactOnLaunchCallback;
@@ -48,6 +49,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import net.iGap.messenger.theme.Theme;
 //import ir.radsense.raadcore.Raad;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -71,6 +73,7 @@ import static net.iGap.G.isSaveToGallery;
 import static net.iGap.G.selectedLanguage;
 import static net.iGap.G.updateResources;
 import static net.iGap.G.userTextSize;
+import static net.iGap.messenger.theme.Theme.DARK_GREEN_THEME;
 
 /**
  * all actions that need doing after open app
@@ -372,7 +375,7 @@ public final class StartupActions {
 
         /** clear map cache and use from new map tile url */
         if (preferences.getBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE_GOOGLE, true)) {
-            FragmentiGapMap.deleteMapFileCash();
+            NearbyFragment.deleteMapFileCash();
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE_GOOGLE, false);
             editor.apply();
@@ -383,7 +386,7 @@ public final class StartupActions {
             checkTimeForAutoTheme(preferences);
         }
 
-        Theme.setThemeColor();
+        //Theme.setThemeColor();
 
         // setting for show layout vote in channel
         G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
@@ -430,9 +433,9 @@ public final class StartupActions {
             if (currentTime.getTime() > time1.getTime() && currentTime.getTime() < time2.getTime()) {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
-                G.themeColor = Theme.DARK;
+                G.themeColor = DARK_GREEN_THEME;
             } else {
-                G.themeColor = Theme.DARK;
+                G.themeColor = DARK_GREEN_THEME;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -453,7 +456,7 @@ public final class StartupActions {
      */
     private void languageDetection(SharedPreferences sharedPreferences) {
 
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
 
         switch (language) {
             case "فارسی":
@@ -484,7 +487,7 @@ public final class StartupActions {
 //                Raad.language = selectedLanguage;
 //                Raad.isFA = false;
                 break;
-            case "Russian":
+            case "русский":
                 selectedLanguage = "ru";
                 HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
@@ -510,13 +513,6 @@ public final class StartupActions {
 
             case "آذری":
                 selectedLanguage = "iw";
-                HelperCalander.isPersianUnicode = true;
-                G.isAppRtl = true;
-//                Raad.language = selectedLanguage;
-//                Raad.isFA = true;
-                break;
-            case "پشتو":
-                selectedLanguage = "ps";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
 //                Raad.language = selectedLanguage;

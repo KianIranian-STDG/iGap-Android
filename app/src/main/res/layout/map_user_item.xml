@@ -47,7 +47,6 @@
                         android:gravity="left"
                         android:singleLine="true"
                         android:text="NearBy User "
-                        android:textColor="?attr/iGapTitleTextColor"
                         android:textSize="@dimen/dp16" />
 
 
@@ -57,7 +56,6 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
                         android:gravity="end"
-                        android:textColor="?attr/iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
                 </LinearLayout>
@@ -72,14 +70,13 @@
                     android:gravity="center_vertical|start"
                     android:singleLine="true"
                     android:tag="menu"
-                    android:textColor="?attr/iGapSubtitleTextColor"
                     android:textSize="@dimen/dp12" />
             </RelativeLayout>
 
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/txt_arrow_list_map"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
@@ -97,6 +94,6 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/dp60"
         android:layout_marginLeft="@dimen/dp60"
-        android:background="?iGapDividerLine" />
+        android:background="@color/key_light_gray" />
 
 </LinearLayout>

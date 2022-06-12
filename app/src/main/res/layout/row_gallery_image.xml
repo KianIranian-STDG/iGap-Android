@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_shared_media_video"
         android:padding="@dimen/dp8"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:singleLine="true"
         android:paddingLeft="@dimen/dp4"

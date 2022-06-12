@@ -6,7 +6,7 @@
     <data>
 
         <import type="net.iGap.G" />
-        <import type="net.iGap.module.Theme" />
+        <import type="net.iGap.messenger.theme.Theme" />
 
     </data>
 
@@ -32,7 +32,7 @@
             app:layout_constraintDimensionRatio="3:1"
             app:cardCornerRadius="3dp"
             app:cardUseCompatPadding="true"
-            app:cardBackgroundColor="@{G.themeColor == Theme.DARK ? @color/chat_item_receive_dark : @color/kuknos_WH_itembg}">
+            app:cardBackgroundColor="@{Theme.isDark() || Theme.isNight()? @color/key_gray : @color/key_light_gray}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                     android:text="123"
                     android:textSize="@dimen/dp12"
                     android:gravity="center"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:singleLine="true"
                     android:visibility="gone"
                     android:layout_marginRight="@dimen/dp8"
@@ -72,7 +72,7 @@
                     app:layout_constraintVertical_chainStyle="packed"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyleGray"
+                    style="@style/baseFontIcon"
                     android:id="@+id/view_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     android:visibility="gone"
                     android:layout_marginRight="@dimen/dp2"
                     android:layout_marginLeft="@dimen/dp8"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintRight_toLeftOf="@+id/view"/>
@@ -96,7 +96,7 @@
                     android:minHeight="@dimen/dp24"
                     android:text="Source"
                     android:textSize="@dimen/dp12"
-                    android:textColor="@color/news_red"
+                    android:textColor="@{Theme.getColor(Theme.key_red)}"
                     android:gravity="center|right"
                     android:layout_marginRight="@dimen/dp8"
                     app:layout_constraintTop_toTopOf="@+id/image"
@@ -113,7 +113,6 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:layout_marginLeft="@dimen/dp8"
-                    android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintTop_toTopOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
@@ -131,7 +130,6 @@
                     android:gravity="center|right"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginLeft="@dimen/dp8"
-                    android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintRight_toRightOf="@+id/source"
                     app:layout_constraintTop_toBottomOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -146,7 +144,7 @@
                     android:text="Title"
                     android:textSize="@dimen/dp14"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/black"
                     android:lines="2"
                     android:maxLines="2"
                     android:ellipsize="end"

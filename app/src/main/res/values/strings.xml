@@ -146,7 +146,7 @@
     <!-- setting -->
     <string name="st_username">Username</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>
-    <string name="st_title_Privacy_Security">Privacy and Security</string>
+    <string name="PrivacySettings">Privacy and Security</string>
     <string name="st_title_message">Message Room</string>
     <string name="st_title_message_textSize">Text Message Size</string>
     <string name="st_chatBackground">Chat Background</string>
@@ -194,7 +194,7 @@
     <string name="Security">Security</string>
     <string name="Passcode_Lock">Pass Code Lock</string>
     <string name="Two_Step_Verification">Two-Step Verification</string>
-    <string name="Active_Sessions">Active Sessions</string>
+    <string name="ActiveSessions">Active Sessions</string>
     <string name="Account_Self_destruction">Account self-destructs</string>
 
     <!-- notification and sound group -->
@@ -432,8 +432,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="please_wait">Please Wait.</string>
-    <string name="Invite_Friends">Invite Friends</string>
-    <string name="iGap_FAQ">iGap FAQs</string>
+    <string name="InviteFriends">Invite Friends</string>
+    <string name="iGapFAQ">iGap FAQs</string>
     <string name="Documents">Documents</string>
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>
@@ -565,7 +565,7 @@ Want to get it?</string>
     <string name="price">Price</string>
     <string name="gif_selected_for_send">the GIF selected to send</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
-    <string name="payment_userScore">Your Score</string>
+    <string name="UserScore">Your Score</string>
     <string name="payment_spentScore">Spending Score: </string>
     <string name="payment_price">discount: </string>
     <!-- New String -->
@@ -734,7 +734,7 @@ Want to get it?</string>
     <string name="voice_calls">iGap Voice Call</string>
     <string name="video_calls">iGap Video Call</string>
     <string name="map">Map</string>
-    <string name="igap_nearby">Nearby</string>
+    <string name="iGapNearBy">Nearby</string>
     <string name="No_messages_here_yet">No messages here yet…</string>
     <string name="mandatory">(Required)</string>
     <string name="desc_group_chanel">Description (Optional)</string>
@@ -865,7 +865,7 @@ Want to get it?</string>
 
     <string name="audio">Audio</string>
 
-    <string name="data_storage">Data Storage</string>
+    <string name="DataSettings">Data Storage</string>
 
 
     <string name="limit_for_set_username">Limit time for change Username</string>
@@ -895,7 +895,7 @@ Want to get it?</string>
     <string name="st_24_Clock">24 hour clock</string>
     <string name="Theme_Dark">Dark Theme</string>
     <string name="two_step_pass_code">PassCode Lock</string>
-    <string name="biometric_unlock">Biometric unlock</string>
+    <string name="unlock_with_fingerPrint">Unlock With FingerPrint</string>
     <string name="change_pass_code">Change PassCode</string>
     <string name="auto_lock">Auto-lock</string>
     <string name="allow_screen_capture">Allow Screen Capture</string>
@@ -905,9 +905,6 @@ Want to get it?</string>
     <string name="Fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="Auto_lock_description">The app will be locked after each time you choose and you need to unlock it at the beginning.</string>
     <string name="Allow_Screen_Capture_description">If enabled, you can take screenshots of the app, but the system will display your chats in the task switcher even when the passcode is on. You may need to restart the app for this to take effect.</string>
-    <string name="set_pass_code_description">When you set a pass code or pattern, a lock icon will appear on top of the main chats page. Tap it to lock or unlock the app.
-    \nNote: you can set only numbers as a PIN or a combination of numbers and letters as a Password with no restriction. \nIf you forget your pass code, you just need to log out once and log in again with no need to enter the PIN/Password.</string>
-
     <string name="forgot_pin_desc">If you have forgotten your PIN/Password, there is no way to recover but only to log out and log in again. Are you sure to log out?</string>
     <string name="forgot_pin_title">Forgot PIN/Password?</string>
     <string name="enter_pass_code">Enter your passcode</string>
@@ -965,7 +962,7 @@ Want to get it?</string>
     <string name="zighade">Thul Qidah</string>
     <string name="zihaje">Thul Hijjah</string>
 
-    <string name="st_dark_theme">Dark Theme</string>
+    <string name="st_dark_theme">System Dark Mode</string>
     <string name="dont_ask_again">Understood</string>
     <string name="attention">Attention</string>
     <string name="content_attention_dialog">Note: People on the map will be displayed with a 500-meter error. So no worries</string>
@@ -1134,7 +1131,7 @@ Want to get it?</string>
     <string name="start">Start</string>
     <string name="bot">Bot</string>
     <string name="back_to_menu">back to main menu</string>
-    <string name="igap_update">Update</string>
+    <string name="iGapUpdate">Update</string>
     <string name="empty_text_dr_bot">Welcome to iGap Smart Intelligence Assistant!</string>
     <string name="hashtag">Hashtag</string>
     <string name="deprecated">Version is deprecated please update to use</string>
@@ -1358,7 +1355,7 @@ Want to get it?</string>
     <string name="enter_your_card_number">Enter your card number</string>
     <string name="enter_your_sheba_number">Enter your IBAN number</string>
 
-    <string name="language">Language</string>
+    <string name="Language">Language</string>
     <string name="app_version">Version</string>
     <string name="logout">Logout</string>
 
@@ -1454,7 +1451,7 @@ Want to get it?</string>
     <string name="cache">Cache</string>
     <string name="auto_play_media">Auto-play Media</string>
     <string name="auto_download_media">Auto-download Media</string>
-    <string name="chat_setting">Chat Settings</string>
+    <string name="ChatSettings">Chat Settings</string>
     <string name="terms_and_condition">By pressing the start button you will accept %s</string>
     <string name="terms_and_condition_clickable">rules and regulations</string>
     <string name="add_bank_card">Add Your Card Here!</string>
@@ -1463,7 +1460,7 @@ Want to get it?</string>
     <string name="add_new_subscriber">Add Subscriber</string>
     <string name="financial_report">Financial Report</string>
     <string name="fag">FAQ</string>
-    <string name="cloud">Cloud</string>
+    <string name="UserCloud">Your Cloud</string>
     <string name="score">Score</string>
     <string name="Credit">Credit</string>
     <string name="read_all">Read All</string>
@@ -1488,7 +1485,7 @@ Want to get it?</string>
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
     <string name="groups_in_common">Groups in Common</string>
-    <string name="register_with_barcode_scan">Login with barcode scan</string>
+    <string name="BarcodeScan">Login with barcode scan</string>
     <string name="one_number">1</string>
     <string name="two_number">2</string>
     <string name="three_number">3</string>
@@ -1968,6 +1965,7 @@ Want to get it?</string>
     <string name="elecBill_error_zeroResultBill">No bills is registered under your name.</string>
     <string name="elecBill_error_notPossible">This action is Not available at the moment.</string>
     <string name="elecBill_success_title">Success</string>
+    <string name="success_title">Successful operation</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
     <string name="elecBill_main_serviceMode">Service Bills</string>
     <string name="elecBill_main_PhoneMode">Phone Bills</string>
@@ -2173,7 +2171,7 @@ Want to get it?</string>
     <string name="file_manager_image_desc">To send images file</string>
     <string name="file_manager_video_desc">To send videos file</string>
     <string name="file_manager_music">To send audios file</string>
-    <string name="folder">Folder</string>
+    <string name="Filters">Folder</string>
     <string name="internal_storage">Internal storage</string>
     <string name="external_storage">External storage</string>
     <string name="file_manager">File Manager</string>
@@ -2290,9 +2288,6 @@ Want to get it?</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please try later</string>
-    <string name="access_folder">Unauthorized Folder</string>
-    <string name="restrict_folder">Access to this folder is restricted.</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Story</string>
     <string name="stories">histoires</string>
@@ -2767,7 +2762,7 @@ Want to get it?</string>
     <string name="manually_enter_code">Manually enter code</string>
     <string name="acceptor_name">Acceptor name</string>
     <string name="acceptor_code">Acceptor code</string>
-    <string name="please_enter_desired_amount">Please enter desired amount in Rials:</string>
+    <string name="please_enter_desired_amount">Please enter desired amount:</string>
     <string name="confirm">Confirm</string>
     <string name="you_have_not_specified_the_amount">You have not specified the amount</string>
     <string name="the_amount_can_not_be_less_than_1000_rials">The amount can not be less than 1000 Rials</string>
@@ -2776,13 +2771,95 @@ Want to get it?</string>
         <item>Electricity</item>
         <item>Gas</item>
     </string-array>
-    <string name="bio_error">Bio not verified</string>
-    <string name="bio_added">Bio verified</string>
+
+    <!-- qrCode -->
+    <string name="qr_title">Scan From Mobile IGap</string>
+    <string name="qr_steps">1. Open IGap on your phone\n\n 2. Go to Profile > Login With QR Scan\n\n 3. Scan this image to Log In</string>
+
+    <!-- contact -->
+    <string name="contact_first_name">First Name</string>
+    <string name="contact_last_name">Last Name</string>
+    <string name="contact_choose_country">Choose a country</string>
+    <string name="contact_last_view">Last View Time</string>
+    <string name="add_folder">Add Folder</string>
+    <string name="folder_name">Folder Name</string>
+    <string name="valid_message">Allowed Conversations</string>
+    <string name="add_message">Add Conversation</string>
+    <string name="invalid_message">Unauthorized Conversations</string>
+    <string name="not_add_message">Do Not Add Conversations</string>
+
+    <string name="search_users_groups">Search for users and groups ...</string>
+    <string name="non_contacts">Non Contacts</string>
+    <string name="groups">Groups</string>
+    <string name="channels">Channels</string>
+    <string name="bots">Bots</string>
+
+    <string name="green">Green</string>
+    <string name="dark">Dark</string>
+    <string name="red">Red</string>
+    <string name="pink">Pink</string>
+    <string name="purple">Purple</string>
+    <string name="blue">Blue</string>
+    <string name="yellow">Yellow</string>
+    <string name="orange">Orange</string>
+    <string name="gray">Gray</string>
+
+    <string name="UserWallet">Your Wallet</string>
+    <string name="FontSizePreviewReply">It\'s one of the best messengers I\'ve ever used!  &#129335;</string>
+    <string name="Blocked_Users">Blocked Users</string>
+    <string name="NotificationsAndSounds">Notifications and Sounds</string>
+    <string name="PassCode_Lock">Pass Code Lock</string>
+    <string name="data_usage">Data Usage</string>
+    <string name="userName_available">Username is available</string>
+    <string name="bio_content_count">The Bio should be at least 180 character</string>
+    <string name="near_by_users_around_you">Users around you</string>
+    <string name="near_by_igaps_around_me">IGAPs around me</string>
+    <string name="near_by_header_desc">If you do not use your account during any of the specified periods, your account will be automatically deleted and deleted forever</string>
+    <string name="near_by_my_account_is_visible">My account is visible</string>
+    <string name="near_by_show_more">Show more</string>
+    <string name="near_by_contact_name">Contact name</string>
+    <string name="near_by_distance_from_the_user">Distance from the user</string>
+    <string name="contact">contact permission</string>
+    <string name="PhoneHidden">Unknown</string>
+    <string name="Username">Username</string>
+    <string name="UserBioDetail">Add a few words about yourself</string>
+    <string name="UserBio">Bio</string>
+    <string name="help">Help</string>
+    <string name="ManageCloud">Manage Your Cloud</string>
+    <string name="AccDescrMoreOptions">More options</string>
+    <string name="Done">Done</string>
+    <string name="UsernamePlaceholder">Your Username</string>
+    <string name="NamePlaceholder">Your Name</string>
+    <string name="UsernameHelp">If You choose a username, other people will be able to find you by this username and contact you without knowing your phone number.\n\nYou can use **a–z**, **0–9** and underscores. Minimum length is **5** characters.</string>
+    <string name="UsernameInvalid">Sorry, this username is invalid.</string>
+    <string name="UsernameInvalidStartNumber">Sorry, a username can\'t start with a number.</string>
+    <string name="UsernameInvalidLong">The username must not exceed 32 characters.</string>
+    <string name="NameInvalidLong">The Name must not exceed 32 characters.</string>
+    <string name="UsernameAvailable">%1$s is available.</string>
+    <string name="UsernameChecking">Checking username...</string>
+    <string name="NameChecking">Checking name...</string>
+    <string name="OK">OK</string>
+    <string name="UsernameInvalidShort">A username must have at least 5 characters.</string>
+    <string name="UsernameInUse">Sorry, this username is already taken.</string>
+    <string name="UserBioInfo">You can add a few lines about yourself. Anyone who opens your profile will see this text.</string>
+    <string name="NotificationsOn">On</string>
+    <string name="NotificationsOff">Off</string>
     <string name="user_name_error">Username not confirmed</string>
-    <string name="user_name_added">Username confirmed</string>
     <string name="update_lock_error">"Request out of number"</string>
-    <string name="seted_gender">Gender confirmed</string>
     <string name="gender_error">Gender not confirmed</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="privacy_group_channel">Change who can add you to groups and channels.</string>
+    <string name="privacy_active_session">Control your sessions on other devices.</string>
+    <string name="AccDescrUserOption">User options</string>
+    <string name="BlockUser">Block user</string>
+    <string name="block_desc">Blocked users will not be able to contact you and will not see your Last Seen time.</string>
+    <string name="Unblock">Unblock</string>
+    <string name="blocked_users">%d blocked users</string>
+    <string name="Enable">On</string>
+    <string name="block_users">Blocked Users</string>
+    <string name="NoResult">No Results</string>
+    <string name="EnabledPasswordText">You have enabled Two-Step verification.\nYou\'ll need the password you set up here to log in to your iGap account.</string>
     <string name="seted_name">Name confirmed</string>
     <string name="name_error">Name not verified</string>
     <string name="email_error">Wrong Email Address</string>
@@ -2808,6 +2885,64 @@ Want to get it?</string>
     <string name="read_more">read More</string>
     <string name="at_least_5_characters_are_required_for_a_global_search">At least 5 characters are required for a global search</string>
     <string name="faild_payment">Sorry, an error occurred and try again</string>
+
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="seted_gender">Gender confirmed</string>
+    <string name="st_title_Privacy_Security">Privacy Security</string>
+    <string name="data_storage">Data Storage</string>
+    <string name="language">Language</string>
+    <string name="igap_nearby">Near by</string>
+    <string name="igap_update">Update</string>
+    <string name="register_with_barcode_scan">Register with barcode scan</string>
+    <string name="folder">Folder</string>
+    <string name="payment_userScore">Score</string>
+    <string name="Invite_Friends">Invite Friends</string>
+    <string name="chat_setting">chat setting</string>
+    <string name="cloud">cloud</string>
+    <string name="iGap_FAQ">iGap FAQ</string>
+    <string name="Continue">Continue</string>
+    <string name="LoginPassword">Login Password</string>
+    <string name="VerificationCode">Verification Code</string>
+    <string name="EnterCode">Enter Code</string>
+    <string name="EmailPasswordConfirmText2">To complete Two-Step Verification Setup, check your email (don\'t forget the spam folder) and enter the code we just sent you.</string>
+    <string name="RestoreEmailTroubleNoEmail">Having trouble accessing your email?</string>
+    <string name="RestorePasswordNoEmailTitle">Sorry</string>
+    <string name="RestoreEmailTroubleText">If you can\'t restore access to your email, your remaining options are either to remember your password or to reset your account.</string>
+    <string name="Active_Sessions">Active Sessions</string>
+    <string name="icon_delete">delete</string>
+    <string name="NoOtherSessions">No other active sessions</string>
+    <string name="NoOtherSessionsInfo">You can log in to iGap from other mobile, tablet and desktop devices, using the same phone number. All your data will be instantly synchronized.</string>
+    <string name="AreYouSureSessions">Are you sure you want to terminate all other sessions?</string>
+    <string name="AreYouSureSessionsTitle">Terminate sessions</string>
+    <string name="Terminate">Terminate</string>
+    <string name="Cancel">Cancel</string>
+    <string name="TerminateSessionText">Are you sure you want to terminate this session?</string>
+    <string name="AreYouSureSessionTitle">Terminate session</string>
+    <string name="TerminateAllSessions">Terminate All Other Sessions</string>
+    <string name="AuthAnotherClient">Scan QR Code</string>
+    <string name="ClearOtherSessionsHelp">Logs out all devices except for this one.</string>
+    <string name="TerminateSessionInfo">Tap on a session to terminate</string>
+    <string name="LoginAttemptsInfo">The devices above have no access to your messages. The code was entered correctly, but no correct password was given.</string>
+    <string name="CurrentSession">Current Session</string>
+    <string name="OtherSessions">Active sessions</string>
+    <string name="LoginAttempts">Incomplete login attempts</string>
+    <string name="Online">Online:</string>
+    <string name="UnofficialApp">unofficial app</string>
+    <string name="please_try_later">Please Try Later</string>
+    <string name="selectLanguage">select Language</string>
+    <string name="score_icloud">My Score &amp; Cloud</string>
+    <string name="iGap_features">iGap Features</string>
+    <string name="set_Email">Enter your Email</string>
+    <string name="gender">Enter your gender</string>
+    <string name="set_referral_code">Enter your referral cell phone</string>
+    <string name="day">Day</string>
+    <string name="night">night</string>
+    <string name="cyan">cyan</string>
+    <string name="biometric_unlock">Biometric unlock</string>
+    <string name="set_pass_code_description">When you set a pass code or pattern, a lock icon will appear on top of the main chats page. Tap it to lock or unlock the app.
+\nNote: you can set only numbers as a PIN or a combination of numbers and letters as a Password with no restriction. \nIf you forget your pass code, you just need to log out once and log in again with no need to enter the PIN/Password.</string>
     <string name="biometric_password_description">By activating this option, the active biometric password on your phone (fingerprint, face recognition or iris scan), will be applied to the application</string>
     <string name="biometric_password">Biometric password</string>
     <string name="set_now">Set now</string>
@@ -2823,6 +2958,31 @@ Want to get it?</string>
     <string name="load_sticker_types_error_message">types filter not loaded</string>
 
     <string name="locating">Receiving current position…</string>
+    <string name="send_message">send Message</string>
+    <string name="convert_to_text">convert to text</string>
+    <string name="permission_to_this_section_temporarily_denied">Access to folders from this section is temporarily restricted</string>
+    <string name="convert_voice_message">Convert voice message to text</string>
+    <string name="convert_text_message">Convert text message to voice</string>
+    <string name="convert_error">This structure cannot be analyzed</string>
+    <string name="convert_text_to_voice" >convert to voice</string>
+    <string name="uploading_file_to">Uploading file to</string>
+    <string name="upload_canceled">Upload canceled</string>
+    <string name="upload_failed">Upload failed</string>
+    <string name="upload_finished">Upload finished</string>
+    <string name="igap_is_uploading_file">iGap is Uploading file</string>
+    <string name="you_are_in_uploading_state">You are uploading file and it is not possible to change your account.\n Stop uploading to change account</string>
+    <string name="set_owner">Transfer ownership</string>
+    <string name="change_owner_message">Are you sure about this request?</string>
     <string name="enable_sending_non_media_file_soon">Ability to send non-media files will be enabled soon</string>
+    <string name="search_main">Main</string>
+    <string name="search_global">Global</string>
 
+    <string name="change_phone_number">Phone Number is changed</string>
+    <string name="invalid_phone_number">Phone Number is used in another account</string>
+    <string name="changePhoneNumber">Change Phone Number</string>
+    <string name="change_phone_description">You can change your iGap number. After changing all the content of the cloud, contacts, channels, group will be transferred to the new number. Note that it is not possible to change the number if the entered number has iGap</string>
+    <string name="sound_empty">The sound is empty</string>
+    <string name="ai_error">The message was sent by voice due to a server error</string>
+    <string name="powered_by_aipaa">Powered by AIPAA</string>
+    <string name="Powered_by_aipa">"Reading message "</string>
 </resources>

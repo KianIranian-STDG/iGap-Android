@@ -32,7 +32,6 @@
         android:textSize="@dimen/standardTextSize"
         android:paddingLeft="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
-        android:textColor="?iGapTitleTextColor"
         tools:text="حساب پارسیان" />
 
 </RelativeLayout>

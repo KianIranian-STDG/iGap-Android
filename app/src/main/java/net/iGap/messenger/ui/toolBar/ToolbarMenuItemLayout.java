@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class ToolbarMenuItemLayout extends FrameLayout {
         super(context);
 
         backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
-        setBackgroundColor(Theme.getInstance().getRootColor(context));
+        setBackgroundColor(Theme.getColor(Theme.key_popup_background));
 
         scrollView = new ScrollView(context);
         scrollView.setVerticalScrollBarEnabled(false);
@@ -164,7 +164,7 @@ public class ToolbarMenuItemLayout extends FrameLayout {
 
     @Override
     public void setBackgroundDrawable(Drawable drawable) {
-        backgroundColor = Color.WHITE;
+        backgroundColor = Theme.getColor(Theme.key_popup_background);
         backgroundDrawable = drawable;
     }
 

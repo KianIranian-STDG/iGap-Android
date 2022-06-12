@@ -19,6 +19,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.helper.HelperError;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.request.RequestClientSetDiscoveryItemAgreement;
 import net.iGap.request.RequestInfoPage;
@@ -55,12 +56,16 @@ public class DiscoveryFragmentAgreement extends DialogFragment {
         agreementSlug = getArguments().getString("agreementSlug");
         discoveryField = (DiscoveryItemField) getArguments().getSerializable("discoveryField");
         agreement = view.findViewById(R.id.agreement);
+        agreement.setTextColor(Theme.getColor(Theme.key_title_text));
         scroll_view = view.findViewById(R.id.scroll_view);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
+        emptyRecycle.setTextColor(Theme.getColor(Theme.key_title_text));
         btnPositive = view.findViewById(R.id.btnPositive);
+        btnPositive.setTextColor(Theme.getColor(Theme.key_theme_color));
         btnNegative = view.findViewById(R.id.btnNegative);
+        btnNegative.setTextColor(Theme.getColor(Theme.key_red));
         checkBox = view.findViewById(R.id.fpc_checkBox_trabord);
-
+        checkBox.setTextColor(Theme.getColor(Theme.key_title_text));
         btnPositive.setOnClickListener(v -> onPositiveClicked());
         btnNegative.setOnClickListener(v -> onNegativeClicked());
 

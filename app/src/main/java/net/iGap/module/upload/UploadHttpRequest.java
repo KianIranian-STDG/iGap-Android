@@ -2,15 +2,17 @@ package net.iGap.module.upload;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.OkHttpClientInstance;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -44,7 +46,7 @@ import shadow.org.apache.commons.io.FilenameUtils;
 
 import static net.iGap.api.apiService.ApiStatic.FILE;
 
-public class UploadHttpRequest {
+public class UploadHttpRequest implements EventManager.EventDelegate {
     public String key;
     public UploadObject fileObject;
     private String md5Key;
@@ -60,6 +62,7 @@ public class UploadHttpRequest {
     private String userToken;
     private SharedPreferences preferences;
     private int storeTime;
+
 
     public interface UploadDelegate {
         void onUploadProgress(UploadObject fileObject);
@@ -79,6 +82,7 @@ public class UploadHttpRequest {
         preferences = G.context.getSharedPreferences("file_info", Context.MODE_PRIVATE);
 
         FileLog.i(TAG, "UploadHttpRequest create: " + fileObject.toString());
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_ERROR_IN_SERVICE, this);
     }
 
     public void startUploadProcess() {
@@ -342,9 +346,10 @@ public class UploadHttpRequest {
 
         FileLog.i(TAG, "-----------------------------------------------------------------------------------");
 
-        if (delegate != null) {
-            delegate.onUploadFail(fileObject, exception);
+        if (delegate == null) {
+            delegate = HttpUploader.getInstance();
         }
+        delegate.onUploadFail(fileObject, exception);
     }
 
     public void cancelUpload() {
@@ -369,5 +374,25 @@ public class UploadHttpRequest {
         }
         return cipher;
     }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_UPLOAD_ERROR_IN_SERVICE) {
+
+            Exception exception = (Exception) args[0];
+            boolean inputBoolean = (boolean) args[1];
+            UploadObject uploadObject = (UploadObject) args[2];
+
+            fileObject = uploadObject;
+            if (preferences == null) {
+                preferences = G.context.getSharedPreferences("file_info", Context.MODE_PRIVATE);
+            }
+            if (cancelDownload == null) {
+                cancelDownload = new AtomicBoolean(false);
+            }
+            error(exception, inputBoolean);
+        }
+    }
+
 
 }

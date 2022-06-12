@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/dp2"
     android:layout_marginRight="@dimen/dp4"
     android:layout_marginBottom="@dimen/dp2"
-    android:background="@color/white"
+    android:background="@android:color/white"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="4dp"

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 public class SubmitScoreDialog extends Dialog {
 
@@ -35,10 +36,10 @@ public class SubmitScoreDialog extends Dialog {
         txt_message.setText(message);
         if (isOk) {
             image.setText(R.string.icon_sent);
-            image.setTextColor(getContext().getResources().getColor(R.color.green));
+            image.setTextColor(getContext().getResources().getColor(R.color.dayGreenTheme));
         } else {
             image.setText(R.string.icon_close);
-            image.setTextColor(getContext().getResources().getColor(R.color.red));
+            image.setTextColor(Theme.getColor(Theme.key_red));
         }
 
         ok.setOnClickListener(new View.OnClickListener() {

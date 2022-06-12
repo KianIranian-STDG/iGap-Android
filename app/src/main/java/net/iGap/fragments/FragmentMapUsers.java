@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.MaterialDesignTextView;
@@ -39,8 +41,8 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
-import static net.iGap.fragments.FragmentiGapMap.isBackPress;
-import static net.iGap.fragments.FragmentiGapMap.pageUserList;
+import static net.iGap.messenger.ui.fragments.NearbyFragment.pageUserList;
+
 
 public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBackPressedListener {
 
@@ -70,7 +72,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
-        if (FragmentiGapMap.location != null) {
+        if (NearbyFragment.location != null) {
             getDistanceLoop(0, false);
         }
     }
@@ -83,7 +85,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.igap_nearby))
+                .setDefaultTitle(getString(R.string.iGapNearBy))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -155,22 +157,22 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     }
 
     private void getDistanceLoop(final int delay, boolean loop) {
-        if (loop && FragmentiGapMap.page == pageUserList) {
+        if (loop && NearbyFragment.page == pageUserList) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+                    new RequestGeoGetNearbyDistance().getNearbyDistance(NearbyFragment.location.getLatitude(), NearbyFragment.location.getLongitude());
                     getDistanceLoop(DEFAULT_LOOP_TIME, true);
                 }
             }, delay);
         } else {
-            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+            new RequestGeoGetNearbyDistance().getNearbyDistance(NearbyFragment.location.getLatitude(),NearbyFragment.location.getLongitude());
         }
     }
 
     @Override
     public void doBack() {
-        isBackPress = true;
+        NearbyFragment.isBackPress = true;
         if (btnBack != null) btnBack.performClick();
     }
 
@@ -311,7 +313,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public void onResume() {
         super.onResume();
-        FragmentiGapMap.page = FragmentiGapMap.pageUserList;
+        NearbyFragment.page = pageUserList;
         if (FragmentiGapMap.rippleMoreMap != null) {
             FragmentiGapMap.rippleMoreMap.setVisibility(View.GONE);
         }
@@ -337,6 +339,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             return new MapUserAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.map_user_item, parent, false));
         }
 
+        @SuppressLint("StringFormatInvalid")
         @Override
         public void onBindViewHolder(final MapUserAdapter.ViewHolder holder, int i) {
             final RealmGeoNearbyDistance item = getItem(i);

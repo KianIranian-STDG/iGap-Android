@@ -11,7 +11,6 @@
         android:layout_height="@dimen/dp4"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp8"
-        android:background="?attr/iGapBottomSheetHeaderLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +25,6 @@
         android:paddingTop="@dimen/dp8"
         android:paddingEnd="@dimen/dp16"
         android:paddingBottom="@dimen/dp4"
-        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,11 +39,9 @@
         android:clipToPadding="false"
         android:minHeight="@dimen/dp300"
         android:paddingBottom="60dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_stickerDialog_groupName"
-        app:spanCount="5" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_stickerDialog_groupName"/>
 
     <ImageView
         android:id="@+id/iv_stickerDialog_preview"
@@ -92,7 +88,6 @@
         android:layout_gravity="center"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:text="@string/icon_retry"
-        android:textColor="?attr/iGapTitleTextColor"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"
         app:layout_constraintEnd_toEndOf="@+id/rv_stickerDialog"
@@ -103,9 +98,8 @@
         android:id="@+id/tv_stickerDialog_add"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
-        android:background="?attr/iGapButtonColor"
         android:gravity="center"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         android:visibility="invisible"

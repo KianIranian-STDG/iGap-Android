@@ -40,7 +40,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -49,7 +48,6 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/all"
-                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -57,7 +55,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -66,7 +63,6 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/missed"
-                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -75,7 +71,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -84,7 +79,6 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/incoming"
-                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -92,7 +86,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -101,7 +94,6 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/un_answered"
-                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -110,7 +102,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -119,7 +110,6 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/outgoing"
-                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
             </LinearLayout>
@@ -176,7 +166,6 @@
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginBottom="@dimen/dp52"
         android:text="@string/empty_call"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

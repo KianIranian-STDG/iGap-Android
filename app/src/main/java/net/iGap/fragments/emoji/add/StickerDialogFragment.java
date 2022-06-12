@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +25,7 @@ import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperCalander;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.viewmodel.sticker.StickerDialogViewModel;
 
@@ -40,6 +42,7 @@ public class StickerDialogFragment extends BaseBottomSheet {
     private ProgressBar progressBar;
     private TextView retryView;
     private AnimatedStickerCell stickerCell;
+    private View lineViewTop;
 
     private OnStickerDialogListener listener;
 
@@ -72,19 +75,23 @@ public class StickerDialogFragment extends BaseBottomSheet {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        lineViewTop = view.findViewById(R.id.lineViewTop);
         RecyclerView stickerRecyclerView = view.findViewById(R.id.rv_stickerDialog);
         progressBar = view.findViewById(R.id.fl_stickerDialog_progressContainer);
         groupNameTv = view.findViewById(R.id.tv_stickerDialog_groupName);
+        groupNameTv.setTextColor(Theme.getColor(Theme.key_title_text));
         addOrRemoveTv = view.findViewById(R.id.tv_stickerDialog_add);
+        addOrRemoveTv.setBackgroundColor(Theme.getColor(Theme.key_button_background));
         previewIv = view.findViewById(R.id.iv_stickerDialog_preview);
         stickerCell = view.findViewById(R.id.iv_stickerDialog_lottiePreview);
         retryView = view.findViewById(R.id.retryView);
+        retryView.setTextColor(Theme.getColor(Theme.key_title_text));
         addOrRemoveProgressBar = view.findViewById(R.id.pb_stickerDialog_addOrRemove);
 
-        addOrRemoveProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
-        progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getPrimaryDarkColor(getContext()), PorterDuff.Mode.SRC_IN);
-
+        lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
+        addOrRemoveProgressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_dark_theme_color), PorterDuff.Mode.SRC_IN);
+        stickerRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 5, GridLayoutManager.VERTICAL, false));
         stickerRecyclerView.setAdapter(adapter);
 
         stickerCell.setFailureListener(result -> Log.e(TAG, "setFailureListener: ", result));

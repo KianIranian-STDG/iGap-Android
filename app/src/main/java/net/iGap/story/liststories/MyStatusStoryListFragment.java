@@ -2,7 +2,6 @@ package net.iGap.story.liststories;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,29 +31,22 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
-import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
-import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.story.MainStoryObject;
-import net.iGap.story.PhotoViewer;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
 import net.iGap.story.StoryPagerFragment;
@@ -66,13 +58,10 @@ import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static net.iGap.G.isAppRtl;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
-import static net.iGap.activities.ActivityMain.setMediaLayout;
 
-public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
+public class MyStatusStoryListFragment extends BaseFragment implements StoryCell.DeleteStory, EventManager.EventDelegate {
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
     List<StoryObject> storyProto;
@@ -153,7 +142,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getEventManager().removeObserver(EventManager.STORY_ROOM_IMAGE_UPLOAD, this);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -174,7 +162,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
         FrameLayout rootView = new FrameLayout(new ContextThemeWrapper(context, R.style.IGapRootViewStyle));
         rootView.addView(myStoryToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
-
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();
         recyclerListView.setAdapter(adapter);
@@ -182,6 +170,52 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         recyclerListView.setClipToPadding(false);
         recyclerListView.setVisibility(View.GONE);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
+        recyclerListView.setOnItemLongClickListener((itemView, position) -> {
+            StoryCell storyCell = (StoryCell) itemView;
+            if ((storyCell.getSendStatus() == MessageObject.STATUS_FAILED ||
+                    storyCell.getSendStatus() == MessageObject.STATUS_SENT) && (!storyCell.isRoom() || listMode == 1)) {
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(getResources().getString(R.string.delete_status_update))
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                        .positiveText(R.string.ok)
+                        .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                    recyclerListView.setVisibility(View.GONE);
+
+                    if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED) {
+                        getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
+                    } else {
+                        AbstractObject req = null;
+                        IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
+                        story_delete.storyId = storyCell.getStoryId();
+                        req = story_delete;
+                        getRequestManager().sendRequest(req, (response, error) -> {
+                            if (error == null) {
+                                IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
+                                getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
+                            } else {
+
+                            }
+                        });
+                    }
+
+
+                    dialog.dismiss();
+
+                });
+            }
+            return true;
+        });
+        recyclerListView.setOnItemClickListener((view, position, x, y) -> {
+            StoryCell storyCell = (StoryCell) view;
+            new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, !storyCell.isRoom(), storyCell.isRoom(), false, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex(), 0)).setReplace(false).load();
+        });
+
         rootView.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
 
         progressBar = new ProgressBar(context);
@@ -193,7 +227,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         rootView.addView(actionButtonsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 
         customStatusActionLayout = new FrameLayout(context);
-        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
         customStatusActionLayout.setBackground(customStatusDrawable);
         IconView customStatusAddButton = new IconView(context);
         customStatusAddButton.setIcon(R.string.icon_edit);
@@ -203,7 +237,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_camera);
@@ -413,7 +447,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     }
 
-
     private void hideFloatingButton(boolean hide) {
         if (floatingHidden == hide) {
             return;
@@ -434,69 +467,17 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         animatorSet.start();
     }
 
-
-    @Override
-    public void onClick(View view, int position) {
-        StoryCell storyCell = (StoryCell) view;
-        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, !storyCell.isRoom(), storyCell.isRoom(), false, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex(), 0)).setReplace(false).load();
-    }
-
-    @Override
-    public void onLongClick(View itemView, int position) {
-        StoryCell storyCell = (StoryCell) itemView;
-
-
-        if ((storyCell.getSendStatus() == MessageObject.STATUS_FAILED ||
-                storyCell.getSendStatus() == MessageObject.STATUS_SENT) && (!storyCell.isRoom() || listMode == 1)) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
-                    .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                    .positiveText(R.string.ok)
-                    .onNegative((dialog1, which) -> dialog1.dismiss()).show();
-
-            dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-                progressBar.setVisibility(View.VISIBLE);
-                recyclerListView.setVisibility(View.GONE);
-
-                if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED) {
-                    getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
-                } else {
-                    AbstractObject req = null;
-                    IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
-                    story_delete.storyId = storyCell.getStoryId();
-                    req = story_delete;
-                    getRequestManager().sendRequest(req, (response, error) -> {
-                        if (error == null) {
-                            IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-                            getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
-                        } else {
-
-                        }
-                    });
-                }
-
-
-                dialog.dismiss();
-
-            });
-        }
-
-
-    }
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
-
     @Override
     public void deleteStory(StoryCell storyCell, long storyId, long roomId, boolean isRoom) {
         if (isRoom && listMode == 0) {
             getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.mainFrame, new MyStatusStoryListFragment(roomId, 1)).commit();
             //  new HelperFragment(getActivity().getSupportFragmentManager(), new MyStatusStoryListFragment(1)).setReplace(false).load();
         } else {
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .title(getResources().getString(R.string.delete_status_update))
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
                     .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
                     .positiveText(R.string.ok)
                     .onNegative((dialog1, which) -> dialog1.dismiss()).show();
@@ -530,7 +511,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     public void onStoryClick(StoryCell storyCell) {
         new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, (!storyCell.isRoom() && listMode == 0) || (storyCell.isRoom() && listMode == 1), storyCell.isRoom(), false, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex(), 0)).setReplace(false).load();
     }
-
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
@@ -650,7 +630,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getEventManager().addObserver(EventManager.STORY_ROOM_UPLOAD, this);
     }
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter {
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         public void addRow() {
             rowSize = 0;
@@ -712,7 +692,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 default:
                     cellView = new View(parent.getContext());
             }
-            return new RecyclerListView.ItemViewHolder(cellView, MyStatusStoryListFragment.this);
+            return new RecyclerListView.Holder(cellView);
         }
 
         @Override
@@ -736,9 +716,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                             setDataForStoryCell(storyCell, true, recentRoomStoryCounter, storyRoomProto);
                             storyCell.addIconVisibility(false);
                             if (storyRoomProto.get(recentRoomStoryCounter).status == MessageObject.STATUS_FAILED) {
-                                storyCell.deleteIconVisibility(true, listMode == 0 ? R.string.icon_other_horizontal_dots : R.string.icon_delete);
+                                storyCell.deleteIconVisibility(true, listMode == 0 ? R.string.icon_other_horizontal_dots : R.string.icon_Delete);
                             } else if (storyRoomProto.get(recentRoomStoryCounter).status == MessageObject.STATUS_SENT) {
-                                storyCell.deleteIconVisibility(true, listMode == 0 ? R.string.icon_other_horizontal_dots : R.string.icon_delete);
+                                storyCell.deleteIconVisibility(true, listMode == 0 ? R.string.icon_other_horizontal_dots : R.string.icon_Delete);
                             } else {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                                 if (listMode == 0) {
@@ -754,7 +734,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    headerCell.setTextColor(Theme.getInstance().getSendMessageTextColor(headerCell.getContext()));
+                    headerCell.setTextColor(Theme.getColor(Theme.key_default_text));
                     headerCell.setGravity(Gravity.CENTER);
                     headerCell.setTextSize(12);
                     if (position == recentHeaderRow) {
@@ -804,7 +784,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 } else {
                     storyCell.setData(storyProto.get(position), isRoom, storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
-                    storyCell.deleteIconVisibility(true, R.string.icon_delete);
+                    storyCell.deleteIconVisibility(true, R.string.icon_Delete);
                 }
 
 
@@ -833,7 +813,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 } else {
                     storyCell.setData(storyProto.get(position), isRoom, storyProto.get(position).displayName, storyProto.get(position).profileColor, context, (position + 1) != storyProto.size(), StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
-                    storyCell.deleteIconVisibility(true, R.string.icon_delete);
+                    storyCell.deleteIconVisibility(true, R.string.icon_Delete);
                 }
             }
 
@@ -871,7 +851,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         }
 
         @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int viewType = holder.getItemViewType();
             return viewType != 2;
         }
     }

@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.observers.interfaces.OnComplete;
@@ -79,7 +80,7 @@ public class MyDialog {
             } else if (items.get(position).equals(activity.getString(R.string.unmute)) || items.get(position).equals(activity.getString(R.string.mute))) {
                 if (complete != null) complete.complete(true, "txtMuteNotification", "");
             } else if (items.get(position).equals(activity.getString(R.string.clear_history))) {
-                new MaterialDialog.Builder(activity).title(itemName).titleColor(G.context.getResources().getColor(R.color.toolbar_background)).content(activity.getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(activity).title(itemName).titleColor(Theme.getColor(Theme.key_toolbar_background)).content(activity.getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (complete != null) complete.complete(true, "txtClearHistory", "");

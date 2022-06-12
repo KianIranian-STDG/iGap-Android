@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -96,7 +97,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             songActionTv = itemView.findViewById(R.id.tv_itemSong_action);
             songPrwTv = itemView.findViewById(R.id.tv_itemSong_prw);
             progressBar = itemView.findViewById(R.id.pb_itemSong);
-            progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
         }
 
         void bindTracks(Track track) {
@@ -201,7 +202,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
             });
 
 //            realmDownloadSong.addChangeListener(realm -> );
-            progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
         }
 
         private void playPrw(Track track) {

@@ -9,10 +9,9 @@
         android:id="@+id/lmr_layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="?attr/rootBackgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <View
         android:layout_width="@dimen/dp60"
@@ -25,14 +24,13 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/lmr_txt_Lock"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp18"
         android:padding="8dp"
         android:text="@string/icon_unlock"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="?iGapIconTextColor"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/lmr_btn_mic_layout"
         app:layout_constraintEnd_toEndOf="@+id/lmr_btn_mic_layout"
@@ -40,10 +38,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/lmr_btn_mic_layout"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:background="?attr/iGapAvatarBackground"
         android:text="@string/icon_microphone"
         android:textColor="@color/white"
         android:textSize="24sp"
@@ -58,7 +55,6 @@
         android:layout_height="55dp"
         android:gravity="center"
         android:text="@string/slide_to_cancel_en"
-        android:textColor="?iGapIconTextColor"
         android:textSize="@dimen/dp14"
         app:layout_constraintBottom_toBottomOf="@+id/lmr_layout_bottom"
         app:layout_constraintEnd_toStartOf="@+id/txt_time_mili_secend"
@@ -82,7 +78,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="00:00"
-        android:textColor="?iGapIconTextColor"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/img_pic_record"
@@ -97,7 +92,6 @@
         android:layout_weight="1"
         android:gravity="left"
         android:text="99"
-        android:textColor="?iGapIconTextColor"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/txt_time_record"

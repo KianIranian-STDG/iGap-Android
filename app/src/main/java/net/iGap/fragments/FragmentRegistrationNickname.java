@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
@@ -47,12 +49,12 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
@@ -95,10 +97,16 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.name.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.nameEditText.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.lastNameEditText.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.reagentCountryCode.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.reagentPhoneNumber.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.lastName.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
+        binding.reagentPhoneNumber.setHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
         AppUtils.setProgresColler(binding.prg);
 
-        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, new Theme().getPrimaryColor(getContext()));
+        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, Theme.getColor(Theme.key_theme_color));
 
         viewModel.progressValue.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
@@ -230,6 +238,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             MaterialDialog.Builder imageDialog = new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture)
                     .negativeText(R.string.B_cancel)
                     .items(R.array.profile)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
+                    .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                     .itemsCallback((dialog, view, which, text) -> {
                         switch (which) {
                             case 0:
@@ -278,7 +289,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             //
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
-
+            txtTitle.setTextColor(Theme.getColor(Theme.key_icon));
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);
                 edtSearchView.setIconifiedByDefault(true);

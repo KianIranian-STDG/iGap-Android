@@ -20,8 +20,9 @@ import androidx.databinding.ObservableInt;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.fragments.FragmentMediaPlayer;
+import net.iGap.fragments.FragmentMusicPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
@@ -51,8 +52,8 @@ public class FragmentMediaPlayerViewModel {
     public ObservableInt imgRepeadOneVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt imgMusicPicture = new ObservableInt(View.VISIBLE);
     public ObservableInt imgMusIciconDefault = new ObservableInt(View.VISIBLE);
-    public ObservableInt btnShuffelMusicColor = new ObservableInt(R.attr.iGapTitleTextColor);
-    public ObservableInt btnReplayMusicColor = new ObservableInt(R.attr.iGapTitleTextColor);
+    public ObservableInt btnShuffelMusicColor = new ObservableInt(Theme.getColor(Theme.key_title_text));
+    public ObservableInt btnReplayMusicColor = new ObservableInt(Theme.getColor(Theme.key_title_text));
     public ObservableInt seekBar1 = new ObservableInt();
     public ObservableBoolean txtMusicInfoSingleLine = new ObservableBoolean(true);
     private RippleVisualizerView rippleVisualizerView;
@@ -67,8 +68,8 @@ public class FragmentMediaPlayerViewModel {
 
     public void onClickRippleBack(View v) {
 
-        if (FragmentMediaPlayer.onBackFragment != null) {
-            FragmentMediaPlayer.onBackFragment.onBack();
+        if (FragmentMusicPlayer.onBackFragment != null) {
+            FragmentMusicPlayer.onBackFragment.onBack();
         }
 
     }
@@ -99,7 +100,7 @@ public class FragmentMediaPlayerViewModel {
 
     private void getInfo() {
 
-        FragmentMediaPlayer.onComplete = new OnComplete() {
+        FragmentMusicPlayer.onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, final String MessageTwo) {
 
@@ -139,8 +140,8 @@ public class FragmentMediaPlayerViewModel {
                 } else if (messageOne.equals("Shuffel")) {
                     setShuffleButton();
                 } else if (messageOne.equals("finish")) {
-                    if (FragmentMediaPlayer.onBackFragment != null) {
-                        FragmentMediaPlayer.onBackFragment.onBack();
+                    if (FragmentMusicPlayer.onBackFragment != null) {
+                        FragmentMusicPlayer.onBackFragment.onBack();
                     }
                 }
             }
@@ -160,14 +161,14 @@ public class FragmentMediaPlayerViewModel {
 
     private void popUpMusicMenu() {
 
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.save_to_Music);
-        items.add(R.string.share_item_dialog);
+        List<String> items = new ArrayList<>();
+        items.add(G.fragmentActivity.getString(R.string.save_to_Music));
+        items.add(G.fragmentActivity.getString(R.string.share_item_dialog));
 
-        new TopSheetDialog(G.fragmentActivity).setListDataWithResourceId(items, -1, position -> {
-            if (items.get(position)==R.string.save_to_Music) {
+        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
+            if (items.get(position).equals(G.fragmentActivity.getString(R.string.save_to_Music))) {
                 saveToMusic();
-            } else if (items.get(position)==R.string.share_item_dialog) {
+            } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.share_item_dialog))) {
                 shareMusic();
             }
         }).show();
@@ -238,8 +239,8 @@ public class FragmentMediaPlayerViewModel {
 
             if (MusicPlayer.mediaThumpnail != null) {
 
-                if (FragmentMediaPlayer.onSetImage != null)
-                    FragmentMediaPlayer.onSetImage.setImage();
+                if (FragmentMusicPlayer.onSetImage != null)
+                    FragmentMusicPlayer.onSetImage.setImage();
 
                 imgMusicPicture.set(View.VISIBLE);
                 imgMusIciconDefault.set(View.GONE);
@@ -268,11 +269,11 @@ public class FragmentMediaPlayerViewModel {
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.icon_retry));
-            btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
+            btnReplayMusicColor.set(Theme.getColor(Theme.key_title_text));
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.icon_retry));
-            btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
+            btnReplayMusicColor.set(Theme.getColor(Theme.key_title_text));
             imgRepeadOneVisibility.set(View.VISIBLE);
         }
     }
@@ -280,7 +281,7 @@ public class FragmentMediaPlayerViewModel {
     private void setShuffleButton() {
 
         if (MusicPlayer.isShuffelOn) {
-            btnShuffelMusicColor.set(R.attr.iGapTitleTextColor);
+            btnShuffelMusicColor.set(Theme.getColor(Theme.key_title_text));
         } else {
             btnShuffelMusicColor.set(Color.GRAY);
         }
@@ -301,13 +302,13 @@ public class FragmentMediaPlayerViewModel {
 
     public void onResume() {
         if (MusicPlayer.mp == null) {
-            if (FragmentMediaPlayer.onBackFragment != null) {
-                FragmentMediaPlayer.onBackFragment.onBack();
+            if (FragmentMusicPlayer.onBackFragment != null) {
+                FragmentMusicPlayer.onBackFragment.onBack();
             }
         } else {
             MusicPlayer.isShowMediaPlayer = true;
             updateUi();
-            MusicPlayer.onComplete = FragmentMediaPlayer.onComplete;
+            MusicPlayer.onComplete = FragmentMusicPlayer.onComplete;
         }
     }
 

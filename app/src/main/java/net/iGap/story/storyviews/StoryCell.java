@@ -31,12 +31,12 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadObject;
@@ -188,7 +188,6 @@ public class StoryCell extends FrameLayout {
         String name = HelperImageBackColor.getFirstAlphabetName(storyObject.displayName != null ? storyObject.displayName : "");
 
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
-
             if (isRoom && mode == 0) {
                 deleteIcon.setTextColor(Color.RED);
                 topText.setText(storyObject.displayName);
@@ -197,14 +196,13 @@ public class StoryCell extends FrameLayout {
             } else {
                 uploadIcon.setVisibility(VISIBLE);
                 deleteIcon.setVisibility(VISIBLE);
-                deleteIcon.setText(R.string.icon_delete);
+                deleteIcon.setText(R.string.icon_Delete);
                 topText.setVisibility(GONE);
                 bottomText.setVisibility(GONE);
                 middleText.setVisibility(VISIBLE);
                 middleText.setText(context.getString(R.string.story_could_not_sent));
-                middleText.setTextColor(Color.RED);
+                middleText.setTextColor(Theme.getColor(Theme.key_title_text));
             }
-
 
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
             if (isRoom && mode == 0) {
@@ -216,9 +214,8 @@ public class StoryCell extends FrameLayout {
                 topText.setVisibility(GONE);
                 middleText.setVisibility(VISIBLE);
                 middleText.setText(context.getString(R.string.story_sending));
-                middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+                middleText.setTextColor(Theme.getColor(Theme.key_title_text));
             }
-
         } else {
             topText.setVisibility(VISIBLE);
             bottomText.setVisibility(VISIBLE);
@@ -302,13 +299,15 @@ public class StoryCell extends FrameLayout {
         String name = HelperImageBackColor.getFirstAlphabetName(mainStoryObject.storyObjects.get(0).displayName != null ? mainStoryObject.storyObjects.get(0).displayName : "");
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             bottomText.setText(context.getString(R.string.story_could_not_sent));
-            bottomText.setTextColor(Color.RED);
-            deleteIcon.setTextColor(Color.RED);
-            addIcon.setTextColor(Color.RED);
+            bottomText.setTextColor(Theme.getColor(Theme.key_default_text));
+            uploadIcon.setVisibility(GONE);
+            deleteIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
+            addIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
             addIcon.setText(R.string.icon_error);
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
             bottomText.setText(context.getString(R.string.story_sending));
-            deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            uploadIcon.setVisibility(GONE);
+            deleteIcon.setTextColor(Theme.getColor(Theme.key_title_text));
         } else {
             bottomText.setText(LastSeenTimeUtil.computeTime(context, mainStoryObject.userId, mainStoryObject.storyObjects.get(0).createdAt / 1000L, false, false));
         }
@@ -363,8 +362,8 @@ public class StoryCell extends FrameLayout {
 
     public void initView(Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked, long createTime) {
         removeAllViews();
-        if (G.themeColor == Theme.DARK) {
-            setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
+        if (Theme.isDark() || Theme.isNight()) {
+            setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_white)));
         } else {
             setBackgroundColor(Color.WHITE);
         }
@@ -393,7 +392,7 @@ public class StoryCell extends FrameLayout {
 
         addIcon = new MaterialDesignTextView(context);
         addIcon.setText(R.string.icon_add_whit_circle);
-        addIcon.setTextColor(getResources().getColor(R.color.green));
+        addIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
         addIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addIcon.setGravity(isRtl ? Gravity.LEFT : Gravity.RIGHT);
 
@@ -407,7 +406,7 @@ public class StoryCell extends FrameLayout {
         channelIconTv = new FontIconTextView(getContext());
         setTextSize(channelIconTv, R.dimen.dp14);
         channelIconTv.setText(R.string.icon_channel);
-        channelIconTv.setTextColor(Theme.getInstance().getAccentColor(channelIconTv.getContext()));
+        channelIconTv.setTextColor(Theme.getColor(Theme.key_icon));
         channelIconTv.setVisibility(GONE);
         topViewRootView.addView(channelIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
@@ -417,12 +416,12 @@ public class StoryCell extends FrameLayout {
         ViewMaker.setTextSize(topText, R.dimen.dp15);
         topText.setSingleLine(true);
         topText.setEllipsize(TextUtils.TruncateAt.END);
-        topText.setTextColor(Theme.getInstance().getSendMessageTextColor(topText.getContext()));
+        topText.setTextColor(Theme.getColor(Theme.key_title_text));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         topViewRootView.addView(topText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, !isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0, isRtl && roomId != 0 && userId != AccountManager.getInstance().getCurrentUser().getId() ? 4 : 0, 0));
 
         verifyIconTv = new FontIconTextView(getContext());
-        verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verifyIconTv.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
         verifyIconTv.setText(R.string.icon_blue_badge);
         setTextSize(verifyIconTv, R.dimen.standardTextSize);
         verifyIconTv.setVisibility(GONE);
@@ -435,7 +434,7 @@ public class StoryCell extends FrameLayout {
         ViewMaker.setTextSize(middleText, R.dimen.dp15);
         middleText.setSingleLine(true);
         middleText.setEllipsize(TextUtils.TruncateAt.END);
-        middleText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
+        middleText.setTextColor(Theme.getColor(Theme.key_default_text));
         middleText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         middleText.setVisibility(GONE);
         addView(middleText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
@@ -446,7 +445,7 @@ public class StoryCell extends FrameLayout {
         ViewMaker.setTypeFace(bottomText);
         ViewMaker.setTextSize(bottomText, R.dimen.dp13);
         bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        bottomText.setTextColor(Color.GRAY);
+        bottomText.setTextColor(Theme.getColor(Theme.key_default_text));
         addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
         icon = new IconView(getContext());
@@ -469,7 +468,7 @@ public class StoryCell extends FrameLayout {
         uploadIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         uploadIcon.setText(R.string.icon_upload);
         uploadIcon.setVisibility(GONE);
-        uploadIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(uploadIcon.getContext()));
+        uploadIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
         uploadIcon.setGravity(Gravity.CENTER);
         uploadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -478,7 +477,8 @@ public class StoryCell extends FrameLayout {
                         (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED && isFromMyStatus && isRoom && mode == 1)) {
                     deleteIcon.setVisibility(GONE);
                     uploadIcon.setVisibility(GONE);
-                    middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+                    deleteIcon.setVisibility(GONE);
+                    middleText.setTextColor(Theme.getColor(Theme.key_title_text));
                     middleText.setText(context.getString(R.string.story_sending));
                     circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
                     StoryObject realmStoryProto;
@@ -519,7 +519,7 @@ public class StoryCell extends FrameLayout {
         deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         deleteIcon.setText(R.string.icon_other_horizontal_dots);
         deleteIcon.setVisibility(GONE);
-        deleteIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(deleteIcon.getContext()));
+        deleteIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
         deleteIcon.setGravity(Gravity.CENTER);
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -599,9 +599,9 @@ public class StoryCell extends FrameLayout {
         if (visible) {
             if (getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
                 addIcon.setText(R.string.icon_add_whit_circle);
-                addIcon.setTextColor(getResources().getColor(R.color.green));
+                addIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
             } else {
-                addIcon.setTextColor(Color.RED);
+                addIcon.setTextColor(Theme.getColor(Theme.key_dark_red));
                 addIcon.setText(R.string.icon_error);
             }
         }
@@ -625,9 +625,7 @@ public class StoryCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Theme.getInstance().getDividerColor(getContext()));
-            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, paint);
+            canvas.drawLine(G.isAppRtl ? 0 : LayoutCreator.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (G.isAppRtl ? LayoutCreator.dp(20) : 0), getMeasuredHeight() - 1, Theme.getDividerPaint());
         }
     }
 

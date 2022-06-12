@@ -44,7 +44,6 @@
                 android:ellipsize="end"
                 android:gravity="start|center"
                 android:maxLines="1"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -68,7 +67,7 @@
                     android:paddingRight="6.0dip"
                     android:paddingBottom="2.0dip"
                     android:text="@string/tapsell_advertisement"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/black"
                     android:textSize="11sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -90,7 +89,6 @@
                 android:ellipsize="end"
                 android:gravity="start|center"
                 android:maxLines="1"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="13sp" />
 
             <ir.tapsell.sdk.nativeads.views.RatioImageView

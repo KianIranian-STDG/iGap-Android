@@ -17,6 +17,7 @@ import net.iGap.databinding.FragmentPaymentInquiryShowBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 public class ShowBillInquiryFragment extends BaseFragment {
@@ -57,7 +58,13 @@ public class ShowBillInquiryFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.lastTermMessage.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billId.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.lastTermPayId.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.lastTermAmount.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.midTermMessage.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.midTermBillId.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.midTermPayId.setTextColor(Theme.getColor(Theme.key_title_text));
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())

@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -511,7 +514,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 animateCheckBox = view.findViewById(R.id.iv_itemContactChat_checkBox);
                 animateCheckBox.setVisibility(View.GONE);
                 image = view.findViewById(R.id.iv_itemContactChat_profileImage);
+                image.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
                 title = view.findViewById(R.id.tv_itemContactChat_userName);
+                title.setTextColor(Theme.getColor(Theme.key_title_text));
                 subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
 
                 if (G.isAppRtl) {
@@ -530,7 +535,12 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                             if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                new MaterialDialog.Builder(G.fragmentActivity)
+                                        .items(R.array.calls)
+                                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                                        .itemsCallback(new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
 

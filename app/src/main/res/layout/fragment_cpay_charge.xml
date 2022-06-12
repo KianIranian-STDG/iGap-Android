@@ -52,7 +52,6 @@
             android:layout_marginTop="@dimen/dp20"
             android:gravity="center"
             android:text="@string/wallet_Your_credit"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:fontFamily="@font/main_font"
             app:layout_constraintEnd_toEndOf="@id/plaqueView"
@@ -76,7 +75,6 @@
             android:gravity="center|top"
             android:paddingBottom="@dimen/dp20"
             android:text="@{@string/amount_rials(viewModel.userCurrentAmount)}"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/xlargeTextSize"
             android:textStyle="bold"
             android:visibility="invisible"
@@ -109,7 +107,6 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edtAmount"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp20"
@@ -128,7 +125,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPay"
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"

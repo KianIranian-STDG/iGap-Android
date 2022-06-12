@@ -25,7 +25,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/checkIcon"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@string/icon_sent"
@@ -43,7 +43,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/igasht_success_payment"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/barCodeImage"
@@ -55,7 +54,7 @@
             android:id="@+id/barCodeImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
+            android:background="@android:color/white"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/paymentCode"
             app:layout_constraintDimensionRatio="1:1"
@@ -72,7 +71,6 @@
             android:gravity="center"
             android:padding="@dimen/dp16"
             android:text="@{@string/Your_purchase_code(viewModel.voucherNumber)}"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/v"
@@ -86,7 +84,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/scan_barcode_to_enter_visit"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -106,7 +103,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/retryView"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:text="@string/icon_retry"

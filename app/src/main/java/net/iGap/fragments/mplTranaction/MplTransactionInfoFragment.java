@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,8 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.FontIconTextView;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 
@@ -79,6 +82,8 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         setupViews();
 
         viewModel.getTransactionInfo(token);
@@ -101,6 +106,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                             transactionDesc.setText(transactionCardToCard.getStatusDescription());
                             TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
                             desTitle.setVisibility(View.VISIBLE);
+                            desTitle.setTextColor(Theme.getColor(Theme.key_title_text));
                             transactionDesc.setVisibility(View.VISIBLE);
                         }
 
@@ -125,6 +131,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                         if (transactionTopUp.getStatus() != 0) {
                             TextView transactionDesc = rootView.findViewById(R.id.tv_mplTransActionInfo_description);
                             transactionDesc.setText(transactionTopUp.getStatusDescription());
+                            transactionDesc.setTextColor(Theme.getColor(Theme.key_title_text));
                             TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
                             desTitle.setVisibility(View.VISIBLE);
                             transactionDesc.setVisibility(View.VISIBLE);
@@ -233,12 +240,23 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
         swipeRefreshLayout = rootView.findViewById(R.id.sl_mplTransactionInfo);
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_mplTransActionInfo);
         rvContainer = rootView.findViewById(R.id.cl_mplTransactionInfo_rv);
+        rvContainer.setCardBackgroundColor(Theme.getColor(Theme.key_popup_background));
         statusTv = rootView.findViewById(R.id.tv_mplTransactionInfo_stats);
+        statusTv.setTextColor(Theme.getColor(Theme.key_title_text));
         dataTv = rootView.findViewById(R.id.tv_mplTransactionInfo_data);
+        dataTv.setTextColor(Theme.getColor(Theme.key_title_text));
         timeTv = rootView.findViewById(R.id.tv_mplTransactionInfo_time);
+        timeTv.setTextColor(Theme.getColor(Theme.key_title_text));
         statusIv = rootView.findViewById(R.id.fv_mplTransactionInfo_status);
+        statusIv.setTextColor(Theme.getColor(Theme.key_title_text));
         statusRootView = rootView.findViewById(R.id.cv_mplTransactionInfo);
+        statusRootView.setCardBackgroundColor(Theme.getColor(Theme.key_popup_background));
         emptyView = rootView.findViewById(R.id.tv_mplTransactionInfo_emptyView);
+        emptyView.setTextColor(Theme.getColor(Theme.key_title_text));
+        FontIconTextView icon1 = rootView.findViewById(R.id.icon1);
+        icon1.setTextColor(Theme.getColor(Theme.key_title_text));
+        FontIconTextView icon2 = rootView.findViewById(R.id.icon2);
+        icon2.setTextColor(Theme.getColor(Theme.key_title_text));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);
@@ -263,15 +281,15 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     }
 
     private void successfulStatus() {
-        statusTv.setTextColor(getResources().getColor(R.color.green));
-        statusIv.setTextColor(getResources().getColor(R.color.green));
+        statusTv.setTextColor(Theme.getColor(Theme.key_theme_color));
+        statusIv.setTextColor(Theme.getColor(Theme.key_theme_color));
         statusIv.setText(getResources().getString(R.string.icon_sent));
         statusTv.setText(getResources().getString(R.string.successful_payment));
     }
 
     private void unsuccessfulStatus() {
-        statusTv.setTextColor(getResources().getColor(R.color.red));
-        statusIv.setTextColor(getResources().getColor(R.color.red));
+        statusTv.setTextColor(Theme.getColor(Theme.key_red));
+        statusIv.setTextColor(Theme.getColor(Theme.key_red));
         statusIv.setText(getResources().getString(R.string.icon_error));
         statusTv.setText(getResources().getString(R.string.unsuccessful_payment));
     }

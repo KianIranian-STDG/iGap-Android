@@ -31,7 +31,7 @@
         android:paddingRight="6.0dip"
         android:paddingBottom="2.0dip"
         android:text="@string/tapsell_advertisement"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="11sp" />
 </com.google.android.gms.ads.nativead.NativeAdView>
 

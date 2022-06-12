@@ -25,8 +25,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 30
         multiDexEnabled true
-        versionCode 302
-        versionName "2.4.1"
+        versionCode 324
+        versionName "3.0.2 alpha 2"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
@@ -162,724 +162,173 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_Takups1 {
+        release_Takups_tamg1 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"kxsfvl\""
+            resValue "string", "TrackCode", "\"gewqt8\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_Takups2 {
+        release_Takups_tamg2 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"mamxdg\""
+            resValue "string", "TrackCode", "\"oe2ucn\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_Takups3 {
+        release_Takups_tamg3 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"6d26kf\""
+            resValue "string", "TrackCode", "\"xe9xlj\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_Takups4 {
+        release_Takups_tamg4 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"eo44ya\""
+            resValue "string", "TrackCode", "\"eudo4w\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_Takups5 {
+        release_Takups_tamg5 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"xhh3jx\""
+            resValue "string", "TrackCode", "\"etbgid\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther1 {
+        release_Takups_tamg6 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"pzmruy\""
+            resValue "string", "TrackCode", "\"9zujo7\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther2 {
+        release_Takups_tamg7 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"qho0xg\""
+            resValue "string", "TrackCode", "\"szwOwa\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther3 {
+        release_Takups_tamg8 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"ysntzr\""
+            resValue "string", "TrackCode", "\"ggozh\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther4 {
+        release_Takups_tamg9 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"sbmgwc\""
+            resValue "string", "TrackCode", "\"q30g95\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther5 {
+        release_Takups_tamg10 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"rvwn3c\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release_TakupsOther6 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"rtzzla\""
+            resValue "string", "TrackCode", "\"spxs6t\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther7 {
+        release_Takups_tadm1 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"tpkhzt\""
+            resValue "string", "TrackCode", "\"ilqgv1\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther8 {
+        release_Takups_tadm2 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"vrgp4x\""
+            resValue "string", "TrackCode", "\"5gwd2f\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        release_TakupsOther9 {
+        release_Takups_tadm3 {
             matchingFallbacks = ['release', 'debug']
 
             minifyEnabled true
             shrinkResources true
             resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"xnej5i\""
+            resValue "string", "TrackCode", "\"vzqm9u\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther10 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"c2qfcy\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther11 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"eoufkx\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther12 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"9r4bsw\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther13 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"gqt5yi\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther14 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"enq9im\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther15 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"h1ieup\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther16 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"zejkum\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther17 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"gcghun\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther18 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"u3gcw7\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther19 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"olsbbr\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release_TakupsOther20 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"nt6lah\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther21 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"fymzfn\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release_TakupsOther22 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"se3re2\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther23 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"qomidm\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther24 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"q3xppe\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther25 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"gxhgao\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther26 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"uxnm88\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther27 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"qxkiib\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther28 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"nuiide\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther29 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"ivqgkz\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther30 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"8jbd0w\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther31 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"347yyp\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        release_TakupsOther32 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"lujetj\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_TakupsOther33 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"ef6rxb\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe34 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"bpssrb\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe35 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"bvchpe\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe36 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"bwmkyz\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe37 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"gdfnme\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe38 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"6l3mp5\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe39 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"tvfakm\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe40 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"h5e62t\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe41_tmg01 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"z55qsj\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe42_tmg02 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"n8ymba\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe43_tmg03 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"goyb09\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe44_tmg04 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"hgvmt4\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release_Takupsothe45_tmg05 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"hc3pzu\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-        }
-        release_Takupsothe46_tmg06 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"jgbl6l\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-
-        }
-        release_Takupsothe47_tmg07 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"cborb9\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-
-        }
-
-        release_Takupsothe48_tmg08 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"fkqbp3\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-
-        }
-
-        release_Takupsothe49_tmg09 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"vflayw\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-
-        }
-
-        release_Takupsothe50_tmg10 {
-            matchingFallbacks = ['release', 'debug']
-
-            minifyEnabled true
-            shrinkResources true
-            resValue "string", "Store", "\"Takups\""
-            resValue "string", "TrackCode", "\"a9wjmo\""
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            }
-
         }
 
         lintOptions {
@@ -944,7 +393,6 @@ android {
         implementation 'androidx.multidex:multidex:2.0.1'
         implementation 'androidx.appcompat:appcompat:1.0.0'
         implementation 'com.nineoldandroids:library:2.4.0'
-        implementation 'androidx.recyclerview:recyclerview:1.1.0'
         implementation 'com.google.android.material:material:1.0.0'
         implementation 'io.github.vicmikhailau:MaskedEditText:4.0.5'
         implementation 'com.uncopt:android.justified:1.0'
@@ -988,7 +436,6 @@ android {
         implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
         implementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
         debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
-//    implementation 'com.google.protobuf:protobuf-java:3.1.0'
         implementation 'com.google.protobuf:protobuf-java:3.1.0'
         implementation 'com.squareup.retrofit2:retrofit:2.6.2'
         implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
@@ -1052,16 +499,17 @@ android {
         implementation project(path: ':moduleFirebase1')
     }
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
-            if (requested.group == 'com.android.support') {
-                if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '28.0.0'
-                }
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '28.0.0'
             }
         }
     }
+    exclude group: 'androidx.recyclerview', module: 'recyclerview'
+}
 
     apply plugin: 'kotlin-android-extensions'
 }

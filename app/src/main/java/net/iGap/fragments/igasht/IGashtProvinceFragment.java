@@ -1,6 +1,8 @@
 package net.iGap.fragments.igasht;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +12,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.card.MaterialCardView;
 
 import net.iGap.R;
 import net.iGap.adapter.igahst.ProvinceSuggestionListAdapter;
 import net.iGap.databinding.FragmentIgashtProvinceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.igasht.IGashtProvinceViewModel;
 
@@ -40,10 +47,14 @@ public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewMod
         return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.frameLayout.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.background_button_card_to_card), context, Theme.getColor(Theme.key_theme_color)));
+        binding.frameLayout.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        MaterialCardView bottom_view = view.findViewById(R.id.bottom_view);
+        bottom_view.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -83,6 +94,7 @@ public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewMod
         viewModel.getProvinceListResult().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
+                binding.provinceSearchText.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             }
         });
 

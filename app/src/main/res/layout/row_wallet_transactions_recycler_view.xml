@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/white_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp100"
+        android:background="@drawable/background_white_bottom_shadow"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <TextView
+        android:id="@+id/transaction_type_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="withdrawal" />
+
+    <TextView
+        android:id="@+id/transaction_amount_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp12"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+        tools:text="250,000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp12"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/transaction_amount_textView"
+        app:layout_constraintStart_toEndOf="@id/transaction_amount_textView"
+        app:layout_constraintTop_toTopOf="@id/transaction_amount_textView"
+        tools:text="@string/Rials" />
+
+    <TextView
+        android:id="@+id/chevron_down_expand_icon"
+        style="@style/baseFontIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/icon_chevron_Down"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/transaction_status_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="@dimen/dp12"
+        app:layout_constraintBottom_toBottomOf="@id/transaction_amount_textView"
+        app:layout_constraintEnd_toStartOf="@id/transaction_date_and_time"
+        app:layout_constraintTop_toTopOf="@id/transaction_amount_textView"
+        tools:text="successful" />
+
+    <TextView
+        android:id="@+id/transaction_date_and_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/transaction_amount_textView"
+        app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+        app:layout_constraintTop_toTopOf="@id/transaction_amount_textView"
+        tools:text="14/04/1400 - 11:18" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

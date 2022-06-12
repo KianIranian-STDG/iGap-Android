@@ -62,6 +62,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import net.iGap.messenger.theme.Theme;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -266,18 +267,15 @@ public final class AppUtils {
             G.imageLoader.displayImage(AndroidUtils.suitablePath(AppUtils.getLocationPath(message.location.lat, message.location.lan)), view);
         } else {
 
-            FragmentMap.loadImageFromPosition(message.location.lat, message.location.lan, new FragmentMap.OnGetPicture() {
-                @Override
-                public void getBitmap(Bitmap bitmap) {
+            FragmentMap.takeScreenshot(bitmap -> {
 
-                    view.setImageBitmap(bitmap);
-                    final String savedPath = AppUtils.saveMapToFile(bitmap, message.location.lat, message.location.lan);
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        if (message.location != null) {
-                            message.location.imagePath = savedPath; // TODO: 1/2/21  MESSAGE_REFACTOR
-                        }
-                    });
-                }
+                view.setImageBitmap(bitmap);
+                final String savedPath = AppUtils.saveMapToFile(bitmap, message.location.lat, message.location.lan);
+                DbManager.getInstance().doRealmTask(realm -> {
+                    if (message.location != null) {
+                        message.location.imagePath = savedPath; // TODO: 1/2/21  MESSAGE_REFACTOR
+                    }
+                });
             });
         }
     }
@@ -331,24 +329,24 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.icon_delivery);
-                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.icon_error);
-                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_dark_red));
                 break;
             case SEEN:
             case LISTENED:
                 iconTextView.setText(R.string.icon_delivery);
-                iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.icon_time);
-                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             case SENT:
                 iconTextView.setText(R.string.icon_sent);
-                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -375,24 +373,24 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.icon_delivery);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.icon_error);
-                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_dark_red));
                 break;
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.icon_delivery);
-                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.icon_time);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             case SENT:
                 iconTextView.setText(R.string.icon_sent);
-                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
+                iconTextView.setTextColor(Theme.getColor(Theme.key_default_text));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -645,7 +643,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
 
             //  getResources().getColor(R.color.toolbar_background)
 
@@ -658,7 +656,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.setColor(new Theme().getAccentColor(progressBar.getContext()));
+            progressBar.setColor(Theme.getColor(Theme.key_theme_color));
         } catch (Exception e) {
             e.printStackTrace();
         }

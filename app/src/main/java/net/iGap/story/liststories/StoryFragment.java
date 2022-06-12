@@ -33,12 +33,12 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.ApiBased.HttpUploader;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
@@ -52,8 +52,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmStory;
-import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.MainStoryObject;
 import net.iGap.story.StatusTextFragment;
 import net.iGap.story.StoryObject;
@@ -67,9 +65,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.iGap.G.isAppRtl;
-import static net.iGap.G.localHashContact;
 
-public class StoryFragment extends BaseMainFragments implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
+public class StoryFragment extends BaseMainFragments implements StoryCell.DeleteStory, EventManager.EventDelegate {
 
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
@@ -198,6 +195,21 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
+        recyclerListView.setOnItemClickListener((view, position, x, y) ->{
+            StoryCell storyCell = (StoryCell) view;
+            if (position == addStoryRow) {
+                if (storyCell.getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment(false)).setReplace(false).load();
+                } else if (storyCell.getStatus() == StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, storyCell.getRoomId() != 0, false)).setReplace(false).load();
+                }
+
+            } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
+                StoryViewFragment storyViewFragment;
+                storyViewFragment = new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), false, storyCell.getRoomId() != 0, true);
+                new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
+            }
+        });
         swipeRefreshLayout.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
 
         progressBar = new ProgressBar(context);
@@ -210,7 +222,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
 
         customStatusActionLayout = new FrameLayout(context);
-        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
         customStatusActionLayout.setBackground(customStatusDrawable);
         IconView customStatusAddButton = new IconView(context);
         customStatusAddButton.setIcon(R.string.icon_edit);
@@ -221,13 +233,14 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_camera);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
         actionButtonsRootView.addView(floatActionLayout, LayoutCreator.createLinear(52, 52, Gravity.CENTER, 0, 10, 0, 0));
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         return rootView;
     }
 
@@ -403,28 +416,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     }
 
     @Override
-    public void onClick(View view, int position) {
-        StoryCell storyCell = (StoryCell) view;
-        if (position == addStoryRow) {
-            if (storyCell.getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment(false)).setReplace(false).load();
-            } else if (storyCell.getStatus() == StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, storyCell.getRoomId() != 0, false)).setReplace(false).load();
-            }
-
-        } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
-            StoryViewFragment storyViewFragment;
-            storyViewFragment = new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), false, storyCell.getRoomId() != 0, true);
-            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
-        }
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
-    }
-
-    @Override
     public void receivedEvent(int id, int account, Object... args) {
         swipeRefreshLayout.setRefreshing(false);
         if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_ROOM_IMAGE_UPLOAD || id == EventManager.STORY_ROOM_UPLOAD) {
@@ -569,7 +560,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     }
 
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter<RecyclerListView.ItemViewHolder> {
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         public void addRow() {
             rowSize = 0;
@@ -594,7 +585,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
         @NonNull
         @Override
-        public RecyclerListView.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View cellView;
             switch (viewType) {
                 case 0:
@@ -607,11 +598,11 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 default:
                     cellView = new View(parent.getContext());
             }
-            return new RecyclerListView.ItemViewHolder(cellView, StoryFragment.this);
+            return new RecyclerListView.Holder(cellView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerListView.ItemViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             int viewType = holder.getItemViewType();
             if (getActivity() != null && isAdded()) {
                 switch (viewType) {
@@ -708,7 +699,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                         break;
                     case 2:
                         HeaderCell headerCell = (HeaderCell) holder.itemView;
-                        headerCell.setTextColor(Theme.getInstance().getSendMessageTextColor(headerCell.getContext()));
+                        headerCell.setBackgroundColor(Theme.getColor(Theme.key_line));
+                        headerCell.setTextColor(Theme.getColor(Theme.key_subtitle_text));
                         if (position == recentHeaderRow) {
                             headerCell.setText(getString(R.string.recent_updates));
                         } else if (position == muteHeaderRow) {
@@ -718,8 +710,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
                 }
             }
-
         }
+
 
         @Override
         public int getItemCount() {
@@ -738,11 +730,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             return super.getItemViewType(position);
         }
 
-        @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
-            return viewType != 2;
-        }
-
         public Integer getFailedMessages(long userId, long roomId) {
             for (int i = 0; i < otherUserRealmStory.size(); i++) {
                 if (otherUserRealmStory.get(i) != null && (roomId == 0 ? otherUserRealmStory.get(i).userId : otherUserRealmStory.get(i).roomId) == (roomId == 0 ? userId : roomId)) {
@@ -752,6 +739,11 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             return null;
         }
 
+        @Override
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int viewType = holder.getItemViewType();
+            return viewType != 2;
+        }
     }
 
 

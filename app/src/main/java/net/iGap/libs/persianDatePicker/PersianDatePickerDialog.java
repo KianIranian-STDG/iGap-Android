@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import net.iGap.R;
 import net.iGap.libs.persianDatePicker.util.PersianCalendar;
 import net.iGap.libs.persianDatePicker.util.PersianHelper;
+import net.iGap.messenger.theme.Theme;
 
 import java.util.Date;
 
@@ -180,6 +181,7 @@ public class PersianDatePickerDialog {
         pCalendar = new PersianCalendar();
 
         View v = View.inflate(context, R.layout.dialog_picker, null);
+        v.setBackgroundColor(Theme.getColor(Theme.key_theme_color));
         final PersianDatePicker datePicker = v.findViewById(R.id.datePicker);
         final TextView dateText = v.findViewById(R.id.dateText);
         final AppCompatButton positiveButton = v.findViewById(R.id.positive_button);

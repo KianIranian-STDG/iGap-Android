@@ -31,7 +31,9 @@ public class NotificationCenter extends FirebaseMessagingService {
                 .addOnSuccessListener(installationTokenResult -> {
                     if (installationTokenResult != null) {
                         Log.e(TAG, "OnSuccessListener: " + installationTokenResult.getToken());
-                        onTokenReceived.tokenReceived(installationTokenResult.getToken());
+                        if (onTokenReceived != null) {
+                            onTokenReceived.tokenReceived(installationTokenResult.getToken());
+                        }
                     }
 
                 }).addOnFailureListener(e -> {

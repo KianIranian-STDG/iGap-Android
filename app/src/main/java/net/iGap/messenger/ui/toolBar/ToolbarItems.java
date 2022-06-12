@@ -76,4 +76,17 @@ public class ToolbarItems extends LinearLayout {
             }
         }
     }
+
+    public void onMenuButtonPressed() {
+        int count = getChildCount();
+        for (int a = 0; a < count; a++) {
+            View view = getChildAt(a);
+            if (view instanceof ToolbarItem) {
+                ToolbarItem item = (ToolbarItem) view;
+                if (item.getVisibility() != VISIBLE) {
+                    continue;
+                }
+            }
+        }
+    }
 }

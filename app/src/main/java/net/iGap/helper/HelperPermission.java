@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
@@ -30,7 +31,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.dialog.AlertDialog;
 import net.iGap.observers.interfaces.OnGetPermission;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,15 +83,12 @@ public class HelperPermission {
     }
 
     //************************************************************************************************************
-    public static void getStoragePermission(Context context, OnGetPermission onGetPermission) throws IOException {
+    public static void getStoragePermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
         if (checkApi()) {
             if (onGetPermission != null) onGetPermission.Allow();
             return;
         }
-
-        /**Following condition do not affect on app flow temporary
-         *because Enviroment.isExternalStorageManager always return false*/
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             if (Environment.isExternalStorageManager()) {
                 if (onGetPermission != null) {
@@ -482,5 +483,82 @@ public class HelperPermission {
         }
 
 
+    }
+
+    public static void getPermission(final Context context, @NotNull final String[] needPermission, final int requestCode, String titleText, String Text, final OnGetPermission onGetPermission, Drawable drawable) {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
+
+            String message = context.getString(R.string.you_need_to_allow) + " " + Text + " دستگاه خود را بدهید :";
+            String title = titleText;
+
+            net.iGap.messenger.dialog.AlertDialog dialog = AlertDialog.createNormalDialogBuilder(context).create();
+            dialog.setTitle(title);
+            dialog.setMessage(message);
+            dialog.setPositiveButton(context.getResources().getString(R.string.ok), (dialog12, which) -> {
+                ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
+            });
+
+            dialog.setNegativeButton(context.getResources().getString(R.string.cancel), (dialog1, which) -> {
+                if (onGetPermission != null) onGetPermission.deny();
+            });
+
+            dialog.show();
+
+            return;
+        }
+    }
+
+    public static void getContactPermission(Context context, OnGetPermission onGetPermission) {
+        if (checkApi()) {
+            if (onGetPermission != null) {
+                try {
+                    onGetPermission.Allow();
+                } catch (IOException e) {
+                    FileLog.e(e);
+                }
+            }
+            return;
+        }
+
+        ArrayList<String> needPermosion = null;
+
+        int permissionReadContact = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
+        int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+        int permissionWritGetAccount = ContextCompat.checkSelfPermission(context, Manifest.permission.GET_ACCOUNTS);
+
+        if (permissionReadContact != PackageManager.PERMISSION_GRANTED) {
+            needPermosion = new ArrayList<>();
+            needPermosion.add(Manifest.permission.READ_CONTACTS);
+        }
+
+        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+            if (needPermosion == null) {
+                needPermosion = new ArrayList<>();
+            }
+            needPermosion.add(Manifest.permission.WRITE_CONTACTS);
+        }
+
+        if (permissionWritGetAccount != PackageManager.PERMISSION_GRANTED) {
+            if (needPermosion == null) {
+                needPermosion = new ArrayList<>();
+            }
+            needPermosion.add(Manifest.permission.GET_ACCOUNTS);
+
+        }
+
+        if (needPermosion != null) {
+            String[] mStringArray = new String[needPermosion.size()];
+            mStringArray = needPermosion.toArray(mStringArray);
+            getPermission(context, mStringArray, MY_PERMISSIONS_CONTACTS, context.getResources().getString(R.string.contact), context.getResources().getString(R.string.permission_contact), onGetPermission, context.getResources().getDrawable(R.drawable.ic_contact_permission));
+        } else {
+            if (onGetPermission != null) {
+                try {
+                    onGetPermission.Allow();
+                } catch (IOException e) {
+                    FileLog.e(e);
+                }
+            }
+        }
     }
 }

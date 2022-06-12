@@ -50,8 +50,8 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.libs.Tuple;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
@@ -96,10 +96,10 @@ public class HelperUrl {
 
     private static final String IGAP_LINK_PATTERN = "((?:https?://(?:u\\.i|profile\\.i|i)|(?:u\\.i|profile\\.i|i))+?gap.net\\/[^\\s]*)";
     private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap://discovery/[^\\s]*)|(?:(?:https?://(?:u\\.i|i)|(?:u\\.i|i))+?gap.net\\/d:[^\\s]*))";
-    private static final String WEB_LINK = "((?:(?:(?:http|ftp|https):\\/\\/)?(?:[\\w_-]+(?:(?:\\.[\\w_-]+)+))+(?:[\\w.,\\u0600-\\u06FF\\u2000-\\u200F\\(\\)!@?^=%&:\\/~+#-\\.]*[\\w@?^=%&\\/~+#-])|(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])))";
+    private static final String WEB_LINK = "((?:(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+(?:[\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(?::[0-9]{1,5})?(?:\\/.*)?|^(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])))";
     private static final String BOT_LINK = "((?:\\B\\/\\w+))";
     private static final String IGAP_RESOLVE = "(igap://resolve\\?[^\\s]*)";
-    private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
+    private static final String IGAP_DIGIT_LINK = "((?:\\d{3,5}[-]?\\d{3}[-]?\\d{4}|\\d{2}[-]?\\d{3}[-]?\\d{4}|\\d{1}[-]?\\d{3}[-]?\\d{6}|\\d{1}[-]?\\d{3}[-]?\\d{2}[-]?\\d{2}[-]?\\d{2}|\\*{1}?\\d{2,5})\\b)";
     private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_.]+\\b)";
     private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
 
@@ -115,6 +115,7 @@ public class HelperUrl {
     private static boolean isIgapLink(String text) {
         return text.matches("((?:https?://(?:[^\\s]*\\.i|i)|(?:[^\\s]*\\.i|i))+?gap.net\\/[^\\s]*)");
     }
+
 
     public static SpannableStringBuilder setUrlLink(FragmentActivity activity, String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
@@ -251,7 +252,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(context);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -328,7 +329,7 @@ public class HelperUrl {
         //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = Theme.getInstance().getPrimaryColor(G.currentActivity);
+        int mColorPrimary = Theme.getColor(Theme.key_theme_color);
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
@@ -392,7 +393,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(activity);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -419,7 +420,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(context);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -461,7 +462,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(activity);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -485,7 +486,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(activity);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -537,7 +538,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(activity);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -609,7 +610,7 @@ public class HelperUrl {
             @Override
             public void updateDrawState(TextPaint ds) {
                 //ToDo: fixed it and pass color to this function
-                ds.linkColor = Theme.getInstance().getLinkColor(context);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -686,7 +687,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Theme.getInstance().getLinkColor(activity);
+                ds.linkColor = Theme.getColor(Theme.key_link_text);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -1308,7 +1309,14 @@ public class HelperUrl {
                         if (dialogWaiting != null && dialogWaiting.isShowing()) {
 
                         } else if (!(activity).isFinishing()) {
-                            dialogWaiting = new MaterialDialog.Builder(activity).title("").content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
+                            dialogWaiting = new MaterialDialog.Builder(activity)
+                                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                    .title("").content(R.string.please_wait)
+                                    .progress(true, 0)
+                                    .cancelable(false)
+                                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                                    .positiveColor(Theme.getColor(Theme.key_button_background))
+                                    .progressIndeterminateStyle(false).show();
                         }
                     }
                 });

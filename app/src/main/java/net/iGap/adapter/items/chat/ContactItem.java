@@ -32,6 +32,7 @@ import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -51,16 +52,16 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.contactName.setTextColor(theme.getSendMessageTextColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(Theme.getColor(Theme.key_gray));
+        holder.contactNumberTv.setTextColor(Theme.getColor(Theme.key_light_gray));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.contactName.setTextColor(theme.getReceivedMessageColor(holder.getContext()));
-        holder.contactNumberTv.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.contactName.setTextColor(Theme.getColor(Theme.key_default_text));
+        holder.contactNumberTv.setTextColor(Theme.getColor(Theme.key_light_gray));
     }
 
     @Override
@@ -117,7 +118,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactImage = new AppCompatImageView(getContext());
             contactImage.setId(R.id.iv_contactItem_contact);
             contactImage.setContentDescription(null);
-            contactImage.setBackground(theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
+            contactImage.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), Theme.getColor(Theme.key_dark_theme_color)));
 
             contactName = new AppCompatTextView(getContext());
             contactName.setId(R.id.tv_contactItem_contactName);
@@ -154,7 +155,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactWithUserBtn.setBackground(getDrawable(R.drawable.background_contact));
             contactWithUserBtn.setPadding(LayoutCreator.dp(16), 0, LayoutCreator.dp(16), 0);
             contactWithUserBtn.setTextSize(10);
-            contactWithUserBtn.setTextColor(getColor(R.color.grayNew));
+            contactWithUserBtn.setTextColor(Theme.getColor(Theme.key_gray));
             contactWithUserBtn.setAllCaps(false);
             contactWithUserBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext(), R.font.main_font));
 

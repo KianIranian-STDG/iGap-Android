@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
@@ -29,12 +30,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperError;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.helper.HelperFragment;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.Theme;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentEditProfileBinding;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.UserProfileViewModel;
@@ -68,17 +68,22 @@ public class FragmentEditProfile extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_profile, container, false);
-        /*viewModel.init();*/
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
-
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.referralError.setTextColor(Theme.getColor(Theme.key_red));
+        binding.changePhoneNumberButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChangePhoneNumber()).setReplace(false).load();
+            }
+        });
 
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
@@ -194,8 +199,9 @@ public class FragmentEditProfile extends BaseFragment {
             //
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+            txtTitle.setTextColor(Theme.getColor(Theme.key_icon));
             LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
-            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background), getContext(), R.attr.rootBackgroundColor));
+            rootView.setBackground(Theme.tintDrawable(getResources().getDrawable(R.drawable.dialog_background), getContext(), Theme.getColor(Theme.key_popup_background)));
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);

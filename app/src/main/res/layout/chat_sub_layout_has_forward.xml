@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp52"
-    android:background="?attr/rootBackgroundColor"
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/cslhs_imv_forward"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:text="@string/icon_reply"
@@ -30,6 +29,7 @@
         android:paddingRight="@dimen/dp6">
 
         <TextView
+            android:id="@+id/forwardText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp4"
@@ -38,7 +38,6 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text="@string/forward_message"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp12"
             android:textStyle="bold" />
 
@@ -48,7 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp4"
             android:ellipsize="end"
-            android:textColor="?attr/iGapSubtitleTextColor"
             android:gravity="left"
             android:maxLines="1"
             android:singleLine="true"
@@ -58,7 +56,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cslhf_imv_cansel"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp40"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp2"

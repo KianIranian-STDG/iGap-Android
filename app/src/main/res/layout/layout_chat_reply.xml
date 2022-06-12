@@ -3,7 +3,7 @@
     android:id="@+id/replayLayoutAboveEditText"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp52"
-    android:background="?attr/iGapDividerLine"
+    android:background="@color/key_light_gray"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center_vertical"
@@ -11,7 +11,7 @@
 
     <net.iGap.module.FontIconTextView
         android:id="@+id/lcr_imv_replay"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:text="@string/icon_reply"
@@ -41,7 +41,6 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text="SAMPLE TEXT"
-            android:textColor="?attr/iGapSendReplayColor"
             android:textSize="@dimen/dp12"
             android:textStyle="bold" />
 
@@ -55,13 +54,12 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text="SAMPLE TEXT"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/dp10" />
     </LinearLayout>
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cancelIcon"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp40"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp2"

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/mainContainer">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sl_itemMplTransAction"
@@ -57,7 +58,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -66,7 +66,6 @@
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
                 android:text="@string/all"
-                android:textColor="@color/button_text_color_selector"
                 android:textSize="@dimen/smallTextSize" />
 
             <TextView
@@ -74,7 +73,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -83,7 +81,6 @@
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
                 android:text="@string/mpl_transaction_topup"
-                android:textColor="@color/button_text_color_selector"
                 android:textSize="@dimen/smallTextSize" />
 
 
@@ -92,7 +89,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -101,7 +97,6 @@
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
                 android:text="@string/mpl_transaction_card"
-                android:textColor="@color/button_text_color_selector"
                 android:textSize="@dimen/smallTextSize" />
 
             <TextView
@@ -109,7 +104,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -118,7 +112,6 @@
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
                 android:text="@string/mpl_transaction_sales"
-                android:textColor="@color/button_text_color_selector"
                 android:textSize="@dimen/smallTextSize" />
 
             <TextView
@@ -126,7 +119,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minWidth="50dp"
                 android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -135,7 +127,6 @@
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
                 android:text="@string/bills"
-                android:textColor="@color/button_text_color_selector"
                 android:textSize="@dimen/smallTextSize" />
 
         </LinearLayout>

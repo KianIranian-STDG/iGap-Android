@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsList;
-import net.iGap.module.Theme;
 
 public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -93,7 +93,7 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
 
         void initDoubleVH(int position) {
 
-            if (G.themeColor == Theme.DARK)
+            if (Theme.isDark() || Theme.isNight())
                 changeToNormalDark();
 
             if (position * 2 >= mData.getNews().size())
@@ -125,11 +125,11 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
         private void changeToNormalDark() {
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_send_dark));
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_dark_gray));
 
             source1.setTextColor(Color.WHITE);
             title1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_send_dark));
+            container1.setCardBackgroundColor(Theme.getColor(Theme.key_dark_gray));
         }
     }
 }

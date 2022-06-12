@@ -20,7 +20,6 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMap;
-import net.iGap.fragments.NewFragmentMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
@@ -78,19 +77,27 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         if (item != null) {
             String path = AppUtils.getLocationPath(item.lat, item.lan);
+            holder.mapPosition.setImageResource(R.drawable.map);
 
             if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.mapPosition);
             } else {
-                LocationObject finalItem1 = item;
-                FragmentMap.loadImageFromPosition(item.lat, item.lan, bitmap -> {
-                    if (bitmap == null) {
-                        holder.mapPosition.setImageResource(R.drawable.map);
-                    } else {
-                        holder.mapPosition.setImageBitmap(bitmap);
-                        AppUtils.saveMapToFile(bitmap, finalItem1.lat, finalItem1.lan);
-                    }
-                });
+                holder.mapPosition.setImageResource(R.drawable.map);
+                /**Before here was sent a request to google map api that was gets lat and log and returned
+                 * a map bitmap screen shot.
+                 * Cause google boycott iranian app from access to google map api, creating location
+                 * bitmap for peer must change.
+                 * Currently set a cursor drawable for showing in chat room temporarily*/
+                // TODO: 01/06/22 Refactor server response for location message item that peer can get screenshot bitmap to show it in chat room
+//                LocationObject finalItem1 = item;
+//                NewFragmentMap.loadImageFromPosition( bitmap -> {
+//                    if (bitmap == null) {
+//                        holder.mapPosition.setImageResource(R.drawable.map);
+//                    } else {
+//                        holder.mapPosition.setImageBitmap(bitmap);
+//                        AppUtils.saveMapToFile(bitmap, finalItem1.lat, finalItem1.lan);
+//                    }
+//                });
             }
 
             final LocationObject finalItem = item;
@@ -107,9 +114,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         @Override
                         public void Allow() {
                             G.handler.post(() -> {
-                                NewFragmentMap fragment = NewFragmentMap.newInstance(finalItem.lat, finalItem.lan);
-//                                FragmentMap fragment = FragmentMap.getInstance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
-//                                        RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
+                                FragmentMap fragment = FragmentMap.newInstance(finalItem.lat, finalItem.lan);
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });
                         }

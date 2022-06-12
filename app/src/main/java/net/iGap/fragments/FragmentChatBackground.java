@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -35,6 +37,7 @@ import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -95,6 +98,8 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         toolbar.getSecondRightButton().setVisibility(View.GONE);
 
+        binding.rcvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
         binding.rcvContent.setAdapter(new AdapterChatBackground(viewModel.getOnImageWallpaperListClick()));
 
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
@@ -114,7 +119,13 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         viewModel.getShowAddImage().observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture).negativeText(R.string.cancel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture)
+                        .negativeText(R.string.cancel)
+                        .items(R.array.profile)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         AttachFile attachFile = new AttachFile(getActivity());
@@ -153,7 +164,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         viewModel.getMenuList().observe(getViewLifecycleOwner(), menuList -> {
             if (getContext() != null && menuList != null) {
-                new TopSheetDialog(getContext()).setListDataWithResourceId(menuList, -1, position -> viewModel.onMenuItemClicked(position)).show();
+                new TopSheetDialog(getContext()).setListData(menuList, -1, position -> viewModel.onMenuItemClicked(position)).show();
             }
         });
 
@@ -171,9 +182,9 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getActivity() instanceof ActivityMain && isGoBack != null) {
-                if (isGoBack) {
+                /*if (isGoBack) {
                     ((ActivityMain) getActivity()).chatBackgroundChanged();
-                }
+                }*/
                 getActivity().onBackPressed();
             }
         });

@@ -8,12 +8,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/iv_close4"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/icon_close"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +23,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
         android:text="@string/Select_the_type_of_charge"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close4"
         app:layout_constraintStart_toEndOf="@+id/iv_close4"
         app:layout_constraintTop_toTopOf="@+id/iv_close4" />
@@ -55,7 +53,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_dialog4"
-        style="@style/iGapButton"
+        style="@style/BaseIGapButtonStyle"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginTop="32dp"

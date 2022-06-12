@@ -1,8 +1,8 @@
 package net.iGap.helper.upload.ApiBased;
 
+import android.os.Build;
 import android.os.Looper;
 
-import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
 import net.iGap.G;
@@ -26,8 +26,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmStory;
-import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
@@ -46,7 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HttpUploader implements IUpload {
+public class HttpUploader implements IUpload, UploadHttpRequest.UploadDelegate {
 
     private static volatile HttpUploader instance = null;
 
@@ -54,6 +52,7 @@ public class HttpUploader implements IUpload {
     private HashMap<String, UploadHttpRequest> inProgressUploads = new HashMap<>();
     private ArrayMap<String, CompressTask> pendingCompressTasks = new ArrayMap<>();
     private AtomicInteger inProgressCount = new AtomicInteger(0);
+    private File completedCompressFile;
     private ThreadPoolExecutor mThreadPoolExecutor;
     public static boolean isMultiUpload = false;
     public static boolean isRoomMultiUpload = false;
@@ -61,9 +60,9 @@ public class HttpUploader implements IUpload {
     public static boolean isStoryUploading = false;
     private FileIOExecutor fileExecutors;
 
-    private final int MAX_UPLOAD;
+    private ServiceUploadCallback mServiceUploadCallback;
 
-    private static final String TAG = "UploadHttpRequest";
+    private final int MAX_UPLOAD;
 
     public static HttpUploader getInstance() {
         HttpUploader localInstance = instance;
@@ -113,6 +112,14 @@ public class HttpUploader implements IUpload {
         });
     }
 
+    public void registerServiceUploadCallback(ServiceUploadCallback serviceUploadCallback) {
+        mServiceUploadCallback = serviceUploadCallback;
+    }
+
+    public void unRegisterServiceUploadCallback() {
+        mServiceUploadCallback = null;
+    }
+
     @Override
     public boolean isUploading(String messageId) {
         return findExistedRequest(messageId) != null;
@@ -140,6 +147,7 @@ public class HttpUploader implements IUpload {
         if (request == null) {
             return false;
         } else {
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_CANCEL, request.fileObject.messageId);
             request.cancelUpload();
             return true;
         }
@@ -174,7 +182,7 @@ public class HttpUploader implements IUpload {
         if (validForCompress(fileObject) && ignoreCompress()) {
             final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + fileObject.messageId + ".mp4";
             final File compressFile = new File(savePathVideoCompress);
-            final File completedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
+            completedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
 
             if (!completedCompressFile.exists() && ignoreCompress()) {
                 if (pendingCompressTasks.containsKey(fileObject.messageId + ""))
@@ -226,122 +234,7 @@ public class HttpUploader implements IUpload {
         } else {
             UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
             if (existedRequest == null) {
-                existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
-                    @Override
-                    public void onUploadProgress(UploadObject fileObject) {
-                        FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
-                        if (fileObject.onUploadListener != null) {
-                            fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
-                        }
-                    }
-
-                    @Override
-                    public void onUploadFinish(UploadObject fileObject) {
-                        HelperDataUsage.increaseUploadFiles(fileObject.messageType);
-                        HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
-                        FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
-                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                        if (req != null) {
-                            inProgressUploads.remove(fileObject.key);
-                            inProgressCount.decrementAndGet();
-                        }
-                        if (fileObject.messageObject != null) {
-                            if (completedCompressFile != null && completedCompressFile.exists()) {
-                                completedCompressFile.delete();
-                            }
-
-                            HelperSetAction.sendCancel(fileObject.messageId);
-
-                            DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
-                            sendMessage(fileObject);
-                        }
-                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
-
-                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryFileToken(fileObject.messageId, fileObject.fileToken);
-
-
-                            if (isMultiUpload || isRoomMultiUpload) {
-                                if (MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryById(AccountManager.getInstance().getCurrentUser().getId(), false).storyObjects.size() ==
-                                        MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), 0).size()) {
-                                    List<StoryObject> realmStoryProtos;
-                                    if (isRoomMultiUpload) {
-                                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), storyRoomIdForUpload, MessageObject.STATUS_SENDING, true, true, new String[]{"createdAt"});
-                                    } else {
-                                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), 0, MessageObject.STATUS_SENDING, true, false, new String[]{"createdAt"});
-                                    }
-                                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
-                                        List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
-                                        for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                            storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
-                                            storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
-                                            storyObjects.add(storyAddRequest.build());
-                                        }
-                                        isStoryUploading = false;
-                                        if (isRoomMultiUpload) {
-                                            MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, storyRoomIdForUpload);
-                                        } else {
-                                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
-                                        }
-
-                                    }
-
-                                }
-                            } else {
-                                List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING);
-                                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
-                                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
-                                    for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                        storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
-                                        storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
-                                        storyObjects.add(storyAddRequest.build());
-                                    }
-                                    isStoryUploading = false;
-                                    if (realmStoryProtos.get(0).isForRoom) {
-                                        MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, realmStoryProtos.get(0).roomId);
-                                    } else {
-                                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
-                                    }
-
-                                }
-                            }
-
-                        }
-                        if (fileObject.onUploadListener != null) {
-                            fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
-                        }
-                        scheduleNewUpload();
-                    }
-
-                    @Override
-                    public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
-                        long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
-                        HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
-                        FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
-                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                        if (req != null) {
-                            inProgressUploads.remove(fileObject.key);
-                            inProgressCount.decrementAndGet();
-                        }
-
-                        scheduleNewUpload();
-
-                        if (inProgressCount.get() == 0)
-                            HelperSetAction.sendCancel(fileObject.messageId);
-
-                        makeFailed(fileObject.messageId);
-                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
-                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(), false);
-                            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId, MessageObject.STATUS_FAILED);
-                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
-                        }
-                        if (fileObject.onUploadListener != null) {
-                            fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
-                        }
-                    }
-                });
+                existedRequest = new UploadHttpRequest(fileObject, HttpUploader.this);
 
                 uploadQueue.add(existedRequest);
                 scheduleNewUpload();
@@ -388,9 +281,22 @@ public class HttpUploader implements IUpload {
             return;
         }
 
-        inProgressUploads.put(request.key, request);
-        inProgressCount.incrementAndGet();
-        fileExecutors.execute(request::startUploadProcess);
+        if (request.fileObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT || request.fileObject.messageType == ProtoGlobal.RoomMessageType.VIDEO || request.fileObject.messageType == ProtoGlobal.RoomMessageType.FILE || request.fileObject.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                inProgressUploads.put(request.key, request);
+                inProgressCount.incrementAndGet();
+                mServiceUploadCallback.onServiceUpload(request.fileObject);
+            } else {
+                inProgressUploads.put(request.key, request);
+                inProgressCount.incrementAndGet();
+                fileExecutors.execute(request::startUploadProcess);
+            }
+        } else {
+            inProgressUploads.put(request.key, request);
+            inProgressCount.incrementAndGet();
+            fileExecutors.execute(request::startUploadProcess);
+        }
+
     }
 
     private boolean ignoreCompress() {
@@ -400,4 +306,133 @@ public class HttpUploader implements IUpload {
     private boolean validForCompress(UploadObject fileObject) {
         return fileObject.messageType == ProtoGlobal.RoomMessageType.VIDEO || fileObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT;
     }
+
+    /**
+     * 3 methods implementation for UploadDelegate interface
+     */
+    @Override
+    public void onUploadProgress(UploadObject fileObject) {
+        FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
+        if (fileObject.onUploadListener != null) {
+            fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
+        }
+
+    }
+
+    @Override
+    public void onUploadFinish(UploadObject fileObject) {
+
+        HelperDataUsage.increaseUploadFiles(fileObject.messageType);
+        HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
+        FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
+        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+        if (req != null) {
+            inProgressUploads.remove(fileObject.key);
+            inProgressCount.decrementAndGet();
+        }
+        if (fileObject.messageObject != null) {
+            if (completedCompressFile != null && completedCompressFile.exists()) {
+                completedCompressFile.delete();
+            }
+
+            HelperSetAction.sendCancel(fileObject.messageId);
+
+            DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
+            sendMessage(fileObject);
+        }
+        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
+
+            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryFileToken(fileObject.messageId, fileObject.fileToken);
+
+
+            if (isMultiUpload || isRoomMultiUpload) {
+                if (MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryById(AccountManager.getInstance().getCurrentUser().getId(), false).storyObjects.size() ==
+                        MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), 0).size()) {
+                    List<StoryObject> realmStoryProtos;
+                    if (isRoomMultiUpload) {
+                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), storyRoomIdForUpload, MessageObject.STATUS_SENDING, true, true, new String[]{"createdAt"});
+                    } else {
+                        realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getStoryByStatus(AccountManager.getInstance().getCurrentUser().getId(), 0, MessageObject.STATUS_SENDING, true, false, new String[]{"createdAt"});
+                    }
+                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                        List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                        for (int i = 0; i < realmStoryProtos.size(); i++) {
+                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                            storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                            storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
+                            storyObjects.add(storyAddRequest.build());
+                        }
+                        isStoryUploading = false;
+                        if (isRoomMultiUpload) {
+                            MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, storyRoomIdForUpload);
+                        } else {
+                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                        }
+
+                    }
+
+                }
+            } else {
+                List<StoryObject> realmStoryProtos = MessageDataStorage.getInstance(AccountManager.selectedAccount).getNotNullTokenStories(AccountManager.getInstance().getCurrentUser().getId(), MessageObject.STATUS_SENDING);
+                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                    for (int i = 0; i < realmStoryProtos.size(); i++) {
+                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                        storyAddRequest.setToken(realmStoryProtos.get(i).fileToken);
+                        storyAddRequest.setCaption(realmStoryProtos.get(i).caption);
+                        storyObjects.add(storyAddRequest.build());
+                    }
+                    isStoryUploading = false;
+                    if (realmStoryProtos.get(0).isForRoom) {
+                        MessageController.getInstance(AccountManager.selectedAccount).addMyRoomStory(storyObjects, realmStoryProtos.get(0).roomId);
+                    } else {
+                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                    }
+
+                }
+            }
+
+        }
+        if (fileObject.onUploadListener != null) {
+            fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
+        }
+        scheduleNewUpload();
+
+    }
+
+    @Override
+    public void onUploadFail(UploadObject fileObject, @org.jetbrains.annotations.Nullable Exception e) {
+        long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
+        HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
+        FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
+        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+        if (req != null) {
+            inProgressUploads.remove(fileObject.key);
+            inProgressCount.decrementAndGet();
+        }
+
+        scheduleNewUpload();
+
+        if (inProgressCount.get() == 0)
+            HelperSetAction.sendCancel(fileObject.messageId);
+
+        makeFailed(fileObject.messageId);
+        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STORY) {
+            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStorySentStatus(AccountManager.getInstance().getCurrentUser().getId(), false);
+            MessageDataStorage.getInstance(AccountManager.selectedAccount).updateStoryStatus(fileObject.messageId, MessageObject.STATUS_FAILED);
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED, fileObject.messageId));
+        }
+        if (fileObject.onUploadListener != null) {
+            fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
+        }
+
+    }
+
+    public interface ServiceUploadCallback {
+
+        void onServiceUpload(UploadObject uploadObject);
+
+    }
+
 }

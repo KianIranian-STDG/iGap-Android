@@ -22,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class CheckBox extends View {
 
@@ -102,7 +102,7 @@ public class CheckBox extends View {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(LayoutCreator.dp(18));
         checkDrawable = getContext().getResources().getDrawable(checkResId).mutate();
-        setColor(Theme.getInstance().getButtonColor(getContext()), getResources().getColor(R.color.whit_background));
+        setColor(Theme.getColor(Theme.key_button_background),Theme.getColor(Theme.key_white));
 
     }
 

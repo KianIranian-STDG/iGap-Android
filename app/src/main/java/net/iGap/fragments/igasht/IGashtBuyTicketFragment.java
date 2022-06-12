@@ -11,9 +11,11 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBuyTicketBinding;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.viewmodel.igasht.IGashtBuyTicketViewModel;
 import net.iGap.adapter.igahst.OrderedTicketListAdapter;
 
@@ -41,11 +43,16 @@ public class IGashtBuyTicketFragment extends IGashtBaseView<IGashtBuyTicketViewM
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.constraintLayout2.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         binding.addedPlaceList.addItemDecoration(new DividerItemDecoration(binding.addedPlaceList.getContext(), DividerItemDecoration.VERTICAL));
         binding.addedPlaceList.setNestedScrollingEnabled(false);
         binding.addedPlaceList.setHasFixedSize(true);
+        binding.addedPlaceList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), totalPrice -> viewModel.setTotalPrice(totalPrice)));
+        binding.priceTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.countTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.serviceTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.totalPrice.setTextColor(Theme.getColor(Theme.key_title_text));
 
         viewModel.getServiceList().observe(getViewLifecycleOwner(), ticketList -> {
             if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && ticketList != null) {

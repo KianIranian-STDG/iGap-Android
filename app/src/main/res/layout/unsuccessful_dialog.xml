@@ -13,7 +13,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            app:cardBackgroundColor="@color/colorWhite"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="13dp"
             app:cardElevation="4dp">
 
@@ -66,7 +66,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/green_bottom_rounded"
                     android:text="@string/ok"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentChangePhoneNumberActivationViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toTopOf="@id/sendActivationStatus"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".6" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/sendActivationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp8"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:text="@{viewModel.sendActivationStatus}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_fragmentActivation_phoneNumberContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@{viewModel.sendActivationPhoneNumber}"
+            app:layout_constraintBottom_toTopOf="@+id/timerView"
+            app:layout_constraintEnd_toEndOf="@+id/sendActivationStatus"
+            app:layout_constraintStart_toStartOf="@+id/sendActivationStatus"
+            app:layout_constraintTop_toBottomOf="@+id/sendActivationStatus" />
+
+        <View
+            android:id="@+id/timerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/timer_line"
+            app:layout_constraintBottom_toTopOf="@id/resentActivationCode"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sendActivationStatus"
+            app:layout_constraintWidth_percent=".6" />
+
+        <View
+            android:id="@+id/timerPosition"
+            android:layout_width="@dimen/dp16"
+            android:layout_height="@dimen/dp16"
+            app:layout_constraintCircle="@id/timerView"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="0dp"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.timerValue}"
+            android:textColor="?attr/colorAccent"
+            app:layout_constraintCircle="@id/timerPosition"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="@dimen/dp20"
+            tools:ignore="MissingConstraints" />
+
+        <!--TODO: change this and create custom view-->
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/activationCodeEditText1"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/timerView"
+            app:layout_constraintLeft_toLeftOf="@id/timerView"
+            app:layout_constraintRight_toLeftOf="@id/activationCodeEditText2"
+            app:layout_constraintTop_toTopOf="@id/timerView" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/activationCodeEditText2"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/activationCodeEditText1"
+            app:layout_constraintLeft_toRightOf="@id/activationCodeEditText1"
+            app:layout_constraintRight_toLeftOf="@id/activationCodeEditText3"
+            app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/activationCodeEditText3"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/activationCodeEditText1"
+            app:layout_constraintLeft_toRightOf="@id/activationCodeEditText2"
+            app:layout_constraintRight_toLeftOf="@id/activationCodeEditText4"
+            app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/activationCodeEditText4"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/activationCodeEditText1"
+            app:layout_constraintLeft_toRightOf="@id/activationCodeEditText3"
+            app:layout_constraintRight_toLeftOf="@id/activationCodeEditText5"
+            app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/activationCodeEditText5"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/activationCodeEditText1"
+            app:layout_constraintLeft_toRightOf="@id/activationCodeEditText4"
+            app:layout_constraintRight_toRightOf="@id/timerView"
+            app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/resentActivationCode"
+            style="@style/BaseIGapStrokeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.enabledResendCodeButton}"
+            android:onClick="@{()->viewModel.resentActivationCodeClick()}"
+            android:text="@string/resend_code"
+            android:padding="5dp"
+            app:layout_constraintBottom_toTopOf="@id/loginButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timerView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="@{viewModel.isActive}"
+            android:onClick="@{()->viewModel.loginButtonOnClick(activationCodeEditText1.getEditableText().toString() + activationCodeEditText2.getEditableText().toString() + activationCodeEditText3.getEditableText().toString() + activationCodeEditText4.getEditableText().toString()+activationCodeEditText5.getEditableText().toString())}"
+            android:text="@string/login"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/resentActivationCode"
+            app:layout_constraintWidth_percent=".5" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoading}"
+            app:layout_constraintBottom_toTopOf="@id/loginButton"
+            app:layout_constraintLeft_toLeftOf="@id/loginButton"
+            app:layout_constraintRight_toRightOf="@id/loginButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

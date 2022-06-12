@@ -16,6 +16,7 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoGlobal;
 
+import org.parceler.Parcel;
 
 import java.util.List;
 

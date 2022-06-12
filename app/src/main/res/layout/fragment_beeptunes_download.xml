@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@android:color/white"
     android:padding="16dp">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="لطفا کیفیت دانلود را انتخاب کنید."
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
         android:layout_marginTop="16dp"
         android:enabled="false"
         android:text="تنظیمات را به خاطر داشته باش"
-        android:textColor="@color/gray_300"
+        android:textColor="@color/key_light_gray"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        android:background="@color/gray10"
+        android:background="@color/key_light_gray"
         app:layout_constraintTop_toBottomOf="@+id/rg_downloadQuality"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -73,7 +73,7 @@
         android:layout_marginTop="16dp"
         android:padding="8dp"
         android:text="دانلود"
-        android:textColor="@color/gray_300"
+        android:textColor="@color/key_light_gray"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
         android:layout_marginLeft="8dp"
         android:padding="8dp"
         android:text="بیخیال"
-        android:textColor="@color/gray_300"
+        android:textColor="@color/key_light_gray"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tv_downloadQuality_confirm"

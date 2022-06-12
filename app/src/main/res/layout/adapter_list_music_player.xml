@@ -26,7 +26,6 @@
                 android:gravity="center"
                 android:text="@string/icon_play"
                 android:textAppearance="@style/TextIconAppearance.all"
-                android:textColor="@color/toolbar_player_base_color"
                 android:textSize="@dimen/dp36"
                 android:visibility="visible" />
 
@@ -56,12 +55,10 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/music_name"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
             <TextView
                 android:id="@+id/ml_txt_music_place"
-                style="?iGapSubtitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -77,6 +74,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?iGapDividerLine" />
+        android:background="@color/key_light_gray" />
 
 </LinearLayout>

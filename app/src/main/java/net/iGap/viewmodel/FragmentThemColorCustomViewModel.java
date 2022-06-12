@@ -26,9 +26,9 @@ import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
 import net.iGap.fragments.FragmentThemColorCustom;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -98,7 +98,13 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         String titleMessage = G.fragmentActivity.getResources().getString(title);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.popup_colorpicker, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.popup_colorpicker, wrapInScrollView)
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.set))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -204,11 +210,11 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         /*String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);*/
-        String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Theme.default_notificationColor);
+        /*String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Theme.default_notificationColor);
         String toggleButtonColor = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Theme.default_toggleButtonColor);
         String attachmentColor = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Theme.default_attachmentColor);
         String headerTextColor = sharedPreferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Theme.default_headerTextColor);
-        String progressColor = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Theme.default_progressColor);
+        String progressColor = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Theme.default_progressColor);*/
 
         //***********************
         GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
@@ -217,29 +223,29 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
         //***********************
 
         GradientDrawable bgShapeNotification = (GradientDrawable) fragmentThemColorCustomBinding.asnImgNotificationColor.getBackground();
-        bgShapeNotification.setColor(Color.parseColor(notificationColor));
+        //bgShapeNotification.setColor(Color.parseColor(notificationColor));
 
         //***********************
 
         GradientDrawable bgShapeToggleBottomColor = (GradientDrawable) fragmentThemColorCustomBinding.asnImgToggleBottonColor.getBackground();
-        bgShapeToggleBottomColor.setColor(Color.parseColor(toggleButtonColor));
+        //bgShapeToggleBottomColor.setColor(Color.parseColor(toggleButtonColor));
 
          /*
           page for show all image user
          */
         GradientDrawable bgShapeSendAndAttachColor = (GradientDrawable) fragmentThemColorCustomBinding.asnImgSendAndAttachColor.getBackground();
-        bgShapeSendAndAttachColor.setColor(Color.parseColor(attachmentColor));
+       // bgShapeSendAndAttachColor.setColor(Color.parseColor(attachmentColor));
 
 
         //***********************
 
         GradientDrawable bgShapeHeaderTextColor = (GradientDrawable) fragmentThemColorCustomBinding.asnImgDefaultHeaderFontColor.getBackground();
-        bgShapeHeaderTextColor.setColor(Color.parseColor(headerTextColor));
+      //  bgShapeHeaderTextColor.setColor(Color.parseColor(headerTextColor));
 
         //***********************
 
         GradientDrawable bgShapeProgressColor = (GradientDrawable) fragmentThemColorCustomBinding.asnImgDefaultProgressColor.getBackground();
-        bgShapeProgressColor.setColor(Color.parseColor(progressColor));
+       // bgShapeProgressColor.setColor(Color.parseColor(progressColor));
 
 
     }

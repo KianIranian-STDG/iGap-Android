@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/iGapChatSendMessageBackground"
     android:clickable="true"
     android:gravity="bottom"
     android:layoutDirection="ltr"
@@ -11,7 +10,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
-        style="@style/myIconTextViewStyleGray"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
@@ -22,23 +21,23 @@
 
     <net.iGap.module.customView.EventEditText
         android:id="@+id/et_chatRoom_writeMessage"
-        style="@style/iGapEditTextStyle"
+        android:background="@null"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:background="@null"
         android:hint="@string/type_message"
         android:imeOptions="actionDone"
         android:inputType="textMultiLine"
         android:maxLines="6"
         android:minLines="1"
         android:padding="@dimen/dp4"
+        android:textCursorDrawable="@null"
         android:textSize="@dimen/largeTextSize" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
-        style="@style/myIconTextViewStyleGray"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
         android:padding="@dimen/dp8"
@@ -55,13 +54,12 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_send"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
-            android:layout_gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/icon_send"
-            android:textColor="?attr/iGapSendReplayColor"
+            android:layout_gravity="center"
             android:visibility="gone" />
 
         <ProgressBar
@@ -84,7 +82,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_wallet"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/dp8"
@@ -95,7 +93,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/dp8"
@@ -104,24 +102,25 @@
             android:text="@string/icon_attach"
             android:textSize="24sp" />
 
+
         <FrameLayout
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_gravity="top">
 
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/btn_chatRoom_mic"
-                style="@style/myIconTextViewStyle"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="@dimen/dp52"
-                android:padding="@dimen/dp8"
-                android:text="@string/icon_microphone"
-                android:textColor="?attr/colorAccent"
-                android:textSize="24sp" />
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/btn_chatRoom_mic"
+            style="@style/baseFontIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/dp8"
+            android:paddingEnd="@dimen/dp8"
+            android:text="@string/icon_microphone"
+            android:textSize="24sp" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/btn_chatRoom_add_story"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="top"

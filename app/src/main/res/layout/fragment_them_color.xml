@@ -59,7 +59,7 @@
                             android:gravity="center"
                             android:text="@string/icon_back"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -71,7 +71,7 @@
                         android:fontFamily="@font/main_font_bold"
                         android:gravity="center"
                         android:text="@string/app_theme"
-                        android:textColor="@color/whit_background"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
                         android:visibility="visible" />
@@ -109,7 +109,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Custom"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -146,7 +145,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -164,7 +163,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Default"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -194,7 +192,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -212,7 +210,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Dark"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -250,7 +247,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -268,7 +265,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Blue Grey (Full Set)"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -298,7 +294,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -316,7 +312,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Indigo (Full Set)"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -346,7 +341,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -364,7 +359,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Brown (Full Set)"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -394,7 +388,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -412,7 +406,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Teal (Full Set)"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -442,7 +435,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -460,7 +453,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Grey (Full Set)"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -490,7 +482,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -508,7 +500,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Red"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -538,7 +529,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
 
                 <LinearLayout
@@ -557,7 +548,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Pink"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -587,7 +577,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -605,7 +595,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Purple"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -635,7 +624,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -653,7 +642,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Deep Purple"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -683,7 +671,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
 
                 <LinearLayout
@@ -702,7 +690,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Indigo"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -732,7 +719,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -750,7 +737,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Blue"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -780,7 +766,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -798,7 +784,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Light Blue"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -828,7 +813,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -846,7 +831,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Cyan"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -876,7 +860,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -894,7 +878,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Teal"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -924,7 +907,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -942,7 +925,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Green"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -972,7 +954,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -990,7 +972,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Light Green"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1020,7 +1001,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1038,7 +1019,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Lime"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1067,7 +1047,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1085,7 +1065,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Yellow"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1115,7 +1094,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1133,7 +1112,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Amber"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1163,7 +1141,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1180,7 +1158,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Orange"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1210,7 +1187,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1228,7 +1205,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Deep Orange"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1258,7 +1234,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1276,7 +1252,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Brown"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1306,7 +1281,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1324,7 +1299,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Grey"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1354,7 +1328,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1372,7 +1346,6 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="Blue Grey"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1402,7 +1375,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine" />
+                    android:background="@color/key_light_gray" />
 
 
             </LinearLayout>

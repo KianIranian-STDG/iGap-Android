@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:layout_margin="@dimen/dp2"
-        android:textColor="?attr/iGapPrimaryTextColor"
         android:textSize="@dimen/smallTextSize" />
 
     <RelativeLayout
@@ -39,7 +38,6 @@
                 android:layout_marginStart="@dimen/dp2"
                 android:layout_marginEnd="@dimen/dp2"
                 android:adjustViewBounds="true"
-                android:tint="?attr/iGapTitleTextColor"
                 app:srcCompat="@drawable/ic_more_popular_channel" />
         </FrameLayout>
 

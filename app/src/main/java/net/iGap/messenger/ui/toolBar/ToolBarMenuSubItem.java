@@ -16,8 +16,8 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.components.IconView;
-import net.iGap.module.Theme;
 
 public class ToolBarMenuSubItem extends FrameLayout {
 
@@ -34,8 +34,8 @@ public class ToolBarMenuSubItem extends FrameLayout {
 
     public ToolBarMenuSubItem(Context context, boolean needCheck) {
         super(context);
-        textColor = Theme.getInstance().getTitleTextColor(context);
-        selectorColor = Theme.getInstance().getDividerColor(context);
+        textColor = Theme.getColor(Theme.key_icon);
+        selectorColor = Theme.getColor(Theme.key_popup_background);
         setBackground(Theme.createSelectorDrawable(selectorColor, 2));
         setPadding(LayoutCreator.dp(18), 0, LayoutCreator.dp(18), 0);
 
@@ -58,7 +58,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
             checkView = new ImageView(context);
             checkView.setImageResource(R.drawable.round_check);
             checkView.setScaleType(ImageView.ScaleType.CENTER);
-            checkView.setColorFilter(new PorterDuffColorFilter(Theme.getInstance().getTitleTextColor(context), PorterDuff.Mode.MULTIPLY));
+            checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_title_text), PorterDuff.Mode.MULTIPLY));
             addView(checkView, LayoutCreator.createFrame(26, LayoutCreator.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         }
     }

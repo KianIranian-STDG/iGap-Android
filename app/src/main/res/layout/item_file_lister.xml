@@ -11,14 +11,13 @@
         android:padding="5dp">
 
         <TextView
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/icon_folder"
             android:textSize="@dimen/dp28"
-            android:padding="@dimen/dp10"
-            android:textColor="?iGapPrimaryIconTextColor" />
+            android:padding="@dimen/dp10"/>
 
         <TextView
             android:id="@+id/name"
@@ -28,7 +27,6 @@
             android:layout_marginStart="@dimen/dp10"
             android:layout_weight="0.9"
             android:gravity="center_vertical"
-            android:textColor="?iGapTitleTextColor"
             android:text="Folder"
             android:singleLine="true"
             android:textSize="15sp" />

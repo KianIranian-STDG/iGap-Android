@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="fragmentChangePhoneNumberViewModel"
+            type="net.iGap.viewmodel.FragmentChangePhoneNumberViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/changePhoneNumber"
+                app:layout_constraintBottom_toTopOf="@id/description"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".6"
+                android:layout_marginTop="@dimen/dp80"
+                android:textStyle="bold"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_phone_description"
+                android:textSize="16sp"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.viewVisibility}"
+                app:layout_constraintBottom_toTopOf="@id/rg_btn_choseCountry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintWidth_percent=".8"
+                android:padding="20dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rg_btn_choseCountry"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:enabled="@{fragmentChangePhoneNumberViewModel.btnChoseCountryEnable}"
+                android:onClick="@{()-> fragmentChangePhoneNumberViewModel.onClickChoseCountry()}"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.viewVisibility}"
+                app:cardCornerRadius="20dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="8dp"
+                app:layout_constraintBottom_toTopOf="@id/phoneNumber"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                app:layout_constraintWidth_percent=".7"
+                android:layout_marginTop="15dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/countryFlag"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/country"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="@{fragmentChangePhoneNumberViewModel.callbackBtnChoseCountry}"
+                        android:textSize="@dimen/largeTextSize"
+                        app:layout_constraintLeft_toRightOf="@id/t1"
+                        app:layout_constraintRight_toLeftOf="@id/countryFlag"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/t1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="..."
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.vicmikhailau.maskededittext.MaskedEditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:afterTextChanged="@{(phoneNumber)->fragmentChangePhoneNumberViewModel.onTextChanged(phoneNumber.toString())}"
+                android:enabled="@{fragmentChangePhoneNumberViewModel.edtPhoneNumberEnable}"
+                android:gravity="left|center_vertical"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="phone"
+                android:maxLength="18"
+                android:maxLines="@{fragmentChangePhoneNumberViewModel.edtPhoneNumberMaskMaxCount}"
+                android:padding="@dimen/dp4"
+                android:text="@={fragmentChangePhoneNumberViewModel.callBackEdtPhoneNumber}"
+                android:textAlignment="gravity"
+                android:textSize="@dimen/dp14"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.viewVisibility}"
+                app:layout_constraintLeft_toRightOf="@id/countyCode"
+                app:layout_constraintRight_toRightOf="@id/rg_btn_choseCountry"
+                app:layout_constraintTop_toBottomOf="@id/rg_btn_choseCountry"
+                app:mask="@{fragmentChangePhoneNumberViewModel.edtPhoneNumberMask}" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/countyCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:maxLength="5"
+                android:padding="@dimen/dp4"
+                android:singleLine="true"
+                android:text="@{fragmentChangePhoneNumberViewModel.callbackEdtCodeNumber}"
+                android:textDirection="ltr"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/dp14"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.viewVisibility}"
+                app:layout_constraintBottom_toBottomOf="@id/phoneNumber"
+                app:layout_constraintLeft_toLeftOf="@id/rg_btn_choseCountry"
+                app:layout_constraintRight_toLeftOf="@id/phoneNumber"
+                app:layout_constraintTop_toTopOf="@id/phoneNumber" />
+
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.isShowLoading}"
+                app:layout_constraintEnd_toEndOf="@id/registerButton"
+                app:layout_constraintStart_toStartOf="@id/registerButton"
+                app:layout_constraintTop_toBottomOf="@id/registerButton" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/retryView"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp48"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="@string/retry"
+                android:textSize="@dimen/largeTextSize"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.showRetryView}"
+                app:layout_constraintBottom_toBottomOf="@id/loading"
+                app:layout_constraintEnd_toEndOf="@id/loading"
+                app:layout_constraintStart_toStartOf="@id/loading"
+                app:layout_constraintTop_toTopOf="@id/loading"
+                android:layout_marginTop="15dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/registerButton"
+                style="@style/BaseIGapButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:enabled="@{fragmentChangePhoneNumberViewModel.btnStartEnable }"
+                android:onClick="@{()->fragmentChangePhoneNumberViewModel.onClickChangeNumber()}"
+                android:text="@string/changePhoneNumber"
+                android:textSize="@dimen/dp14"
+                android:visibility="@{fragmentChangePhoneNumberViewModel.viewVisibility}"
+                app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent=".7"
+                android:layout_marginTop="15dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                style="@style/BaseIGapStrokeButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/largeTextSize"
+                android:text="@string/back"
+                android:padding="5dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/registerButton"
+                app:layout_constraintWidth_percent=".7"
+                android:layout_marginTop="15dp"
+                android:onClick="@{()->fragmentChangePhoneNumberViewModel.onClickBack()}"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

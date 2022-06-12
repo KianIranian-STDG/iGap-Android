@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
 
         <androidx.cardview.widget.CardView
@@ -28,7 +27,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp68"
             android:visibility="visible"
-            app:cardBackgroundColor="?attr/iGapDividerLine"
             app:cardCornerRadius="5dp">
 
             <RelativeLayout
@@ -48,7 +46,6 @@
                     android:singleLine="true"
                     android:text="@string/today"
                     android:textAllCaps="false"
-                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -134,10 +131,9 @@
                         android:layout_height="@dimen/dp44"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dp12"
-                        android:background="?attr/iGapAvatarBackground"
                         android:gravity="center"
                         android:text="@string/icon_chevron_Down"
-                        android:textColor="@color/white" />
+                        android:textColor="@android:color/white" />
 
                 </FrameLayout>
 
@@ -153,7 +149,7 @@
                     android:paddingRight="@dimen/dp24"
                     android:paddingBottom="@dimen/dp4"
                     android:text="@string/No_messages_here_yet"
-                    android:textColor="@color/black90"
+                    android:textColor="@android:color/black"
                     android:textSize="@dimen/dp14"
                     android:visibility="gone" />
 
@@ -164,7 +160,6 @@
                 android:id="@+id/ac_ll_attach_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:background="#8046A829"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -180,12 +175,11 @@
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
-                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_cancel_sending_file"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/dp8"
@@ -197,7 +191,6 @@
                 android:id="@+id/ac_ll_hash_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:background="?rootBackgroundColor"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -205,7 +198,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_hash_up"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp48"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -223,13 +216,12 @@
                     android:padding="@dimen/dp8"
                     android:singleLine="true"
                     android:text="0 of 0"
-                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp16" />
 
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_hash_down"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="match_parent"
                     android:background="@null"
@@ -250,8 +242,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/icon_close"
-                        android:textColor="?attr/iGapTitleTextColor" />
+                        android:text="@string/icon_close" />
 
 
                 </LinearLayout>
@@ -278,20 +269,18 @@
                 android:id="@+id/tv_chat_sendMessagePermission"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp52"
-                android:background="?attr/iGapTopRoundButtonPrimary"
-                android:clickable="true"
-                android:focusable="true"
                 android:gravity="center"
+                android:clickable="true"
                 android:text="@string/restrictions_on_sending_messages"
-                android:textColor="?attr/iGapPrimaryTextColor"
                 android:textSize="@dimen/standardTextSize"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:focusable="true" />
 
             <FrameLayout
                 android:id="@+id/fl_chat_keyboardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"/>
 
             <include
                 android:id="@+id/layout_bot"
@@ -305,7 +294,6 @@
                 android:id="@+id/ac_ll_join"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -316,7 +304,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/dp6"
                     android:text="@string/join"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/largeTextSize" />
 
             </LinearLayout>
@@ -325,13 +313,12 @@
                 android:id="@+id/chl_ll_channel_footer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:background="?attr/iGapTopRoundButtonPrimary"
                 android:layoutDirection="locale"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/chl_icon_mute_channel"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp10"
@@ -339,7 +326,6 @@
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp6"
                     android:text="@string/icon_mute"
-                    android:textColor="?iGapPrimaryTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/chl_txt_mute_channel"
@@ -354,7 +340,6 @@
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp6"
                     android:text="Mute"
-                    android:textColor="?attr/iGapPrimaryTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -383,7 +368,7 @@
                 android:layout_gravity="center">
 
                 <net.iGap.module.MaterialDesignTextView
-                    style="@style/myIconTextViewStyleGray"
+                    style="@style/baseFontIcon"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:text="@string/icon_edit"
@@ -398,7 +383,7 @@
                 android:layout_marginTop="@dimen/dp10">
 
                 <net.iGap.module.MaterialDesignTextView
-                    style="@style/myIconTextViewStyleGray"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="@dimen/dp52"
                     android:text="@string/icon_camera"

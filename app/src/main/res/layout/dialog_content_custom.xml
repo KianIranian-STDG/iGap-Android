@@ -14,7 +14,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/iconDialogTitle"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:fontFamily="@font/font_icons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,6 @@
             android:paddingTop="@dimen/dp8"
             android:paddingRight="@dimen/dp16"
             android:text="@string/mute_notification"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp20" />
     </LinearLayout>
 
@@ -48,7 +47,6 @@
             android:paddingTop="@dimen/dp16"
             android:paddingBottom="@dimen/dp16"
             android:text="@string/content_log_out"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/dp14" />
     </LinearLayout>
 
@@ -71,7 +69,6 @@
             android:paddingRight="@dimen/dp20"
             android:paddingBottom="@dimen/dp8"
             android:text="@string/B_cancel"
-            android:textColor="?attr/colorAccent"
             android:textSize="@dimen/dp14" />
 
         <TextView
@@ -85,7 +82,6 @@
             android:paddingRight="@dimen/dp20"
             android:paddingBottom="@dimen/dp8"
             android:text="@string/B_ok"
-            android:textColor="?attr/colorAccent"
             android:textSize="@dimen/dp14" />
 
 

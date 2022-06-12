@@ -24,6 +24,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperLog;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 
 import java.util.ArrayList;
@@ -43,7 +44,8 @@ public class RatingDialog {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(activity);
         builder
                 .items(activity.getResources().getString(R.string.score_request_text))
-                .itemsColorAttr(R.attr.iGapTitleTextColor)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .itemsColor(Theme.getColor(Theme.key_title_text))
                 .itemsGravity(GravityEnum.START)
                 .buttonsGravity(GravityEnum.CENTER)
                 .positiveText(R.string.ok)
@@ -86,7 +88,7 @@ public class RatingDialog {
                     }
                 })
                 .negativeText(R.string.remind_me_later)
-                .negativeColorAttr(R.attr.iGapSubtitleTextColor)
+                .negativeColor(Theme.getColor(Theme.key_subtitle_text))
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -94,7 +96,8 @@ public class RatingDialog {
                         dialog.dismiss();
                     }
                 });
-        MaterialDialog dialog = builder.build();
+        MaterialDialog dialog = builder.negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background)).build();
         dialog.show();
     }
 

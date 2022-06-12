@@ -4,6 +4,7 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
@@ -117,9 +119,6 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
-    }
-
-    private FragmentEditImage() {
     }
 
     @Override
@@ -325,7 +324,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
             itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
             checkBox.setChecked(true);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+            checkBox.setUnCheckColor(Theme.getColor(Theme.key_theme_color));
 
             StructBottomSheet item = new StructBottomSheet();
             item.setPath(path);
@@ -572,10 +571,10 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
         if (itemGalleryList.get(viewPager.getCurrentItem()).isSelected) {
             checkBox.setChecked(false);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+            checkBox.setUnCheckColor(Color.TRANSPARENT);
         } else {
             checkBox.setChecked(true);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+            checkBox.setUnCheckColor(Theme.getColor(Theme.key_theme_color));
         }
 
     }
@@ -599,10 +598,10 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
                 if (itemGalleryList.get(position).isSelected) {
                     checkBox.setChecked(false);
-                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+                    checkBox.setUnCheckColor(Color.TRANSPARENT);
                 } else {
                     checkBox.setChecked(true);
-                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+                    checkBox.setUnCheckColor(Theme.getColor(Theme.key_theme_color));
                 }
 
                 if (textImageList.containsKey(itemGalleryList.get(position).path)) {
@@ -823,7 +822,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         if (itemGalleryList.size() != 0) {
             if (checkBox.isChecked()) {
                 checkBox.setChecked(false);
-                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+                checkBox.setUnCheckColor(Color.TRANSPARENT);
                 itemGalleryList.get(position).setSelected(true);
                 textImageList.remove(itemGalleryList.get(position).path);
 
@@ -834,7 +833,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
                 item.setPath(itemGalleryList.get(position).path);
                 item.setId(itemGalleryList.get(position).getId());
                 textImageList.put(itemGalleryList.get(position).path, item);
-                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+                checkBox.setUnCheckColor(Theme.getColor(Theme.key_theme_color));
                 itemGalleryList.get(position).setSelected(false);
             }
         }
@@ -869,6 +868,9 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
         checkBox = view.findViewById(R.id.checkBox_editImage);
+        checkBox.setCircleColor(Theme.getColor(Theme.key_button_background));
+        checkBox.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.background_check));
+        //checkBox.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.background_check), getContext(), Theme.getColor(Theme.key_theme_color)));
         imvSmileButton = view.findViewById(R.id.chl_imv_smile_button);
     }
 
@@ -889,8 +891,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         Uri uri = Uri.parse(newPath);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             UCrop.Options options = new UCrop.Options();
-            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
-            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setStatusBarColor(Theme.getColor(Theme.key_black));
+            options.setToolbarColor(Theme.getColor(Theme.key_black));
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
@@ -911,8 +913,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
                     .setShowCropOverlay(true)
                     .setAspectRatio(1, 1)
                     .setFixAspectRatio(false)
-                    .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                    .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                    .setBorderCornerColor(Theme.getColor(Theme.key_white))
+                    .setBackgroundColor(Theme.getColor(Theme.key_dark_gray))
                     .setScaleType(CropImageView.ScaleType.FIT_CENTER)
                     .start(G.fragmentActivity, FragmentEditImage.this);
         }

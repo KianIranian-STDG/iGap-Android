@@ -11,7 +11,6 @@
         android:layout_margin="@dimen/discovery_margin"
         android:padding="@dimen/dp24"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="?attr/iGapCardViewColor"
         app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,7 +26,6 @@
             android:layout_margin="@dimen/dp12"
             android:gravity="center"
             android:text="@string/unknown_type"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp14" />
 
     </androidx.cardview.widget.CardView>

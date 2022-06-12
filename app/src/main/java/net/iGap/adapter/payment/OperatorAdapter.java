@@ -1,18 +1,21 @@
 package net.iGap.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.Operator;
-import net.iGap.module.Theme;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 
 import java.util.List;
@@ -87,33 +90,43 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.ViewHo
     }
 
     public void setViewBackground(View view) {
-        switch (G.themeColor) {
-            case Theme.DARK:
-                view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_dark));
-                break;
-            case Theme.AMBER:
-                view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_amber));
-                break;
-            case Theme.GREEN:
+        switch (Theme.getCurrentTheme().getName()) {
+            case Theme.DAY_GREEN_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_green));
                 break;
-            case Theme.BLUE:
+            case Theme.DARK_GREEN_THEME:
+            case Theme.NIGHT_GREEN_THEME:
+                view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_dark));
+                break;
+            case Theme.DAY_YELLOW_THEME:
+            case Theme.DARK_YELLOW_THEME:
+            case Theme.NIGHT_YELLOW_THEME:
+                view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_amber));
+                break;
+            case Theme.DAY_BLUE_THEME:
+            case Theme.DARK_BLUE_THEME:
+            case Theme.NIGHT_BLUE_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_blue));
                 break;
-            case Theme.PURPLE:
+            case Theme.DAY_CYAN_THEME:
+            case Theme.DARK_CYAN_THEME:
+            case Theme.NIGHT_CYAN_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_purple));
                 break;
-            case Theme.PINK:
+            case Theme.DAY_PINK_THEME:
+            case Theme.DARK_PINK_THEME:
+            case Theme.NIGHT_PINK_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_pink));
                 break;
-            case Theme.RED:
+            case Theme.DAY_RED_THEME:
+            case Theme.DARK_RED_THEME:
+            case Theme.NIGHT_RED_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_red));
                 break;
-            case Theme.ORANGE:
+            case Theme.DAY_ORANGE_THEME:
+            case Theme.DARK_ORANGE_THEME:
+            case Theme.NIGHT_ORANGE_THEME:
                 view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_orange));
-                break;
-            case Theme.GREY:
-                view.setBackground(context.getResources().getDrawable(R.drawable.selector_topup_operator_dark_gray));
                 break;
         }
     }
@@ -127,10 +140,17 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.ViewHo
         AppCompatRadioButton radioButton;
         AppCompatImageView imageView;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public ViewHolder(View view) {
             super(view);
             root = (ViewGroup) view;
             radioButton = view.findViewById(R.id.radioButton);
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][]{new int[]{-android.R.attr.state_enabled},new int[]{android.R.attr.state_enabled}},
+                    new int[]{Theme.getColor(Theme.key_icon),Theme.getColor(Theme.key_theme_color)}
+            );
+            radioButton.setButtonTintList(colorStateList);
+            radioButton.invalidate();
             imageView = view.findViewById(R.id.imageView);
         }
     }

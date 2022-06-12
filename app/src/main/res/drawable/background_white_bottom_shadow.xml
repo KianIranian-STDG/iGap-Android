@@ -3,7 +3,7 @@
 
     <item android:bottom="1dp">
         <shape>
-            <solid android:color="@color/light_gray" />
+            <solid android:color="@color/key_light_gray" />
         </shape>
     </item>
 
@@ -15,7 +15,7 @@
 
     <item android:bottom="3dp">
         <shape>
-            <solid android:color="?attr/iGapWalletLighterBackground" />
+            <solid android:color="#303030" />
         </shape>
     </item>
 

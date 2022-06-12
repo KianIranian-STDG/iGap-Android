@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class InlineButton extends FrameLayout {
     private ProgressBar progressBar;
@@ -31,14 +32,14 @@ public class InlineButton extends FrameLayout {
 
         setPadding(LayoutCreator.dp(2), LayoutCreator.dp(2), LayoutCreator.dp(2), LayoutCreator.dp(2));
 
-        textView.setTextColor(getResources().getColor(R.color.whit_background));
+        textView.setTextColor(Theme.getColor(Theme.key_white));
         setTextSize(textView, R.dimen.standardTextSize);
         textView.setAllCaps(false);
         textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setText("دکمه ی شیشه ای");
         textView.setGravity(Gravity.CENTER);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.whit_background), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN);
 
 //        progressBar.setVisibility(GONE);
         addView(progressBar, LayoutCreator.createFrame(15, 15, Gravity.TOP | Gravity.RIGHT, 0, 4, 4, 0));

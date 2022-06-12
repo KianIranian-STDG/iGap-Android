@@ -9,7 +9,7 @@
         android:id="@+id/cigp_view_topLine"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="?attr/iGapDividerLine"
+        android:background="@color/key_light_gray"
         app:layout_constraintBottom_toTopOf="parent" />
 
     <net.iGap.module.CircleImageView
@@ -35,7 +35,6 @@
         android:layout_marginRight="8dp"
         android:singleLine="true"
         android:text="Dominika Faniz"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintBottom_toTopOf="@+id/cigp_txt_contact_lastseen"
         app:layout_constraintEnd_toStartOf="@+id/cigp_moreButton"
@@ -51,7 +50,6 @@
         android:layout_alignParentBottom="true"
         android:singleLine="true"
         android:text="@string/last_seen_recently"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/cigp_txt_contact_name"
@@ -60,7 +58,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cigp_moreButton"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp48"
         android:layout_height="0dp"
         android:gravity="center"

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.adapter.electricity_bill.ElectricityBranchInfoListAdapter;
@@ -17,6 +18,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBranchInfoListBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.GasBranchData;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
@@ -63,7 +65,7 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        binding.errorView.setTextColor(Theme.getColor(Theme.key_title_text));
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -80,6 +82,7 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag<ElectricityBr
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.billRecycler.setHasFixedSize(true);
+        binding.billRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         onDataChangedListener();
         viewModel.setBillID(billID);
 

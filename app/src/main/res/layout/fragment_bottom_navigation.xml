@@ -18,41 +18,43 @@
         android:id="@+id/bn_main_bottomNavigation"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="?attr/iGapDividerLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"
         app:layout_constraintStart_toStartOf="@id/viewpager">
 
         <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/storyTab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_my_story_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_my_story_off_darmode"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_my_story_on"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_my_story_off"
             app:item_text="@string/bottom_navigation_my_story"
             app:hasUnreadBadge="true"
             app:selected_icon="@drawable/ic_bottomnavigation_my_story_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_my_story_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/callTab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off"
             app:item_text="@string/all_calls"
             app:selected_icon="@drawable/ic_bottomnavigation_call_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/chatTab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off"
             app:haveAvatarImage="false"
             app:hasUnreadBadge="true"
             app:item_text="@string/chat"
@@ -60,12 +62,13 @@
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ilandTab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off"
             app:item_text="@string/iland"
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.proto.ProtoUserIVandGetScore;
@@ -63,6 +65,7 @@ public class FragmentUserScore extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.scoreView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.score_background_drawable), getContext(), Theme.getColor(Theme.key_light_theme_color)));
         userScoreToolbar = new Toolbar(getContext());
         userScoreToolbar.setTitle(getString(R.string.score));
         userScoreToolbar.setBackIcon(new BackDrawable(false));
@@ -162,18 +165,20 @@ public class FragmentUserScore extends BaseFragment {
 
                 title = itemView.findViewById(R.id.row_score_txt_title);
                 count = itemView.findViewById(R.id.row_score_txt_score_count);
+                count.setTextColor(Theme.getColor(Theme.key_theme_color));
                 addIcon = itemView.findViewById(R.id.addIcon);
+                addIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
             }
 
             private void bindView(ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore iVandScore) {
                 if (iVandScore.getScore() >= 0) {
                     addIcon.setText(R.string.icon_add_whit_circle);
-                    addIcon.setTextColor(getContext().getResources().getColor(R.color.green));
-                    count.setTextColor(getContext().getResources().getColor(R.color.green));
+                    addIcon.setTextColor(getContext().getResources().getColor(R.color.dayGreenTheme));
+                    count.setTextColor(getContext().getResources().getColor(R.color.dayGreenTheme));
                 } else {
                     addIcon.setText(R.string.icon_delete_minus);
-                    addIcon.setTextColor(getContext().getResources().getColor(R.color.red));
-                    count.setTextColor(getContext().getResources().getColor(R.color.red));
+                    addIcon.setTextColor(Theme.getColor(Theme.key_red));
+                    count.setTextColor(Theme.getColor(Theme.key_red));
                 }
 
                 if (G.isAppRtl) {

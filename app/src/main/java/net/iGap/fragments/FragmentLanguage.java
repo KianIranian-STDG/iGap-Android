@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.databinding.FragmentLanguageBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +35,6 @@ public class FragmentLanguage extends BaseFragment {
     public static boolean languageChanged = false;
     private FragmentLanguageViewModel viewModel;
     private FragmentLanguageBinding binding;
-    private Toolbar languageToolbar;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,17 +61,19 @@ public class FragmentLanguage extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        languageToolbar = new Toolbar(getContext());
-        languageToolbar.setBackIcon(new BackDrawable(false));
-        languageToolbar.setTitle(getString(R.string.language));
-        languageToolbar.setListener(i -> {
-            switch (i) {
-                case -1:
-                    popBackStackFragment();
-                    break;
-            }
-        });
-        binding.flLayoutToolbar.addView(languageToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
+        binding.flLayoutToolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.icon_back)
+                .setLogoShown(true)
+                .setShowConnectionState(false)
+                .setDefaultTitle(getString(R.string.language))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                }).getView());
 
         viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {

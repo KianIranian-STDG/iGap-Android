@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/dp8"
-    app:cardBackgroundColor="?iGapCardViewColor"
     app:cardCornerRadius="@dimen/dp6"
     app:cardElevation="@dimen/dp6"
     android:minHeight="@dimen/dp80">
@@ -24,7 +23,6 @@
             android:singleLine="true"
             android:text="@string/cheque_number"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,7 +48,6 @@
             android:singleLine="true"
             android:text="@string/page_count"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,7 +59,6 @@
             android:layout_weight="1"
             android:layout_marginTop="@dimen/dp22"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             android:text="@string/pass_count"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintEnd_toStartOf="@id/tvReject"
@@ -76,7 +72,6 @@
             android:singleLine="true"
             android:layout_weight="1"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             android:text="@string/reject_count"
             android:layout_marginRight="@dimen/dp4"
             android:layout_marginLeft="@dimen/dp4"
@@ -93,7 +88,6 @@
             android:layout_marginLeft="@dimen/dp4"
             android:layout_marginRight="@dimen/dp4"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             android:text="@string/usable_count"
             app:layout_constraintStart_toEndOf="@id/tvReject"
             app:layout_constraintTop_toTopOf="@id/tvPass"
@@ -108,7 +102,6 @@
             android:layout_marginLeft="@dimen/dp6"
             android:layout_marginRight="@dimen/dp6"
             android:textSize="@dimen/smallTextSize"
-            android:textColor="?iGapTitleTextColor"
             android:text="@string/block"
             app:layout_constraintStart_toEndOf="@id/tvUsable"
             app:layout_constraintEnd_toEndOf="parent"

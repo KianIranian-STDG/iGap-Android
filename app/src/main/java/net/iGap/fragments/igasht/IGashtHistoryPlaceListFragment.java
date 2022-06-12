@@ -19,6 +19,7 @@ import net.iGap.adapter.igahst.PlaceHistoryAdapter;
 import net.iGap.databinding.FragmentIgashtHistoryPlaceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.igasht.IGashtHistoryPlaceViewModel;
 
@@ -44,7 +45,7 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView<IGashtHistory
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.emptyListMessage.setTextColor(Theme.getColor(Theme.key_title_text));
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -59,8 +60,8 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView<IGashtHistory
                         }
                     }
                 }).getView());
-
-        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> viewModel.onClickHistoryItem(position)));
+        binding.favoriteList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> viewModel.onClickHistoryItem(position),context));
         binding.favoriteList.addItemDecoration(new DividerItemDecoration(binding.favoriteList.getContext(), DividerItemDecoration.VERTICAL));
         binding.favoriteList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

@@ -38,7 +38,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/int_btnStart"
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.onStartClick()}"
@@ -58,7 +58,6 @@
             android:textAllCaps="false"
             android:paddingRight="@dimen/dp15"
             android:paddingLeft="@dimen/dp15"
-            android:textColor="?attr/iGapButtonTextColor"
             app:layout_constraintBottom_toTopOf="@+id/conditionText"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -68,7 +67,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

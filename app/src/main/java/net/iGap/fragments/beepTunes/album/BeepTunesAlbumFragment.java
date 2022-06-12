@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.G;
@@ -28,6 +31,7 @@ import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAlbumAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.OnTrackAdapter;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
@@ -94,7 +98,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> impl
 
         setUpAlbumInfo(album);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
         viewModel.getAlbumSong(album.getId());
         viewModel.getArtistOtherAlbum(album.getArtists().get(0).getId());
 
@@ -181,6 +185,7 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> impl
         albumNameTv = rootView.findViewById(R.id.tv_album_name);
         otherAlbumRecyclerView = rootView.findViewById(R.id.rv_album_artistAlbums);
         actionButton = rootView.findViewById(R.id.fl_album_actionButton);
+        actionButton.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_beeptunes_album_light), getContext(), Theme.getColor(Theme.key_theme_color)));
         statusTv = rootView.findViewById(R.id.tv_album_play);
         progressBar = rootView.findViewById(R.id.pb_album_progress);
         otherAlbumTv = rootView.findViewById(R.id.tv_album_artistOtherAlbum);
@@ -188,6 +193,12 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> impl
         scrollView = rootView.findViewById(R.id.ns_album);
         toolBarTv = rootView.findViewById(R.id.tv_album_toolBarName);
         backIcon = rootView.findViewById(R.id.tv_album_backIcon);
+
+        CollapsingToolbarLayout collapsingToolbarLayout = rootView.findViewById(R.id.collapsingToolbarLayout);
+        collapsingToolbarLayout.setContentScrimColor(Theme.getColor(Theme.key_light_theme_color));
+
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(Theme.getColor(Theme.key_light_theme_color));
 
         songRecyclerView.setNestedScrollingEnabled(false);
         otherAlbumRecyclerView.setNestedScrollingEnabled(false);

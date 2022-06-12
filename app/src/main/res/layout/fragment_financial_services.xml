@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -46,12 +47,12 @@
                     android:onClick="@{()->viewModel.onScanQRCodeClick()}"
                     android:text="@string/QrCode_Scan"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    android:textColor="@color/grayNewDarker"
-                    app:backgroundTint="@color/gray_300"
+                    android:textColor="@color/key_gray"
+                    app:backgroundTint="@color/key_light_gray"
                     app:icon="@drawable/qr_logo"
                     app:iconGravity="textStart"
                     app:iconSize="@dimen/dp32"
-                    app:iconTint="@color/grayNewDarker"
+                    app:iconTint="@color/key_gray"
                     app:layout_constraintBottom_toTopOf="@id/line1"
                     app:layout_constraintDimensionRatio="342:81"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -63,7 +64,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    android:background="@color/key_gray"
                     app:layout_constraintBottom_toTopOf="@id/walletPriceView"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -88,10 +89,10 @@
                     android:id="@+id/walletPointer"
                     android:layout_width="@dimen/dp16"
                     android:layout_height="@dimen/dp16"
-                    android:background="@drawable/wallet_pointer"
                     app:layout_constraintCircle="@id/walletPriceView"
                     app:layout_constraintCircleAngle="0"
-                    app:layout_constraintCircleRadius="83dp" />
+                    app:layout_constraintCircleRadius="83dp"
+                    tools:ignore="MissingConstraints" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/walletPriceValue"
@@ -156,7 +157,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="@color/gray"
+                    android:background="@color/key_gray"
                     app:layout_constraintBottom_toTopOf="@id/addBankCard"
                     app:layout_constraintLeft_toLeftOf="@id/line1"
                     app:layout_constraintRight_toRightOf="@id/line1"
@@ -183,7 +184,7 @@
                     android:gravity="center"
                     android:text="@string/icon_add"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="32sp"
                     app:layout_constraintBottom_toTopOf="@id/v1"
                     app:layout_constraintDimensionRatio="1:1"

@@ -14,8 +14,9 @@
         android:orientation="horizontal" />
 
     <LinearLayout
+        android:id="@+id/add_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="69dp"
         android:orientation="vertical"
         android:paddingTop="10dp">
 
@@ -29,7 +30,6 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:text="@string/add_new_member"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize" />
 
         <View
@@ -41,13 +41,14 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="?iGapDividerLine" />
+            android:background="@color/key_light_gray" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/show_member">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fcm_recycler_view_show_member"
@@ -58,7 +59,6 @@
             android:overScrollMode="never"
             android:paddingTop="@dimen/dp16"
             android:scrollbarSize="5dp"
-            android:scrollbarThumbVertical="@color/toolbar_background"
             android:scrollbars="vertical" />
 
         <ProgressBar

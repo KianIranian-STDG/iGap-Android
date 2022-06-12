@@ -14,9 +14,10 @@ import net.iGap.proto.ProtoClientRegisterDevice;
 
 public class RequestClientRegisterDevice {
 
-    public void clientRegisterDevice(String token) {
+    public void clientRegisterDevice(String token, String matrix) {
         ProtoClientRegisterDevice.ClientRegisterDevice.Builder builder = ProtoClientRegisterDevice.ClientRegisterDevice.newBuilder();
         builder.setToken(token);
+       builder.setMetrix(matrix);
 
         RequestWrapper requestWrapper = new RequestWrapper(617, builder);
         try {

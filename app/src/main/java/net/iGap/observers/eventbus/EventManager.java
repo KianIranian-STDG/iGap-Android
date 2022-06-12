@@ -24,6 +24,9 @@ public class EventManager {
 
     public static final int ON_UPLOAD_PROGRESS = eventId++;
     public static final int ON_UPLOAD_COMPRESS = eventId++;
+    public static final int ON_UPLOAD_CANCEL = eventId++;
+    public static final int ON_UPLOAD_ERROR_IN_SERVICE = eventId++;
+    public static final int ON_UPLOAD_SERVICE_STOPPED = eventId++;
 
     public static final int CALL_STATE_CHANGED = eventId++;
 
@@ -89,11 +92,14 @@ public class EventManager {
     public static final int STORY_TEXT_EDITOR_CLOSE = eventId++;
     public static final int STORY_VIEWS_FETCHED = eventId++;
 
+    public static final int UPDATE_PHONE_NUMBER = eventId++;
+
     public static final int ON_VOLUME_DOWN_KEY = eventId++;
 
     public static final int ON_CAMERA_PERMISSION_GRANTED = eventId++;
 
     public static final int ON_INPUT_PASS_CODE_INCORRECT = eventId++;
+
 
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();

@@ -342,10 +342,10 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private void CheckAndSetFingerAndBiometricPasswordIcon() {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            showBiometricPasswordIcon.set(G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
+            showBiometricPasswordIcon.set(G.currentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
             showFingerPrintIcon.set(View.GONE);
         }else {
-            showFingerPrintIcon.set(G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
+            showFingerPrintIcon.set(G.currentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false) ? View.VISIBLE : View.GONE);
             showBiometricPasswordIcon.set(View.GONE);
         }
 

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
@@ -34,6 +35,7 @@ import net.iGap.libs.ColorSeekBar;
 import net.iGap.libs.photoEdit.PhotoEditor;
 import net.iGap.libs.photoEdit.PhotoEditorView;
 import net.iGap.libs.photoEdit.SaveSettings;
+import net.iGap.messenger.theme.Theme;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,6 +71,8 @@ public class FragmentPaintImage extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer =  view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_black));
         lockScreenToPortrait();
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -105,7 +109,7 @@ public class FragmentPaintImage extends Fragment {
         });
 
         skBrushSize = view.findViewById(R.id.seekbar_brushSize);
-        skBrushSize.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
+        skBrushSize.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN));
 
         paintImageView.getSource().setImageURI(Uri.parse(path));
         initDialogBrush();

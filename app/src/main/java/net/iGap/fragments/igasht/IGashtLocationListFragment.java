@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.adapter.igahst.IGashtLocationListAdapter;
@@ -64,7 +65,7 @@ public class IGashtLocationListFragment extends IGashtBaseView<IGashtLocationVie
                         }
                     }
                 }).getView());
-
+        binding.locationListView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
         binding.locationListView.setAdapter(new IGashtLocationListAdapter(viewModel.getSelectedProvinceName(), new IGashtLocationListAdapter.onLocationItemClickListener() {
             @Override

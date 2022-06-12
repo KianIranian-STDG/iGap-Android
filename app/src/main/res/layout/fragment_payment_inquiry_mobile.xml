@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/mainContainer">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -26,7 +27,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/mobileNumberIcon"
-            style="@style/primaryIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
             android:layout_marginStart="@dimen/dp16"
@@ -42,7 +43,6 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
-            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_marginStart="@dimen/dp8"
@@ -72,14 +72,14 @@
             android:paddingLeft="@dimen/dp10"
             android:paddingRight="@dimen/dp10"
             android:text="@string/ex_mobile_phone"
-            android:textColor="@color/gray"
+            android:textColor="@color/key_gray"
             android:textSize="@dimen/dp10"
             app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
             app:layout_constraintTop_toBottomOf="@id/mobileNumberIcon" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/materialButton"
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp12"

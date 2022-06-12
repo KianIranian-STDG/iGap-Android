@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/iGapWalletDarkerBackground">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_vertical_guideline"
@@ -40,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@id/withdrawal_message_title"
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
-        android:background="?attr/iGapDividerLine"
+        android:background="@color/key_light_gray"
         android:layout_marginTop="@dimen/dp8"/>
 
     <TextView
@@ -49,7 +48,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
-        android:textColor="?attr/iGapPrimaryTextColor"
         android:textSize="@dimen/standardTextSize"
         android:text="@string/withdrawal_dialog_message"
         app:layout_constraintTop_toBottomOf="@id/divider"
@@ -62,7 +60,7 @@
         app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
         app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
         android:text="@string/close"
-        style="@style/iGapButton"
+        style="@style/BaseIGapButtonStyle"
         android:layout_marginTop="@dimen/dp24"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

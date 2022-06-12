@@ -11,11 +11,9 @@
         android:id="@+id/tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?rootBackgroundColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/green" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
@@ -39,7 +37,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/emptyRecycle"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"

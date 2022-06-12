@@ -8,7 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 public class CircleSeekBar extends View {
 
@@ -46,7 +49,7 @@ public class CircleSeekBar extends View {
         float density = context.getResources().getDisplayMetrics().density;
         int thumbHeight;
         int thumbWidth;
-        drawable = getContext().getResources().getDrawable(R.drawable.shape_circle_progress);
+        drawable = Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_circle_progress), getContext(), Theme.getColor(Theme.key_theme_color));
         progressWidth = (int) (progressWidth * density);
         thumbHeight = drawable.getIntrinsicHeight() / 2;
         thumbWidth = drawable.getIntrinsicWidth() / 2;
@@ -66,8 +69,8 @@ public class CircleSeekBar extends View {
 
         progressSweep = (float) progress / max * sweepAngle;
 
-        arcPaint.setColor(getContext().getResources().getColor(R.color.voice_round));
-        progressPaint.setColor(getContext().getResources().getColor(R.color.voice_round));
+        arcPaint.setColor(Theme.getColor(Theme.key_light_theme_color));
+        progressPaint.setColor(Theme.getColor(Theme.key_light_theme_color));
 
         arcPaint.setAntiAlias(true);
         arcPaint.setStyle(Paint.Style.STROKE);

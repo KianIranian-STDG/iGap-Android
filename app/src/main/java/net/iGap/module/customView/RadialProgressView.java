@@ -20,7 +20,7 @@ import android.view.animation.DecelerateInterpolator;
 import androidx.annotation.Keep;
 
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 public class RadialProgressView extends View {
 
@@ -56,7 +56,7 @@ public class RadialProgressView extends View {
 
         size = LayoutCreator.dp(40);
 
-        progressColor = Theme.getInstance().getAccentColor(context);
+        progressColor = Theme.getColor(Theme.key_theme_color);
         decelerateInterpolator = new DecelerateInterpolator();
         accelerateInterpolator = new AccelerateInterpolator();
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

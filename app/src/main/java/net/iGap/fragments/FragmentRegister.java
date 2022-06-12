@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -33,6 +34,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,6 +51,7 @@ import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperTracker;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
@@ -89,6 +93,24 @@ public class FragmentRegister extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        fragmentRegisterBinding.mainFrame.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        CardView rg_btn_choseCountry = view.findViewById(R.id.rg_btn_choseCountry);
+        rg_btn_choseCountry.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
+        fragmentRegisterBinding.conditionCheckBox.setLinkTextColor(Theme.getColor(Theme.key_link_text));
+        fragmentRegisterBinding.phoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.phoneNumber.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ColorStateList colorStateList = ColorStateList.valueOf(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(fragmentRegisterBinding.phoneNumber, colorStateList);
+        fragmentRegisterBinding.scanBarcodeButton.setTextColor(Theme.getColor(Theme.key_theme_color));
+        fragmentRegisterBinding.scanBarcodeButton.setStrokeColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        fragmentRegisterBinding.description.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.country.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.t1.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.phoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.countyCode.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.conditionCheckBox.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.conditionText.setTextColor(Theme.getColor(Theme.key_default_text));
+        fragmentRegisterBinding.retryView.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_ENTRY_PHONE);
 
@@ -125,6 +147,11 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null && !phoneNumber.isEmpty()) {
                 new MaterialDialog.Builder(getActivity())
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .content(getString(R.string.Re_dialog_verify_number_part1) + "\n" + phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
                         .positiveText(R.string.B_ok)
                         .negativeText(R.string.B_edit)
@@ -209,6 +236,11 @@ public class FragmentRegister extends BaseFragment {
     private void showMessageDialog(int title, int msg) {
         if (getActivity() == null) return;
         new MaterialDialog.Builder(getActivity())
+                .titleColor(Theme.getColor(Theme.key_title_text))
+                .contentColor(Theme.getColor(Theme.key_default_text))
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .title(title)
                 .content(msg)
                 .positiveText(R.string.ok)
@@ -220,7 +252,7 @@ public class FragmentRegister extends BaseFragment {
             Dialog dialogChooseCountry = new Dialog(getActivity());
             dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogChooseCountry.setContentView(R.layout.rg_dialog);
-            dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Theme.getColor(Theme.key_popup_background)));
 
             int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
             int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
@@ -228,7 +260,7 @@ public class FragmentRegister extends BaseFragment {
             //
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
-
+            txtTitle.setTextColor(Theme.getColor(Theme.key_icon));
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);
                 edtSearchView.setIconifiedByDefault(true);
@@ -331,7 +363,13 @@ public class FragmentRegister extends BaseFragment {
 
     private void showQrCodeDialog(int expireTime) {
         if (getActivity() != null) {
-            dialogQrCode = new MaterialDialog.Builder(getActivity()).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true)
+            dialogQrCode = new MaterialDialog.Builder(getActivity())
+                    .titleColor(Theme.getColor(Theme.key_title_text))
+                    .contentColor(Theme.getColor(Theme.key_default_text))
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
                     .positiveText(R.string.share_item_dialog).onPositive((dialog, which) -> fragmentRegisterViewModel.shareQr())
                     .negativeText(R.string.save).onNegative((dialog, which) -> fragmentRegisterViewModel.saveQr())
                     .neutralText(R.string.cancel).onNeutral((dialog, which) -> dialog.dismiss()).build();

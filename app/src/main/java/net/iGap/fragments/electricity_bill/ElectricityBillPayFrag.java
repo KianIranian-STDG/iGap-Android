@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -28,6 +29,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.electricity_bill.Bill;
 import net.iGap.model.electricity_bill.LastBillData;
@@ -115,6 +117,17 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        binding.cardHolder.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.loadAgain.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billIDTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billID.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billPayIDTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billPayID.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billPriceTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billPrice.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billTimeTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.billTime.setTextColor(Theme.getColor(Theme.key_title_text));
+
         HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_BILL_PAGE);
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -130,6 +143,8 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
 
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
+
+        binding.billImageBack.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bill_round_drawable), getContext(), Theme.getColor(Theme.key_theme_color)));
 
         binding.loadAgain.setOnClickListener(v -> viewModel.getData());
 

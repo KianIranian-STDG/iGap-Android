@@ -41,7 +41,6 @@
             android:layout_height="@dimen/dp120"
             android:layout_marginBottom="@dimen/dp20"
             android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

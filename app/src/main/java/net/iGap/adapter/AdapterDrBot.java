@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
         if (checkColor(bgColor)) {
             gd.setColor(Color.parseColor(bgColor));
         } else {
-            gd.setColor(G.context.getResources().getColor(R.color.colorOldBlack));
+            gd.setColor(Theme.getColor(Theme.key_dark_gray));
         }
 
         holder.itemView.setBackgroundDrawable(gd);
@@ -79,7 +80,7 @@ public class AdapterDrBot extends RecyclerView.Adapter<AdapterDrBot.ViewHolder> 
         if (checkColor(txtColor)) {
             holder.title.setTextColor(Color.parseColor(txtColor));
         } else {
-            holder.title.setTextColor(G.context.getResources().getColor(R.color.white));
+            holder.title.setTextColor(Theme.getColor(Theme.key_white));
         }
     }
 

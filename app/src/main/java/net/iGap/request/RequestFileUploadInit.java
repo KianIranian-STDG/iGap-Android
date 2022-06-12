@@ -18,7 +18,7 @@ import net.iGap.proto.ProtoRequest;
 
 import java.io.UnsupportedEncodingException;
 
-public class RequestFileUploadInit {
+public class  RequestFileUploadInit {
 
     public interface OnFileUploadInit {
         void onFileUploadInit(String token, double progress, long offset, int limit);

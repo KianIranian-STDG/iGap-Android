@@ -4,6 +4,7 @@ import android.util.Log;
 
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
+import net.iGap.proto.ProtoChangePhoneNumber;
 import net.iGap.proto.ProtoChannelAddMessageReaction;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
@@ -24,6 +25,8 @@ import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.proto.ProtoClientPinRoom;
+import net.iGap.proto.ProtoClientSearch;
+import net.iGap.proto.ProtoClientRoomChangeOwner;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupClearMessage;
@@ -42,6 +45,7 @@ import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.proto.ProtoStoryRoomAddNew;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.proto.ProtoUserInfo;
+import net.iGap.proto.ProtoVerifyNewPhoneNumber;
 import net.iGap.request.RequestPagination;
 
 import java.util.ArrayList;
@@ -2283,4 +2287,224 @@ public class IG_RPC {
             resId = response.getResponse().getId();
         }
     }
+
+    public static class Change_Room_Owner extends AbstractObject {
+        public static int actionId = 626;
+        public long roomId;
+        public long userId;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Change_Room_Owner().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoClientRoomChangeOwner.ClientRoomChangeOwner.Builder builder = ProtoClientRoomChangeOwner.ClientRoomChangeOwner.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setUserId(userId);
+            return builder;
+        }
+    }
+
+
+
+
+    public static class Res_Change_Room_Owner extends AbstractObject {
+        public static int actionId = 30626;
+        public net.iGap.proto.ProtoGlobal.RoomAccess roomAccess;
+
+        public Res_Change_Room_Owner deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Change_Room_Owner object = null;
+            try {
+                object = new Res_Change_Room_Owner();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoClientRoomChangeOwner.ClientRoomChangeOwnerResponse response = ProtoClientRoomChangeOwner.ClientRoomChangeOwnerResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomAccess = response.getPermission();
+
+        }
+    }
+
+    public static class Change_Phone_Number extends AbstractObject {
+        public static int actionId = 162;
+        public String countryCode;
+        public long phoneNumber;
+        public ProtoChangePhoneNumber.ChangePhoneNumber changePhoneNumber;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Change_Phone_Number.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChangePhoneNumber.ChangePhoneNumber.Builder builder = ProtoChangePhoneNumber.ChangePhoneNumber.newBuilder();
+            builder.setCountryCode(countryCode);
+            builder.setPhoneNumber(phoneNumber);
+            return builder;
+        }
+    }
+
+    public static class Res_Change_Phone_Number extends AbstractObject {
+        public static int actionId = 30162;
+
+
+        public static Res_Change_Phone_Number deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Change_Phone_Number object = null;
+            try {
+                object = new Res_Change_Phone_Number();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChangePhoneNumber.ChangePhoneNumberResponse response = ProtoChangePhoneNumber.ChangePhoneNumberResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+        }
+    }
+
+    public static class Verify_New_Phone_Number extends AbstractObject {
+        public static int actionId = 163;
+        public ProtoVerifyNewPhoneNumber.VerifyNewPhoneNumber verifyNewPhoneNumber;
+        public String verifyCode;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Verify_New_Phone_Number.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoVerifyNewPhoneNumber.VerifyNewPhoneNumber.Builder builder = ProtoVerifyNewPhoneNumber.VerifyNewPhoneNumber.newBuilder();
+            builder.setVerifyCode(verifyCode);
+            return builder;
+        }
+    }
+
+    public static class Res_Verify_New_Phone_Number extends AbstractObject {
+        public static int actionId = 30163;
+
+
+        public static Res_Verify_New_Phone_Number deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Verify_New_Phone_Number object = null;
+            try {
+                object = new Res_Verify_New_Phone_Number();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoVerifyNewPhoneNumber.VerifyNewPhoneNumberResponse response = ProtoVerifyNewPhoneNumber.VerifyNewPhoneNumberResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+        }
+    }
+
+
+    public static class Client_search extends AbstractObject {
+        public static final int actionId = 627;
+        public String query;
+
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_client_search().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoClientSearch.ClientSearch.Builder builder = ProtoClientSearch.ClientSearch.newBuilder();
+            builder.setQuery(query);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_client_search extends AbstractObject {
+        public static final int actionId = 30627;
+
+        public List<ProtoClientSearch.ClientSearchResponse.Info> infoList;
+
+        public Res_client_search deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_client_search object = null;
+            try {
+                object = new Res_client_search();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoClientSearch.ClientSearchResponse response = ProtoClientSearch.ClientSearchResponse.parseFrom(message);
+
+            infoList = response.getInfoList();
+            resId = response.getResponse().getId();
+        }
+    }
+
+
 }

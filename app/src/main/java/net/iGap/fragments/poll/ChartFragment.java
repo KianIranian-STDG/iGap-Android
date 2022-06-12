@@ -31,7 +31,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
 
@@ -70,6 +70,7 @@ public class ChartFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.getRootView().setBackgroundColor(Theme.getColor(Theme.key_window_background));
         toolbar = view.findViewById(R.id.chart_toolbar);
         emptyRecycle = view.findViewById(R.id.emptyRecycle_chart);
         swipeRefresh = view.findViewById(R.id.sweep);
@@ -97,7 +98,7 @@ public class ChartFragment extends BaseFragment {
 
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        xAxis.setTextColor(Theme.getColor(Theme.key_title_text));
         xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(ViewMaker.dpToPixel(4));
@@ -209,11 +210,11 @@ public class ChartFragment extends BaseFragment {
 
         set1 = new BarDataSet(barEntries, "Data Set");
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(new Theme().getAccentColor(chart.getContext()));
+        colors.add(Theme.getColor(Theme.key_theme_color));
         set1.setColors(colors);
         set1.setDrawValues(true);
         set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
-        set1.setValueTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        set1.setValueTextColor(Theme.getColor(Theme.key_title_text));
         set1.setValueTextSize(ViewMaker.dpToPixel(3));
         set1.setValueFormatter(new ValueFormatter() {
             @Override

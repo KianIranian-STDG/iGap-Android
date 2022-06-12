@@ -15,6 +15,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,8 +34,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,7 +60,8 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.MusicAndCallInfoStrip;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.ToolBarMenuSubItem;
@@ -76,7 +80,6 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.CheckBox;
@@ -161,7 +164,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
     private ToolbarItem editItem;
     private ToolbarItem searchItem;
     private ToolbarItem passCodeItem;
-    private FragmentMediaContainer mediaContainer;
+    private MusicAndCallInfoStrip mediaContainer;
 
     public static RegisteredContactsFragment newInstance(boolean isSwipe, boolean isCallAction, int pageMode) {
         RegisteredContactsFragment contactsFragment = new RegisteredContactsFragment();
@@ -185,9 +188,24 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
     @Override
     public void onViewCreated(@NotNull View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout menu_parent_layout = view.findViewById(R.id.menu_parent_layout);
+        menu_parent_layout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        AppCompatTextView newChannelTitle = view.findViewById(R.id.newChannelTitle);
+        newChannelTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView newGroupTitle = view.findViewById(R.id.newGroupTitle);
+        newGroupTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView newGroupCallTitle = view.findViewById(R.id.newGroupCallTitle);
+        newGroupCallTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView dialNumberTitle = view.findViewById(R.id.dialNumberTitle);
+        dialNumberTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        AppCompatTextView newChannelIcon = view.findViewById(R.id.newChannelIcon);
+        newChannelIcon.setTextColor(Theme.getColor(Theme.key_icon));
+        AppCompatTextView newGroupIcon = view.findViewById(R.id.newGroupIcon);
+        newGroupIcon.setTextColor(Theme.getColor(Theme.key_icon));
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+            StatusBarUtil.setColor(getActivity(), Theme.getColor(Theme.key_dark_theme_color), 50);
         }
 
         G.onContactImport = this;
@@ -200,13 +218,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
         FrameLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
         contactsToolbar = new Toolbar(getContext());
-        mediaContainer = new FragmentMediaContainer(getContext(), this);
+        mediaContainer = new MusicAndCallInfoStrip(getContext(), this);
         mediaContainer.setListener(i -> {
             switch (i) {
-                case FragmentMediaContainer.CALL_TAG:
+                case MusicAndCallInfoStrip.CALL_TAG:
                     getActivity().startActivity(new Intent(getContext(), CallActivity.class));
                     break;
-                case FragmentMediaContainer.MEDIA_TAG:
+                case MusicAndCallInfoStrip.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
                         intent.putExtra(ActivityMain.openMediaPlayer, true);
@@ -214,7 +232,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                         getActivity().startActivity(intent);
                     }
                     break;
-                case FragmentMediaContainer.PLAY_TAG:
+                case MusicAndCallInfoStrip.PLAY_TAG:
                     break;
             }
         });
@@ -227,7 +245,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
             ToolbarItem moreItem = toolbarItems.addItemWithWidth(moreItemTag, R.string.icon_other_vertical_dots, 54);
             addItem = moreItem.addSubItem(addUserTag, R.string.icon_add, getResources().getString(R.string.menu_add_contact));
             moreItem.addSubItem(syncContactTag, R.string.icon_beeptunes_sync, getResources().getString(R.string.sync_contact));
-            moreItem.addSubItem(inviteContactTag, R.string.icon_add_contact, getResources().getString(R.string.Invite_Friends));
+            moreItem.addSubItem(inviteContactTag, R.string.icon_add_contact, getResources().getString(R.string.InviteFriends));
             if (PassCode.getInstance().isPassCode()) {
                 passCodeItem = toolbarItems.addItemWithWidth(passCodeTag, R.string.icon_unlock, 54);
             }
@@ -266,6 +284,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         if (!isContact) {
             contactsToolbar.setBackIcon(new BackDrawable(false));
             toolbarItems.addItemWithWidth(addUserTag, R.string.icon_add_contact, 54);
+            toolbarItems.addItemWithWidth(syncContactTag, R.string.icon_beeptunes_sync, 54);
         } else {
             toolbarItems.addItemWithWidth(codeScannerTag, R.string.icon_QR_code, 54);
         }
@@ -321,7 +340,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                         }
                         setMultiSelectState(true);
                         contactsToolbar.hideActionToolbar();
-                        contactsToolbar.setBackIcon(null);
+                        contactsToolbar.setBackIcon(new BackDrawable(false));
                     }).negativeText(R.string.B_cancel).show();
                     break;
                 case addUserTag:
@@ -546,13 +565,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
 
         actionToolbar = contactsToolbar.createActionToolbar(null);
 
-        deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
+        deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_Delete, 54);
         editItem = actionToolbar.addItemWithWidth(editTag, R.string.icon_edit, 54);
 
         multiSelectCounter = new NumberTextView(getContext());
         multiSelectCounter.setTextSize(18);
         multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTextColor(Theme.getColor(Theme.key_white));
         multiSelectCounter.setTag(selectCounter);
         actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
@@ -564,7 +583,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
         contactsToolbar.showActionToolbar();
         BackDrawable backDrawable = new BackDrawable(true);
         backDrawable.setRotation(1, true);
-        backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        backDrawable.setRotatedColor(Theme.getColor(Theme.key_default_text));
         contactsToolbar.setBackIcon(backDrawable);
 
         AnimatorSet animatorSet = new AnimatorSet();
@@ -674,7 +693,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 contactsToolbar.setBackIconToNull();
                 BackDrawable backDrawable = new BackDrawable(true);
                 backDrawable.setRotation(1, true);
-                backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+                backDrawable.setRotatedColor(Theme.getColor(Theme.key_default_text));
                 contactsToolbar.setBackIcon(backDrawable);
                 contactsToolbar.removeView(imageView);
 
@@ -937,7 +956,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                             if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
-                                new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
+                                new MaterialDialog.Builder(G.fragmentActivity)
+                                        .items(R.array.calls)
+                                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                                        .itemsCallback(new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
 
@@ -1088,8 +1112,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 root = view.findViewById(R.id.iv_itemContactChat_root);
                 animateCheckBox = view.findViewById(R.id.iv_itemContactChat_checkBox);
                 image = view.findViewById(R.id.iv_itemContactChat_profileImage);
+                image.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
                 title = view.findViewById(R.id.tv_itemContactChat_userName);
+                title.setTextColor(Theme.getColor(Theme.key_default_text));
                 subtitle = view.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
+                subtitle.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
                 if (G.isAppRtl) {
                     title.setGravity(Gravity.RIGHT);
@@ -1129,7 +1156,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 root = view.findViewById(R.id.iv_itemContactCall_root);
                 animateCheckBox = view.findViewById(R.id.iv_itemContactCall_checkBox);
                 image = view.findViewById(R.id.iv_itemContactCall_profileImage);
+                image.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
                 title = view.findViewById(R.id.tv_itemContactCall_userName);
+                title.setTextColor(Theme.getColor(Theme.key_default_text));
                 subtitle = view.findViewById(R.id.tv_itemContactCall_userPhoneNumber);
                 btnVoiceCall = view.findViewById(R.id.tv_itemContactCall_voiceCall);
 
@@ -1193,8 +1222,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                 if (HelperCalander.isPersianUnicode) {
                     countStr = HelperCalander.convertToUnicodeFarsiNumber(countStr);
                 }
-
-
                 txtCounter.setText(countStr + " " + getString(R.string.am_contact) + (G.selectedLanguage.equals("en") ? "s" : ""));
             }
         }

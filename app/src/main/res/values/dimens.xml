@@ -10,7 +10,7 @@
     <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
     <dimen name="toolbar_icon_margin">@dimen/dp4</dimen>
     <dimen name="toolbar_igap_icon_textSize">@dimen/dp60</dimen>
-
+    <dimen name="margin_for_below_layouts_of_toolbar_with_search">@dimen/dp52</dimen>
     <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
     <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
     <dimen name="ivand_profile_toolbar_bottom_radius">20dp</dimen>

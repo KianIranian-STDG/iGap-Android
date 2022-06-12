@@ -52,7 +52,6 @@
                     android:layout_marginEnd="@dimen/dp16"
                     android:minHeight="48dp"
                     android:hint="@string/elecBill_search_billSerial"
-                    android:textColorHint="?iGapHintTextColor"
                     app:errorText="@{viewmodel.billSerialError}"
                     app:errorEnabled="@{viewmodel.billSerialErrorEnable}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +67,6 @@
                         android:inputType="numberDecimal"
                         android:minHeight="48dp"
                         android:text="@={viewmodel.billSerial}"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp18"
                         android:digits="0123456789"
                         android:imeOptions="actionDone"
@@ -86,7 +84,6 @@
                     android:layout_marginEnd="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_search_billCompany"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="center_vertical|start"
                     android:ellipsize="end"
@@ -110,7 +107,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addNewBill"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="58dp"
@@ -144,7 +141,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/addNewBill"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -159,7 +155,6 @@
                     android:layout_marginEnd="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_error_zeroResultSearch"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="center"
                     android:ellipsize="end"

@@ -6,6 +6,5 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:text="@string/terminate_all"
-    android:textColor="@color/red"
     android:textSize="@dimen/largeTextSize"
     android:textStyle="bold" />

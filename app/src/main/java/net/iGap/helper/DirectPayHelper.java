@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.DialogAnimation;
 import net.iGap.request.RequestMplGetSalesToken;
 import net.iGap.request.RequestMplSetSalesResult;
@@ -63,7 +64,11 @@ public class DirectPayHelper {
 
         String content = convertNumberToPriceRial(price);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.pay_direct_dialog, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.pay_direct_dialog, true)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background)).build();
 
         View v = dialog.getCustomView();
         if (v == null) {

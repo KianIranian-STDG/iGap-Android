@@ -23,7 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,6 +34,7 @@ import net.iGap.proto.ProtoGlobal;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import net.iGap.messenger.theme.Theme;
 
 public class VoiceRecord {
 
@@ -70,9 +71,13 @@ public class VoiceRecord {
     public VoiceRecord(Context context, View layoutMic, View layoutAttach, OnVoiceRecord listener) {
         imgPicRecord = layoutMic.findViewById(R.id.img_pic_record);
         txtTimeRecord = layoutMic.findViewById(R.id.txt_time_record);
+        txtTimeRecord.setTextColor(Theme.getColor(Theme.key_default_text));
         txtMillisecond = layoutMic.findViewById(R.id.txt_time_mili_secend);
+        txtMillisecond.setTextColor(Theme.getColor(Theme.key_default_text));
         txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
+        txt_slide_to_cancel.setTextColor(Theme.getColor(Theme.key_default_text));
         btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
+        btnMicLayout.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
         btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
@@ -321,7 +326,7 @@ public class VoiceRecord {
         txt_slide_to_cancel.setAlpha(1);
         txt_slide_to_cancel.setText(R.string.cancel);
         txt_slide_to_cancel.clearAnimation();
-        txt_slide_to_cancel.setTextColor(new Theme().getAccentColor(context));
+        txt_slide_to_cancel.setTextColor(Theme.getColor(Theme.key_red));
         btnMicLayout.setText(R.string.icon_send);
         isHandFree = true;
     }
@@ -334,7 +339,7 @@ public class VoiceRecord {
         txt_slide_to_cancel.setText(R.string.slide_to_cancel_en);
         txt_slide_to_cancel.startAnimation(animation);
         txt_slide_to_cancel.setAlpha(1);
-        txt_slide_to_cancel.setTextColor(new Theme().getIconTextColor(context));
+        txt_slide_to_cancel.setTextColor(Theme.getColor(Theme.key_icon));
         btnMicLayout.setText(R.string.icon_microphone);
         itemTag = "";
         layoutAttach.setVisibility(View.VISIBLE);

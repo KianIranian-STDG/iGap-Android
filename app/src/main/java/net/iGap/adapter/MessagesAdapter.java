@@ -24,7 +24,7 @@ import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 
 import net.iGap.G;
-import net.iGap.R;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.CardToCardItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
@@ -34,6 +34,7 @@ import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
@@ -47,7 +48,7 @@ import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class MessagesAdapter<Item extends net.iGap.adapter.items.chat.AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
+public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     private OnChatMessageSelectionChanged<Item> onChatMessageSelectionChanged;
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
@@ -342,7 +343,7 @@ public class MessagesAdapter<Item extends net.iGap.adapter.items.chat.AbstractMe
 
     private void makeSelected(View v) {
         //noinspection RedundantCast
-        ((FrameLayout) v).setForeground(v.getResources().getDrawable(R.drawable.message_selected_mode));
+        ((FrameLayout) v).setForeground(new ColorDrawable(Theme.getColor(Theme.key_opacity_theme_color)));
     }
 
     private void makeDeselected(View v) {
@@ -391,7 +392,7 @@ public class MessagesAdapter<Item extends net.iGap.adapter.items.chat.AbstractMe
 
     }
 
-    public void onBotButtonClicked(net.iGap.adapter.items.chat.AbstractMessage.OnAllowBotCommand onAllowBotCommand) {
+    public void onBotButtonClicked(AbstractMessage.OnAllowBotCommand onAllowBotCommand) {
         if (allowAction) {
             allowAction = false;
             runTimer();

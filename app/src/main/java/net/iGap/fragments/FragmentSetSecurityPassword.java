@@ -17,6 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.RecoveryEmailCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
@@ -144,6 +145,7 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
 
         //
         edtSetPassword = view.findViewById(R.id.setPassword_edtSetPassword);
+        edtSetPassword.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         edtSetPassword.requestFocus();
         openKeyboard(edtSetPassword);
         edtSetRePassword = view.findViewById(R.id.setPassword_edtSetRePassword);

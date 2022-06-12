@@ -13,7 +13,6 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/iGapWalletDarkerBackground"
         android:fillViewport="true"
         tools:context=".fragments.qrCodePayment.fragments.ScanCodeQRCodePaymentFragment">
 
@@ -31,13 +30,10 @@
                 android:id="@+id/code_scanner"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:autoFocusButtonColor="?attr/iGapButtonColor"
                 app:autoFocusButtonVisible="true"
-                app:flashButtonColor="?attr/iGapButtonColor"
                 app:flashButtonVisible="true"
                 app:frameAspectRatioHeight="1"
                 app:frameAspectRatioWidth="1"
-                app:frameColor="?attr/iGapButtonColor"
                 app:frameCornersRadius="15dp"
                 app:frameCornersSize="60dp"
                 app:frameSize="0.5"
@@ -54,7 +50,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="96dp"
                 android:text="@string/scan_code"
-                android:textColor="?attr/iGapButtonColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +67,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/code_enter_button"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"

@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/discovery_margin"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/transparent"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="@dimen/discovery_radius"
             app:cardElevation="0dp"
             app:cardPreventCornerOverlap="false"

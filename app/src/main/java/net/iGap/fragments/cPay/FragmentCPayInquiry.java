@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import net.iGap.databinding.FragmentCpayInquiryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayInquiryViewModel;
 
@@ -55,7 +57,10 @@ public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null)
             plaqueText = getArguments().getString(HelperCPay.PLAQUE);
-
+        TextView fci_lbl_plaque = view.findViewById(R.id.fci_lbl_plaque);
+        fci_lbl_plaque.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        TextView fci_txt_result = view.findViewById(R.id.fci_txt_result);
+        fci_txt_result.setTextColor(Theme.getColor(Theme.key_title_text));
         initToolbar();
         initPlaque();
     }

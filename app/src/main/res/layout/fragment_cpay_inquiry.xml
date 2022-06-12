@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp32"
             android:text="@string/car_plaque"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +54,6 @@
             android:layout_margin="@dimen/dp32"
             android:gravity="right"
             android:text="@{viewModel.inquiryResultText}"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +61,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car_"
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp52"

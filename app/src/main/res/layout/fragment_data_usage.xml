@@ -15,7 +15,6 @@
         android:id="@+id/rcDataUsage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/fdu_layout_toolbar"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_below="@+id/fdu_layout_toolbar" />
 
 </RelativeLayout>

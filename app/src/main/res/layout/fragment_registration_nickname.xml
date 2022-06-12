@@ -21,7 +21,6 @@
             android:layout_marginTop="@dimen/dp16"
             android:gravity="center"
             android:text="@string/pu_title_profileUser"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/dp18"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp8"
-            android:background="?attr/iGapDividerLine"
+            android:background="@color/key_light_gray"
             app:layout_constraintLeft_toLeftOf="@id/pu_txt_title_desc"
             app:layout_constraintRight_toRightOf="@id/pu_txt_title_desc"
             app:layout_constraintTop_toBottomOf="@id/pu_txt_title_information" />
@@ -47,7 +46,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:gravity="center"
             android:text="@string/pu_desc_profileUser"
-            android:textColor="?attr/iGapSubtitleTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -86,7 +84,6 @@
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColorHint="?attr/iGapHintTextColor"
             app:errorText="@{viewModel.showErrorName}"
             app:layout_constraintBottom_toTopOf="@id/lastName"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -103,7 +100,6 @@
                 android:lines="1"
                 android:maxLength="20"
                 android:singleLine="true"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
                 app:errorTextAppearance="@style/remove_error_appearance" />
 
@@ -113,7 +109,6 @@
             android:id="@+id/lastName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColorHint="?attr/iGapHintTextColor"
             app:errorText="@{viewModel.showErrorLastName}"
             app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintLeft_toLeftOf="@id/name"
@@ -130,7 +125,6 @@
                 android:lines="1"
                 android:maxLength="20"
                 android:singleLine="true"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
                 app:errorTextAppearance="@style/remove_error_appearance" />
 
@@ -147,8 +141,6 @@
             android:maxLength="18"
             android:padding="@dimen/dp8"
             android:textAlignment="gravity"
-            android:textColor="?attr/iGapTitleTextColor"
-            android:textColorHint="?attr/iGapHintTextColor"
             android:textSize="@dimen/dp14"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
@@ -164,7 +156,6 @@
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.onCountryCodeClick()}"
             android:padding="@dimen/dp8"
-            android:textColor="?attr/iGapTitleTextColor"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/reagentPhoneNumber"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -174,7 +165,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pu_btn_letsGo"
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.OnClickBtnLetsGo(nameEditText.getEditableText().toString(),lastNameEditText.getEditableText().toString())}"

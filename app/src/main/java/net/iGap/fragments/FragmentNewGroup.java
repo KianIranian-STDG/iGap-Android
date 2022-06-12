@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +35,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -42,6 +46,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -59,11 +64,13 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.MEditText;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.CheckBox;
 import net.iGap.module.structs.StructContactInfo;
@@ -141,6 +148,24 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        MEditText ng_edt_newGroup = (MEditText) view.findViewById(R.id.ng_edt_newGroup);
+        ng_edt_newGroup.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        AppCompatEditText ng_edt_description = (AppCompatEditText) view.findViewById(R.id.ng_edt_description);
+        ng_edt_description.setTextColor(Theme.getColor(Theme.key_title_text));
+
+
+        AppCompatTextView ang_txt_add_hint = (AppCompatTextView) view.findViewById(R.id.ang_txt_add_hint);
+        ang_txt_add_hint.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+
+        TextView membersText = (TextView) view.findViewById(R.id.membersText);
+        membersText.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        View divider = view.findViewById(R.id.divider);
+        divider.setBackgroundColor(Theme.getColor(Theme.key_line));
 
         initDataBinding();
         initComponent(view);
@@ -234,78 +259,84 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
     }
 
     private void showDialogSelectGallery() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
+                .items(R.array.profile)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                switch (which) {
-                    case 0: {
+                        switch (which) {
+                            case 0: {
 
-                        try {
-                            HelperPermission.getStoragePermission(context, new OnGetPermission() {
-                                @Override
-                                public void Allow() {
+                                try {
+                                    HelperPermission.getStoragePermision(context, new OnGetPermission() {
+                                        @Override
+                                        public void Allow() {
 
-                                    if (isAdded()) { // boolean isAdded () Return true if the fragment is currently added to its activity.
-                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        intent.setType("image/*");
-                                        startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                                        isInAttach = true;
-                                    }
+                                            if (isAdded()) { // boolean isAdded () Return true if the fragment is currently added to its activity.
+                                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                                intent.setType("image/*");
+                                                startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                                isInAttach = true;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void deny() {
+                                            showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
+                                break;
+                            }
+                            case 1: {
 
-                                @Override
-                                public void deny() {
-                                    showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    }
-                    case 1: {
+                                if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    try {
 
-                        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                            try {
-
-                                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
-                                    @Override
-                                    public void Allow() throws IOException {
-                                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                             @Override
-                                            public void Allow() {
-                                                // this dialog show 2 way for choose image : gallery and camera
+                                            public void Allow() throws IOException {
+                                                HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                                    @Override
+                                                    public void Allow() {
+                                                        // this dialog show 2 way for choose image : gallery and camera
 
-                                                if (isAdded()) {
-                                                    useCamera();
-                                                }
-                                                dialog.dismiss();
+                                                        if (isAdded()) {
+                                                            useCamera();
+                                                        }
+                                                        dialog.dismiss();
+                                                    }
+
+                                                    @Override
+                                                    public void deny() {
+                                                        showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+                                                    }
+                                                });
                                             }
 
                                             @Override
                                             public void deny() {
-                                                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
+
                                             }
                                         });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-
-                                    @Override
-                                    public void deny() {
-
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                } else {
+                                    Toast.makeText(context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                                }
+                                break;
                             }
-                        } else {
-                            Toast.makeText(context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                         }
-                        break;
                     }
-                }
-            }
-        }).show();
+                }).show();
     }
 
     private void useCamera() {
@@ -342,6 +373,11 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
     public void initComponent(View view) {
         G.onGroupAvatarResponse = this;
         G.onChannelAvatarAdd = this;
+        TextInputLayout ng_txtInput_newGroup = view.findViewById(R.id.ng_txtInput_newGroup);
+        ng_txtInput_newGroup.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+
+        TextInputLayout ng_txtInput_description = view.findViewById(R.id.ng_txtInput_description);
+        ng_txtInput_description.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
 
         AppUtils.setProgresColler(fragmentNewGroupBinding.ngPrgWaiting);
 
@@ -376,7 +412,7 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();
@@ -763,9 +799,12 @@ public class FragmentNewGroup extends BaseFragment implements EventManager.Event
                 super(itemView);
 
                 txtName = itemView.findViewById(R.id.tv_itemContactChat_userName);
+                txtName.setTextColor(Theme.getColor(Theme.key_title_text));
                 txtPhone = itemView.findViewById(R.id.tv_itemContactChat_userPhoneNumber);
                 btnRemove = itemView.findViewById(R.id.tv_itemContactChat_remove);
+                btnRemove.setTextColor(Theme.getColor(Theme.key_red));
                 imgAvatar = itemView.findViewById(R.id.iv_itemContactChat_profileImage);
+                imgAvatar.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
                 chSelected = itemView.findViewById(R.id.iv_itemContactChat_checkBox);
             }
 

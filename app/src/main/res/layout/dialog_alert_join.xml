@@ -13,8 +13,7 @@
         android:layout_width="@dimen/dp100"
         android:layout_height="@dimen/dp4"
         android:layout_marginTop="@dimen/dp8"
-        android:layout_gravity="center"
-        android:background="?iGapBottomSheetHeaderLine" />
+        android:layout_gravity="center"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
@@ -25,7 +24,6 @@
         android:layout_marginTop="@dimen/dp16"
         android:layout_marginBottom="@dimen/dp6"
         android:singleLine="true"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize" />
 
     <net.iGap.module.CircleImageView
@@ -43,7 +41,6 @@
         android:layout_marginRight="@dimen/dp10"
         android:gravity="center"
         android:singleLine="true"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize" />
 
     <TextView
@@ -56,8 +53,7 @@
         android:layout_marginBottom="@dimen/dp10"
         android:gravity="center"
         android:singleLine="true"
-        android:textSize="@dimen/smallTextSize"
-        android:textColor="?iGapSubtitleTextColor" />
+        android:textSize="@dimen/smallTextSize"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,8 +71,7 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:text="@string/cancel"
             android:textSize="@dimen/standardTextSize"
-            android:padding="@dimen/dp10"
-            android:textColor="?iGapSubtitleTextColor" />
+            android:padding="@dimen/dp10"/>
 
         <TextView
             android:id="@+id/btnJoin"
@@ -88,8 +83,7 @@
             app:layout_constraintStart_toEndOf="@id/btnCancel"
             android:text="@string/join"
             android:textSize="@dimen/standardTextSize"
-            android:padding="@dimen/dp10"
-            android:textColor="?iGapPrimaryIconTextColor" />
+            android:padding="@dimen/dp10"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

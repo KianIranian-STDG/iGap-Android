@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:layoutDirection="ltr"
-    android:background="?attr/iGapEditTxtColor"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,11 +19,11 @@
             android:padding="@dimen/dp4">
 
             <TextView
+                android:id="@+id/pinText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@string/pined_message"
-                android:textColor="@color/shared_media_music_list_icon_color"
                 android:textSize="@dimen/smallTextSize" />
 
             <TextView
@@ -33,14 +32,13 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text=""
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/smallTextSize" />
 
         </LinearLayout>
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/pl_btn_close"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp40"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/dp8"

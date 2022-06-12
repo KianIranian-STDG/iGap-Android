@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.fragments.emoji.add.StickerAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class StickerGridView extends FrameLayout implements StickerAdapter.AddStickerDialogListener {
     private AppCompatTextView stickerNameTv;
@@ -35,7 +35,7 @@ public class StickerGridView extends FrameLayout implements StickerAdapter.AddSt
         boolean isRtl = G.isAppRtl;
 
         stickerNameTv = new AppCompatTextView(getContext());
-        stickerNameTv.setTextColor(new Theme().getSubTitleColor(getContext()));
+        stickerNameTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         stickerNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         stickerNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         stickerNameTv.setLines(1);

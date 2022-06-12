@@ -51,7 +51,6 @@
                     android:layout_marginTop="@dimen/dp4"
                     android:justificationMode="inter_word"
                     android:text="@string/retry"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="bold"
                     android:gravity="start"
@@ -63,7 +62,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyleGray"
+                    style="@style/baseFontIcon"
                     android:id="@+id/loadAgainIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +84,6 @@
                     android:layout_height="0dp"
                     android:elevation="@dimen/dp4"
                     android:padding="@dimen/dp10"
-                    android:background="@drawable/bill_round_drawable"
                     app:layout_constraintStart_toStartOf="@+id/billImage"
                     app:layout_constraintEnd_toEndOf="@+id/billImage"
                     app:layout_constraintTop_toTopOf="@+id/billImage"
@@ -127,8 +125,7 @@
                     app:layout_constraintTop_toTopOf="@+id/baseLine"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="?attr/iGapCardViewColor">
+                    app:cardUseCompatPadding="true">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -154,7 +151,6 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_pay_billID"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="start"
                             android:ellipsize="end"
@@ -165,7 +161,7 @@
                             android:id="@+id/followUp"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="?attr/iGapDividerLine"
+                            android:background="@color/key_light_gray"
                             android:layout_marginTop="@dimen/dp4"
                             android:layout_marginStart="@dimen/dp32"
                             android:layout_marginEnd="@dimen/dp32"
@@ -179,7 +175,6 @@
                             android:layout_height="wrap_content"
                             android:justificationMode="inter_word"
                             android:text="@{viewmodel.billID}"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="end"
                             android:ellipsize="end"
@@ -198,7 +193,6 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_pay_billPayID"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="start"
                             android:ellipsize="end"
@@ -209,7 +203,7 @@
                             android:id="@+id/followUp4"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="?attr/iGapDividerLine"
+                            android:background="@color/key_light_gray"
                             android:layout_marginTop="@dimen/dp4"
                             android:layout_marginStart="@dimen/dp32"
                             android:layout_marginEnd="@dimen/dp32"
@@ -223,7 +217,6 @@
                             android:layout_height="wrap_content"
                             android:justificationMode="inter_word"
                             android:text="@{viewmodel.billPayID}"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="end"
                             android:ellipsize="end"
@@ -255,7 +248,6 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_pay_billPrice"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="start"
                             android:ellipsize="end"
@@ -266,7 +258,7 @@
                             android:id="@+id/followUp2"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="?attr/iGapDividerLine"
+                            android:background="@color/key_light_gray"
                             android:layout_marginTop="@dimen/dp4"
                             android:layout_marginStart="@dimen/dp32"
                             android:layout_marginEnd="@dimen/dp32"
@@ -280,7 +272,6 @@
                             android:layout_height="wrap_content"
                             android:justificationMode="inter_word"
                             android:text="@{viewmodel.billPrice}"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="end"
                             android:ellipsize="end"
@@ -313,7 +304,6 @@
                             android:layout_marginLeft="@dimen/dp16"
                             android:justificationMode="inter_word"
                             android:text="@string/elecBill_pay_billTime"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="start"
                             android:ellipsize="end"
@@ -327,7 +317,6 @@
                             android:layout_height="wrap_content"
                             android:justificationMode="inter_word"
                             android:text="@{viewmodel.billTime}"
-                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp18"
                             android:gravity="end"
                             android:ellipsize="end"
@@ -355,7 +344,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Pay"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="58dp"
@@ -373,7 +362,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/Pay2"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="58dp"

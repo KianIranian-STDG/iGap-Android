@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -180,7 +181,7 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
     @Override
     public void onBindViewHolder(FileListHolder holder, int position) {
         File f = data.get(position);
-
+        holder.name.setTextColor(Theme.getColor(Theme.key_title_text));
         if (!G.isAppRtl) {
             holder.name.setGravity(Gravity.LEFT);
         } else {
@@ -241,6 +242,7 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             super(itemView);
             name = itemView.findViewById(R.id.name);
             icon = itemView.findViewById(R.id.icon);
+            icon.setTextColor(Theme.getColor(Theme.key_icon));
             itemView.findViewById(R.id.layout).setOnClickListener(this);
         }
 
@@ -249,6 +251,8 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
             if (data.get(getPosition()) == null) {
                 View view = View.inflate(getContext(), R.layout.dialog_create_folder, null);
                 final AppCompatEditText editText = view.findViewById(R.id.edittext);
+                editText.setHintTextColor(Theme.getColor(Theme.key_subtitle_text));
+                editText.setTextColor(Theme.getColor(Theme.key_title_text));
                 MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext())
                         .customView(view, false)
                         .title("Enter the folder name")

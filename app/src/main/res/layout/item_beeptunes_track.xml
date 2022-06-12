@@ -28,7 +28,7 @@
             android:layout_marginRight="@dimen/dp4"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/smallTextSize"
             tools:text="رگ خواب" />
 
@@ -42,7 +42,7 @@
             android:layout_marginRight="@dimen/dp4"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/gray"
+            android:textColor="@color/key_gray"
             android:textSize="@dimen/smallTextSize"
             tools:text="همایون شجریان" />
     </LinearLayout>

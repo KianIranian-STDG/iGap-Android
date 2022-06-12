@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.MaterialDesignTextView;
 import net.igap.video.trim.K4LVideoTrimmer;
 import net.igap.video.trim.interfaces.OnK4LVideoListener;
 import net.igap.video.trim.interfaces.OnTrimVideoListener;
@@ -47,8 +49,11 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.fragment_video_trime);
 
+        MaterialDesignTextView pu_txt_agreeImage = findViewById(R.id.pu_txt_agreeImage);
+        pu_txt_agreeImage.setTextColor(Theme.getColor(Theme.key_white));
         txtDetail = findViewById(R.id.stfaq_txt_detail);
         txtTime = findViewById(R.id.stfaq_txt_time);
         txtSize = findViewById(R.id.stfaq_txt_size);

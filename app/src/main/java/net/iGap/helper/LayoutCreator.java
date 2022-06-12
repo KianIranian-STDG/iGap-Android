@@ -1,5 +1,9 @@
 package net.iGap.helper;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
@@ -7,11 +11,15 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.DimenRes;
 
 import net.iGap.G;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
+
+import static net.iGap.module.AndroidUtils.density;
 
 public class LayoutCreator {
 
@@ -156,5 +164,36 @@ public class LayoutCreator {
 
     public static int getDimen(@DimenRes int dimension) {
         return pxToDp((int) context.getResources().getDimension(dimension));
+    }
+
+    public static void shakeView(final View view, final float x, final int num) {
+        if (view == null) {
+            return;
+        }
+        if (num == 6) {
+            view.setTranslationX(0);
+            return;
+        }
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(ObjectAnimator.ofFloat(view, "translationX", dp(x)));
+        animatorSet.setDuration(50);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                shakeView(view, num == 5 ? 0 : -x, num + 1);
+            }
+        });
+        animatorSet.start();
+    }
+
+    public static float dpf2(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return density * value;
+    }
+
+    public static ScrollView.LayoutParams createScroll(int width, int height, int gravity) {
+        return new ScrollView.LayoutParams(getSize(width), getSize(height), gravity);
     }
 }

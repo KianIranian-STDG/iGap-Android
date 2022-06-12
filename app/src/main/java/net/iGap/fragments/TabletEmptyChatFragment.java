@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ public class TabletEmptyChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imgBackGround = view.findViewById(R.id.backgroundView);
-
+        imgBackGround.setBackgroundColor(Theme.getColor(Theme.key_chat_background));
         getChatBackground();
 
         view.findViewById(R.id.goToSetting).setOnClickListener(v -> {
@@ -72,7 +72,7 @@ public class TabletEmptyChatFragment extends Fragment {
                 }
             }
         } else {
-            if (G.themeColor == Theme.DARK) {
+            if (Theme.isDark() || Theme.isNight()) {
                 imgBackGround.setImageResource(R.drawable.chat_bg_dark);
             } else {
                 //todo: fixed load default background in light mode

@@ -35,9 +35,9 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.collection.ArrayMap;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -69,6 +69,7 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -78,7 +79,6 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -87,6 +87,7 @@ import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
@@ -126,12 +127,17 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
@@ -154,7 +160,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public MessagesAdapter<AbstractMessage> mAdapter;
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
-    protected Theme theme;
     private VH holder;
     public int currentAccount;
 
@@ -163,7 +168,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.type = type;
         this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
-        this.theme = Theme.getInstance();
         currentAccount = AccountManager.selectedAccount;
     }
 
@@ -412,12 +416,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         // TODO: 12/29/20 MESSAGE_REFACTOR
-        mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OnClickRow(mHolder, view);
-            }
-        });
+        mHolder.getItemContainer().setOnClickListener(view -> OnClickRow(mHolder, view));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -519,7 +518,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             ButtonEntity buttonEntity = new Gson().fromJson(buttonList.get(i).get(j).toString(), ButtonEntity.class);
                             buttonEntity.setJsonObject(buttonList.get(i).get(j).toString());
 
-                            childLayout = MakeButtons.addButtons(theme, buttonEntity, buttonList.get(i).length(), 1f, childLayout, (view, btnEntity) -> {
+                            childLayout = MakeButtons.addButtons(buttonEntity, buttonList.get(i).length(), 1f, childLayout, (view, btnEntity) -> {
                                 if (FragmentChat.isInSelectionMode) {
                                     holder.itemView.performLongClick();
                                     return;
@@ -553,7 +552,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (isSelected() || messageObject.isSelected) {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Theme.getColor(Theme.key_opacity_theme_color)));
         } else {
             ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
@@ -617,17 +616,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     mHolder.getItemContainer().addView(messageSenderAvatar, 0);
                 }
                 messageSenderAvatar.setVisibility(View.VISIBLE);
-
-                messageSenderAvatar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (FragmentChat.isInSelectionMode) {
-                            holder.itemView.performLongClick();
-                            return;
-                        }
-
-                        messageClickListener.onSenderAvatarClick(v, messageObject, holder.getAdapterPosition());
+                messageSenderAvatar.setOnClickListener(v -> {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return;
                     }
+
+                    messageClickListener.onSenderAvatarClick(v, messageObject, holder.getAdapterPosition());
                 });
 
                 messageSenderAvatar.setOnLongClickListener(getLongClickPerform(holder));
@@ -635,41 +630,74 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
                 mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, messageObject.userId).avatarType(AvatarHandler.AvatarType.USER));
             }
+        }
+        FrameLayout optionContainer = mHolder.getItemContainer().findViewById(R.id.messageOptionContainer);
+
+        boolean isMyCloud = type == ProtoGlobal.Room.Type.CHAT && mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().getChatRoom() != null &&
+                mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
+        if (optionContainer == null) {
+            optionContainer = new FrameLayout(holder.itemView.getContext());
+            optionContainer.setId(R.id.messageOptionContainer);
+        }
+
+
+        mHolder.getItemContainer().removeView(optionContainer);
+        if (isMyCloud || (type == ProtoGlobal.Room.Type.CHAT && messageObject.isSenderMe()) || (type == ProtoGlobal.Room.Type.GROUP && messageObject.isSenderMe())) {
+            mHolder.getItemContainer().addView(optionContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
         } else {
-            FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
-            ContextThemeWrapper wrapper = new ContextThemeWrapper(holder.itemView.getContext(), Theme.getInstance().getTheme(holder.itemView.getContext()));
-
-            if (forwardContainer == null) {
-                forwardContainer = new FrameLayout(holder.itemView.getContext());
-                forwardContainer.setId(R.id.messageForwardContainer);
-
-                if (mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().getChatRoom() != null && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
-                    mHolder.getItemContainer().addView(forwardContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
-                } else {
-                    mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
-                }
-
-                forwardContainer.addView(mHolder.getChannelForwardIv(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
-                forwardContainer.setVisibility(View.GONE);
+            if ((type == ProtoGlobal.Room.Type.GROUP && !messageObject.isSenderMe())) {
+                mHolder.getItemContainer().addView(optionContainer, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+            } else {
+                mHolder.getItemContainer().addView(optionContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
             }
+        }
 
-            if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
-                forwardContainer.setVisibility(View.VISIBLE);
-                mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (isAllowToForward(messageObject))
-                        messageClickListener.onForwardClick(messageObject);
-                });
-            }
+        optionContainer.removeAllViews();
+        if ((type == ProtoGlobal.Room.Type.CHAT || type == ProtoGlobal.Room.Type.GROUP) && !isMyCloud) {
+            optionContainer.addView(mHolder.getMessageTTSOption(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 2, 4, 2));
+            optionContainer.addView(mHolder.getProgressBar(), LayoutCreator.createFrame(30, 30, Gravity.BOTTOM, 4, 2, 4, 2));
+        } else {
+            optionContainer.addView(mHolder.getMessageTTSOption(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 2, 4, 32));
+            optionContainer.addView(mHolder.getProgressBar(), LayoutCreator.createFrame(30, 30, Gravity.BOTTOM, 4, 2, 4, 32));
+            optionContainer.addView(mHolder.getChannelForwardIv(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 2, 4, 2));
+        }
 
-            if (type == ProtoGlobal.Room.Type.CHAT && mAdapter.getRealmRoom().getChatRoom() != null && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !messageObject.isGiftSticker()) {
-                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
-                forwardContainer.setVisibility(View.VISIBLE);
-                mHolder.getChannelForwardIv().setOnClickListener(v -> {
-                    if (isAllowToForward(messageObject))
-                        messageClickListener.onForwardFromCloudClick(messageObject);
-                });
-            }
+
+        mHolder.getProgressBar().setVisibility(View.GONE);
+
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        boolean isConvertTextMessage = sharedPreferences.getBoolean(SHP_SETTING.KEY_CONVERT_TEXT_MESSAGE, true);
+
+        ProtoGlobal.RoomMessageType messageType;
+        if (messageObject.forwardedMessage != null)
+            messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage.messageType);
+        else
+            messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
+
+        if ((messageType == IMAGE_TEXT || messageType == TEXT || messageType == VIDEO_TEXT || messageType == FILE_TEXT || messageType == GIF_TEXT || messageType == AUDIO_TEXT) && isConvertTextMessage) {
+            mHolder.getMessageTTSOption().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.icon_video_play, context.getTheme()));
+            mHolder.getMessageTTSOption().setColorFilter(Color.GRAY);
+            mHolder.getMessageTTSOption().setOnClickListener(v -> {
+                messageClickListener.onTextToVoiceConvertClick(messageObject, mHolder.getProgressBar(), mHolder.getMessageTTSOption());
+            });
+        }
+
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
+            mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, context.getTheme()));
+            //mHolder.getChannelForwardIv().setColorFilter(Color.GRAY);
+            mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                if (isAllowToForward(messageObject))
+                    messageClickListener.onForwardClick(messageObject);
+            });
+        }
+
+        if (isMyCloud && !messageObject.isGiftSticker()) {
+            mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, context.getTheme()));
+            //mHolder.getChannelForwardIv().setColorFilter(Color.GRAY);
+            mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                if (isAllowToForward(messageObject))
+                    messageClickListener.onForwardFromCloudClick(messageObject);
+            });
         }
 
 
@@ -822,10 +850,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getReceivedMessageColor(viewHolder.getContext()));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Theme.getColor(Theme.key_default_text));
         }
 
-        viewHolder.getChatBloke().setBackground(theme.tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.colorPrimaryLight));
+        viewHolder.getChatBloke().setBackground(Theme.tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), Theme.getColor(Theme.key_received_item_background)));
 
         /**
          * add main layout margin to prevent getting match parent completely
@@ -835,13 +863,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
-        viewHolder.getMessageTimeTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
-        viewHolder.getSignatureTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getMessageTimeTv().setTextColor(Theme.getColor(Theme.key_chat_item_holder));
+        viewHolder.getSignatureTv().setTextColor(Theme.getColor(Theme.key_chat_item_holder));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
         } else {
-            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
+            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
         }
 
     }
@@ -857,18 +885,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getSendMessageTextColor(((ChatItemWithTextHolder) holder).getContext()));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Theme.getColor(Theme.key_default_text));
         }
 
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.forNumber(messageObject.status);
 
         if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
-            viewHolder.getMessageStatusTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
+            viewHolder.getMessageStatusTv().setTextColor(Theme.getColor(Theme.key_default_text));
         }
-        viewHolder.getChatBloke().setBackground(theme.tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
-        viewHolder.getMessageTimeTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
-        viewHolder.getSignatureTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getChatBloke().setBackground(Theme.tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), Theme.getColor(Theme.key_send_item_background)));
+        viewHolder.getMessageTimeTv().setTextColor(Theme.getColor(Theme.key_chat_item_holder));
+        viewHolder.getSignatureTv().setTextColor(Theme.getColor(Theme.key_chat_item_holder));
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
     }
@@ -969,12 +997,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
             if (messageObject.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
+                replayView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.rectangle_reply_sender_round_color), context, Theme.getColor(Theme.key_received_item_background)));
             } else {
-                replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
+                replayView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.rectangle_reply_recive_round_color), context, Theme.getColor(Theme.key_send_item_background)));
             }
-            replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
-            replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
+            replyFrom.setTextColor(Theme.getColor(Theme.key_chat_item_holder));
+            replayMessage.setTextColor(Theme.getColor(Theme.key_default_text));
 
             replyFrom.measure(0, 0);       //must call measure!
             replayMessage.measure(0, 0);
@@ -1055,7 +1083,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
                 if (info.getUsername() != null)
                     messageObject.username = info.getUsername();
-                txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+                txtForwardFrom.setTextColor(Theme.getColor(Theme.key_chat_item_holder));
             } else if (messageObject.forwardedMessage.userId != 0) {
 
                 if (RealmRegisteredInfo.needUpdateUser(messageObject.forwardedMessage.userId, null)) {
@@ -1069,7 +1097,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
                 if (realmRoom != null) {
                     txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
-                    txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+                    txtForwardFrom.setTextColor(Theme.getColor(Theme.key_chat_item_holder));
 
                     switch (realmRoom.getType()) {
                         case CHANNEL:
@@ -1103,7 +1131,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
 
                         txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoomForwardedFrom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
-                        txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+                        txtForwardFrom.setTextColor(Theme.getColor(Theme.key_chat_item_holder));
                     } else {
                         if (RealmRoom.needUpdateRoomInfo(messageObject.forwardedMessage.roomId)) {
                             if (!updateForwardInfo.containsKey(messageObject.forwardedMessage.roomId)) {
@@ -1537,7 +1565,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             } else {
-                downLoadFile(holder, 2);
+                if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                    Toast.makeText(context, R.string.please_check_your_connenction, Toast.LENGTH_LONG).show();
+                } else {
+                    downLoadFile(holder, 2);
+                }
             }
         }
     }

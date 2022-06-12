@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.MciInternetPackageFilter;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +48,8 @@ public class MySpinnerAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item_custom, parent, false);
 
             holder.txtTitle = convertView.findViewById(R.id.item_title);
+            holder.txtTitle.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+            holder.txtTitle.setTextColor(Theme.getColor(Theme.key_default_text));
             convertView.setTag(holder);
         } else {
             holder = (viewHolder) convertView.getTag();

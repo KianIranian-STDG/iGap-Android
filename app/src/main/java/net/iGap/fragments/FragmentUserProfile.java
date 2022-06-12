@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,14 +35,15 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.dialog.account.AccountDialogListener;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +52,7 @@ import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
+public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited, EventManager.EventDelegate {
 
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
@@ -59,6 +62,12 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         FragmentUserProfile fragment = new FragmentUserProfile();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.updateUserInfoUI();
     }
 
     @Override
@@ -83,11 +92,21 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getEventManager().removeObserver(EventManager.UPDATE_PHONE_NUMBER, this);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.fupUserImage.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
+        binding.addAvatar.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
+
+        getEventManager().addObserver(EventManager.UPDATE_PHONE_NUMBER, this);
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+            StatusBarUtil.setColor(getActivity(), Theme.getColor(Theme.key_dark_theme_color), 50);
         }
 
         viewModel.getCloseKeyboard().observe(getViewLifecycleOwner(), aBoolean -> {
@@ -240,7 +259,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void startDialog() {
-        new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture).negativeText(R.string.B_cancel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.choose_picture)
+                .negativeText(R.string.B_cancel)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .items(R.array.profile)
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getString(R.string.array_From_Camera))) { // camera
@@ -338,4 +364,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         viewModel.uploadAvatar(path);
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.UPDATE_PHONE_NUMBER) {
+            viewModel.updateUserInfoUI();
+        }
+    }
 }

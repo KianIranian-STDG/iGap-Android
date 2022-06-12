@@ -11,10 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.R;
 import net.iGap.activities.CallActivity;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.module.webrtc.CallService;
@@ -113,6 +116,13 @@ public class CallSelectFragment extends BaseBottomSheet {
         super.onViewCreated(view, savedInstanceState);
         voiceCall = view.findViewById(R.id.ll_callAction_voiceCall);
         videoCall = view.findViewById(R.id.ll_callAction_videoCall);
+        FontIconTextView voiceCallIcon = view.findViewById(R.id.voiceCallIcon);
+        FontIconTextView videoCallIcon = view.findViewById(R.id.videoCallIcon);
+        voiceCallIcon.setTextColor(Theme.getColor(Theme.key_icon));
+        videoCallIcon.setTextColor(Theme.getColor(Theme.key_icon));
+
+        View lineViewTop = view.findViewById(R.id.lineViewTop);
+        lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_icon)));
     }
 
     @Override

@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 
 public class EditImageFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -52,9 +53,9 @@ public class EditImageFragment extends Fragment implements SeekBar.OnSeekBarChan
         seekBarContrast = view.findViewById(R.id.seekbar_contrast);
         seekBarSaturation = view.findViewById(R.id.seekbar_saturation);
 
-        seekBarBrightness.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
-        seekBarContrast.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
-        seekBarSaturation.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN));
+        seekBarBrightness.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN));
+        seekBarContrast.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN));
+        seekBarSaturation.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN));
 
         // keeping brightness value b/w -100 / +100
         seekBarBrightness.setMax(200);

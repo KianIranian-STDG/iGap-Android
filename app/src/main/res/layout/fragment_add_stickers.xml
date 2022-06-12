@@ -31,7 +31,6 @@
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/iGapToolbarBackground"
         android:layoutDirection="ltr"
         app:elevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +55,7 @@
                 app:rv_ripplePadding="5dp">
 
                 <net.iGap.module.MaterialDesignTextView
-                    style="@style/myIconToolbarStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/toolbar_icon_size"
                     android:layout_height="@dimen/toolbar_icon_size"
                     android:gravity="center"

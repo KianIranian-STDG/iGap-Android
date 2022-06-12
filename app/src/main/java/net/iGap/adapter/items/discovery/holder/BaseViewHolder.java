@@ -31,7 +31,6 @@ import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWebView;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
@@ -57,6 +56,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
@@ -75,7 +75,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
+import static net.iGap.messenger.ui.fragments.NearbyFragment.mapUrls;
 import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 
@@ -172,7 +172,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
-//                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case PARSLAND:
                 break;
@@ -180,8 +179,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
+//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            //    new HelperFragment(activity.getSupportFragmentManager(), new KuknosEntryOptionFrag()).setReplace(false).load();
+//                } else {
+//                    HelperError.showSnackMessage("", true);
+//                }
                 break;
             case VIRTUAL_GIFT_CARD:
+           //     new HelperFragment(activity.getSupportFragmentManager(), new GiftStickerMainFragment()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();
@@ -213,7 +218,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                         waitingForConfiguration = false;
                                                     }
                                                 }, 2000);
-                                                new HelperFragment(activity.getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
+                                                new HelperFragment(activity.getSupportFragmentManager(),new NearbyFragment()).setReplace(false).load();
 
                                             }
 
@@ -235,7 +240,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                 waitingForConfiguration = false;
                                             }
                                         }, 2000);
-                                        new HelperFragment(activity.getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
+                                        new HelperFragment(activity.getSupportFragmentManager(), new NearbyFragment()).setReplace(false).load();
                                     }
                                 }
 

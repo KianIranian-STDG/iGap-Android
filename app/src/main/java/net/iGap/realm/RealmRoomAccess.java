@@ -25,6 +25,7 @@ public class RealmRoomAccess extends RealmObject {
     private boolean canBanMember;
     private boolean canGetMemberList;
     private boolean canAddNewAdmin;
+    private boolean canAddNewStory;
 
     public static void putOrUpdate(ProtoGlobal.RoomAccess roomAccess, long userId, long roomId, Realm realm) {
 
@@ -52,6 +53,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setRoomId(roomId);
 
         realmRoomAccess.setCanModifyRoom(roomAccess.getModifyRoom());
+        realmRoomAccess.setCanAddNewStory(roomAccess.getAddStory());
         realmRoomAccess.setCanEditMessage(roomAccess.getEditMessage());
         realmRoomAccess.setCanDeleteMessage(roomAccess.getDeleteMessage());
         realmRoomAccess.setCanPinMessage(roomAccess.getPinMessage());
@@ -84,6 +86,7 @@ public class RealmRoomAccess extends RealmObject {
         realmRoomAccess.setRoomId(roomId);
 
         realmRoomAccess.setCanModifyRoom(adminRights.getModifyRoom());
+        realmRoomAccess.setCanAddNewStory(adminRights.getAddStory());
         realmRoomAccess.setRealmPostMessageRights(realmPostMessageRights);
         realmRoomAccess.setCanEditMessage(adminRights.getEditMessage());
         realmRoomAccess.setCanDeleteMessage(adminRights.getDeleteMessage());
@@ -171,6 +174,7 @@ public class RealmRoomAccess extends RealmObject {
                 realmRoomAccess.setCanPinMessage(false);
                 realmRoomAccess.setCanAddNewMember(false);
                 realmRoomAccess.setCanBanMember(false);
+                realmRoomAccess.setCanAddNewStory(false);
                 realmRoomAccess.setCanGetMemberList(false);
                 realmRoomAccess.setCanAddNewAdmin(false);
             }
@@ -266,6 +270,14 @@ public class RealmRoomAccess extends RealmObject {
 
     public boolean isCanAddNewAdmin() {
         return canAddNewAdmin;
+    }
+
+    public boolean isCanAddNewStory() {
+        return canAddNewStory;
+    }
+
+    public void setCanAddNewStory(boolean canAddNewStory) {
+        this.canAddNewStory = canAddNewStory;
     }
 
     private void setCanAddNewAdmin(boolean canAddNewAdmin) {

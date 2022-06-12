@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="@dimen/chat_item_log_radius" />
-    <solid android:color="@color/background_log_time" />
+    <solid android:color="@color/key_light_gray" />
 
 </shape>

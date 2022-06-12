@@ -1,5 +1,6 @@
 package net.iGap.adapter;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.GalleryVideoModel;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.GalleryItemListener;
@@ -27,9 +30,11 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
     private List<GalleryVideoModel> videosItem = new ArrayList<>();
     private List<GalleryVideoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
+    private Context context;
 
-    public AdapterGalleryVideo(boolean isVideoMode) {
+    public AdapterGalleryVideo(boolean isVideoMode,Context context) {
         this.isVideoMode = isVideoMode;
+        this.context = context;
     }
 
     public void setVideosItem(List<GalleryVideoModel> videosItem) {
@@ -145,6 +150,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
             caption = itemView.findViewById(R.id.caption);
             check = itemView.findViewById(R.id.check);
             play = itemView.findViewById(R.id.play);
+            play.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.background_progress), context, Theme.getColor(Theme.key_theme_color)));
         }
 
     }

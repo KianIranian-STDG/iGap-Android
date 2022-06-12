@@ -10,8 +10,8 @@ import net.iGap.fragments.emoji.apiModels.SliderDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
+import net.iGap.fragments.emoji.apiModels.StickerGroupTypesDataModel;
 import net.iGap.fragments.emoji.apiModels.StickersDataModel;
-import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -47,6 +47,9 @@ public interface StickerApi {
     @GET("main/{groupId}")
     Single<StickerGroupDataModel> getStickerGroupStickers(@Path("groupId") String groupId);
 
+    @GET("main/configs")
+    Single<StickerGroupTypesDataModel> getConfigs();
+
     @GET("recently-used/list")
     Single<StickersDataModel> getRecentSticker();
 
@@ -58,15 +61,6 @@ public interface StickerApi {
 
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
-
-    @GET("gift/user-list")
-    Single<UserGiftStickersDataModel> getUserGiftSticker(@Query("status") String status, @Query("skip") int skip, @Query("limit") int limit);
-
-    @GET("gift/activated-list")
-    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker(@Query("skip") int skip, @Query("limit") int limit);
-
-//    @GET("gift/activated-list")
-//    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
 
     @GET("gift/giftable-list")
     Single<StickerCategoryGroupDataModel> getGiftableStickers();

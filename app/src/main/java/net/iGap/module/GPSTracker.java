@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.text.format.DateUtils;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperTimeOut;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoUpdatePosition;
 
@@ -156,7 +156,7 @@ public class GPSTracker implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        FragmentiGapMap.mineStaticLocation = location;
+        NearbyFragment.mineStaticLocation = location;
         if (G.onLocationChanged != null) {
             G.onLocationChanged.onLocationChanged(location);
         }

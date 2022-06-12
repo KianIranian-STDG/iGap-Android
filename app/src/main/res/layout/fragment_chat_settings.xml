@@ -37,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
                     android:text="@string/st_title_message"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +50,6 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp8"
                     android:text="@string/st_title_message_textSize"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/messageTitle"
                     app:layout_constraintStart_toStartOf="@id/messageTitle"
@@ -75,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{viewModel.textSizeValue}"
-                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/st_seekbar_messageTextSize"
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
@@ -87,7 +84,6 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginBottom="@dimen/dp8"
-                    android:background="?attr/iGapDefaultChatBackground"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@id/chatBackground"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +105,6 @@
                         android:id="@+id/receivedReplay"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="?attr/iGapReceivedReplayBackground"
                         android:padding="@dimen/dp8"
                         app:layout_constraintBottom_toBottomOf="@id/replayMessage"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -124,7 +119,6 @@
                         android:layout_marginTop="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp8"
                         android:layout_marginBottom="@dimen/dp4"
-                        android:background="?attr/colorAccentDark"
                         app:layout_constraintBottom_toBottomOf="@id/replayMessage"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="@id/replayUserName" />
@@ -135,7 +129,6 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp4"
                         android:text="ehsan kb"
-                        android:textColor="?attr/iGapSendReplayColor"
                         app:layout_constraintLeft_toRightOf="@id/divider0"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -147,7 +140,6 @@
                         android:padding="@dimen/dp4"
                         android:singleLine="true"
                         android:text="i use iGap and it is so good"
-                        android:textColor="?attr/iGapSubtitleTextColor"
                         app:layout_constraintLeft_toLeftOf="@id/replayUserName"
                         app:layout_constraintRight_toRightOf="@id/replayUserName"
                         app:layout_constraintTop_toBottomOf="@id/replayUserName" />
@@ -159,7 +151,6 @@
                         android:layout_marginTop="@dimen/dp4"
                         android:padding="@dimen/dp4"
                         android:text="really ?!"
-                        android:textColor="?attr/iGapReceivedMessageTextColor"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/replayMessage" />
@@ -169,7 +160,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edited"
-                        android:textColor="?iGapReceivedOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/message" />
@@ -180,7 +170,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:text="10:36 AM"
-                        android:textColor="?iGapReceivedOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="@id/edited"
                         app:layout_constraintLeft_toRightOf="@id/edited"
                         app:layout_constraintRight_toRightOf="parent"
@@ -205,7 +194,6 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp4"
                         android:text="yes it is &#129335;&#8205;&#9794;&#65039;"
-                        android:textColor="?iGapSendMessageTextColor"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -213,7 +201,7 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/seenIcon"
-                        style="@style/primaryIconTextViewStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp4"
@@ -228,7 +216,6 @@
                         android:gravity="right"
                         android:padding="@dimen/dp4"
                         android:text="10:36 AM"
-                        android:textColor="?iGapSendMessageOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="@id/seenIcon"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@id/seenIcon"
@@ -245,7 +232,6 @@
                     android:gravity="center_vertical"
                     android:onClick="@{()->viewModel.onClickChatBackground()}"
                     android:text="@string/st_chatBackground"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -258,7 +244,6 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="@dimen/dp8"
                     android:text="@string/theme"
-                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
                     app:layout_constraintTop_toBottomOf="@id/chatBackground" />
@@ -278,7 +263,6 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="center_vertical"
                     android:text="@string/date"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/date"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -313,7 +297,6 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="center_vertical"
                     android:text="@string/st_24_Clock"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/timeType"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -346,7 +329,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/show_vote_layout_in_channel"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/showVote"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -374,16 +356,89 @@
                     app:layout_constraintTop_toTopOf="@id/showVoteTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/convertVoice"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/convert_voice_message"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/showConvertVoice"
+                    app:layout_constraintStart_toStartOf="@id/showVoteTitle"
+                    app:layout_constraintTop_toBottomOf="@id/showVoteTitle" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/showConvertVoice"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isConvertVoiceMessageEnable}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/convertVoice"
+                    app:layout_constraintEnd_toEndOf="@id/showVote"
+                    app:layout_constraintTop_toTopOf="@id/convertVoice" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onConvertVoiceMessageClicked(showConvertVoice.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/convertVoice"
+                    app:layout_constraintEnd_toEndOf="@id/showConvertVoice"
+                    app:layout_constraintStart_toStartOf="@id/convertVoice"
+                    app:layout_constraintTop_toTopOf="@id/convertVoice" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/convertText"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/convert_text_message"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/showSenderNameGroup"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/convertVoice" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/showConvertText"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isConvertTextMessageEnable}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/convertText"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/convertText" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onConvertTextMessageClicked(showConvertText.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/convertText"
+                    app:layout_constraintEnd_toEndOf="@id/showConvertText"
+                    app:layout_constraintStart_toStartOf="@id/convertText"
+                    app:layout_constraintTop_toTopOf="@id/convertText" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickSenderNameGroup()}"
+                    app:layout_constraintBottom_toBottomOf="@id/showSenderNameGroupTitle"
+                    app:layout_constraintEnd_toEndOf="@id/showSenderNameGroup"
+                    app:layout_constraintStart_toStartOf="@id/showSenderNameGroupTitle"
+                    app:layout_constraintTop_toTopOf="@id/showSenderNameGroupTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/showSenderNameGroupTitle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/show_sender_name_in_group"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/showSenderNameGroup"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/showVoteTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/convertText" />
 
                 <net.iGap.module.CustomToggleButton
                     android:id="@+id/showSenderNameGroup"
@@ -412,7 +467,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/st_send_by_enter"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/sendByEnter"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -445,7 +499,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/play_sound_in_chat"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/playSoundInChat"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -478,7 +531,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/st_inApp_Browser"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/inAppBrowser"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -509,7 +561,7 @@
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/inAppBrowserTitle" />
@@ -520,7 +572,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/st_title_Media"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toEndOf="@id/messageTitle"
                     app:layout_constraintStart_toStartOf="@id/messageTitle"
@@ -533,7 +584,6 @@
                     android:layout_marginTop="@dimen/dp16"
                     android:gravity="center_vertical"
                     android:text="@string/st_compress"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/compressVideo"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -566,7 +616,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/st_trim"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/trimVideo"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -599,7 +648,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/open_default_player"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/openDefaultPlayer"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -632,7 +680,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/st_crop"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/cropAndResizePhoto"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
@@ -665,7 +712,6 @@
                     android:layout_height="@dimen/dp48"
                     android:gravity="center_vertical"
                     android:text="@string/st_cameraBottomSheet"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/cameraBottomSheet"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"

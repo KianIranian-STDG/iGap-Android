@@ -20,8 +20,8 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class ProgressButton extends FrameLayout {
     private TextView buttonTv;
@@ -39,17 +39,17 @@ public class ProgressButton extends FrameLayout {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         progressBar = new ProgressBar(getContext());
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_white), PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(GONE);
         addView(progressBar, LayoutCreator.createFrame(30, 30, Gravity.CENTER));
 
 
         buttonTv = new TextView(getContext());
-        buttonTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+        buttonTv.setTextColor(Theme.getColor(Theme.key_title_text));
         buttonTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         buttonTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         buttonTv.setLines(1);
-        buttonTv.setTextColor(getResources().getColor(R.color.white));
+        buttonTv.setTextColor(Theme.getColor(Theme.key_white));
         buttonTv.setMaxLines(1);
         buttonTv.setSingleLine(true);
         buttonTv.setEllipsize(TextUtils.TruncateAt.END);
@@ -91,10 +91,10 @@ public class ProgressButton extends FrameLayout {
         this.mode = mode;
         if (mode == 0) {
             buttonTv.setText(getResources().getString(R.string.remove));
-            setBackgroundColor(getContext().getResources().getColor(R.color.red));
+            setBackgroundColor(Theme.getColor(Theme.key_red));
         } else {
             buttonTv.setText(getResources().getString(R.string.Add));
-            setBackgroundColor(Theme.getInstance().getButtonColor(getContext()));
+            setBackgroundColor(Theme.getColor(Theme.key_button_background));
         }
     }
 

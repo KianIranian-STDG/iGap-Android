@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="@dimen/dp8"
-    app:cardBackgroundColor="?iGapCardViewColor"
     app:cardCornerRadius="@dimen/dp6"
     app:cardElevation="@dimen/dp4"
     android:minHeight="@dimen/dp80">
@@ -23,8 +22,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:text="@string/loan_number"
-            android:textSize="@dimen/largeTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/largeTextSize"/>
 
         <TextView
             android:id="@+id/tvAmount"
@@ -33,8 +31,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:singleLine="true"
             android:text="@string/amount_2"
-            android:textSize="@dimen/largeTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/largeTextSize"/>
 
         <TextView
             android:id="@+id/tvBranch"
@@ -43,8 +40,7 @@
             android:singleLine="true"
             android:layout_marginTop="@dimen/dp10"
             android:text="@string/branch_name"
-            android:textSize="@dimen/standardTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/standardTextSize"/>
 
         <TextView
             android:id="@+id/tvState"
@@ -53,8 +49,7 @@
             android:singleLine="true"
             android:layout_marginTop="@dimen/dp10"
             android:text="@string/state"
-            android:textSize="@dimen/standardTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/standardTextSize"/>
 
         <TextView
             android:id="@+id/tvBeganDate"
@@ -63,8 +58,7 @@
             android:singleLine="true"
             android:layout_marginTop="@dimen/dp10"
             android:text="@string/start_date"
-            android:textSize="@dimen/standardTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/standardTextSize"/>
 
         <TextView
             android:id="@+id/tvEndDate"
@@ -73,8 +67,7 @@
             android:singleLine="true"
             android:layout_marginTop="@dimen/dp10"
             android:text="@string/end_date"
-            android:textSize="@dimen/standardTextSize"
-            android:textColor="?iGapTitleTextColor" />
+            android:textSize="@dimen/standardTextSize"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +86,6 @@
                 android:layout_marginEnd="@dimen/dp6"
                 android:layout_marginRight="@dimen/dp6"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:text="@string/loan_count" />
 
             <TextView
@@ -103,7 +95,6 @@
                 android:singleLine="true"
                 android:layout_weight="1"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:text="@string/remained_loan" />
 
         </LinearLayout>

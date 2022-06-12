@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.repository.CPayRepository;
 import net.iGap.databinding.FragmentCpayEditBinding;
 import net.iGap.helper.HelperCPay;
@@ -56,6 +59,17 @@ public class FragmentCPayEdit extends BaseAPIViewFrag<FragmentCPayEditViewModel>
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView fce_lbl_plaque = view.findViewById(R.id.fce_lbl_plaque);
+        fce_lbl_plaque.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        AppCompatEditText fce_edt_family = view.findViewById(R.id.fce_edt_family);
+        fce_edt_family.setTextColor(Theme.getColor(Theme.key_title_text));
+        fce_edt_family.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+        AppCompatEditText fce_edt_nationalId = view.findViewById(R.id.fce_edt_nationalId);
+        fce_edt_nationalId.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatEditText fce_edt_name = view.findViewById(R.id.fce_edt_name);
+        fce_edt_name.setTextColor(Theme.getColor(Theme.key_title_text));
+        fce_edt_nationalId.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+        fce_edt_name.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         if (getArguments() != null) plaqueText = getArguments().getString(HelperCPay.PLAQUE, null);
         initToolbar();
         setupViewIfEditMode();

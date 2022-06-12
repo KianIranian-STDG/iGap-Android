@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,7 +11,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainRootEnterPassword"
-        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="1"
@@ -27,13 +25,11 @@
 
         <TextView
             android:id="@+id/lock_icon"
-            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp12"
             android:gravity="center"
             android:text="@string/icon_lock"
-            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="60sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,8 +41,6 @@
             android:layout_height="90dp"
             android:layout_marginTop="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp16"
-            android:outlineAmbientShadowColor="?attr/colorAccentDark"
-            android:outlineSpotShadowColor="?attr/colorAccentDark"
             app:layout_constraintBottom_toTopOf="@id/unlockTitle"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +55,6 @@
             android:layout_marginBottom="@dimen/dp24"
             android:gravity="center"
             android:text="@string/Unlock_with_your_passcode"
-            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +77,6 @@
             android:maxLines="1"
             android:padding="@dimen/dp10"
             android:singleLine="true"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textCursorDrawable="@drawable/white_cursor_color"
             android:textSize="@dimen/standardTextSize"
             android:visibility="@{viewModel.isEditText}"
@@ -99,7 +91,6 @@
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dp24"
             android:layout_marginRight="@dimen/dp24"
-            android:background="?attr/iGapPrimaryIconTextColor"
             android:visibility="@{viewModel.isEditText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -116,8 +107,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/unlockTitle"
-            app:normalStateColor="?attr/iGapPrimaryIconTextColor" />
+            app:layout_constraintTop_toBottomOf="@id/unlockTitle" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_vertical_guideline"
@@ -129,12 +119,10 @@
 
         <TextView
             android:id="@+id/fingerprint_icon"
-            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{ () -> viewModel.onBiometricIconClick()}"
             android:text="@string/icon_finger_print"
-            android:textColor="?iGapPrimaryIconTextColor"
             android:textSize="70sp"
             android:visibility="@{viewModel.showFingerPrintIcon}"
             app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
@@ -144,12 +132,10 @@
 
         <TextView
             android:id="@+id/biometric_password_icon"
-            style="@style/primaryIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{ () -> viewModel.onBiometricIconClick()}"
             android:text="@string/icon_biometric_password"
-            android:textColor="?iGapPrimaryIconTextColor"
             android:textSize="70sp"
             android:visibility="@{viewModel.ShowBiometricPasswordIcon}"
             app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
@@ -162,10 +148,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.forgotPassword()}"
             android:text="@string/forgot_Unlock_with_your_passcode"
-            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

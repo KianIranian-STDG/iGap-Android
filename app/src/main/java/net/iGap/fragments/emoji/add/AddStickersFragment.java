@@ -15,6 +15,7 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.MyAppBarLayout;
@@ -50,6 +51,7 @@ public class AddStickersFragment extends ObserverFragment<AddStickerViewModel> {
     public void setupViews() {
         progressBar = rootView.findViewById(R.id.progress_stricker);
         addStickerToolbar = rootView.findViewById(R.id.toolbar2);
+        addStickerToolbar.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
         customTextViewMedium = rootView.findViewById(R.id.title);
         buttonBack = rootView.findViewById(R.id.chl_ripple_back_Button);
 

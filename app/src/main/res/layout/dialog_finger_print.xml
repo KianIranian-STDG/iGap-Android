@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Confirm_fingerPrint_continue"
+        android:textSize="@dimen/dp13" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDialogTitle"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60"
+            android:layout_gravity="center"
+            android:text="@string/icon_finger_print"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textSize="@dimen/dp26" />
+
+        <TextView
+            android:id="@+id/txtDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp8"
+            android:text="@string/Touch_sensor"
+            android:textSize="@dimen/dp12" />
+    </LinearLayout>
+</LinearLayout>

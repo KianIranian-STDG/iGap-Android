@@ -11,6 +11,7 @@ import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.network.RequestManager;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.Room;
@@ -45,6 +46,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RoomListCell roomListCell = new RoomListCell(parent.getContext());
         roomListCell.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 72));
+        roomListCell.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         return new ViewHolder(roomListCell);
     }
 
@@ -104,6 +106,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
         }
         holder.getRootView().setData(mInfo, avatarHandler, isChatMultiSelectEnable);
         holder.getRootView().setCheck(selectedRoom.contains(holder.realmRoom.id));
+        holder.getRootView().setBackgroundColor(Theme.getColor(Theme.key_window_background));
     }
 
     public void setCallBack(OnMainFragmentCallBack callBack) {

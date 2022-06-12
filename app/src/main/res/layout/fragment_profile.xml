@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,7 +17,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/cloudIcon"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp24"
@@ -31,8 +32,7 @@
             android:id="@+id/cloudTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cloud"
-            android:textColor="?iGapSubtitleTextColor"
+            android:text="@string/UserCloud"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/cloudIcon"
             app:layout_constraintStart_toStartOf="@id/cloudIcon"
@@ -52,7 +52,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/settingIcon"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:text="@string/icon_settings_lines"
@@ -67,7 +67,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/settingIcon"
             app:layout_constraintStart_toStartOf="@id/settingIcon"
@@ -87,7 +86,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/addIcon"
-            style="@style/myIconTextViewStyleGray"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:padding="@dimen/fup_items_icon_padding"
@@ -103,7 +102,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/addIcon"
             app:layout_constraintStart_toStartOf="@id/addIcon"
@@ -128,7 +126,7 @@
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp16"
-            android:background="?iGapDividerLine"
+            android:background="@color/key_light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_cloud" />
@@ -148,7 +146,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_btn_credit_icon"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -164,7 +162,6 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="@string/Credit"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit_icon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +176,6 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@{@string/wallet_Reial(viewModel.currentCredit)}"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +187,7 @@
             android:id="@+id/fup_splitter_2"
             android:layout_width="2dp"
             android:layout_height="46dp"
-            android:background="?iGapDividerLine"
+            android:background="@color/key_light_gray"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit"
             app:layout_constraintEnd_toStartOf="@id/fup_btn_score"
@@ -203,10 +199,10 @@
             android:id="@+id/fup_btn_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onScoreClick()}"
             android:visibility="visible"
-            android:layout_marginTop="@dimen/dp8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@id/fup_splitter_2"
@@ -214,7 +210,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_btn_score_icon"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -230,7 +226,6 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:text="@string/score"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_score_icon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -244,7 +239,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@{viewModel.currentScore}"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_score_lbl"
                 app:layout_constraintStart_toStartOf="@id/fup_btn_score_icon"
@@ -258,7 +252,7 @@
             android:layout_height="1dp"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
-            android:background="?iGapDividerLine"
+            android:background="@color/key_light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fup_btn_score" />
@@ -266,7 +260,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/contactIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_contacts"
@@ -280,7 +274,6 @@
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
             android:text="@string/contacts"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/contactIcon"
             app:layout_constraintEnd_toEndOf="@id/fup_btn_contact"
@@ -303,7 +296,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/inviteIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_add_contact"
@@ -316,8 +309,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp10"
-            android:text="@string/Invite_Friends"
-            android:textColor="?iGapTitleTextColor"
+            android:text="@string/InviteFriends"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
             app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
@@ -338,7 +330,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/scanQRIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_QR_code"
@@ -352,7 +344,6 @@
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginEnd="@dimen/dp10"
             android:text="@string/QrCode_Scan"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_qr_scanner"
             app:layout_constraintStart_toEndOf="@id/scanQRIcon"
@@ -372,7 +363,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nearByIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_location"
@@ -385,8 +376,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginEnd="@dimen/dp10"
-            android:text="@string/igap_nearby"
-            android:textColor="?iGapTitleTextColor"
+            android:text="@string/iGapNearBy"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_nearBy"
             app:layout_constraintStart_toEndOf="@id/nearByIcon"
@@ -406,7 +396,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fup_btn_dark_view_handler_view"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_dark_mode"
@@ -423,7 +413,6 @@
             android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
             android:gravity="center_vertical"
             android:text="@string/st_dark_theme"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_mode"
             app:layout_constraintEnd_toStartOf="@id/darkTheme"
@@ -452,9 +441,10 @@
             app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy" />
 
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fup_btn_faq_view_handler_view"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:text="@string/icon_FAQ"
@@ -468,8 +458,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginEnd="@dimen/dp10"
-            android:text="@string/iGap_FAQ"
-            android:textColor="?iGapTitleTextColor"
+            android:text="@string/iGapFAQ"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_faq"
             app:layout_constraintStart_toEndOf="@id/fup_btn_faq_view_handler_view"
@@ -494,7 +483,7 @@
             android:layout_marginLeft="@dimen/dp12"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp12"
-            android:background="?iGapDividerLine"
+            android:background="@color/key_light_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_faq" />
@@ -506,7 +495,6 @@
             android:layout_marginTop="@dimen/dp4"
             android:padding="@dimen/dp4"
             android:text="@string/app_version"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
             app:layout_constraintTop_toBottomOf="@id/fup_splitter_4" />
@@ -516,7 +504,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.appVersion}"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintBottom_toBottomOf="@id/versionTitle"
             app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
@@ -534,7 +521,6 @@
             android:onClick="@{()->viewModel.onChangeLogClick()}"
             android:padding="@dimen/dp4"
             android:text="@string/check_update_title"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"

@@ -35,7 +35,6 @@
                 android:gravity="center"
                 android:text="@string/str_frag_sync_contactTitle"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/largeTextSize"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +93,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/frag_sync_skipbtn"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"

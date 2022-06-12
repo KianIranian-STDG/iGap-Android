@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
+import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.proto.ProtoUserProfileGetEmail;
 import net.iGap.realm.RealmUserInfo;
 
@@ -17,9 +19,9 @@ public class UserProfileGetEmailResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserProfileGetEmailResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileGetEmailResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.actionId = actionId;
@@ -32,11 +34,17 @@ public class UserProfileGetEmailResponse extends MessageHandler {
         super.handler();
         ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder builder = (ProtoUserProfileGetEmail.UserProfileGetEmailResponse.Builder) message;
         RealmUserInfo.updateEmail(builder.getEmail());
+        if (identity instanceof OnUserProfileSetEmailResponse) {
+            ((OnUserProfileSetEmailResponse) identity).onUserProfileEmailResponse(builder.getEmail(),builder.getResponse());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (identity instanceof OnUserProfileSetEmailResponse) {
+            ((OnUserProfileSetEmailResponse) identity).onTimeOut();
+        }
     }
 
     @Override

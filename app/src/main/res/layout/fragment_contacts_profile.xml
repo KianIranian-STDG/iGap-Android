@@ -23,7 +23,7 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@android:color/transparent"
             android:layoutDirection="ltr"
             app:elevation="0dp">
 
@@ -38,9 +38,8 @@
                     android:id="@+id/toolbar_background"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp140"
-                    android:background="?attr/iGapToolbarBackground"
                     android:minHeight="@dimen/toolbar_height"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/toolbar_collapsed"
@@ -54,7 +53,8 @@
 
                     <TextView
                         android:id="@+id/toolbar_back"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
+                        android:textColor="@color/white"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:layout_marginStart="@dimen/dp4"
@@ -84,7 +84,7 @@
                         android:layout_marginRight="@dimen/dp8"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,13 +94,14 @@
 
                     <TextView
                         android:id="@+id/toolbar_more"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
                         android:text="@string/icon_other_vertical_dots"
                         android:visibility="gone"
+                        android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="@id/toolbar_back"
@@ -108,11 +109,12 @@
 
                     <TextView
                         android:id="@+id/toolbar_call"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:text="@string/icon_voice_call"
                         android:visibility="gone"
+                        android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_more"
                         app:layout_constraintTop_toTopOf="@id/toolbar_back" />
@@ -124,6 +126,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layoutDirection="locale"
@@ -146,7 +149,6 @@
                     android:layout_marginRight="16dp"
                     android:paddingTop="@dimen/dp2"
                     android:text="@{viewModel.bio}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -158,7 +160,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -182,12 +184,12 @@
 
 
                     <TextView
+                        android:id="@+id/mute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:text="@string/mute_notification"
-                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize" />
 
 
@@ -197,7 +199,7 @@
                         android:layout_height="@dimen/toggles_height"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:checked="@={viewModel.isMuteNotification}" />
+                        android:checked="@={viewModel.isMuteNotification}"/>
 
 
                 </RelativeLayout>
@@ -210,7 +212,6 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onCustomNotificationClick()}"
                     android:text="@string/notificaion_and_sound"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -222,7 +223,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/customNotification"
@@ -234,7 +235,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/chi_shared_Media"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +250,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -263,7 +262,6 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
@@ -278,7 +276,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -306,7 +303,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(3)}"
                     android:padding="8dp"
                     android:text="@string/shared_audio"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
@@ -334,7 +330,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(4)}"
                     android:padding="8dp"
                     android:text="@string/shared_voice"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
@@ -362,7 +357,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(5)}"
                     android:padding="8dp"
                     android:text="@string/shared_gif"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/gifCount"
@@ -390,7 +384,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(6)}"
                     android:padding="8dp"
                     android:text="@string/shared_files"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/filesCount"
@@ -418,7 +411,6 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(7)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"
@@ -445,7 +437,6 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/there_is_no_sheared_media"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedEmptyVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -457,7 +448,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
@@ -469,7 +460,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/groups_in_common"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/commonGroupCount"
@@ -494,7 +484,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/commonGroup" />
@@ -504,7 +493,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
@@ -516,7 +505,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/st_chatBackground"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
@@ -528,7 +516,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="?iGapDividerLine"
+                    android:background="@color/key_light_gray"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/background" />
@@ -541,7 +529,6 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClearChatClick()}"
                     android:text="@string/clear_history"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
@@ -555,7 +542,6 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onReportButtonClick()}"
                     android:text="@string/report"
-                    android:textColor="@color/red"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.isShowReportView ? View.VISIBLE : View.GONE}"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
@@ -571,7 +557,6 @@
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onBlockButtonClick()}"
                     android:text="@{viewModel.userBlockState}"
-                    android:textColor="@color/red"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
@@ -589,7 +574,6 @@
             android:layout_marginStart="@dimen/dp14"
             android:layout_marginLeft="@dimen/dp14"
             android:layout_marginTop="@dimen/dp80"
-            android:background="?attr/iGapAvatarBackground"
             android:scaleType="centerCrop"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />
@@ -630,7 +614,7 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/standardTextSize" />
 
 
@@ -641,7 +625,7 @@
                     android:layout_marginTop="@dimen/dp1"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:textColor="@color/white"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -653,7 +637,6 @@
                     android:onClick="@{() -> viewModel.onUserNameClicked()}"
                     android:singleLine="true"
                     android:text="@{viewModel.username}"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -663,7 +646,6 @@
                     android:layout_marginTop="@dimen/dp2"
                     android:gravity="left"
                     android:singleLine="true"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
 
             </LinearLayout>
@@ -677,12 +659,10 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp20"
             android:onClick="@{()->viewModel.onClickGoToChat()}"
-            app:backgroundTint="?attr/colorPrimary"
             app:fabSize="mini"
             app:layout_anchor="@id/toolbar_background"
             app:layout_anchorGravity="end|bottom"
-            app:srcCompat="@drawable/ic_chat_message"
-            app:tint="@color/white" />
+            app:srcCompat="@drawable/ic_chat_message" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

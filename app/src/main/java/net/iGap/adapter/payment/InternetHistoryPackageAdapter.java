@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class InternetHistoryPackageAdapter extends RecyclerView.Adapter<Internet
     @Override
     public ContactNumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment_pakage_history, parent, false);
+
         return new ContactNumberViewHolder(view);
     }
 
@@ -46,12 +48,16 @@ public class InternetHistoryPackageAdapter extends RecyclerView.Adapter<Internet
     class ContactNumberViewHolder extends RecyclerView.ViewHolder {
         private TextView detailTextView;
         private TextView phoneNumberTextView;
+        private View line;
 
         ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
             phoneNumberTextView = itemView.findViewById(R.id.tv_itemInternetPackage_number);
+            phoneNumberTextView.setTextColor(Theme.getColor(Theme.key_default_text));
             detailTextView = itemView.findViewById(R.id.tv_itemInternetPackage_detail);
-
+            detailTextView.setTextColor(Theme.getColor(Theme.key_default_text));
+            line = itemView.findViewById(R.id.line);
+            line.setBackgroundColor(Theme.getColor(Theme.key_default_text));
             itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null)
                     onItemClickListener.onItemClicked(getAdapterPosition());

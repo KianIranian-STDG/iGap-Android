@@ -26,7 +26,7 @@ public class RealmCallLog extends RealmObject {
     private long id;
     private long logId;
     private String type;
-    private String status;
+    public String status;
     private RealmRegisteredInfo user;
     private int offerTime;
     private int duration;
@@ -75,14 +75,6 @@ public class RealmCallLog extends RealmObject {
         this.type = type;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public RealmRegisteredInfo getUser() {
         return user;
     }
@@ -113,5 +105,13 @@ public class RealmCallLog extends RealmObject {
 
     public void setLogId(long logId) {
         this.logId = logId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -9,11 +9,13 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperMobileBank;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.payment.PaymentFeature;
 
 import java.util.ArrayList;
@@ -63,15 +65,30 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
         private View click;
         private CheckBox checkBox;
         private Group detail;
+        private View divider;
+        private CardView cardHolder;
+        private View planDivider;
 
         public ChequeListViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardHolder  = itemView.findViewById(R.id.cardHolder);
+            cardHolder.setCardBackgroundColor(Theme.getColor(Theme.key_popup_background));
+            divider = itemView.findViewById(R.id.divider);
+            divider.setBackgroundColor(Theme.getColor(Theme.key_line));
+            planDivider = itemView.findViewById(R.id.planDivider);
+            planDivider.setBackgroundColor(Theme.getColor(Theme.key_line));
             title = itemView.findViewById(R.id.planTitle);
+            title.setTextColor(Theme.getColor(Theme.key_title_text));
             userScore = itemView.findViewById(R.id.planUserScore);
+            userScore.setTextColor(Theme.getColor(Theme.key_title_text));
             spentScore = itemView.findViewById(R.id.planSpentScore);
+            spentScore.setTextColor(Theme.getColor(Theme.key_title_text));
             price = itemView.findViewById(R.id.planPrice);
+            price.setTextColor(Theme.getColor(Theme.key_title_text));
             click = itemView.findViewById(R.id.planClick);
             checkBox = itemView.findViewById(R.id.planCheckBox);
+            checkBox.setTextColor(Theme.getColor(Theme.key_title_text));
+            checkBox.setLinkTextColor(Theme.getColor(Theme.key_link_text));
             detail = itemView.findViewById(R.id.planGroup);
         }
 
@@ -79,7 +96,7 @@ public class PaymentPlansAdapter extends RecyclerView.Adapter<PaymentPlansAdapte
         public void bind(int position) {
 
             title.setText(items.get(position).getTitle());
-            userScore.setText(getString(R.string.payment_userScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getUserScore()));
+            userScore.setText(getString(R.string.UserScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getUserScore()));
             spentScore.setText(getString(R.string.payment_spentScore) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getSpentScore()));
             price.setText(getString(R.string.payment_price) + HelperMobileBank.checkNumbersInMultiLangs("" + items.get(position).getDiscount()) + getString(R.string.rial));
 

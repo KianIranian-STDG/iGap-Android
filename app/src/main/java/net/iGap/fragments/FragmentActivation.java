@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.module.AndroidUtils;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
@@ -69,7 +71,16 @@ public class FragmentActivation extends BaseFragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         startSMSListener();
-
+        binding.root.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.resentActivationCode.setTextColor(Theme.getColor(Theme.key_theme_color));
+        binding.resentActivationCode.setStrokeColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.sendActivationStatus.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.activationCodeEditText1.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.activationCodeEditText2.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.activationCodeEditText3.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.activationCodeEditText4.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.activationCodeEditText5.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.tvFragmentActivationPhoneNumberContainer.setTextColor(Theme.getColor(Theme.key_default_text));
         binding.timerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -159,6 +170,11 @@ public class FragmentActivation extends BaseFragment{
     private void showMessageDialog(int title, int msg) {
         if (getActivity() == null) return;
         new MaterialDialog.Builder(getActivity())
+                .titleColor(Theme.getColor(Theme.key_title_text))
+                .contentColor(Theme.getColor(Theme.key_default_text))
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .title(title)
                 .content(msg)
                 .positiveText(R.string.ok)
@@ -234,10 +250,15 @@ public class FragmentActivation extends BaseFragment{
     private void setActivationCode(@NotNull String code) {
         if (code.length() == 5) {
             binding.activationCodeEditText1.setText(String.valueOf(code.charAt(0)));
+            binding.activationCodeEditText1.setHintTextColor(Theme.getColor(Theme.key_theme_color));
             binding.activationCodeEditText2.setText(String.valueOf(code.charAt(1)));
+            binding.activationCodeEditText2.setHintTextColor(Theme.getColor(Theme.key_theme_color));
             binding.activationCodeEditText3.setText(String.valueOf(code.charAt(2)));
+            binding.activationCodeEditText3.setHintTextColor(Theme.getColor(Theme.key_theme_color));
             binding.activationCodeEditText4.setText(String.valueOf(code.charAt(3)));
+            binding.activationCodeEditText4.setHintTextColor(Theme.getColor(Theme.key_theme_color));
             binding.activationCodeEditText5.setText(String.valueOf(code.charAt(4)));
+            binding.activationCodeEditText5.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         }
     }
 
@@ -389,7 +410,14 @@ public class FragmentActivation extends BaseFragment{
     private void dialogWaitTime(WaitTimeModel data) {
 
         if (getActivity() != null && !getActivity().isFinishing()) {
-            MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity())
+                    .titleColor(Theme.getColor(Theme.key_title_text))
+                    .contentColor(Theme.getColor(Theme.key_default_text))
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .title(data.getTitle()).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
+                    .autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     viewModel.timerFinished();
@@ -398,8 +426,13 @@ public class FragmentActivation extends BaseFragment{
             }).show();
 
             View v = dialogWait.getCustomView();
-
+            v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             final TextView remindTime = v.findViewById(R.id.remindTime);
+            remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+            final TextView textReason = v.findViewById(R.id.textReason);
+            textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+            final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+            textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
             CountDownTimer countWaitTimer = new CountDownTimer(data.getTime() * 1000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {

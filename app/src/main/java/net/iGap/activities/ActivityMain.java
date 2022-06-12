@@ -67,10 +67,9 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
-import net.iGap.fragments.FragmentMediaPlayer;
+import net.iGap.fragments.FragmentMusicPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
@@ -80,6 +79,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperError;
@@ -93,6 +93,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
@@ -105,7 +106,6 @@ import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -135,6 +135,7 @@ import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.story.CameraStoryFragment;
 import net.iGap.viewmodel.UserScoreViewModel;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -323,10 +324,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         isOpenChatBeforeShare = true;
         checkIntent(intent);
         Uri data = intent.getData();
-        if (data != null) {
+        if (data!=null) {
             String[] strings = data.toString().split("/");
             String path = strings[strings.length - 1];
-            if ((intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) || path.toLowerCase().startsWith("d:")) {
+            if ((intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null)||path.toLowerCase().startsWith("d:")) {
                 handleDeepLink(intent);
             }
         }
@@ -343,8 +344,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void handleDeepLink(String uri) {
         String[] strings = uri.split("/");
-        if (strings[strings.length - 1].toLowerCase().startsWith("d:"))
-            uri = "discovery/" + uri;
+        if (strings[strings.length-1].toLowerCase().startsWith("d:"))
+            uri = "discovery/"+uri;
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
 
         if (bottomNavigationFragment != null)
@@ -363,6 +364,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void checkIntent(Intent intent) {
         if (G.isRestartActivity) {
+            return;
+        }
+
+        if (intent.getAction() != null && intent.getAction().equalsIgnoreCase("uploadService")) {
+            if(intent.getLongExtra("userId", 0) == AccountManager.getInstance().getCurrentUser().getId()){
+                GoToChatActivity goToChatActivity = new GoToChatActivity(intent.getLongExtra("roomId", 0));
+                goToChatActivity.setPeerID(intent.getLongExtra("peerId", 0));
+                goToChatActivity.startActivity(ActivityMain.this);
+            } else {
+                new AccountHelper().changeAccount(intent.getLongExtra("userId", 0));
+                this.updateUiForChangeAccount();
+                GoToChatActivity goToChatActivity = new GoToChatActivity(intent.getLongExtra("roomId", 0));
+                goToChatActivity.setPeerID(intent.getLongExtra("peerId", 0));
+                goToChatActivity.startActivity(ActivityMain.this);
+            }
+
             return;
         }
 
@@ -412,8 +429,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean openMediaPlayer = extras.getBoolean(ActivityMain.openMediaPlayer);
             if (openMediaPlayer) {
-                if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
-                    FragmentMediaPlayer fragment = new FragmentMediaPlayer();
+                if (getSupportFragmentManager().findFragmentByTag(FragmentMusicPlayer.class.getName()) == null) {
+                    FragmentMusicPlayer fragment = new FragmentMusicPlayer();
                     new HelperFragment(getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
             }
@@ -423,17 +440,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
         super.onCreate(savedInstanceState);
-
         if (Config.FILE_LOG_ENABLE) {
             FileLog.i("Main activity on create");
         }
-
         setContentView(R.layout.activity_main);
-
         detectDeviceType();
-
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
                 boolean haveOtherAccount = new AccountHelper().logoutAccount();
@@ -504,6 +516,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
 
+
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -545,6 +558,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeShare = false;
+
 
 
             initComponent();
@@ -659,12 +673,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(textView);
             showToast(textView);
         }
-
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
-
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -679,9 +691,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         });
-
         GPSTracker.getGpsTrackerInstance().checkLocation();
-
         Log.wtf(this.getClass().getName(), "onCreate");
         try {
             InstallReferrerClient referrerClient = InstallReferrerClient.newBuilder(this).build();
@@ -1292,7 +1302,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.isFirstPassCode = false;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(this, new Theme().getPrimaryDarkColor(this), 50);
+            StatusBarUtil.setColor(this, Theme.getColor(Theme.key_dark_theme_color), 50);
         }
     }
 
@@ -1315,8 +1325,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             long oldTime = sharedPreferences.getLong(SHP_SETTING.KEY_OLD_TIME, 0);
             long calculatorTimeLock = currentTime - oldTime;
 
-            if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
-                enterPassword();
+            if (PassCode.getInstance().isPassCode()) {
+                if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
+                    enterPassword();
+                }
             }
         }
         /**
@@ -1454,23 +1466,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 //                        List fragmentList = getSupportFragmentManager().getFragments();
-                    boolean handled = false;
-                    try {
-                        // because some of our fragments are NOT extended from BaseFragment
-                        if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
-                            SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
-                            if (searchFragment != null && searchFragment.isVisible()) {
-                                searchFragment.onSearchCollapsed();
+                        boolean handled = false;
+                        try {
+                            // because some of our fragments are NOT extended from BaseFragment
+                            if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
+                                SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
+                                if (searchFragment != null && searchFragment.isVisible()) {
+                                    searchFragment.onSearchCollapsed();
+                                }
                             }
+                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+                            handled = ((BaseFragment) frag).onBackPressed();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
-                        handled = ((BaseFragment) frag).onBackPressed();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (!handled) {
-                        super.onBackPressed();
-                    }
+                        if (!handled) {
+                            super.onBackPressed();
+                        }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
@@ -1559,7 +1571,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
 
             Uri data = intent.getData();
-            if (data != null) {
+            if (data!=null) {
                 String[] strings = data.toString().split("/");
                 String path = strings[strings.length - 1];
                 path = path.toLowerCase();
@@ -2079,27 +2091,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             // Clear all notification
             NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             nMgr.cancelAll();
-        } catch (IllegalStateException ignored) {
+        }catch (IllegalStateException ignored){
             FileLog.e(ignored);
             // There's no way to avoid getting this if saveInstanceState has already been called.
         }
 
-    }
-
-    public void chatBackgroundChanged() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
-        if (fragment instanceof FragmentChatSettings) {
-            ((FragmentChatSettings) fragment).chatBackgroundChange();
-        }
-        if (G.twoPaneMode) {
-            Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
-            if (f instanceof TabletEmptyChatFragment) {
-                ((TabletEmptyChatFragment) f).getChatBackground();
-            }
-        }
-    }
-
-    private void setThemeSetting() {
-        this.setTheme(new Theme().getTheme(this));
     }
 }

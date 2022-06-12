@@ -16,11 +16,11 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.controllers.MessageDataStorage;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -118,9 +118,9 @@ public final class HelperLogout {
         G.isFirstPassCode = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
-        G.themeColor = Theme.DEFAULT;
+        G.themeColor = Theme.DAY_GREEN_THEME;
         G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).edit()
-                .putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT)
+                .putString(SHP_SETTING.KEY_THEME_COLOR, Theme.DAY_GREEN_THEME)
                 .putBoolean(SHP_SETTING.KEY_THEME_DARK, false)
                 .apply();
     }

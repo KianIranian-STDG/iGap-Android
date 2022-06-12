@@ -21,6 +21,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.structs.StructSessions;
 
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,7 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
     @Override
     public void bindView(@NotNull ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
-
+        holder.txtTerminate.setTextColor(Theme.getColor(Theme.key_red));
         if (item.isCurrent()) {
             holder.txtCurrentSession.setText(R.string.current_session);
             holder.txtTerminate.setVisibility(View.GONE);

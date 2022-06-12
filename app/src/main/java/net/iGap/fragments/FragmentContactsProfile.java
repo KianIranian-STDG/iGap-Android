@@ -14,8 +14,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.InputType;
@@ -24,16 +26,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.Config;
@@ -50,7 +59,9 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.CustomToggleButton;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
@@ -137,10 +148,22 @@ public class FragmentContactsProfile extends BaseFragment implements OnSetAction
         return attachToSwipeBack(binding.getRoot());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        CollapsingToolbarLayout toolbar_layout_collapse = view.findViewById(R.id.toolbar_layout_collapse);
+        toolbar_layout_collapse.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        View toolbar_background = view.findViewById(R.id.toolbar_background);
+        toolbar_background.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
+        FloatingActionButton toolbar_fab_chat = view.findViewById(R.id.toolbar_fab_chat);
+        toolbar_fab_chat.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_light_theme_color)));
+        NestedScrollView mainContainer= view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        AppCompatTextView photoCount = view.findViewById(R.id.photoCount);
+        photoCount.setTextColor(Theme.getColor(Theme.key_title_text));
+        CustomToggleButton enableNotification = view.findViewById(R.id.enableNotification);
+        enableNotification.setButtonTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
         initialToolbar();
         DbManager.getInstance().doRealmTask(realm -> {
             realmRoom = realm.where(RealmRoom.class).equalTo("id", viewModel.roomId).findFirst();
@@ -162,8 +185,36 @@ public class FragmentContactsProfile extends BaseFragment implements OnSetAction
                     binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
             });
         }
+        binding.userBio.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.mute.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.customNotification.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.sharedContentTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.background.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.clearChat.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.photo.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.photoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.video.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.videoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFiles.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFilesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessage.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessageCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gif.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gifCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.files.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.filesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.links.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.linksCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.emptySharedMedia.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.commonGroup.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+
+        TextView toolbar_username = view.findViewById(R.id.toolbar_txt_username_expanded);
+        toolbar_username.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        TextView toolbar_tel = view.findViewById(R.id.toolbar_txt_tel_expanded);
+        toolbar_tel.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         userAvatarImageView = binding.toolbarAvatar;
+        userAvatarImageView.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
@@ -187,7 +238,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnSetAction
                     binding.line1.setVisibility(View.GONE);
                     binding.customNotification.setVisibility(View.GONE);
                 } else {
+                    binding.report.setTextColor(Theme.getColor(Theme.key_red));
                     binding.report.setVisibility(View.VISIBLE);
+                    binding.block.setTextColor(Theme.getColor(Theme.key_red));
                     binding.block.setVisibility(View.VISIBLE);
                     binding.line1.setVisibility(View.VISIBLE);
                     binding.enableNotificationLyt.setVisibility(View.VISIBLE);
@@ -558,14 +611,14 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
                 if (aBoolean) {
                     avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
                 } else {
-                    userAvatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+                    userAvatarImageView.setImageResource(R.drawable.cloud);
                 }
             }
         });
 
         viewModel.showDeleteContactDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(context).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         viewModel.deleteContact();
@@ -654,7 +707,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
 
     private void initialToolbar() {
         startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
-
+        binding.toolbarAppbar.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background), context, Theme.getColor(Theme.key_theme_color)));
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
 
             isCollapsed = offset != 0;
@@ -755,7 +808,13 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             }
 
             if (isExist) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback((dialog, view, which, text) -> {
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.phone_number)
+                        .items(R.array.phone_number2)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .itemsCallback((dialog, view, which, text) -> {
                     switch (which) {
                         case 0:
                             String call = "+" + Long.parseLong(viewModel.phone.get());
@@ -778,7 +837,13 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
                     }
                 }).show();
             } else {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.phone_number)
+                        .items(R.array.phone_number)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -866,7 +931,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
     }
 
     private void showPopUp() {
-        new TopSheetDialog(getContext()).setListDataWithResourceId(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
+        new TopSheetDialog(getActivity()).setListData(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
     }
 
     private void openDialogReport() {
@@ -884,7 +949,12 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
             } else if (items.get(position) == R.string.st_FakeAccount) {
                 new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
             } else if (items.get(position) == R.string.st_Other) {
-                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
+                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity)
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         // Do something

@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.popularChannel;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.Datum;
@@ -168,6 +169,7 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.rv_item_popular_row);
             headerTv = itemView.findViewById(R.id.tv_item_popular_title);
+            headerTv.setTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_default_text)));
             moreFl = itemView.findViewById(R.id.frame_more_one);
         }
 
@@ -189,8 +191,8 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
 
             RelativeLayout relativeLayoutRow = itemView.findViewById(R.id.rl_item_pop_rows);
             LinearLayout linearLayoutRow = itemView.findViewById(R.id.ll_item_pop_rows);
-            linearLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), R.attr.iGapSendMessageOtherTextColor));
-            relativeLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), R.attr.iGapDividerLine));
+            linearLayoutRow.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), Theme.getColor(Theme.key_light_gray)));
+            relativeLayoutRow.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), Theme.getColor(Theme.key_gray)));
         }
     }
 

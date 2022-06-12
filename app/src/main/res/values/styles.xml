@@ -4,9 +4,9 @@
     <!-- Base application theme. -->
     <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/greenStatus</item>
-        <item name="colorAccent">@color/green</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorAccent">@color/dayGreenTheme</item>
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="fontFamily">@font/main_font</item>
@@ -15,27 +15,90 @@
     </style>
 
     <style name="AppTheme.Launcher" parent="BaseTheme">
-        <!--<item name="android:windowDisablePreview">true</item>-->
         <item name="android:windowBackground">@drawable/theme</item>
     </style>
 
+    <style name="DayBlueTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayBlueTheme</item>
+    </style>
+
+    <style name="DayRedTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayRedTheme</item>
+    </style>
+
+    <style name="DayPinkTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayPinkTheme</item>
+    </style>
+
+    <style name="DayCyanTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayCyanTheme</item>
+    </style>
+
+    <style name="DayYellowTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayYellowTheme</item>
+    </style>
+
+    <style name="DayOrangeTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/dayOrangeTheme</item>
+    </style>
+
+    <style name="DarkBlueTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkBlueTheme</item>
+    </style>
+
+    <style name="DarkRedTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkRedTheme</item>
+    </style>
+
+    <style name="DarkPinkTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkPinkTheme</item>
+    </style>
+
+    <style name="DarkCyanTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkCyanTheme</item>
+    </style>
+
+    <style name="DarkYellowTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkYellowTheme</item>
+    </style>
+
+    <style name="DarkOrangeTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/darkOrangeTheme</item>
+    </style>
+
+    <style name="NightBlueTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightBlueTheme</item>
+    </style>
+
+    <style name="NightRedTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightRedTheme</item>
+    </style>
+
+    <style name="NightPinkTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightPinkTheme</item>
+    </style>
+
+    <style name="NightCyanTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightCyanTheme</item>
+    </style>
+
+    <style name="NightYellowTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightYellowTheme</item>
+    </style>
+
+    <style name="NightOrangeTheme" parent="BaseTheme">
+        <item name="colorAccent">@color/nightOrangeTheme</item>
+    </style>
+
     <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:editTextColor">?attr/iGapTitleTextColor</item>
-        <item name="android:textColorHint">?attr/iGapHintTextColor</item>
-        <item name="android:tint">?attr/iGapPrimaryIconTextColor</item>
         <item name="android:gravity">end|right</item>
-        <item name="android:textColor">?attr/iGapTitleTextColor</item>
     </style>
 
     <style name="error_appearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/red</item>
-        <item name="android:textColorHint">@color/red</item>
         <item name="android:textSize">@dimen/dp12</item>
     </style>
 
     <style name="remove_error_appearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/hint_edit_text</item>
-        <item name="android:textColorHint">@color/hint_edit_text</item>
         <item name="android:textSize">@dimen/dp12</item>
     </style>
 
@@ -77,26 +140,15 @@
 
     <!--custom theme-->
 
-    <style name="iGapEditTextStyle">
-        <item name="android:textColorHint">?attr/iGapSubtitleTextColor</item>
-        <item name="android:textColor">?attr/iGapTitleTextColor</item>
-    </style>
-
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">?attr/iGapBottomSheetBackground</item>
-    </style>
-
     <style name="Widget.Design.TopSheet.Modal" parent="android:Widget">
-        <item name="android:elevation">@dimen/dp8</item>
+        <item name="android:elevation" tools:targetApi="lollipop">@dimen/dp8</item>
         <item name="android:background">@drawable/top_sheet_background</item>
-        <!--<item name="behavior_peekHeight">@dimen/top_sheet_modal_peek_height</item>-->
         <item name="behavior_hideable">true</item>
     </style>
 
@@ -120,40 +172,20 @@
         <item name="android:textSize">@dimen/dp22</item>
     </style>
 
-    <style name="myIconTextViewStyle" parent="baseFontIcon">
-        <item name="android:textColor">?iGapTitleTextColor</item>
-    </style>
-
-    <style name="myIconTextViewStyleGray" parent="baseFontIcon">
-        <item name="android:textColor">?iGapSubtitleTextColor</item>
-    </style>
-
-    <style name="myIconToolbarStyle" parent="baseFontIcon">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <style name="chatAttachmentAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/translate_enter_down</item>
         <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
     </style>
 
     <style name="IGapRootViewStyle">
-        <item name="android:background">?rootBackgroundColor</item>
         <item name="android:layoutDirection">locale</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="IGapTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout" >
-        <item name="tabTextColor">?iGapTitleTextColor</item>
-        <item name="tabIndicatorColor">@color/green</item>
-        <item name="tabBackground">?rootBackgroundColor</item>
-    </style>
-
     <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
-        <item name="android:textColor">@color/buttonTextColor</item>
         <item name="android:textAllCaps">false</item>
-        <item name="cornerRadius">@dimen/dp18</item>
+        <item name="cornerRadius">@dimen/dp12</item>
         <item name="android:textSize">@dimen/dp16</item>
     </style>
 
@@ -165,36 +197,13 @@
         <item name="strokeWidth">@dimen/dp2</item>
     </style>
 
-    <style name="iGapButton" parent="BaseIGapButtonStyle">
-        <item name="backgroundTint">?iGapButtonColor</item>
-    </style>
-    z
-    <style name="mobileBankButton" parent="BaseIGapButtonStyle">
-        <item name="backgroundTint">@color/brown</item>
-    </style>
-
-    <style name="iGapButtonSecondary" parent="BaseIGapButtonStyle">
-        <item name="backgroundTint">?iGapSubtitleTextColor</item>
-    </style>
-
     <style name="iGapOutlinedButton" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">@dimen/dp18</item>
         <item name="android:textSize">@dimen/dp16</item>
         <item name="strokeWidth">2dp</item>
-        <item name="android:textColor">?iGapButtonTextColor</item>
-        <item name="strokeColor">?iGapButtonTextColor</item>
-
     </style>
 
-    <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">
-        <item name="android:textColor">?iGapButtonTextColor</item>
-        <item name="strokeColor">?iGapButtonColor</item>
-    </style>
-
-    <style name="primaryIconTextViewStyle" parent="baseFontIcon">
-        <item name="android:textColor">?iGapPrimaryIconTextColor</item>
-    </style>
     <declare-styleable name="ImageLoadingViewAttr">
         <attr name="rotate_duration" format="integer" />
         <attr name="circle_duration" format="integer" />

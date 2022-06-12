@@ -1,7 +1,10 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,13 +17,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.G;
@@ -31,8 +39,10 @@ import net.iGap.api.apiService.TokenContainer;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperScreenShot;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.payment.Payment;
 import net.iGap.model.payment.PaymentFeature;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -45,11 +55,14 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
@@ -127,7 +140,26 @@ public class PaymentFragment extends BaseAPIViewFrag {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.paymentStateIcon.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context,R.drawable.circle_white),getContext(),Theme.getColor(Theme.key_popup_background)));
+        binding.divider.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider1.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.planDivider2.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.planDivider.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.discountDividerLeft.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.discountDividerRight.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.v.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.bottom_sheet_background), context, Theme.getColor(Theme.key_popup_background)));
+        binding.title.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.priceTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.discountTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.taxTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.paymentStatus.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.discountCode.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.discountCode.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        binding.showDiscountError.setTextColor(Theme.getColor(Theme.key_red));
+        binding.cancelButton.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
+        binding.retryView.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.acceptButton.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.saveDiscountCode.setStrokeColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)));
         if (getArguments() != null) {
             isShowValueAdded = getArguments().getBoolean(IS_SHOW_VALUE_ADDED, false);
         }
@@ -164,6 +196,8 @@ public class PaymentFragment extends BaseAPIViewFrag {
         });
 
         binding.paymentFeatureRC.setHasFixedSize(true);
+        binding.paymentFeatureRC.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.paymentFeatureRC.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
         paymentViewModel.getDiscountOption().observe(getViewLifecycleOwner(), new Observer<List<PaymentFeature>>() {
             @Override
             public void onChanged(List<PaymentFeature> paymentFeatures) {
@@ -184,7 +218,7 @@ public class PaymentFragment extends BaseAPIViewFrag {
 
         binding.screenshotButton.setOnClickListener(v -> {
             try {
-                HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+                HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         getScreenshot();

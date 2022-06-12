@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.viewmodel.WaitTimeModel;
 
 import java.util.Locale;
@@ -57,6 +59,12 @@ public class WaitingDialog extends AlertDialog {
         setContentView(R.layout.dialog_remind_time);
 
         timerTextView = findViewById(R.id.remindTime);
+        timerTextView.setTextColor(Theme.getColor(Theme.key_title_text));
+
+        final TextView textReason = findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
 
         View positiveButtonView = findViewById(R.id.positiveButton);
         if (positiveButtonView != null) {

@@ -22,6 +22,7 @@ import net.iGap.adapter.IVandActivityAdapter;
 import net.iGap.databinding.FragmentIvandActivitiesBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.proto.ProtoGlobal;
@@ -66,7 +67,9 @@ public class FragmentIVandActivities extends BaseFragment {
 
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
         retry = view.findViewById(R.id.retry);
+        retry.setTextColor(Theme.getColor(Theme.key_title_text));
         emptyActivitiesText = view.findViewById(R.id.emptyActivitiesText);
+        emptyActivitiesText.setTextColor(Theme.getColor(Theme.key_title_text));
         isLoading = false;
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

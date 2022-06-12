@@ -11,6 +11,7 @@
 package net.iGap.viewmodel;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -30,6 +31,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
@@ -155,7 +157,14 @@ public class FragmentNotificationViewModel {
     //===============================================================================
 
     public void onNotificationStateClick(View view) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.notifications_notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification))
+                .items(R.array.notifications_notification)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 switch (which) {
@@ -177,7 +186,14 @@ public class FragmentNotificationViewModel {
     }
 
     public void onNotificationVibrateClick(View view) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(G.fragmentActivity.getResources().getString(R.string.st_vibrate))
+                .items(R.array.vibrate)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, final int vibrateLevel, CharSequence text) {
                 switch (vibrateLevel) {
@@ -209,7 +225,15 @@ public class FragmentNotificationViewModel {
 
     public void onNotificationSoundClick(View view) {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(G.fragmentActivity.getResources().getString(R.string.Ringtone))
+                .titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black))
+                .items(R.array.sound_message)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .alwaysCallSingleChoiceCallback()
+                .itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
 
@@ -271,7 +295,14 @@ public class FragmentNotificationViewModel {
 
     public void onLedColorClick(View view) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.popup_colorpicker, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.popup_colorpicker, wrapInScrollView)
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.set))
+                .negativeText(G.fragmentActivity.getResources().getString(DISCARD))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.button.MaterialButton;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
@@ -39,6 +42,7 @@ import net.iGap.databinding.FragmentIntroduceBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ParallaxPageTransformer;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.viewmodel.IntroductionViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -68,15 +72,6 @@ public class FragmentIntroduce extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
-
-        String condition = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
-        String language = getString(R.string.change_language_title);
-
-        SpannableString conditionSpan = new SpannableString(condition);
-        SpannableString languageSpan = new SpannableString(language);
-
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View view) {
@@ -84,6 +79,10 @@ public class FragmentIntroduce extends BaseFragment {
             }
         };
 
+        String condition = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
+        String language = getString(R.string.change_language_title);
+        SpannableString conditionSpan = new SpannableString(condition);
+        SpannableString languageSpan = new SpannableString(language);
         conditionSpan.setSpan(clickableSpan, condition.indexOf(getString(R.string.terms_and_condition_clickable)), condition.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         languageSpan.setSpan(new UnderlineSpan(), language.indexOf(getString(R.string.change_language_title)), getString(R.string.change_language_title).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -106,12 +105,15 @@ public class FragmentIntroduce extends BaseFragment {
         });
 
         binding.viewPagerIndicator.circleButtonCount(INTRODUCE_SLIDE_COUNT);
-
+        binding.conditionText.setTextColor(Theme.getColor(Theme.key_default_text));
         binding.conditionText.setText(conditionSpan);
         binding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
         binding.conditionText.setHighlightColor(Color.TRANSPARENT);
-
         binding.changeLanguage.setText(languageSpan);
+        binding.intBtnStart.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)));
+        binding.intBtnStart.setTextColor(Theme.getColor(Theme.key_white));
+        binding.changeLanguage.setTextColor(Theme.getColor(Theme.key_theme_color));
+        HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
 
         viewModel.showTermsAndConditionDialog.observe(getViewLifecycleOwner(), conditionText -> {
             if (conditionText != null) {

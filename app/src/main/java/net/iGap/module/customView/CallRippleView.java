@@ -22,6 +22,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 public class CallRippleView extends FrameLayout {
 
@@ -40,7 +41,7 @@ public class CallRippleView extends FrameLayout {
         int strokeWidth = LayoutCreator.dp(2);
 
         Paint paint = new Paint();
-        paint.setColor(getResources().getColor(R.color.white));
+        paint.setColor(Theme.getColor(Theme.key_white));
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(0);

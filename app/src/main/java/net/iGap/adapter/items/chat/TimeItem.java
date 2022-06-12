@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
@@ -72,7 +73,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             linearLayout_33.setPadding(0, ViewMaker.i_Dp(R.dimen.dp8), 0, ViewMaker.i_Dp(R.dimen.dp8));
 
             View view_12 = new View(view.getContext());
-            view_12.setBackgroundColor(theme.getDividerColor(view.getContext()));
+            view_12.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
             LinearLayout.LayoutParams layout_522 = new LinearLayout.LayoutParams(0, 2, 1);
             view_12.setLayoutParams(layout_522);
             linearLayout_33.addView(view_12);
@@ -81,8 +82,8 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             text.setId(R.id.cslt_txt_time_date);
             text.setSingleLine(true);
             text.setPadding(ViewMaker.i_Dp(R.dimen.dp10), ViewMaker.i_Dp(R.dimen.dp1), ViewMaker.i_Dp(R.dimen.dp10), ViewMaker.i_Dp(R.dimen.dp1));
-            text.setTextColor(theme.getTitleTextColor(text.getContext()));
-            text.setBackground(theme.tintDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.background_log_time), view.getContext(), R.attr.iGapDividerLine));
+            text.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
+            text.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.background_log_time), view.getContext(), Theme.getColor(Theme.key_light_gray)));
 
             text.setText("Today");
             text.setAllCaps(false);
@@ -94,7 +95,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             linearLayout_33.addView(text);
 
             View vew_147 = new View(view.getContext());
-            vew_147.setBackgroundColor(theme.getDividerColor(view.getContext()));
+            vew_147.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
             LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 2, 1);
             vew_147.setLayoutParams(layout_270);
             linearLayout_33.addView(vew_147);

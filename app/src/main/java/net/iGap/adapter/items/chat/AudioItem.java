@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -286,17 +288,17 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
-        holder.songFileName.setTextColor(theme.getSendMessageTextColor(holder.getContext()));
-        holder.songSize.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
-        holder.songArtist.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
-        holder.songTimeTv.setTextColor(theme.getSendMessageOtherTextColor(holder.songTimeTv.getContext()));
+        holder.songFileName.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songSize.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songArtist.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songTimeTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-            holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.black),
+            holder.seekBar.getThumb().mutate().setColorFilter(Theme.getColor(Theme.key_black),
                     PorterDuff.Mode.SRC_IN);
         }
 
-        holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.text_line1_igap_dark),
+        holder.seekBar.getProgressDrawable().setColorFilter(Theme.getColor(Theme.key_dark_gray),
                 android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
@@ -304,26 +306,26 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.songFileName.setTextColor(theme.getReceivedMessageColor(holder.getContext()));
-        holder.songSize.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.songArtist.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.songTimeTv.setTextColor(theme.getReceivedMessageOtherTextColor(holder.songTimeTv.getContext()));
+        holder.songFileName.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songSize.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songArtist.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.songTimeTv.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.black),
+                holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.darkTheme),
                         PorterDuff.Mode.SRC_IN);
             }
-            holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.text_line1_igap_dark),
+            holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.key_gray),
                     android.graphics.PorterDuff.Mode.SRC_IN);
             holder.seekBar.setVisibility(View.INVISIBLE);
         } else {
 
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.black),
+                holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.darkTheme),
                         PorterDuff.Mode.SRC_IN);
             }
-            holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.black),
+            holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.darkTheme),
                     android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
@@ -395,7 +397,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
             playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icons));
             playBtn.setGravity(CENTER);
-            playBtn.setTextColor(getColor(R.color.white));
+            playBtn.setTextColor(Theme.getColor(Theme.key_white));
             playBtn.setText(R.string.icon_play);
             setTextSize(playBtn, R.dimen.largeIconSize);
             playBtn.setBackgroundResource(R.drawable.background_audioitem_cover);

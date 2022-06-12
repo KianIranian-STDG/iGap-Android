@@ -20,8 +20,7 @@
         android:ellipsize="end"
         android:gravity="clip_vertical"
         android:maxLength="15"
-        tools:text="0912454545"
-        android:textColor="?iGapSubtitleTextColor" />
+        tools:text="0912454545"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_itemInternetPackage_detail"
@@ -33,13 +32,12 @@
         android:textSize="@dimen/smallTextSize"
         android:layout_marginTop="@dimen/dp4"
         android:gravity="center_vertical"
-        android:textColor="?iGapSubtitleTextColor"
         tools:text="abolfazl abbasi iran" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?iGapDividerLine" />
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

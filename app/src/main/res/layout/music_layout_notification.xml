@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="@color/notification_music_icons"
+    android:background="@color/key_gray"
     android:gravity="left"
     android:layoutDirection="ltr"
     android:orientation="horizontal">
@@ -31,7 +31,7 @@
             android:gravity="left"
             android:singleLine="true"
             android:text="@string/music_name"
-            android:textColor="@color/notification_music_background"
+            android:textColor="@android:color/white"
             android:textSize="16dp" />
 
 
@@ -43,7 +43,7 @@
             android:gravity="left"
             android:singleLine="true"
             android:text="hamid asgari"
-            android:textColor="@color/notification_music_background"
+            android:textColor="@android:color/white"
             android:textSize="12dp" />
 
 
@@ -59,7 +59,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:src="@mipmap/previous_track"
-                app:tint="@color/notification_music_background" />
+                app:tint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/mln_btn_play_music"
@@ -70,7 +70,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:src="@mipmap/play_button"
-                app:tint="@color/notification_music_background" />
+                app:tint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/mln_btn_forward_music"
@@ -79,7 +79,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:src="@mipmap/play_next_button"
-                app:tint="@color/notification_music_background" />
+                app:tint="@android:color/white" />
 
 
         </LinearLayout>
@@ -95,6 +95,6 @@
         android:paddingBottom="24dp"
         android:paddingLeft="12dp"
         android:src="@mipmap/cross"
-        app:tint="@color/notification_music_background" />
+        app:tint="@android:color/white" />
 
 </LinearLayout>

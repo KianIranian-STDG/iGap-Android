@@ -24,6 +24,7 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
@@ -126,7 +127,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             more.setGravity(Gravity.CENTER);
             more.setText(R.string.icon_other_horizontal_dots);
             setTextSize(more, R.dimen.largeTextSize);
-            more.setTextColor(G.context.getResources().getColor(R.color.white));
+            more.setTextColor(Theme.getColor(Theme.key_white));
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_50.gravity = Gravity.RIGHT | Gravity.TOP;

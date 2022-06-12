@@ -34,7 +34,6 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:background="?attr/iGapToolbarBackground"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"
@@ -61,7 +60,7 @@
                             android:gravity="center"
                             android:text="@string/icon_back"
                             android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
+                            android:textColor="@android:color/white" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
@@ -70,7 +69,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/wallet"
-                        android:textColor="@color/whit_background"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
                         android:visibility="visible" />

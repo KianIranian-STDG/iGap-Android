@@ -20,7 +20,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@android:color/transparent"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -67,9 +67,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:paddingTop="@dimen/dp16"
-                android:paddingBottom="@dimen/dp16"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4" />
+                android:paddingBottom="@dimen/dp16" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -90,7 +88,6 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:text="@string/icon_retry"
             android:layout_gravity="center"
-            android:textColor="?attr/iGapTitleTextColor"
             android:visibility="gone" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

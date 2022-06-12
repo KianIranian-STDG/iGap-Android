@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -44,12 +46,12 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MEditText;
 import net.iGap.module.SUID;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.observers.eventbus.EventManager;
@@ -123,9 +125,32 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.moderatorsCount.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.deleteChannel.setTextColor(Theme.getColor(Theme.key_red));
+        binding.emojiButton.setTextColor(Theme.getColor(Theme.key_default_text));
         avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
-
+        binding.channelNameEditText.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.channelNameEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        binding.groupDescriptionEditText.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.groupDescriptionEditText.setHintTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.channelTypeTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.channelType.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.channelUsername.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.signedMessageTxt.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.signedMessageDescription.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.rateMessageTxt.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.rateMessageDescription.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.administrators.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.administratorsCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.moderator.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.members.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.membersCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.line.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line2.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line3.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line4.setBackgroundColor(Theme.getColor(Theme.key_line));
         viewModel.onCreateFragment(this);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
@@ -275,7 +300,13 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }
 
     private void startDialogSelectPicture() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture)
+                .negativeText(R.string.cansel)
+                .items(R.array.profile)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.from_camera))) {
@@ -302,7 +333,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                     }
                 } else {
                     try {
-                        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
@@ -417,14 +448,14 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             edtUserName.setText(Config.IGAP_LINK_PREFIX + linkUsername);
         }*/
 
-        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setTextColor(Theme.getColor(Theme.key_black));
+        edtUserName.setHintTextColor(Theme.getColor(Theme.key_light_gray));
         edtUserName.setPadding(0, 8, 0, 8);
         edtUserName.setSingleLine(true);
         inputUserName.addView(edtUserName);
         inputUserName.addView(viewUserName, viewParams);
 
-        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewUserName.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
         }
@@ -434,9 +465,12 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title(R.string.st_username)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
                 .positiveText(R.string.save)
                 .customView(layoutUserName, true)
-                .widgetColor(new Theme().getPrimaryColor(getContext()))
+                .widgetColor(Theme.getColor(Theme.key_default_text))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
                 .negativeText(R.string.B_cancel)
                 .build();
 
@@ -560,9 +594,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         });
         edtUserName.setOnFocusChangeListener((view, b) -> {
             if (b) {
-                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
+                viewUserName.setBackgroundColor(Theme.getColor(Theme.key_theme_color));
             } else {
-                viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                viewUserName.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
             }
         });
         // check each word with server
@@ -572,7 +606,13 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok).autoDismiss(false)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
@@ -580,8 +620,13 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         }).show();
 
         View v = dialog.getCustomView();
-
+        v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         final TextView remindTime = v.findViewById(R.id.remindTime);
+        remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textReason = v.findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

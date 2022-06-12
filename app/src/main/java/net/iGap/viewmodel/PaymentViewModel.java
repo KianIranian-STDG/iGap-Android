@@ -13,6 +13,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.payment.CheckOrderResponse;
 import net.iGap.model.payment.CheckOrderStatusResponse;
 import net.iGap.model.payment.Payment;
@@ -36,7 +37,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableInt showDiscountCoupon = new ObservableInt(View.INVISIBLE);
     private final ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
     private final ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
-    private final ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
+    private final ObservableInt paymentStatusTextColor = new ObservableInt(Theme.getColor(Theme.key_black));
     private final ObservableInt showButtons = new ObservableInt(View.GONE);
     private final ObservableInt showPaymentStatus = new ObservableInt(View.GONE);
     private final ObservableInt showSaveReceipt = new ObservableInt(View.GONE);
@@ -59,9 +60,11 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableBoolean saveDiscountCodeEnable = new ObservableBoolean(true);
     private final ObservableInt discountErrorVisibility = new ObservableInt(View.GONE);
     private final ObservableField<String> discountErrorText = new ObservableField<>();
-    private final ObservableInt saveDiscountCodeColor = new ObservableInt(R.color.green);
+    private final ObservableInt saveDiscountCodeColor = new ObservableInt(R.color.dayGreenTheme);
+
     private int discountPlanPosition = -1;
     private int originalPrice;
+
     private final String token;
     private String orderId;
     private CheckOrderResponse orderDetail;
@@ -218,7 +221,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             showPaymentStatus.set(View.VISIBLE);
             showSaveReceipt.set(View.GONE);
             paymentStateIcon.set(R.string.icon_close);
-            paymentStatusTextColor.set(R.color.red);
+            paymentStatusTextColor.set(Theme.getColor(Theme.key_red));
             errorMessage.setValue(payment.getMessage());
             discountVisibility.set(View.GONE);
         }
@@ -276,10 +279,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
             repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
                 @Override
                 public void onSuccess(CheckOrderResponse data) {
-                    Log.e("jdhfjhfjsdhf", "onSuccess2: ");
                     discountCodeEnable.set(false);
                     saveDiscountCodeEnable.set(false);
-                    saveDiscountCodeColor.set(R.color.gray);
+                    saveDiscountCodeColor.set(Theme.getColor(Theme.key_gray));
                     discountErrorVisibility.set(View.GONE);
                     description.set(data.getInfo().getProduct().getDescription());
                     originalPrice = data.getInfo().getPrice();
@@ -294,10 +296,9 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
                 @Override
                 public void onError(String error) {
-                    Log.e("jdhfjhfjsdhf", "onError2: " + error);
                     discountCodeEnable.set(true);
                     saveDiscountCodeEnable.set(true);
-                    saveDiscountCodeColor.set(R.color.green);
+                    saveDiscountCodeColor.set(R.color.dayGreenTheme);
                     discountErrorVisibility.set(View.VISIBLE);
                     discountErrorText.set(error);
                 }
@@ -332,14 +333,14 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 title.set(data.getPaymentInfo().getProduct().getTitle());
                 errorMessage.setValue(data.getMessage());
                 if (data.isPaymentSuccess()) {
-                    paymentStatusTextColor.set(R.color.green);
+                    paymentStatusTextColor.set(R.color.dayGreenTheme);
                     paymentStateIcon.set(R.string.icon_sent);
                     showDiscountCoupon.set(View.GONE);
                 } else if (data.isPaymentUnknown()) {
-                    paymentStatusTextColor.set(R.color.orange);
+                    paymentStatusTextColor.set(R.color.dayOrangeTheme);
                     paymentStateIcon.set(R.string.icon_error);
                 } else {
-                    paymentStatusTextColor.set(R.color.red);
+                    paymentStatusTextColor.set(Theme.getColor(Theme.key_red));
                     paymentStateIcon.set(R.string.icon_close);
                 }
                 closeButtonColor.set(R.color.accent);
@@ -369,7 +370,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         showPaymentStatus.set(View.VISIBLE);
         showSaveReceipt.set(View.GONE);
         errorMessage.setValue(error);
-        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
+        paymentStatusTextColor.set(Theme.getColor(Theme.key_theme_color));
     }
 
     private void onFailedHandler() {
@@ -378,8 +379,8 @@ public class PaymentViewModel extends BaseAPIViewModel {
         showPaymentStatus.set(View.VISIBLE);
         showSaveReceipt.set(View.GONE);
         errorMessage.setValue("errorPayment");
-        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
-        closeButtonColor.set(R.color.red);
+        paymentStatusTextColor.set(Theme.getColor(Theme.key_title_text));
+        closeButtonColor.set(Theme.getColor(Theme.key_red));
         showRetryView.set(View.VISIBLE);
     }
 

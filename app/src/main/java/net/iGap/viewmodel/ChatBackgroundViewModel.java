@@ -14,6 +14,7 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.messenger.ui.fragments.ChatBackgroundFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StructWallpaper;
@@ -42,13 +43,13 @@ public class ChatBackgroundViewModel extends ViewModel {
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<WallpaperImage> loadSelectedImage = new MutableLiveData<>();
     private MutableLiveData<WallpaperSolidColor> loadSelectedColor = new MutableLiveData<>();
-    private MutableLiveData<List<Integer>> menuList = new MutableLiveData<>();
+    private MutableLiveData<List<String>> menuList = new MutableLiveData<>();
     private MutableLiveData<List<StructWallpaper>> loadChatBackgroundImage = new MutableLiveData<>();
     private MutableLiveData<List<String>> loadChatBackgroundSolidColor = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> showAddImage = new SingleLiveEvent<>();
     private ObservableInt showLoadingView = new ObservableInt(View.GONE);
 
-    private List<Integer> menuItemList;
+    private List<String> menuItemList;
     private SharedPreferences sharedPreferences;
     private List<StructWallpaper> wList;
     private List<String> solidList;
@@ -91,20 +92,22 @@ public class ChatBackgroundViewModel extends ViewModel {
         }
 
         menuItemList = new ArrayList<>();
-        menuItemList.add(R.string.solid_colors);
-        menuItemList.add(R.string.wallpapers);
+        menuItemList.add(G.fragmentActivity.getString(R.string.solid_colors));
+        menuItemList.add(G.fragmentActivity.getString(R.string.wallpapers));
         onImageWallpaperListClick = new ChatBackgroundViewModel.OnImageWallpaperListClick() {
             @Override
             public void onClick(int type, int position) {
                 if (type == AdapterChatBackground.WALLPAPER_IMAGE) {
-                    String bigImagePath = "";
-                    RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
-                    if (pf.getLocalFilePath() != null) {
-                        bigImagePath = pf.getLocalFilePath();
-                        loadSelectedImage.setValue(new WallpaperImage(bigImagePath, true));
-                        savePath = bigImagePath;
-                        isSolidColor = false;
+                    String bigImagePath;
+                    if (wList.get(position).getWallpaperType() == ChatBackgroundFragment.WallpaperType.proto) {
+                        RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
+                        bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                    } else {
+                        bigImagePath = wList.get(position).getPath();
                     }
+                    loadSelectedImage.setValue(new WallpaperImage(bigImagePath, true));
+                    savePath = bigImagePath;
+                    isSolidColor = false;
                 } else {
                     isSolidColor = true;
                     savePath = solidList.get(position);
@@ -133,7 +136,7 @@ public class ChatBackgroundViewModel extends ViewModel {
         return loadSelectedColor;
     }
 
-    public MutableLiveData<List<Integer>> getMenuList() {
+    public MutableLiveData<List<String>> getMenuList() {
         return menuList;
     }
 
@@ -172,10 +175,10 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     public void onMenuItemClicked(int position) {
-        if (menuItemList.get(position) == R.string.solid_colors) {
+        if (menuItemList.get(position).equals(G.fragmentActivity.getString(R.string.solid_colors))) {
             loadChatBackgroundSolidColor.setValue(solidList);
             isSolidColor = true;
-        } else if (menuItemList.get(position) == R.string.wallpapers) {
+        } else if (menuItemList.get(position).equals(G.fragmentActivity.getString(R.string.wallpapers))) {
             loadChatBackgroundImage.setValue(wList);
             isSolidColor = false;
         }
@@ -238,7 +241,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     for (String localPath : realmWallpaper.getLocalList()) {
                         if (new File(localPath).exists()) {
                             StructWallpaper _swl = new StructWallpaper();
-                            _swl.setWallpaperType(FragmentChatBackground.WallpaperType.local);
+                            _swl.setWallpaperType(ChatBackgroundFragment.WallpaperType.local);
                             _swl.setPath(localPath);
                             wList.add(_swl);
                             loadChatBackgroundImage.postValue(wList);
@@ -250,7 +253,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     Log.wtf(this.getClass().getName(), "realmWallpaper.getWallPaperList() != null");
                     for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
                         StructWallpaper _swp = new StructWallpaper();
-                        _swp.setWallpaperType(FragmentChatBackground.WallpaperType.proto);
+                        _swp.setWallpaperType(ChatBackgroundFragment.WallpaperType.proto);
                         _swp.setProtoWallpaper(realm.copyFromRealm(wallpaper));
                         wList.add(_swp);
                         loadChatBackgroundImage.postValue(wList);

@@ -14,7 +14,7 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 public class TextCell extends FrameLayout {
     private TextView textView;
@@ -37,7 +37,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
 
         textView = new TextView(getContext());
-        textView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+        textView.setTextColor(Theme.getColor(Theme.key_title_text));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         textView.setLines(1);
@@ -66,7 +66,7 @@ public class TextCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, Theme.getInstance().getDividerPaint(getContext()));
+            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1,Theme.dividerPaint);
         }
     }
 }

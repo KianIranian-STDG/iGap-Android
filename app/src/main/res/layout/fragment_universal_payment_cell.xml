@@ -11,8 +11,7 @@
         android:layout_marginTop="@dimen/dp4"
         android:layout_marginBottom="@dimen/dp4"
         app:cardCornerRadius="@dimen/dp8"
-        app:cardUseCompatPadding="true"
-        app:cardBackgroundColor="?attr/iGapCardViewColor">
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             style="@style/IGapRootViewStyle"
@@ -24,8 +23,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/check_box_background"
-                android:textColor="?attr/iGapTitleTextColor"
-                android:textColorLink="?attr/colorPrimary"
                 android:layout_marginStart="@dimen/dp4"
                 android:layout_marginLeft="@dimen/dp4"
                 app:layout_constraintTop_toTopOf="@+id/planTitle"
@@ -42,7 +39,6 @@
                 android:layout_marginBottom="@dimen/dp8"
                 android:text="title"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:gravity="start"
                 android:ellipsize="end"
                 android:textStyle="bold"
@@ -60,7 +56,6 @@
                 android:layout_marginEnd="@dimen/dp8"
                 android:text="Price: 10000 Toman"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:gravity="start"
                 android:ellipsize="end"
                 app:layout_constraintStart_toEndOf="@+id/planVerticalGuideline"
@@ -79,16 +74,16 @@
                 android:id="@+id/planClick"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="@+id/planTitle"
                 app:layout_constraintEnd_toEndOf="@+id/planPrice"
                 app:layout_constraintTop_toTopOf="@+id/planTitle"
                 app:layout_constraintBottom_toBottomOf="@+id/planTitle" />
 
             <View
+                android:id="@+id/divider"
                 android:layout_width="@dimen/dp1"
                 android:layout_height="0dp"
-                android:background="?iGapDividerLine"
                 app:layout_constraintStart_toStartOf="@+id/planVerticalGuideline"
                 app:layout_constraintTop_toTopOf="@+id/planTitle"
                 app:layout_constraintBottom_toBottomOf="@+id/planTitle" />
@@ -104,7 +99,7 @@
                 android:id="@+id/planDivider"
                 android:layout_width="@dimen/dp1"
                 android:layout_height="0dp"
-                android:background="?iGapDividerLine"
+                android:background="@color/key_light_gray"
                 app:layout_constraintStart_toStartOf="@+id/planVerticalGuideline"
                 app:layout_constraintTop_toTopOf="@+id/planUserScore"
                 app:layout_constraintBottom_toBottomOf="@+id/planUserScore"/>-->
@@ -118,7 +113,6 @@
                 android:layout_marginBottom="@dimen/dp4"
                 android:text="@string/desc"
                 android:textSize="@dimen/smallTextSize"
-                android:textColor="?iGapSubtitleTextColor"
                 android:gravity="start"
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="@+id/planTitle"
@@ -129,7 +123,6 @@
                 android:id="@+id/planDivider"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp1"
-                android:background="?iGapDividerLine"
                 android:layout_marginStart="@dimen/dp8"
                 android:layout_marginEnd="@dimen/dp8"
                 app:layout_constraintTop_toTopOf="@+id/planDesc"
@@ -146,7 +139,6 @@
                 android:layout_marginBottom="@dimen/dp8"
                 android:text="User Score: 1000"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:gravity="start"
                 android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -162,7 +154,6 @@
                 android:layout_marginEnd="@dimen/dp8"
                 android:text="Spent Score: 500"
                 android:textSize="@dimen/standardTextSize"
-                android:textColor="?iGapTitleTextColor"
                 android:gravity="start"
                 android:ellipsize="end"
                 app:layout_constraintStart_toEndOf="@+id/planVerticalGuideline"

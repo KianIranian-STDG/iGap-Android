@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
 import net.iGap.helper.FileManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.structs.StructFileManager;
 import net.iGap.viewmodel.FileManagerChildViewModel;
 
@@ -72,6 +69,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.noItem.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         if (getArguments() != null) {
             mFolderName = getArguments().getString(FOLDER_NAME);
             getSelectedListAndSetToViewModel();
@@ -170,29 +168,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             mViewModel.getFoldersSubItems(folder , items -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (items != null) {
-                            setupListItems(items);
-                        }
-                        else{
-                            binding.loader.setVisibility(View.GONE);
-                            new MaterialDialog
-                                    .Builder(G.currentActivity)
-                                    .title(G.fragmentActivity.getResources().getString(R.string.access_folder))
-                                    .content(G.fragmentActivity.getResources().getString(R.string.restrict_folder))
-                                    .contentColor(Color.BLACK)
-                                    .autoDismiss(true)
-                                    .canceledOnTouchOutside(false)
-                                    .positiveText(G.fragmentActivity.getResources().getString(R.string.dialog_ok))
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            closeSearch();
-                                            popBackStackFragment();
-                                        }
-                                    })
-                                    .build()
-                                    .show();
-                        }
+                        setupListItems(items);
                     });
                 }
             });
@@ -201,17 +177,12 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     private void setupListItems(List<StructFileManager> items) {
-        if (items != null) {
-            binding.loader.setVisibility(View.GONE);
-            mAdapter = new AdapterFileManager(items, this);
-            binding.rvItems.setAdapter(mAdapter);
-            if (items.size() == 0) {
-                binding.btnBack.setVisibility(View.VISIBLE);
-                binding.lytNothing.setVisibility(View.VISIBLE);
-            }
-        }
-        else{
-            binding.loader.setVisibility(View.GONE);
+        binding.loader.setVisibility(View.GONE);
+        mAdapter = new AdapterFileManager(items, this);
+        binding.rvItems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.rvItems.setAdapter(mAdapter);
+
+        if(items.size() == 0){
             binding.btnBack.setVisibility(View.VISIBLE);
             binding.lytNothing.setVisibility(View.VISIBLE);
         }
@@ -232,9 +203,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         if (text == null) {
             binding.lytNothing.setVisibility(View.GONE);
             binding.rvItems.setVisibility(View.VISIBLE);
-            if (mAdapter != null){
-                mAdapter.update(mViewModel.getItems());
-            }
+            mAdapter.update(mViewModel.getItems());
             if(mViewModel.getItems().size() == 0){
                 binding.btnBack.setVisibility(View.VISIBLE);
                 binding.lytNothing.setVisibility(View.VISIBLE);

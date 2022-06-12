@@ -39,7 +39,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/webViewError"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
@@ -70,6 +71,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         usageArrayList.add(new DataUsageStruct(2, 0, 0, 0, 0, "ClearData"));
 
         RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
+        rcDataUsage.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         adapter = new DataUsageAdapter(usageArrayList, totalReceivedByte, totalSendByte, type, this);
         rcDataUsage.setAdapter(adapter);
 

@@ -20,6 +20,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
 import net.iGap.observers.interfaces.IMessageItem;
@@ -91,29 +93,38 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView amount;
-        private TextView payId;
-        private TextView orderId;
-        private TextView billId;
-        private TextView billType;
-        private TextView cardNumber;
-        private TextView terminalNo;
-        private TextView rrn;
-        private TextView traceNumber;
-        private TextView requestTime;
+        private final TextView amount;
+        private final TextView billType;
+        private final TextView billId;
+        private final TextView payId;
+        private final TextView orderId;
+        private final TextView cardNumber;
+        private final TextView terminalNo;
+        private final TextView rrn;
+        private final TextView traceNumber;
+        private final TextView requestTime;
 
         protected ReserveSpaceRoundedImageView image;
 
         public ViewHolder(View view) {
             super(view);
+            TextView amountText = view.findViewById(R.id.amount);
             amount = view.findViewById(R.id.tv_bill_amount);
-            payId = view.findViewById(R.id.tv_bill_payId);
-            orderId = view.findViewById(R.id.tv_bill_orderId);
-            billId = view.findViewById(R.id.tv_bill_billId);
+            TextView billTypeText = view.findViewById(R.id.billType);
             billType = view.findViewById(R.id.tv_bill_billType);
+            TextView billIdText = view.findViewById(R.id.billId);
+            billId = view.findViewById(R.id.tv_bill_billId);
+            TextView payIdText = view.findViewById(R.id.payId);
+            payId = view.findViewById(R.id.tv_bill_payId);
+            TextView orderIdText = view.findViewById(R.id.orderId);
+            orderId = view.findViewById(R.id.tv_bill_orderId);
+            TextView cardNumberText = view.findViewById(R.id.cardNumber);
             cardNumber = view.findViewById(R.id.tv_bill_cardNumber);
+            TextView terminalNoText = view.findViewById(R.id.terminalNo);
             terminalNo = view.findViewById(R.id.tv_bill_terminalNo);
+            TextView rrnText = view.findViewById(R.id.referenceNo);
             rrn = view.findViewById(R.id.tv_bill_referenceNo);
+            TextView traceNumberText = view.findViewById(R.id.traceNumber);
             traceNumber = view.findViewById(R.id.tv_bill_traceNumber);
             requestTime = view.findViewById(R.id.tv_bill_requestDate);
         }

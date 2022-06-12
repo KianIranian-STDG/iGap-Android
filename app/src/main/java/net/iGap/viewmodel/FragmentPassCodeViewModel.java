@@ -11,43 +11,27 @@ package net.iGap.viewmodel;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
-import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 
-import net.iGap.helper.HelperBiometricAuthentication;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -64,7 +48,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import io.realm.Realm;
 
@@ -73,7 +56,6 @@ import static net.iGap.G.context;
 
 public class FragmentPassCodeViewModel {
 
-    public static final int BIOMETRIC_ENRROL_REQUEST_CODE = 100;
     private final int PIN = 0;
     private final int PASSWORD = 1;
     public ObservableField<String> titlePassCode = new ObservableField<>(G.context.getResources().getString(R.string.two_step_pass_code));
@@ -85,7 +67,6 @@ public class FragmentPassCodeViewModel {
     public ObservableField<String> txtModePassCode = new ObservableField<>(G.context.getResources().getString(R.string.PIN));
     public ObservableField<Boolean> isTogglePassCode = new ObservableField<>(false);
     public ObservableField<Boolean> isTogglePatternPassCode = new ObservableField<>(false);
-    public ObservableField<Boolean> isToggleBiometricPassword = new ObservableField<>(false);
     public ObservableField<Boolean> isToggleTactileFeedback = new ObservableField<>(true);
     public ObservableField<Boolean> isFingerPrint = new ObservableField<>(false);
     public ObservableField<Boolean> isAllowScreenCapture = new ObservableField<>(false);
@@ -106,8 +87,6 @@ public class FragmentPassCodeViewModel {
     public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
     public ObservableField<Integer> layoutModePassCode = new ObservableField<>(View.GONE);
     public ObservableField<Integer> vgToggleFingerPrintVisibility = new ObservableField<>(View.GONE);
-    private ObservableInt showFingerPrintIcon = new ObservableInt(View.GONE);
-    private ObservableInt showFaceIdIcon = new ObservableInt(View.GONE);
     public MutableLiveData<Boolean> passCodeStateChangeListener = new MutableLiveData<>();
     private boolean isPassCode;
     public boolean isPattern;
@@ -129,18 +108,6 @@ public class FragmentPassCodeViewModel {
     private boolean tactile;
 
     private String mPattern = null;
-
-    public ObservableInt getShowFingerPrintIcon() {
-        return showFingerPrintIcon;
-    }
-
-    public ObservableInt getShowFaceIdIcon() {
-        return showFaceIdIcon;
-    }
-
-    public void setShowFaceIdIcon(ObservableInt showFaceIdIcon) {
-        this.showFaceIdIcon = showFaceIdIcon;
-    }
 
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
         @Override
@@ -199,7 +166,6 @@ public class FragmentPassCodeViewModel {
         visibilityDescription.set(View.GONE);
         rootPatternPassword.set(View.GONE);
         visibilityPassCode.set(View.GONE);
-        rootSettingPassword.set(View.VISIBLE);
         isTogglePatternPassCode.set(true);
         isToggleTactileFeedback.set(true);
     }
@@ -209,7 +175,6 @@ public class FragmentPassCodeViewModel {
         this.binding = fragmentPassCodeBinding;
         this.fragment = fragment;
         getInfo();
-
     }
 
 
@@ -306,68 +271,14 @@ public class FragmentPassCodeViewModel {
         isTogglePatternPassCode.set(false);
         visibilityChangePass.set(View.GONE);
         visibilityTactileFeedback.set(View.GONE);
-        rootSettingPassword.set(View.GONE);
-
         isPattern = false;
         PassCode.getInstance().setPassCode(false);
         passCodeStateChangeListener.postValue(PassCode.getInstance().isPassCode());
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
+        editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
         editor.apply();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    public void onBiometricEntranceClick(View view) {
-
-        boolean isBiometricActive = sharedPreferences.getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-
-            /**for check existing and enrollment biometric authentication on android 11 onwards*/
-            BiometricManager biometricManager = BiometricManager.from(G.fragmentActivity);
-            switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)) {
-                case BiometricManager.BIOMETRIC_SUCCESS:
-                    Log.d("MY_APP_TAG", "App can authenticate using biometrics");
-                    if (isBiometricActive) {
-                        context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false).apply();
-
-                    } else {
-                        context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, true).apply();
-                    }
-                    isToggleBiometricPassword.set(!isBiometricActive);
-
-                    break;
-                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                    Log.d("MY_APP_TAG", "No biometric features available on this device");
-                    break;
-                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                    Log.d("MY_APP_TAG", "Biometric features are currently unavailable");
-                    break;
-                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                    HelperBiometricAuthentication.showEnrollBiometricPasswordDialog(fragment);
-                    break;
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (!HelperBiometricAuthentication.isHardwareSupported(G.fragmentActivity)) {
-                Toast.makeText(G.fragmentActivity, "No biometric features available on this device", Toast.LENGTH_LONG).show();
-            } else if (!HelperBiometricAuthentication.isFingerprintAvailable(G.fragmentActivity)) {
-                HelperBiometricAuthentication.showEnrollBiometricPasswordDialog(fragment);
-            } else {
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics");
-                if (isBiometricActive) {
-                    context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false).apply();
-
-                } else {
-                    context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, true).apply();
-                }
-                isToggleBiometricPassword.set(!isBiometricActive);
-            }
-
-        } else {
-            Toast.makeText(G.fragmentActivity, "This feature is supported from Android 6 onwards", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void onClickChangePassCode(View v) {
@@ -403,6 +314,28 @@ public class FragmentPassCodeViewModel {
         }
     }
 
+    public void onClickChangeVgToggleFingerPrint(View v) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        if (isFingerPrintCode) {
+                            PassCode.getInstance().setFingerPrint(false);
+                            isFingerPrint.set(false);
+                            isFingerPrintCode = false;
+                        } else {
+                            PassCode.getInstance().setFingerPrint(true);
+                            isFingerPrint.set(true);
+                            isFingerPrintCode = true;
+                        }
+                    }
+                }
+            });
+        });
+    }
+
 
     public void onClickPatternSetting(View v) {
 
@@ -433,6 +366,12 @@ public class FragmentPassCodeViewModel {
                 visibilityPatternLock.set(View.GONE);
                 visibilityChangePass.set(View.VISIBLE);
                 visibilityDescription.set(View.GONE);
+
+                if (deviceHasFingerPrint) {
+                    vgToggleFingerPrintVisibility.set(View.VISIBLE);
+                } else {
+                    vgToggleFingerPrintVisibility.set(View.GONE);
+                }
                 rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
@@ -494,7 +433,13 @@ public class FragmentPassCodeViewModel {
     public void onClickChangeAutoLock(View v) {
 
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.auto_lock)).customView(R.layout.dialog_auto_lock, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(G.fragmentActivity.getResources().getString(R.string.auto_lock))
+                .customView(R.layout.dialog_auto_lock, wrapInScrollView)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
 
         View view1 = dialog.getCustomView();
 
@@ -606,7 +551,12 @@ public class FragmentPassCodeViewModel {
     public void onClickModePassCode(View v) {
 
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).items(R.array.modePassCode).itemsCallback(new MaterialDialog.ListCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .items(R.array.modePassCode).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -640,6 +590,7 @@ public class FragmentPassCodeViewModel {
 
     private void getInfo() {
 
+        checkFingerPrint();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
@@ -703,16 +654,16 @@ public class FragmentPassCodeViewModel {
         isAllowScreenCapture.set(screenShot);
 
 
-        long valuNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
-        if (valuNumberPic == 0) {
+        long valueNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
+        if (valueNumberPic == 0) {
             autoLockText.set(G.fragmentActivity.getResources().getString(R.string.Disable));
-        } else if (valuNumberPic == 60) {
+        } else if (valueNumberPic == 60) {
             autoLockText.set(G.fragmentActivity.getResources().getString(R.string.in_1_minutes));
-        } else if (valuNumberPic == 60 * 5) {
+        } else if (valueNumberPic == 60 * 5) {
             autoLockText.set(G.fragmentActivity.getResources().getString(R.string.in_5_minutes));
-        } else if (valuNumberPic == 60 * 60) {
+        } else if (valueNumberPic == 60 * 60) {
             autoLockText.set(G.fragmentActivity.getResources().getString(R.string.in_1_hours));
-        } else if (valuNumberPic == 60 * 60 * 5) {
+        } else if (valueNumberPic == 60 * 60 * 5) {
             autoLockText.set(G.fragmentActivity.getResources().getString(R.string.in_5_hours));
         }
 
@@ -725,10 +676,24 @@ public class FragmentPassCodeViewModel {
 
             }
         }
-        isToggleBiometricPassword.set(sharedPreferences.getBoolean(SHP_SETTING.IS_ACTIVE_PHONE_BIOMETRIC_SECURITY, false));
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkFingerPrint() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+            if (ActivityCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            if (fingerprintManager != null) {
+                if (!fingerprintManager.isHardwareDetected()) {
+                    deviceHasFingerPrint = false;
+                } else deviceHasFingerPrint = fingerprintManager.hasEnrolledFingerprints();
+            }
+        }
+    }
 
     private void maxLengthEditText(int numberOfLength) {
         edtSetPasswordMaxLength.set(numberOfLength);
@@ -806,5 +771,4 @@ public class FragmentPassCodeViewModel {
             edtSetPasswordText.set("");
         }
     }
-
 }

@@ -22,7 +22,7 @@
         android:id="@+id/row_plaque_edit"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:text="@string/icon_new_conversation"
         android:layout_marginLeft="@dimen/dp6"
         android:layout_marginStart="@dimen/dp6"

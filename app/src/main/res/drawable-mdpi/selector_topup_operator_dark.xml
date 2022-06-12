@@ -2,13 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <stroke android:width="@dimen/dp2" android:color="@color/gray_4c" />
+            <stroke android:width="@dimen/dp2" android:color="@color/key_gray" />
             <corners android:radius="@dimen/dp16" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <stroke android:width="@dimen/dp2" android:color="@color/transparent" />
+            <stroke android:width="@dimen/dp2" android:color="@android:color/transparent" />
             <corners android:radius="@dimen/dp16" />
         </shape>
     </item>

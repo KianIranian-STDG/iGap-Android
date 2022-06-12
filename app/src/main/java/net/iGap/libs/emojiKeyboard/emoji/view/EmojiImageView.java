@@ -13,10 +13,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.helper.LayoutCreator;
 
 @SuppressLint("ViewConstructor")
 public class EmojiImageView extends AppCompatImageView implements EventManager.EventDelegate {

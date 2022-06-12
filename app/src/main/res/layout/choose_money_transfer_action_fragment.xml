@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp16">
+    android:paddingBottom="@dimen/dp16"
+    android:id="@+id/mainContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/stickerGift"
@@ -15,7 +16,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/giftStickerIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:text="@string/icon_send_money"
@@ -25,12 +26,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/buyDigitalGiftCard"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/gift_sticker_title"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,21 +47,22 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/cardToCardIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="match_parent"
             android:text="@string/icon_charge_wallet"
             android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/requestCardToCard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/card_to_card"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardToCardIcon"
@@ -76,7 +78,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/transferMoneyIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:text="@string/icon_send_money"
@@ -86,12 +88,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/walletMoneyTransfer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/WALLET_TRANSFER_MONEY"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/transferMoneyIcon"
@@ -107,7 +109,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chargePaymentIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:text="@string/icon_charge_mobile"
@@ -117,12 +119,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/buyingTheCharge"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/topUp_title"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/chargePaymentIcon"
@@ -138,7 +140,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/internetPaymentIcon"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:text="@string/icon_internet"
@@ -148,12 +150,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/buyInternetPackage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/buy_internet_package_title"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/internetPaymentIcon"

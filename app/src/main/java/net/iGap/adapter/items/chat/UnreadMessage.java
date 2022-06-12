@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
@@ -45,7 +46,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         });
 
-        holder.txtUnreadMessage.setBackgroundColor(theme.getPrimaryDarkColor(holder.txtUnreadMessage.getContext()));
+        holder.txtUnreadMessage.setBackgroundColor(Theme.getColor(Theme.key_dark_theme_color));
 
         holder.txtUnreadMessage.setOnLongClickListener(v -> true);
 

@@ -35,7 +35,7 @@
             app:rv_ripplePadding="5dp">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -66,7 +66,7 @@
             app:rv_ripplePadding="5dp">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"

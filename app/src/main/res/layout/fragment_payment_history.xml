@@ -20,14 +20,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="LinearLayoutManager" />
-
-        <ir.radsense.raadcore.widget.ProgressLayout
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white" />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

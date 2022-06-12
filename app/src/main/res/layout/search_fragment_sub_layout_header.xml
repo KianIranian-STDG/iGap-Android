@@ -14,7 +14,6 @@
         android:gravity="center"
         android:padding="@dimen/dp4"
         android:text="@string/contacts"
-        android:textColor="?attr/iGapTitleTextColor"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="@dimen/dp18" />
 </LinearLayout>

@@ -10,6 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContainer"
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -62,7 +63,8 @@
                     android:layout_height="match_parent"
                     android:padding="@dimen/dp32"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_camera_holder" />
+                    app:srcCompat="@drawable/ic_camera_holder"
+                    app:tint="?attr/colorAccent" />
 
 
             </RelativeLayout>
@@ -77,7 +79,6 @@
             android:layout_marginRight="@dimen/dp20"
             android:layout_marginBottom="@dimen/dp10"
             android:hint="@{fragmentNewGroupVieModel.txtInputName}"
-            android:textColorHint="?iGapHintTextColor"
             app:layout_constraintBottom_toBottomOf="@id/ng_ripple_circle_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ng_ripple_circle_image">
@@ -91,7 +92,6 @@
                 android:paddingBottom="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@={fragmentNewGroupVieModel.edtSetNewGroup}"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +105,6 @@
             android:layout_marginTop="@dimen/dp12"
             android:layout_marginRight="@dimen/dp20"
             android:hint="@string/desc_group_chanel"
-            android:textColorHint="?iGapHintTextColor"
             app:layout_constraintEnd_toEndOf="@id/ng_txtInput_newGroup"
             app:layout_constraintStart_toStartOf="@id/ng_ripple_circle_image"
             app:layout_constraintTop_toBottomOf="@id/ng_ripple_circle_image">
@@ -126,7 +125,6 @@
                 android:paddingBottom="@dimen/dp8"
                 android:singleLine="false"
                 android:text="@={fragmentNewGroupVieModel.edtDescription}"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -138,7 +136,6 @@
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginRight="@dimen/dp20"
             android:text="@{fragmentNewGroupVieModel.txtDescriptionHint}"
-            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/verySmallTextSize"
             app:layout_constraintEnd_toEndOf="@id/ng_txtInput_description"
             app:layout_constraintStart_toStartOf="@id/ng_txtInput_description"
@@ -157,18 +154,18 @@
             app:layout_constraintTop_toBottomOf="@id/ang_txt_add_hint">
 
             <TextView
+                android:id="@+id/membersText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/member"
-                android:textColor="?iGapTitleTextColor" />
+                android:text="@string/member" />
 
             <View
+                android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="10dp"
-                android:background="?iGapDividerLine" />
+                android:layout_margin="10dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ang_recycler_view_selected_contact"

@@ -32,9 +32,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +68,8 @@ import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
-import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.MusicAndCallInfoStrip;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.Toolbar;
@@ -79,8 +82,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.RadiusImageView;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
+import net.iGap.module.SHP_SETTING;;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -231,13 +233,15 @@ public class FragmentShearedMedia extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
+        View rootView = attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
+        return rootView;
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        RelativeLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         //mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
         //MusicPlayer.setMusicPlayer(mediaLayout);
 
@@ -284,13 +288,13 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void initComponent(View view) {
         FrameLayout toolbarLayout = view.findViewById(R.id.frg_shared_media_ll_toolbar_layout);
-        FragmentMediaContainer mediaContainer = new FragmentMediaContainer(getContext(), this);
+        MusicAndCallInfoStrip mediaContainer = new MusicAndCallInfoStrip(getContext(), this);
         mediaContainer.setListener(i -> {
             switch (i) {
-                case FragmentMediaContainer.CALL_TAG:
+                case MusicAndCallInfoStrip.CALL_TAG:
                     getActivity().startActivity(new Intent(getContext(), CallActivity.class));
                     break;
-                case FragmentMediaContainer.MEDIA_TAG:
+                case MusicAndCallInfoStrip.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
                         intent.putExtra(ActivityMain.openMediaPlayer, true);
@@ -298,7 +302,7 @@ public class FragmentShearedMedia extends BaseFragment {
                         getActivity().startActivity(intent);
                     }
                     break;
-                case FragmentMediaContainer.PLAY_TAG:
+                case MusicAndCallInfoStrip.PLAY_TAG:
                     break;
             }
         });
@@ -404,6 +408,10 @@ public class FragmentShearedMedia extends BaseFragment {
         AppUtils.setProgresColler(progressBar);
 
         mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
+        mediaTypesLayout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        HorizontalScrollView horizontalScrollView = view.findViewById(R.id.horizontalScrollView);
+        horizontalScrollView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
 
         complete = new OnComplete() {
             @Override
@@ -423,9 +431,9 @@ public class FragmentShearedMedia extends BaseFragment {
         };
 
         recyclerView = view.findViewById(R.id.asm_recycler_view_sheared_media);
+        recyclerView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         recyclerView.setItemViewCacheSize(400);
         recyclerView.setItemAnimator(null);
-
 
         onScrollListener = new RecyclerView.OnScrollListener() {
             @Override
@@ -463,14 +471,14 @@ public class FragmentShearedMedia extends BaseFragment {
 
         actionToolbar = sharedMediaToolbar.createActionToolbar(null);
         actionToolbar.setBackground(null);
-        ToolbarItem deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
+        ToolbarItem deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_Delete, 54);
         ToolbarItem forwardItem = actionToolbar.addItemWithWidth(forwardTag, R.string.icon_forward, 54);
         seeInChatItem = actionToolbar.addItemWithWidth(seeInChatTag, R.string.icon_eye, 54);
 
         multiSelectCounter = new NumberTextView(getContext());
         multiSelectCounter.setTextSize(18);
         multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTextColor(Theme.getColor(Theme.key_white));
         multiSelectCounter.setTag(selectCounter);
         actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
@@ -560,8 +568,8 @@ public class FragmentShearedMedia extends BaseFragment {
         textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
         textView.setSingleLine(true);
 
-        textView.setBackgroundResource(new Theme().getButtonSelectorBackground(textView.getContext()));
-        textView.setTextColor(ContextCompat.getColorStateList(textView.getContext(), R.color.button_text_color_selector));
+        textView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(LayoutCreator.dp(18),Theme.getColor(Theme.key_gray_background),Theme.getColor(Theme.key_gray_background)));
+        textView.setTextColor(Theme.getColor(Theme.key_gray_background_text));
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (pos == 0 || pos == mSharedTypesList.size() + 1) {
@@ -589,6 +597,15 @@ public class FragmentShearedMedia extends BaseFragment {
     private void checkSharedButtonsBackgrounds() {
         for (int i = 0; i < mSharedTypeButtonsList.size(); i++) {
             mSharedTypeButtonsList.get(i).getButton().setSelected(mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId());
+            if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()){
+                mSharedTypeButtonsList.get(i).getButton().setBackground(Theme.createSimpleSelectorRoundRectDrawable(LayoutCreator.dp(18),Theme.getColor(Theme.key_button_background
+
+                ),Theme.getColor(Theme.key_button_background)));
+                mSharedTypeButtonsList.get(i).getButton().setTextColor(Theme.getColor(Theme.key_button_text));
+            }else{
+                mSharedTypeButtonsList.get(i).getButton().setBackground(Theme.createSimpleSelectorRoundRectDrawable(LayoutCreator.dp(18),Theme.getColor(Theme.key_gray_background),Theme.getColor(Theme.key_gray_background)));
+                mSharedTypeButtonsList.get(i).getButton().setTextColor(Theme.getColor(Theme.key_gray_background_text));
+            }
         }
     }
 
@@ -663,12 +680,12 @@ public class FragmentShearedMedia extends BaseFragment {
 
     public void popUpMenuSharedMedia() {
 
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.name);
-        items.add(R.string.date);
-        items.add(R.string.size);
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.name));
+        items.add(getString(R.string.date));
+        items.add(getString(R.string.size));
 
-        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
 
         }).show();
     }
@@ -1529,8 +1546,11 @@ public class FragmentShearedMedia extends BaseFragment {
             public ViewHolderTime(View view) {
                 super(view);
                 txtTime = itemView.findViewById(R.id.smslt_txt_time);
+                txtTime.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtHeader = itemView.findViewById(R.id.smslt_txt_header);
+                txtHeader.setTextColor(Theme.getColor(Theme.key_default_text));
                 vSplitter = itemView.findViewById(R.id.smslt_time_shared_splitter);
+                vSplitter.setBackgroundColor(Theme.getColor(Theme.key_line));
             }
         }
     }
@@ -1570,7 +1590,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 vh.tempFilePath = getThumpnailPath(position);
                 vh.filePath = getFilePath(position);
 
-                vh.imvPicFile.setImageResource(R.drawable.shared_media_images_holder);
+                vh.imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shared_media_images_holder), getContext(), Theme.getColor(Theme.key_light_theme_color)));
 
                 vh.imvPicFile.setTag(mList.get(position).messageId);
 
@@ -1645,6 +1665,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 super(view);
 
                 imvPicFile = itemView.findViewById(R.id.smsl_imv_file_pic);
+                imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shared_media_images_holder), getContext(), Theme.getColor(Theme.key_popup_background)));
 
             }
         }
@@ -1679,13 +1700,12 @@ public class FragmentShearedMedia extends BaseFragment {
             super.onBindViewHolder(holder, position);
 
             if (holder.getItemViewType() == 1) {
-
                 final VideoAdapter.ViewHolder holder1 = (VideoAdapter.ViewHolder) holder;
                 holder1.layoutInfo.setVisibility(View.VISIBLE);
 
                 RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
 
-                holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
+                holder1.imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shared_media_videos_holder), getContext(), Theme.getColor(Theme.key_light_theme_color)));
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
 
                 final String tempFilePath;
@@ -1706,7 +1726,7 @@ public class FragmentShearedMedia extends BaseFragment {
                         Glide.with(getActivity()).load(AndroidUtils.suitablePath(tempFilePath)).centerCrop().into(holder1.imvPicFile);
                     }
                 } else {
-                    holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
+                    holder1.imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shared_media_videos_holder), getContext(), Theme.getColor(Theme.key_light_theme_color)));
                     DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
 
                     if (fileObject != null) {
@@ -1808,14 +1828,18 @@ public class FragmentShearedMedia extends BaseFragment {
                 super(view);
 
                 imvPicFile = itemView.findViewById(R.id.smsl_imv_file_pic);
+                imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.background_multi_select_light), getContext(), Theme.getColor(Theme.key_popup_background)));
 
                 layoutInfo = itemView.findViewById(R.id.smsl_ll_video);
 
                 txtVideoIcon = itemView.findViewById(R.id.smsl_txt_video_icon);
+                txtVideoIcon.setTextColor(Theme.getColor(Theme.key_icon));
 
                 txtVideoTime = itemView.findViewById(R.id.smsl_txt_video_time);
+                txtVideoTime.setTextColor(Theme.getColor(Theme.key_default_text));
 
                 txtVideoSize = itemView.findViewById(R.id.smsl_txt_video_size);
+                txtVideoSize.setTextColor(Theme.getColor(Theme.key_default_text));
             }
         }
     }
@@ -1853,7 +1877,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 AudioAdapter.ViewHolder holder1 = (AudioAdapter.ViewHolder) holder;
 
-                holder1.imvPicFile.setImageResource(R.drawable.shared_media_audios_holder);
+                holder1.imvPicFile.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shared_media_audios_holder), getContext(), Theme.getColor(Theme.key_light_theme_color)));
                 holder1.imvPicFile.setTag(mList.get(position).messageId);
                 holder1.imvPicFile.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -1945,12 +1969,16 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 imvPicFile = itemView.findViewById(R.id.smslf_imv_image_file);
                 tvIconFile = itemView.findViewById(R.id.smslf_imv_icon_file);
+                tvIconFile.setTextColor(Theme.getColor(Theme.key_theme_color));
                 tvIconFile.setVisibility(View.GONE);
                 imvPicFile.setVisibility(View.VISIBLE);
 
                 txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileName.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileSize.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileInfo.setTextColor(Theme.getColor(Theme.key_default_text));
             }
         }
     }
@@ -2059,8 +2087,11 @@ public class FragmentShearedMedia extends BaseFragment {
                 imvPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
 
                 txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileName.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileSize.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileInfo.setTextColor(Theme.getColor(Theme.key_default_text));
             }
         }
     }
@@ -2318,10 +2349,13 @@ public class FragmentShearedMedia extends BaseFragment {
                 super(view);
 
                 iconPicFile = itemView.findViewById(R.id.smslf_imv_icon_file);
-
+                iconPicFile.setTextColor(Theme.getColor(Theme.key_theme_color));
                 txtFileName = itemView.findViewById(R.id.smslf_txt_file_name);
+                txtFileName.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileInfo = itemView.findViewById(R.id.smslf_txt_file_info);
+                txtFileInfo.setTextColor(Theme.getColor(Theme.key_default_text));
                 txtFileSize = itemView.findViewById(R.id.smslf_txt_file_size);
+                txtFileSize.setTextColor(Theme.getColor(Theme.key_default_text));
             }
         }
     }
@@ -2343,6 +2377,8 @@ public class FragmentShearedMedia extends BaseFragment {
                 viewHolder = new ViewHolderTime(view);
             } else {
                 View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.share_media_layout_link, null);
+                TextView ivCover = view.findViewById(R.id.ivCover);
+                ivCover.setTextColor(Theme.getColor(Theme.key_theme_color));
                 RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 view.setLayoutParams(lp);
                 viewHolder = new LinkAdapter.ViewHolder(view);
@@ -2381,6 +2417,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 super(view);
 
                 tvMessage = itemView.findViewById(R.id.tvMessage);
+                tvMessage.setTextColor(Theme.getColor(Theme.key_default_text));
                 lytLinks = itemView.findViewById(R.id.lytLinks);
             }
 
@@ -2392,7 +2429,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 String[] links = getUrlsFromText(tvMessage);
                 if (links.length != 0) {
 
-                    int txtColor = new Theme().getLinkColor(tvMessage.getContext());
+                    int txtColor = Theme.getColor(Theme.key_link_text);
                     lytLinks.removeAllViews();
                     for (String link : links) {
 

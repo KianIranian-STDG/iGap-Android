@@ -11,6 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
+import net.iGap.observers.interfaces.OnUserProfileUpdateBio;
 import net.iGap.proto.ProtoUserProfileBio;
 
 public class RequestUserProfileSetBio {

@@ -27,7 +27,7 @@ public class StoryPagerAdapter extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        StoryDisplayFragment storyDisplayFragment = new StoryDisplayFragment(position, storyUsers.get(position), isMyStory, isForReply);
+        StoryDisplayFragment storyDisplayFragment = new StoryDisplayFragment(position, position < storyUsers.size() ? storyUsers.get(position) : storyUsers.get(0), isMyStory, isForReply);
         storyDisplayFragment.setPageViewOperator(pageViewOperator);
         return storyDisplayFragment;
     }

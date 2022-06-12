@@ -13,11 +13,11 @@
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorToolbarBackgroundEnd"
-            app:expandedTitleTextAppearance="@color/transparent"
+            app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
@@ -29,10 +29,10 @@
                 app:layout_collapseMode="parallax" />
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_gravity="bottom"
-                android:background="@color/colorToolbarBackgroundEnd"
                 app:layout_collapseMode="pin">
 
                 <RelativeLayout
@@ -49,7 +49,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_toRightOf="@+id/tv_album_backIcon"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="bold"
                         tools:text="aabolfazl" />
@@ -60,7 +60,7 @@
                         android:layout_height="56dp"
                         android:layoutDirection="ltr"
                         android:text="@string/icon_back"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="24dp" />
 
                 </RelativeLayout>
@@ -136,7 +136,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@color/gray"
+                android:background="@color/key_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -146,7 +146,7 @@
                 android:id="@+id/rv_album_songs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray_f2"
+                android:background="@color/key_light_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
@@ -169,7 +169,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
                 android:text="آلبوم های خواننده"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/standardTextSize"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/rv_album_artistAlbums"
@@ -200,7 +200,6 @@
         android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:background="@drawable/shape_beeptunes_album_light"
         android:visibility="invisible"
         app:layout_anchor="@id/ab_beepTunes_album"
         app:layout_anchorGravity="bottom|end">
@@ -212,7 +211,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/icon_play"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="45dp"
             android:visibility="invisible" />
 

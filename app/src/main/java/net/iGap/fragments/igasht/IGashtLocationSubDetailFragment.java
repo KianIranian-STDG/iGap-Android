@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -18,6 +19,8 @@ import net.iGap.R;
 import net.iGap.adapter.igahst.IGashtDetailSliderAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentIgashtLocationSubDetailBinding;
+import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.viewmodel.igasht.IGashtLocationSubDetailViewModel;
 
 public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocationSubDetailViewModel> {
@@ -44,6 +47,15 @@ public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocat
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppCompatTextView null_txt = view.findViewById(R.id.null_txt);
+        null_txt.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView subDetail = view.findViewById(R.id.subDetail);
+        subDetail.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView subTitle = view.findViewById(R.id.subTitle);
+        subTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        view.getRootView().setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        BannerSlider banner_slider = view.findViewById(R.id.banner_slider);
+        banner_slider.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         if (viewModel.getLocationDetail() != null) {
             if (viewModel.getLocationDetail().getmShortDescription() != null) {
                 Spanned titleText = Html.fromHtml(viewModel.getLocationDetail().getmShortDescription());

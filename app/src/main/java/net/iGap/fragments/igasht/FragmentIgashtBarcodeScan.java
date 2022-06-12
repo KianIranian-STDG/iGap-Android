@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBarcodeScanerBinding;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.viewmodel.igasht.IGashtBarcodeScannerViewModel;
 import net.iGap.observers.interfaces.ToolbarListener;
 
@@ -46,6 +47,9 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView<IGashtBarcodeScann
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.paymentStatus.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.paymentCode.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.v.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())

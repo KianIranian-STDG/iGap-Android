@@ -28,15 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="60dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:paddingBottom="60dp"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/emptyRecycle"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"

@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +26,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
@@ -97,6 +101,26 @@ public class FragmentPaymentBill extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        billBinding.mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        billBinding.billIdIcon.setTextColor(Theme.getColor(Theme.key_icon));
+        billBinding.payIdIcon.setTextColor(Theme.getColor(Theme.key_icon));
+        billBinding.amountIcon.setTextColor(Theme.getColor(Theme.key_icon));
+
+        billBinding.billId.setTextColor(Theme.getColor(Theme.key_default_text));
+        billBinding.billId.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ColorStateList colorStateList = ColorStateList.valueOf(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(billBinding.billId, colorStateList);
+
+        billBinding.payId.setTextColor(Theme.getColor(Theme.key_default_text));
+        billBinding.payId.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(billBinding.payId, colorStateList);
+
+        billBinding.fpbEdtPrice.setTextColor(Theme.getColor(Theme.key_default_text));
+        billBinding.fpbEdtPrice.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(billBinding.fpbEdtPrice, colorStateList);
+
+        AppCompatEditText fpb_edt_price = view.findViewById(R.id.fpb_edt_price);
+        fpb_edt_price.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         if (isPolice) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_FINE_BILL_PAGE);
         } else {

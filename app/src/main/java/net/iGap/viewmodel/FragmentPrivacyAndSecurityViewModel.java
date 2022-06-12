@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -20,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
@@ -150,7 +152,14 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, final int position, int title, final int type) {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(title)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(G.fragmentActivity.getResources().getString(title))
+                .titleGravity(GravityEnum.START)
+                .titleColor(G.context.getResources().getColor(android.R.color.black))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -235,7 +244,14 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
     private void selfDestructs() {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(G.fragmentActivity.getResources().getString(R.string.self_destructs))
+                .titleGravity(GravityEnum.START)
+                .titleColor(G.context.getResources().getColor(android.R.color.black))
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 

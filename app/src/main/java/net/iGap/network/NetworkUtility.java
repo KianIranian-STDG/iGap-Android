@@ -1,10 +1,14 @@
 package net.iGap.network;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+
+import androidx.core.app.ActivityCompat;
 
 import net.iGap.G;
 import net.iGap.helper.HelperPermission;
@@ -62,7 +66,10 @@ public class NetworkUtility {
                 HelperPermission.getPhonePermision(G.currentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
-                        networkType = mTelephonyManager.getNetworkType();
+                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                            networkType = mTelephonyManager.getNetworkType();
+                        }
+
                     }
 
                     @Override
@@ -75,7 +82,9 @@ public class NetworkUtility {
             }
 
         } else {
-            networkType = mTelephonyManager.getNetworkType();
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                networkType = mTelephonyManager.getNetworkType();
+            }
         }
 
 

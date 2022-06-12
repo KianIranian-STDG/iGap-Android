@@ -7,14 +7,12 @@
     <View
         android:id="@+id/back_progress"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/gray" />
+        android:layout_height="2dp" />
 
     <View
         android:id="@+id/front_progress"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/white"
         android:visibility="invisible"
         tools:visibility="visible" />
 
@@ -22,7 +20,6 @@
         android:id="@+id/max_progress"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/white"
         android:visibility="gone" />
 
 </FrameLayout>

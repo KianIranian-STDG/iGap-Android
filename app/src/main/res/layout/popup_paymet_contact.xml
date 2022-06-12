@@ -9,24 +9,21 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/iv_close1"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp16"
         android:text="@string/icon_close"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt_choose1"
-        style="?iGapTitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="@dimen/dp8"
         android:text="@string/contacts"
-        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/iv_close1"
         app:layout_constraintStart_toEndOf="@+id/iv_close1"
         app:layout_constraintTop_toTopOf="@+id/iv_close1" />
@@ -42,7 +39,6 @@
 
     <EditText
         android:id="@+id/etSearch"
-        style="@style/iGapEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp44"
         android:layout_marginTop="@dimen/dp24"

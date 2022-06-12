@@ -21,7 +21,6 @@
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleMarginStart="48dp"
                 app:expandedTitleMarginEnd="64dp"
                 app:title="@string/igap">
@@ -55,7 +54,7 @@
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textSize="@dimen/dp16"
-                        android:textColor="@color/black"
+                        android:textColor="@android:color/black"
                         android:ellipsize="end"
                         android:lines="2"
                         android:maxLines="2"

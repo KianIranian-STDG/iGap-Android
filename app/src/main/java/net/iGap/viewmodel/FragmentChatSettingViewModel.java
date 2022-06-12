@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.databinding.ObservableBoolean;
@@ -10,9 +11,9 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.ThemeModel;
+import net.iGap.module.DeprecatedTheme;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
@@ -51,7 +52,8 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     private MutableLiveData<String> setChatBackground = new MutableLiveData<>();
     private MutableLiveData<Integer> setChatBackgroundDefault = new MutableLiveData<>();
-
+    private ObservableBoolean isConvertVoiceEnable = new ObservableBoolean(false);
+    private ObservableBoolean isConvertTextEnable = new ObservableBoolean(false);
     private SharedPreferences sharedPreferences;
 
     public FragmentChatSettingViewModel(@NotNull SharedPreferences sharedPreferences) {
@@ -73,8 +75,8 @@ public class FragmentChatSettingViewModel extends ViewModel {
         setTextSizeValue(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         dateIsChange();
 
-        themeList.setValue(new Theme().getThemeList());
-        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT), 0)));
+        themeList.setValue(new DeprecatedTheme().getThemeList());
+        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DeprecatedTheme.DEFAULT), 0)));
     }
 
     public ObservableBoolean getIsTime() {
@@ -242,6 +244,35 @@ public class FragmentChatSettingViewModel extends ViewModel {
         G.showVoteChannelLayout = isShowVote.get();
     }
 
+
+    public void onConvertVoiceMessageClicked(boolean isChecked) {
+        isConvertVoiceEnable.set(!isChecked);
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().
+                putBoolean(SHP_SETTING.KEY_CONVERT_VOICE_MESSAGE, isConvertVoiceEnable.get()).
+                apply();
+    }
+
+    public ObservableBoolean getIsConvertVoiceMessageEnable() {
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        isConvertVoiceEnable.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_CONVERT_VOICE_MESSAGE, true));
+        return isConvertVoiceEnable;
+    }
+
+    public void onConvertTextMessageClicked(boolean isChecked) {
+        isConvertTextEnable.set(!isChecked);
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().
+                putBoolean(SHP_SETTING.KEY_CONVERT_TEXT_MESSAGE, isConvertTextEnable.get()).
+                apply();
+    }
+
+    public ObservableBoolean getIsConvertTextMessageEnable() {
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        isConvertTextEnable.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_CONVERT_TEXT_MESSAGE, true));
+        return isConvertTextEnable;
+    }
+
     public void onProgressChangedTextSize(int progress, boolean fromUser) {
         if (fromUser) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, progress + MIN_TEXT_SIZE).apply();
@@ -279,9 +310,9 @@ public class FragmentChatSettingViewModel extends ViewModel {
             sharedPreferences.edit()
                     .putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeList.getValue().get(oldTheme != -1 ? oldTheme : 0).getThemeId())
                     .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(newTheme).getThemeId())
-                    .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(newTheme).getThemeId() == Theme.DARK)
+                    .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(newTheme).getThemeId() == DeprecatedTheme.DARK)
                     .apply();
-            G.themeColor = themeList.getValue().get(newTheme).getThemeId();
+            //G.themeColor = themeList.getValue().get(newTheme).getThemeId();
             updateNewTheme.setValue(true);
             if (G.twoPaneMode) {
                 updateTwoPaneView.setValue(true);

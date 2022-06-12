@@ -26,7 +26,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/news_gray"/>
+                    <solid android:color="@color/key_gray"/>
                     <corners android:radius="6dp"/>
                 </shape>
             </item>

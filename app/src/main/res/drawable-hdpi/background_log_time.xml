@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners android:radius="5dp" />
-    <solid android:color="@color/background_log_time" />
+    <solid android:color="@color/key_light_gray" />
 
 </shape>

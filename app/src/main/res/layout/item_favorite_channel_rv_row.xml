@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/dp2"
     android:clickable="true"
-    app:cardBackgroundColor="?attr/iGapCardViewColor"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="@dimen/dp12"
     app:cardElevation="@dimen/dp2"
@@ -37,7 +36,6 @@
             android:maxLength="20"
             android:maxLines="1"
             android:minLines="1"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/verySmallTextSize" />
     </LinearLayout>
 

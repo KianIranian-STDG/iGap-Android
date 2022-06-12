@@ -17,6 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.messenger.theme.Theme;
 
 import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;
 
@@ -50,7 +51,7 @@ public class BadgeView extends FrameLayout {
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(Utils.dpToPx(6), 0, Utils.dpToPx(6), 0);
         textView.setLayoutParams(params);
-        textView.setTextColor(getContext().getResources().getColor(R.color.white));
+        textView.setTextColor(Theme.getColor(Theme.key_white));
         setTextSize(textView, R.dimen.dp10);
         addView(textView);
     }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,7 +40,8 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.MusicAndCallInfoStrip;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.Toolbar;
@@ -50,7 +52,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -102,7 +103,7 @@ public class FragmentCall extends BaseMainFragments {
     private final int codeScannerTag = 2;
     private final int deleteTag = 4;
     private final int deleteAllTag = 5;
-    private FragmentMediaContainer mediaContainer;
+    private MusicAndCallInfoStrip mediaContainer;
     private ArrayList<ToolbarItem> actionModeViews = new ArrayList<>();
     private NumberTextView multiSelectCounter;
     private final int selectCounter = 16;
@@ -118,7 +119,9 @@ public class FragmentCall extends BaseMainFragments {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_call, container, false);
+        View view =  inflater.inflate(R.layout.fragment_call, container, false);
+        view.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        return view;
     }
 
     @Override
@@ -133,8 +136,10 @@ public class FragmentCall extends BaseMainFragments {
         HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+            StatusBarUtil.setColor(getActivity(), Theme.getColor(Theme.key_dark_theme_color), 50);
         }
+
+
 
         callToolbar = new Toolbar(getContext());
         callToolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
@@ -212,13 +217,13 @@ public class FragmentCall extends BaseMainFragments {
             }
         });
         createToolbarActions();
-        mediaContainer = new FragmentMediaContainer(getContext(), this);
+        mediaContainer = new MusicAndCallInfoStrip(getContext(), this);
         mediaContainer.setListener(i -> {
             switch (i) {
-                case FragmentMediaContainer.CALL_TAG:
+                case MusicAndCallInfoStrip.CALL_TAG:
                     getActivity().startActivity(new Intent(getContext(), CallActivity.class));
                     break;
-                case FragmentMediaContainer.MEDIA_TAG:
+                case MusicAndCallInfoStrip.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
                         intent.putExtra(ActivityMain.openMediaPlayer, true);
@@ -226,7 +231,7 @@ public class FragmentCall extends BaseMainFragments {
                         getActivity().startActivity(intent);
                     }
                     break;
-                case FragmentMediaContainer.PLAY_TAG:
+                case MusicAndCallInfoStrip.PLAY_TAG:
                     break;
             }
         });
@@ -238,13 +243,18 @@ public class FragmentCall extends BaseMainFragments {
         mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
         mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
         mBtnCanceledCalls = view.findViewById(R.id.fc_btn_canceled_calls);
+
         mBtnIncomingCalls = view.findViewById(R.id.fc_btn_incoming_calls);
         mBtnOutgoingCalls = view.findViewById(R.id.fc_btn_outgoing_calls);
+
         progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
         emptuListView = view.findViewById(R.id.empty_layout);
         progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
+
+        AppCompatTextView textEmptyCal = view.findViewById(R.id.textEmptyCal);
+        textEmptyCal.setTextColor(Theme.getColor(Theme.key_default_text));
 
         setEnableButton(mSelectedStatus);
 
@@ -368,7 +378,7 @@ public class FragmentCall extends BaseMainFragments {
 
         BackDrawable backDrawable = new BackDrawable(true);
         backDrawable.setRotation(1, true);
-        backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        backDrawable.setRotatedColor(Theme.getColor(Theme.key_default_text));
         callToolbar.setBackIcon(backDrawable);
         multiSelectCounter.setNumber(mSelectedLogList.size(), true);
         AnimatorSet animatorSet = new AnimatorSet();
@@ -390,13 +400,13 @@ public class FragmentCall extends BaseMainFragments {
         ToolbarItems actionToolbar = callToolbar.createActionToolbar(null);
         actionToolbar.setBackground(null);
 
-        deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
+        deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_Delete, 54);
         deleteAllItem = actionToolbar.addItemWithWidth(deleteAllTag, R.string.icon_delete_all, 54);
 
         multiSelectCounter = new NumberTextView(getContext());
         multiSelectCounter.setTextSize(18);
         multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTextColor(Theme.getColor(Theme.key_white));
         multiSelectCounter.setTag(selectCounter);
         actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
@@ -426,9 +436,6 @@ public class FragmentCall extends BaseMainFragments {
 
     private void setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter status) {
         switch (status) {
-            case ALL:
-                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
-                break;
             case MISSED:
                 setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
                 break;
@@ -449,10 +456,20 @@ public class FragmentCall extends BaseMainFragments {
 
     private void setEnableButton(TextView enable, TextView disable, TextView disable2, TextView disable3, TextView disable4) {
         enable.setSelected(true);
+        enable.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getColor(Theme.key_button_background)));
+        enable.setTextColor(Theme.getColor(Theme.key_button_text));
         disable.setSelected(false);
+        disable.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getColor(Theme.key_gray_background)));
+        disable.setTextColor(Theme.getColor(Theme.key_gray_background_text));
         disable2.setSelected(false);
+        disable2.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getColor(Theme.key_gray_background)));
+        disable2.setTextColor(Theme.getColor(Theme.key_gray_background_text));
         disable3.setSelected(false);
+        disable3.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getColor(Theme.key_gray_background)));
+        disable3.setTextColor(Theme.getColor(Theme.key_gray_background_text));
         disable4.setSelected(false);
+        disable4.setBackground(Theme.createRoundRectDrawable(LayoutCreator.dp(18), Theme.getColor(Theme.key_gray_background)));
+        disable4.setTextColor(Theme.getColor(Theme.key_gray_background_text));
     }
 
     private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status, Realm realm) {
@@ -642,25 +659,25 @@ public class FragmentCall extends BaseMainFragments {
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.icon_voice_call);
-                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.dayGreenTheme));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.dayGreenTheme));
                     break;
                 case MISSED:
                     viewHolder.icon.setText(R.string.icon_missed_call);
-                    viewHolder.icon.setTextColor(getResources().getColor(R.color.red));
-                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.red));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.dayRedTheme));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.dayRedTheme));
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
                     viewHolder.icon.setText(R.string.icon_voice_call);
-                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.dayGreenTheme));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.dayGreenTheme));
                     viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
                     viewHolder.icon.setText(R.string.icon_incoming_call);
-                    viewHolder.icon.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.verify));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.verify));
                     break;
             }
 
@@ -699,6 +716,7 @@ public class FragmentCall extends BaseMainFragments {
                 timeDuration = itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 image = itemView.findViewById(R.id.fcsl_imv_picture);
                 name = itemView.findViewById(R.id.fcsl_txt_name);
+                name.setTextColor(Theme.getColor(Theme.key_default_text));
                 icon = itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = itemView.findViewById(R.id.fcsl_txt_time_info);
                 checkBox = itemView.findViewById(R.id.fcsl_check_box);

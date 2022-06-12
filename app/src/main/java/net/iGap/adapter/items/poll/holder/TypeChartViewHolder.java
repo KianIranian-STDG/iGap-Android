@@ -17,10 +17,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setDoubleTapToZoomEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        xAxis.setTextColor(Theme.getColor(Theme.key_title_text));
         xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(ViewMaker.dpToPixel(4));
@@ -92,11 +92,11 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
 
         set1 = new BarDataSet(barEntries, "Data Set");
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(new Theme().getAccentColor(chart.getContext()));
+        colors.add(Theme.getColor(Theme.key_theme_color));
         set1.setColors(colors);
         set1.setDrawValues(true);
         set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
-        set1.setValueTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        set1.setValueTextColor(Theme.getColor(Theme.key_title_text));
         set1.setValueTextSize(ViewMaker.dpToPixel(3));
         set1.setValueFormatter(new ValueFormatter() {
             @Override

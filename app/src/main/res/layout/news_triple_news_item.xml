@@ -19,7 +19,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:cardCornerRadius="3dp"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg"
+        app:cardBackgroundColor="@color/key_light_gray"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,6 @@
                 android:minHeight="@dimen/dp24"
                 android:text="Category"
                 android:textStyle="bold"
-                android:textColor="@color/news_red"
                 android:textSize="@dimen/dp12"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
@@ -80,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:cardCornerRadius="3dp"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg"
+        app:cardBackgroundColor="@color/key_light_gray"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,7 +93,6 @@
                 android:minHeight="@dimen/dp24"
                 android:text="Category"
                 android:textStyle="bold"
-                android:textColor="@color/news_red"
                 android:textSize="@dimen/dp12"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
@@ -139,7 +137,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:cardCornerRadius="3dp"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg"
+        app:cardBackgroundColor="@color/key_light_gray"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -153,7 +151,6 @@
                 android:minHeight="@dimen/dp24"
                 android:text="Category"
                 android:textStyle="bold"
-                android:textColor="@color/news_red"
                 android:textSize="@dimen/dp12"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"

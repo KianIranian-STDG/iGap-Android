@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentNotificationViewModel;
 
@@ -47,7 +49,12 @@ public class FragmentNotification extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        TextView ntg_txt_desc_notifications = view.findViewById(R.id.ntg_txt_desc_notifications);
+        TextView ntg_txt_desc_vibrate = view.findViewById(R.id.ntg_txt_desc_notifications);
+        TextView ntg_txt_desc_sound = view.findViewById(R.id.ntg_txt_desc_notifications);
+        ntg_txt_desc_notifications.setTextColor(Theme.getColor(Theme.key_theme_color));
+        ntg_txt_desc_vibrate.setTextColor(Theme.getColor(Theme.key_theme_color));
+        ntg_txt_desc_sound.setTextColor(Theme.getColor(Theme.key_theme_color));
         roomId = getArguments().getLong("ID");
         initDataBinding();
 

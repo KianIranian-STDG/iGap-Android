@@ -13,7 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 public class CheckBoxCell extends FrameLayout {
 
@@ -67,7 +67,7 @@ public class CheckBoxCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider)
-            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, Theme.getInstance().getDividerPaint(getContext()));
+            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         super.onDraw(canvas);
     }
 

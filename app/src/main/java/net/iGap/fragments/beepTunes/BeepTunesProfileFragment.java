@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.messenger.theme.Theme;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
 import net.iGap.module.dialog.BaseBottomSheet;
@@ -44,12 +46,24 @@ public class BeepTunesProfileFragment extends BaseBottomSheet {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView userName = rootView.findViewById(R.id.tv_userProfile_userName);
+        userName.setTextColor(Theme.getColor(Theme.key_title_text));
         profileImage = rootView.findViewById(R.id.iv_userProfile_userImage);
         ViewGroup perchesSong = rootView.findViewById(R.id.cl_beepTunesProfile_perchesSong);
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
         ViewGroup favoriteSong = rootView.findViewById(R.id.cl_beepTunesProfile_favoriteSong);
-
+        FontIconTextView fontIconTextView2 = rootView.findViewById(R.id.fontIconTextView2);
+        fontIconTextView2.setTextColor(Theme.getColor(Theme.key_icon));
         userName.setText(AccountManager.getInstance().getCurrentUser().getName());
+        TextView purchase = rootView.findViewById(R.id.purchase);
+        purchase.setTextColor(Theme.getColor(Theme.key_title_text));
+        FontIconTextView fontIconTextView3 = rootView.findViewById(R.id.fontIconTextView3);
+        fontIconTextView3.setTextColor(Theme.getColor(Theme.key_icon));
+        TextView sync = rootView.findViewById(R.id.sync);
+        sync.setTextColor(Theme.getColor(Theme.key_title_text));
+        FontIconTextView fontIconTextView4 = rootView.findViewById(R.id.fontIconTextView4);
+        fontIconTextView4.setTextColor(Theme.getColor(Theme.key_icon));
+        TextView favorite = rootView.findViewById(R.id.favorite);
+        favorite.setTextColor(Theme.getColor(Theme.key_title_text));
 
         syncSong.setOnClickListener(v -> {
             callBack.onClick(SYNC_FRAGMENT);

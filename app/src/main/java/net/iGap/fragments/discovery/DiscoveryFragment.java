@@ -42,13 +42,13 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItem;
 import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -104,6 +104,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
+        view.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         if (isSwipeBackEnable) {
             return attachToSwipeBack(view);
         } else {
@@ -135,7 +136,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         page = getArguments().getInt("page");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+            StatusBarUtil.setColor(getActivity(), Theme.getColor(Theme.key_dark_theme_color));
         }
 
         //uncomment this lines after added small avatar and discovery setting

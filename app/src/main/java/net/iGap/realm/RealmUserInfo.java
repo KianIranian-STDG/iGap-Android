@@ -10,9 +10,11 @@
 
 package net.iGap.realm;
 
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.firebase1.NotificationCenter;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
@@ -40,6 +42,18 @@ public class RealmUserInfo extends RealmObject {
     private long walletAmount;
     private long ivandScore;
     private String nationalCode;
+    private String metrixToken;
+    private String aiToken;
+
+
+    public String getMetrixToken() {
+        return metrixToken;
+    }
+
+    public void setMetrixToken(String metrixToken) {
+        this.metrixToken = metrixToken;
+        sendPushNotificationToServer();
+    }
 
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
@@ -102,19 +116,33 @@ public class RealmUserInfo extends RealmObject {
 
     }
 
+
+    public static void sendMetrixTokenToServer() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            String metrixToken = realmUserInfo.getMetrixToken();
+            if (metrixToken == null) {
+                Metrix.setUserIdListener(matrixUserId -> {
+                    MessageDataStorage.getInstance(AccountManager.selectedAccount).setMatrixToken(matrixUserId);
+                });
+            }
+        });
+    }
+
     public static void sendPushNotificationToServer() {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 String token = realmUserInfo.getModuleToken();
-                if (token != null && token.length() > 0) {
-                    new RequestClientRegisterDevice().clientRegisterDevice(token);
+                String metrixToken = realmUserInfo.getMetrixToken();
+                if (token != null && token.length() > 0 && metrixToken != null) {
+                    new RequestClientRegisterDevice().clientRegisterDevice(token, metrixToken);
                 } else {
                     NotificationCenter.getInstance().setOnTokenReceived(moduleToken -> {
                         RealmUserInfo.setPushNotification(moduleToken);
                         Metrix.setPushToken(moduleToken);
                     });
-                    HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
+                    HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!"));
                 }
             }
         });
@@ -167,6 +195,18 @@ public class RealmUserInfo extends RealmObject {
                 RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
                 if (realmRegisteredInfo != null) {
                     realmRegisteredInfo.setUsername(username);
+                }
+            }
+        });
+    }
+
+    public static void updatePhoneNumber(final String phoneNumber) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
+                if (realmRegisteredInfo != null) {
+                    realmRegisteredInfo.setPhoneNumber(phoneNumber);
                 }
             }
         });
@@ -300,18 +340,6 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
-    // Kuknos seed key save and get process
-
-
-    /*public static void updateKuknos(RealmKuknos kuknosM) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null) {
-                realmUserInfo.setKuknosM(kuknosM);
-            }
-        });
-    }*/
-
     public boolean isWalletRegister() {
         return isWalletRegister;
     }
@@ -358,5 +386,13 @@ public class RealmUserInfo extends RealmObject {
 
     public String getNationalCode() {
         return nationalCode;
+    }
+
+    public String getAiToken() {
+        return aiToken;
+    }
+
+    public void setAiToken(String aiToken) {
+        this.aiToken = aiToken;
     }
 }

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.electricity_bill.CompanyList;
 
 import java.util.ArrayList;
@@ -32,9 +33,10 @@ public class ElectricityBillSearchCompanySpinnerAdapter extends BaseAdapter {
         if (layout == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             layout = inflater.inflate(R.layout.fragment_elec_company_spin_cell, parent, false);
+            layout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         }
         TextView companyName = layout.findViewById(R.id.elecCompanyNameCell);
-
+        companyName.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         if (position == 0)
             companyName.setText(context.getResources().getString(R.string.elecBill_search_billSpinner));
         else

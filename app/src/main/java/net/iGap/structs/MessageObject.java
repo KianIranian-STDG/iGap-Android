@@ -77,6 +77,7 @@ public class MessageObject {
     public String username;
     private HashMap<Integer, String> stringMap = new HashMap<>();
     public int storyStatus;
+    private String textConvertToVoice;
 
     private MessageObject() {
 
@@ -216,6 +217,7 @@ public class MessageObject {
         messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
         messageObject.createTime = roomMessage.getCreateTime();
         messageObject.documentId = roomMessage.getDocumentId();
+        messageObject.setTextConvertToVoice(roomMessage.getTextToVoicePath());
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
@@ -420,5 +422,13 @@ public class MessageObject {
             return forwardedMessage.additional;
         }
         return null;
+    }
+
+    public String getTextConvertToVoice() {
+        return textConvertToVoice;
+    }
+
+    public void setTextConvertToVoice(String textConvertToVoice) {
+        this.textConvertToVoice = textConvertToVoice;
     }
 }

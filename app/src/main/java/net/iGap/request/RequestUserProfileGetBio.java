@@ -10,14 +10,15 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
 import net.iGap.proto.ProtoUserProfileGetBio;
 
 public class RequestUserProfileGetBio {
 
-    public void getBio() {
+    public void getBio(OnUserProfileSetBioResponse onUserProfileSetBioResponse) {
         ProtoUserProfileGetBio.UserProfileGetBio.Builder builder = ProtoUserProfileGetBio.UserProfileGetBio.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(148, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(148, builder, onUserProfileSetBioResponse);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

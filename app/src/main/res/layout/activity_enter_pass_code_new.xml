@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data android:layout_height="match_parent">
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.ActivityEnterPassCodeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainRootEnterPassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/dp16">
+
+        <TextView
+            android:id="@+id/icon"
+            style="@style/baseFontIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/ic_pass_code"
+            android:textColor="?colorAccent"
+            android:textSize="@dimen/dp44"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".35" />
+
+        <TextView
+            android:id="@+id/unlockTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:text="@string/Unlock_with_your_passcode"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/icon" />
+
+        <net.iGap.module.MEditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:afterTextChanged="@{(s)->viewModel.afterTextChanged(s.toString())}"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:maxLength="@{viewModel.passwordMaxLength}"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/white_cursor_color"
+            android:textSize="@dimen/dp24"
+            app:layout_constraintEnd_toEndOf="@+id/unlockTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/unlockTitle" />
+
+        <View
+            android:id="@+id/view15"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp4"
+            android:background="?colorAccent"
+            app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/dp8"
+            app:layout_constraintBottom_toTopOf="@+id/forgotPasswordButton"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view15">
+
+            <TextView
+                android:id="@+id/num1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num4"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <TextView
+                android:id="@+id/num2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num5"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toRightOf="@+id/num1"
+                app:layout_constraintRight_toLeftOf="@+id/num3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/num3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num6"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/num4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="4"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num7"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num1" />
+
+            <TextView
+                android:id="@+id/num5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num8"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toRightOf="@+id/num4"
+                app:layout_constraintRight_toLeftOf="@+id/num6"
+                app:layout_constraintTop_toBottomOf="@+id/num2" />
+
+            <TextView
+                android:id="@+id/num6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="6"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num9"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num3" />
+
+            <TextView
+                android:id="@+id/num7"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="7"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/view16"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num4" />
+
+            <TextView
+                android:id="@+id/num8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="8"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/num0"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toRightOf="@+id/num7"
+                app:layout_constraintRight_toLeftOf="@+id/num9"
+                app:layout_constraintTop_toBottomOf="@+id/num5" />
+
+            <TextView
+                android:id="@+id/num9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="9"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@+id/remove_pass"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num6" />
+
+            <TextView
+                android:id="@+id/num0"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toRightOf="@+id/view16"
+                app:layout_constraintRight_toLeftOf="@+id/remove_pass"
+                app:layout_constraintTop_toBottomOf="@+id/num8" />
+
+            <TextView
+                android:id="@+id/remove_pass"
+                style="@style/baseFontIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:text="@string/ic_backspace"
+                android:textColor="?colorAccent"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num9" />
+
+            <View
+                android:id="@+id/view16"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/num7" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="ABC"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num2"
+                app:layout_constraintLeft_toLeftOf="@+id/num2"
+                app:layout_constraintRight_toRightOf="@+id/num2" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="DEF"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num3"
+                app:layout_constraintLeft_toLeftOf="@+id/num3"
+                app:layout_constraintRight_toRightOf="@+id/num3" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="GHI"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num4"
+                app:layout_constraintLeft_toLeftOf="@+id/num4"
+                app:layout_constraintRight_toRightOf="@+id/num4" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="JKL"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num5"
+                app:layout_constraintLeft_toLeftOf="@+id/num5"
+                app:layout_constraintRight_toRightOf="@+id/num5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="MNO"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num6"
+                app:layout_constraintLeft_toLeftOf="@+id/num6"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="PQRS"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num7"
+                app:layout_constraintLeft_toLeftOf="@+id/num7"
+                app:layout_constraintRight_toRightOf="@+id/num7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="TUV"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num8"
+                app:layout_constraintLeft_toLeftOf="@+id/num8"
+                app:layout_constraintRight_toRightOf="@+id/num8" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="WXYZ"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num9"
+                app:layout_constraintLeft_toLeftOf="@+id/num9"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="+"
+                android:textSize="@dimen/dp12"
+                app:layout_constraintBottom_toBottomOf="@+id/num0"
+                app:layout_constraintLeft_toLeftOf="@+id/num0"
+                app:layout_constraintRight_toRightOf="@+id/num0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/forgotPasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.forgotPassword()}"
+            android:padding="@dimen/dp8"
+            android:text="@string/forgot_Unlock_with_your_passcode"
+            android:textColor="?colorAccent"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

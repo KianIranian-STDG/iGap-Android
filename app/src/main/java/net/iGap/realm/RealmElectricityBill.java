@@ -1,6 +1,8 @@
 package net.iGap.realm;
 
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnUserProfileSetEmailResponse;
+import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestUserProfileGetEmail;
 
 public class RealmElectricityBill {
@@ -27,7 +29,22 @@ public class RealmElectricityBill {
         });
 
         if (userInfo.getEmail() == null)
-            new RequestUserProfileGetEmail().userProfileGetEmail();
+            new RequestUserProfileGetEmail().userProfileGetEmail(new OnUserProfileSetEmailResponse() {
+                @Override
+                public void onUserProfileEmailResponse(String email, ProtoResponse.Response response) {
+
+                }
+
+                @Override
+                public void Error(int majorCode, int minorCode) {
+
+                }
+
+                @Override
+                public void onTimeOut() {
+
+                }
+            });
     }
 
 }

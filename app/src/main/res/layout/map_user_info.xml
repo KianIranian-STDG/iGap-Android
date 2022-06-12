@@ -18,22 +18,21 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_info_back_map"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/icon_close"
-            android:textColor="@color/iGapColor"
             android:visibility="gone" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_close_map"
-            style="@style/myIconTextViewStyle"
+            style="@style/baseFontIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/icon_close"
-            android:textColor="@color/gray_5c"
+            android:textColor="@color/key_gray"
             android:visibility="visible" />
     </LinearLayout>
 
@@ -59,29 +58,26 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_chat_map"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_call_message"
-                    android:textColor="@color/iGapColor" />
+                    android:text="@string/icon_call_message" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_call_map"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
-                    android:text="@string/icon_voice_call"
-                    android:textColor="@color/iGapColor" />
+                    android:text="@string/icon_voice_call"/>
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_video_call_map"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
-                    android:text="@string/icon_video_call"
-                    android:textColor="@color/iGapColor" />
+                    android:text="@string/icon_video_call"/>
 
                 <View
                     android:layout_width="0dip"
@@ -95,7 +91,6 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Display Name"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18" />
             </LinearLayout>
 
@@ -109,12 +104,11 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_open_comment_map"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:rotation="90"
-                    android:text="@string/icon_chevron_Down"
-                    android:textColor="@color/iGapColor" />
+                    android:text="@string/icon_chevron_Down"/>
 
                 <TextView
                     android:id="@+id/txt_info_comment"
@@ -125,7 +119,6 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16" />
             </LinearLayout>
         </LinearLayout>

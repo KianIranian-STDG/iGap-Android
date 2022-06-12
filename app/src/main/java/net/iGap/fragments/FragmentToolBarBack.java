@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.MyAppBarLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +56,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView = view.findViewById(R.id.title);
         titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext() , R.font.main_font));
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
+        appBarLayout.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background), context, Theme.getColor(Theme.key_theme_color)));
         menu_item1 = view.findViewById(R.id.menu_item1);
         menu_item1.setVisibility(View.VISIBLE);
 

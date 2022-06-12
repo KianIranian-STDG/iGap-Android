@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.electricity_bill.ElectricityBranchData;
 
 import java.util.ArrayList;
@@ -48,16 +49,24 @@ public class ElectricityBillSearchListAdapter extends RecyclerView.Adapter<Elect
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView billID, customerName, customerAddress;
+        private TextView billID, customerName, customerAddress,billIDTitle,billCustomerNameTitle,billCustomerAddressTitle;
         private CardView container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             customerName = itemView.findViewById(R.id.billCustomerName);
+            billCustomerNameTitle = itemView.findViewById(R.id.billCustomerNameTitle);
+            billCustomerNameTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+            billIDTitle = itemView.findViewById(R.id.billIDTitle);
+            billIDTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             billID = itemView.findViewById(R.id.billID);
+            billID.setTextColor(Theme.getColor(Theme.key_title_text));
             customerAddress = itemView.findViewById(R.id.billCustomerAddress);
+            billCustomerAddressTitle = itemView.findViewById(R.id.billCustomerAddressTitle);
+            billCustomerAddressTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             container = itemView.findViewById(R.id.cardHolder);
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
 
         }
 

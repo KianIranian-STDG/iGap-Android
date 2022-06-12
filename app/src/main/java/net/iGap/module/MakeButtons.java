@@ -1,6 +1,8 @@
 package net.iGap.module;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
@@ -19,6 +22,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.observers.eventbus.EventManager;
@@ -70,7 +74,8 @@ public class MakeButtons {
         void onClick(View view, ButtonEntity buttonEntity);
     }
 
-    public static LinearLayout addButtons(Theme theme, ButtonEntity entity, int culmn, float wightSum, LinearLayout mainLayout, OnClickListener onClickListener) {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static LinearLayout addButtons(ButtonEntity entity, int culmn, float wightSum, LinearLayout mainLayout, OnClickListener onClickListener) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -175,8 +180,8 @@ public class MakeButtons {
         }
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        cardView.setBackgroundResource(theme.getCardToCardButtonBackground(mainLayout.getContext()));
-        textView.setTextColor(theme.getReceivedMessageColor(textView.getContext()));
+        cardView.setBackground(Theme.tintDrawable(textView.getContext().getDrawable(R.drawable.background_button_card_to_card), textView.getContext(), Theme.getColor(Theme.key_button_background)));
+        textView.setTextColor(Theme.getColor(Theme.key_button_text));
 
         LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 

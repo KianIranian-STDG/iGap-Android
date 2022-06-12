@@ -4,7 +4,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/news_red"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -27,7 +26,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="@dimen/dp16"
-        android:textColor="@color/white"
+        android:textColor="@android:color/white"
         android:ellipsize="end"
         android:lines="2"
         android:maxLines="2"
@@ -56,7 +55,6 @@
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp40"
         android:visibility="gone"
-        android:textColor="?attr/iGapTitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

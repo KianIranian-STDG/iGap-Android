@@ -1,5 +1,6 @@
 package net.iGap.fragments.news;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,11 +10,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.viewmodel.news.NewsAddCommentVM;
 
@@ -50,6 +53,11 @@ public class NewsAddCommentBottomSheetFrag extends BaseBottomSheet {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         addCommentVM.setNewsID(newsID);
+        binding.author.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.email.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        binding.comment.setDefaultHintTextColor(ColorStateList.valueOf(Theme.getColor(Theme.key_theme_color)));
+        View lineViewTop = view.findViewById(R.id.lineViewTop);
+        lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
         onComplete();
         onTextChange();
     }

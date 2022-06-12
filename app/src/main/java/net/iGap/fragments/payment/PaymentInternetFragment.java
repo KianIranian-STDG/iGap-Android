@@ -1,5 +1,8 @@
 package net.iGap.fragments.payment;
 
+import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +13,10 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +35,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -51,8 +58,8 @@ public class PaymentInternetFragment extends BaseFragment {
     private RecyclerView otherPackagesRecyclerView;
     private AppCompatTextView suggestedTextView;
     private AppCompatTextView othersTextView;
-    private Spinner spinnerTime;
-    private Spinner spinnerTraffic;
+    private AppCompatSpinner spinnerTime;
+    private AppCompatSpinner spinnerTraffic;
     private int timeFilterPosition = -1;
     private int trafficFilterPosition = -1;
     private LinearLayout toolbar;
@@ -104,6 +111,8 @@ public class PaymentInternetFragment extends BaseFragment {
         viewModel.getData();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,14 +120,23 @@ public class PaymentInternetFragment extends BaseFragment {
         suggestedRecyclerView = view.findViewById(R.id.rv_proposalPackage);
         otherPackagesRecyclerView = view.findViewById(R.id.rv_otherPackage);
         suggestedTextView = view.findViewById(R.id.suggested_packages_textView);
+        suggestedTextView.setHintTextColor(Theme.getColor(Theme.key_theme_color));
         othersTextView = view.findViewById(R.id.other_packages_textView);
+        othersTextView.setTextColor(Theme.getColor(Theme.key_theme_color));
+        View spinner_time_view = view.findViewById(R.id.spinner_time_view);
+        spinner_time_view.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.background_cancel_money_action),getContext(),Theme.getColor(Theme.key_line)));
+        View spinner_traffic_view = view.findViewById(R.id.spinner_traffic_view);
+        spinner_traffic_view.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.background_cancel_money_action),getContext(),Theme.getColor(Theme.key_line)));
         spinnerTime = view.findViewById(R.id.spinner_time);
+        spinnerTime.setSupportBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_line)));
         spinnerTraffic = view.findViewById(R.id.spinner_traffic);
+        spinnerTraffic.setSupportBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_line)));
         toolbar = view.findViewById(R.id.toolbar);
         payBtn = view.findViewById(R.id.btn_pay);
+        payBtn.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)));
+        payBtn.setTextColor(Theme.getColor(Theme.key_white));
         loadingView = view.findViewById(R.id.loadingView);
         scrollView = view.findViewById(R.id.scrollView);
-
         return view;
     }
 
@@ -126,7 +144,8 @@ public class PaymentInternetFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         setupRecyclerViews();
 
         toolbar.addView(HelperToolbar.create()
@@ -339,8 +358,12 @@ public class PaymentInternetFragment extends BaseFragment {
 
     private void savePayment() {
         if (!isSelectedFromHistory) {
-            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.save_purchase))
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                    .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                    .title(getResources().getString(R.string.save_purchase))
                     .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                    .positiveColor(Theme.getColor(Theme.key_button_background))
                     .positiveText(R.string.ok)
                     .onNegative((dialog1, which) -> dialog1.dismiss()).show();
 

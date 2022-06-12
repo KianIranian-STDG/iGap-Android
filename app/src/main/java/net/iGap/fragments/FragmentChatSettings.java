@@ -27,15 +27,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.module.DeprecatedTheme;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,10 +81,6 @@ public class FragmentChatSettings extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
-        }
-
         chatSettingsToolbar = new Toolbar(getContext());
         chatSettingsToolbar.setBackIcon(new BackDrawable(false));
         chatSettingsToolbar.setTitle(getString(R.string.chat_setting));
@@ -95,18 +93,14 @@ public class FragmentChatSettings extends BaseFragment {
         });
         binding.fcsLayoutToolbar.addView(chatSettingsToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
+        binding.convertVoice.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.convertText.setTextColor(Theme.getColor(Theme.key_title_text));
         binding.themeColorList.setLayoutManager(new LinearLayoutManager(binding.themeColorList.getContext(), RecyclerView.HORIZONTAL, G.isAppRtl));
         binding.themeColorList.hasFixedSize();
         binding.themeColorList.setNestedScrollingEnabled(false);
         binding.themeColorList.setAdapter(adapter);
 
         viewModel.getChatBackground();
-        setChatReceivedChatBubble(new Theme().getReceivedChatBubbleColor(getContext()));
-        setChatSendBubble(new Theme().getSendChatBubbleColor(getContext()));
-
-        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
-        }
 
         viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
@@ -217,7 +211,7 @@ public class FragmentChatSettings extends BaseFragment {
 
     private void setTheme() {
         if (getContext() != null) {
-            getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
+            getContext().getTheme().applyStyle(new DeprecatedTheme().getTheme(getContext()), true);
         }
     }
 

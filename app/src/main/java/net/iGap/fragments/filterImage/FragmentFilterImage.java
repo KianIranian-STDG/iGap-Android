@@ -14,6 +14,7 @@ package net.iGap.fragments.filterImage;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.story.PhotoViewer;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
@@ -107,7 +109,7 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        view.getRootView().setBackgroundColor(Theme.getColor(Theme.key_dark_gray));
         if (getActivity() != null)
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -123,6 +125,8 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
 
         imageFilter = view.findViewById(R.id.imageFilter);
         TabLayout tabLayout = view.findViewById(R.id.tabs);
+        tabLayout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        tabLayout.setTabTextColors(ColorStateList.valueOf(Theme.getColor(Theme.key_title_text)));
         ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         loadImage();

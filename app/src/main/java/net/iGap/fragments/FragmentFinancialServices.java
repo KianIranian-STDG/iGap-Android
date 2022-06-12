@@ -8,10 +8,12 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentFinancialServicesBinding;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -43,6 +45,8 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.walletPointer.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.wallet_pointer), getContext(), Theme.getColor(Theme.key_light_theme_color)));
 
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
@@ -77,7 +81,7 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
             }
         });
 
-        viewModel.walletPointerPosition.observe(this, integer -> {
+        viewModel.walletPointerPosition.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
@@ -90,11 +94,11 @@ public class FragmentFinancialServices extends FragmentToolBarBack {
 
     private void showMenu() {
         if (getContext() != null) {
-            List<Integer> items = new ArrayList<>();
-            items.add(R.string.financial_report);
-            items.add(R.string.settings);
-            items.add(R.string.fag);
-            new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.financial_report));
+            items.add(getString(R.string.settings));
+            items.add(getString(R.string.fag));
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
                 switch (position) {
                     case 0:
 

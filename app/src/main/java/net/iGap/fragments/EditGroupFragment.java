@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -34,6 +35,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SUID;
@@ -93,9 +95,28 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.emojiButton.setTextColor(Theme.getColor(Theme.key_icon));
+        binding.moderatorsCount.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.groupNameEditText.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.groupNameEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        binding.groupDescriptionEditText.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.groupDescriptionEditText.setHintTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.chatHistoryTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.chatHistoryStatus.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.permission.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.permissionItems.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.administrators.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.administratorsCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.moderator.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.members.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.membersCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.line.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line2.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line3.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.line4.setBackgroundColor(Theme.getColor(Theme.key_line));
         viewModel.onCreateFragment(this);
-
+        binding.leaveGroup.setTextColor(Theme.getColor(Theme.key_red));
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -147,7 +168,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
-        viewModel.closePageImediatly.observe(getViewLifecycleOwner(), isClose -> {
+        viewModel.closePageImmediately.observe(getViewLifecycleOwner(), isClose -> {
             if (isClose == null || !isClose) return;
             popBackStackFragment();
         });
@@ -230,13 +251,19 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void startDialogSelectPicture() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture)
+                .negativeText(R.string.cansel)
+                .items(R.array.profile)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 if (which == 0) {
                     try {
-                        HelperPermission.getStoragePermission(getActivity(), new OnGetPermission() {
+                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
@@ -320,7 +347,13 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void showDialog() {
-        new MaterialDialog.Builder(getActivity()).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.show_message_count)
+                .items(R.array.numberCountGroup)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 switch (which) {
@@ -335,7 +368,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                         break;
                     case 3:
                         dialog.dismiss();
-                        new MaterialDialog.Builder(getActivity()).title(R.string.customs).positiveText(getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.customs).positiveText(getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(Theme.getColor(Theme.key_toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 if (dialog.getInputEditText() != null && dialog.getInputEditText().getEditableText() != null) {

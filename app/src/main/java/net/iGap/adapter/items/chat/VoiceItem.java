@@ -20,6 +20,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -29,6 +30,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
@@ -265,8 +267,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.txt_Timer.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
-        holder.author.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.txt_Timer.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.author.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         if (messageObject.status == MessageObject.STATUS_LISTENED) {
             holder.listenView.setVisibility(View.GONE);
@@ -279,8 +281,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        holder.txt_Timer.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
-        holder.author.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.txt_Timer.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        holder.author.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         holder.listenView.setVisibility(View.GONE);
     }
 
@@ -330,6 +332,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
             btnPlayMusic.setText(R.string.icon_play);
+            btnPlayMusic.setTextColor(Theme.getColor(Theme.key_theme_color));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(view.getContext());
@@ -338,7 +341,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             setTypeFace(txt_Timer);
 
             listenView = new View(view.getContext());
-            listenView.setBackground(getResources().getDrawable(R.drawable.shape_voice_item_listen));
+            listenView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_voice_item_listen), getContext(), Theme.getColor(Theme.key_light_theme_color)));
             listenView.setId(R.id.view_listen);
 
             rootView = new ConstraintLayout(getContext());
@@ -353,7 +356,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             byte[] soundBytes = hexStringToByteArray(value + value);
 
-            waveView.setWaveColor(getColor(R.color.voice_item_dark));
+            waveView.setWaveColor(Theme.getColor(Theme.key_theme_color));
 
             waveView.setScaledData(soundBytes);
             waveView.setChunkHeight(dpToPx(16));

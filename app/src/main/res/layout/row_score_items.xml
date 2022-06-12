@@ -9,7 +9,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/row_score_txt_title"
-        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
@@ -26,18 +25,16 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
         android:padding="8dp"
-        android:textColor="@color/buttonColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/addIcon"
         app:layout_constraintTop_toTopOf="@id/row_score_txt_title" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/addIcon"
-        style="@style/myIconTextViewStyle"
+        style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/icon_add_whit_circle"
-        android:textColor="@color/green"
         app:layout_constraintBottom_toBottomOf="@id/row_score_txt_score_count"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/row_score_txt_score_count" />

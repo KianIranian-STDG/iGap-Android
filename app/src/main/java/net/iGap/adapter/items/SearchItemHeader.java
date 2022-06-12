@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +63,8 @@ public class SearchItemHeader extends AbstractItem<SearchItemHeader, SearchItemH
             super(view);
             txtHeader = view.findViewById(R.id.sfslh_txt_header_text);
             root = view.findViewById(R.id.sfslh_header_layout);
+            root.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+            txtHeader.setTextColor(Theme.getColor(Theme.key_default_text));
         }
     }
 }

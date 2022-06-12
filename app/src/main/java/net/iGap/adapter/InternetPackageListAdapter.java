@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.InternetPackage;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class InternetPackageListAdapter extends BaseAdapter {
 
             holder = new viewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item_internet_package, parent, false);
-
+            convertView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             holder.txtTitle = convertView.findViewById(R.id.title);
             holder.price = convertView.findViewById(R.id.price);
             convertView.setTag(holder);

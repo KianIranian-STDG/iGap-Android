@@ -33,6 +33,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.AppUtils;
@@ -210,10 +211,10 @@ public class FragmentSetting extends BaseFragment {
 
     public void showMenu() {
         if (getContext() != null) {
-            List<Integer> items = new ArrayList<>();
-            items.add(R.string.delete_account);
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.delete_account));
 
-            new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> viewModel.onDeleteAccountClick()).show();
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> viewModel.onDeleteAccountClick()).show();
         }
     }
 
@@ -236,7 +237,11 @@ public class FragmentSetting extends BaseFragment {
             return;
         }
 
-        MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
+        MaterialDialog inDialog = new MaterialDialog.Builder(getActivity())
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .customView(R.layout.dialog_content_custom, true)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background)).build();
         View v = inDialog.getCustomView();
 
         inDialog.show();

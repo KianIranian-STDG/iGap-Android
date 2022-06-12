@@ -21,8 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:cardCornerRadius="@dimen/dp16"
-            app:cardBackgroundColor="?attr/iGapCardViewColor">
+            app:cardCornerRadius="@dimen/dp16">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -37,7 +36,6 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_searchCell_billID"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="start"
                     android:ellipsize="end"
@@ -50,7 +48,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:justificationMode="inter_word"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="end"
                     android:ellipsize="end"
@@ -73,7 +70,6 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_searchCell_CustomerName"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="start"
                     android:ellipsize="end"
@@ -86,7 +82,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:justificationMode="inter_word"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="end"
                     android:ellipsize="end"
@@ -110,7 +105,6 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_searchCell_CustomerAddress"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="start"
                     android:ellipsize="end"
@@ -124,7 +118,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:justificationMode="inter_word"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:gravity="end"
                     android:ellipsize="end"

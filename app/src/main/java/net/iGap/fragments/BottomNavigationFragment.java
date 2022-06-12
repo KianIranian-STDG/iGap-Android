@@ -18,6 +18,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.libs.bottomNavigation.TabItem;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.realm.RealmStory;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
@@ -31,7 +33,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
-import net.iGap.module.Theme;
+import net.iGap.messenger.ui.fragments.ProfileFragment;
 import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.account.AccountsDialog;
@@ -76,9 +78,10 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setTheme();
         G.onUnreadChange = this;
-        return inflater.inflate(R.layout.fragment_bottom_navigation, container, false);
+        View view = inflater.inflate(R.layout.fragment_bottom_navigation, container, false);
+        view.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        return view;
     }
 
     @Override
@@ -223,9 +226,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
             case PROFILE_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
+                fragment = fragmentManager.findFragmentByTag(ProfileFragment.class.getName());
                 if (fragment == null) {
-                    fragment = new FragmentUserProfile();
+                    fragment = new ProfileFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
@@ -481,12 +484,6 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
         if (fragment instanceof RegisteredContactsFragment) {
             ((RegisteredContactsFragment) fragment).loadContacts();
-        }
-    }
-
-    private void setTheme() {
-        if (getContext() != null) {
-            getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
         }
     }
 }

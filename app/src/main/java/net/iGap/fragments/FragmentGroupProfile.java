@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,13 +27,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.Config;
@@ -47,11 +53,11 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -148,11 +154,45 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        CollapsingToolbarLayout toolbar_layout_collapse = view.findViewById(R.id.toolbar_layout_collapse);
+        toolbar_layout_collapse.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
+        NestedScrollView mainContainer= view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        binding.description.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.divider.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider0.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider1.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider2.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.divider3.setBackgroundColor(Theme.getColor(Theme.key_line));
+        binding.notificationTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.notificationAndSound.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.sharedContentTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.inviteLink.setTextColor(Theme.getColor(Theme.key_link_text));
+        binding.inviteLinkTitle.setTextColor(Theme.getColor(Theme.key_link_text));
+        binding.photo.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.photoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.video.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.videoCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFiles.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.audioFilesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessage.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.voiceMessageCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gif.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.gifCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.files.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.filesCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.links.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.linksCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.addMember.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.showMemberList.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.editGroupPermission.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        AppCompatTextView photoCount = view.findViewById(R.id.photoCount);
+        photoCount.setTextColor(Theme.getColor(Theme.key_title_text));
         isNeedResume = true;
-
+        binding.leaveGroup.setTextColor(Theme.getColor(Theme.key_red));
         // because actionbar not in this view do that and not correct in viewModel
         imvGroupAvatar = binding.toolbarAvatar;
+        imvGroupAvatar.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
         imvGroupAvatar.setOnClickListener(v -> viewModel.onClickRippleGroupAvatar());
 
         if (currentRoomAccess != null) {
@@ -196,15 +236,22 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.showMenu.observe(getViewLifecycleOwner(), menuList -> {
             if (getActivity() != null && menuList != null) {
-                new TopSheetDialog(getActivity()).setListDataWithResourceId(menuList, -1, position -> {
-                    if (menuList.get(position) == R.string.clear_history) {
-                        new MaterialDialog.Builder(getActivity()).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new TopSheetDialog(getActivity()).setListData(menuList, -1, position -> {
+                    if (menuList.get(position).equals(getString(R.string.clear_history))) {
+                        new MaterialDialog.Builder(getActivity())
+                                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                .title(R.string.clear_history)
+                                .content(R.string.clear_history_content)
+                                .positiveText(R.string.yes)
+                                .titleColor(Theme.getColor(Theme.key_title_text))
+                                .contentColor(Theme.getColor(Theme.key_default_text))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 getMessageController().clearHistoryMessage(viewModel.roomId);
                             }
                         }).negativeText(R.string.no).show();
-                    } else if (menuList.get(position) == R.string.group_title_convert_to_public || menuList.get(position) == R.string.group_title_convert_to_private) {
+                    } else if (menuList.get(position).equals(getString(R.string.group_title_convert_to_public)) || menuList.get(position).equals(getString(R.string.group_title_convert_to_private))) {
                         viewModel.convertMenuClick();
                     }
                 }).show();
@@ -220,7 +267,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.showDialogConvertToPublic.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity()).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(getActivity())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(getString(R.string.group_title_convert_to_public))
+                        .content(getString(R.string.group_text_convert_to_public))
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
+                        .positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
@@ -232,7 +285,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.showDialogConvertToPrivate.observe(getViewLifecycleOwner(), isShow -> {
             if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.group_title_convert_to_private).content(R.string.group_text_convert_to_private).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(getActivity())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(R.string.group_title_convert_to_private).content(R.string.group_text_convert_to_private)
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
+                        .positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         viewModel.sendRequestRemoveGroupUsername();
@@ -300,10 +358,16 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.showDialogEditLink.observe(getViewLifecycleOwner(), link -> {
             if (getActivity() != null && link != null) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(R.string.group_link)
                         .positiveText(R.string.array_Copy)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .customView(createDialogLayout(link), true)
-                        .widgetColor(new Theme().getPrimaryColor(getContext()))
+                        .widgetColor(Theme.getColor(Theme.key_default_text))
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
                         .negativeText(R.string.edit)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -326,10 +390,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.showDialogCopyLink.observe(getViewLifecycleOwner(), link -> {
             if (getActivity() != null && link != null) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).backgroundColor(Theme.getColor(Theme.key_popup_background)).title(R.string.group_link)
                         .positiveText(R.string.array_Copy)
                         .customView(createDialogLayout(link), true)
-                        .widgetColor(new Theme().getPrimaryColor(getContext()))
+                        .widgetColor(Theme.getColor(Theme.key_theme_color))
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
@@ -389,15 +457,15 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
         edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtLink.setText(link);
-        edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtLink.setTextColor(Theme.getColor(Theme.key_black));
+        edtLink.setHintTextColor(Theme.getColor(Theme.key_light_gray));
         edtLink.setPadding(0, 16, 0, 8);
         edtLink.setEnabled(false);
         edtLink.setSingleLine(true);
         inputGroupLink.addView(edtLink);
         inputGroupLink.addView(viewRevoke);
 
-        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewRevoke.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
         }
@@ -436,7 +504,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     }
 
     private void initialToolbar() {
-
+        binding.toolbarAppbar.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background), context, Theme.getColor(Theme.key_theme_color)));
         binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
             int maxScroll = appBarLayout.getTotalScrollRange();
             float percentage = (float) Math.abs(offset) / (float) maxScroll;
@@ -499,7 +567,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
         title = R.string.left_group;
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(title)
+                .content(text)
+                .titleColor(Theme.getColor(Theme.key_title_text))
+                .contentColor(Theme.getColor(Theme.key_default_text))
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
                 viewModel.leaveGroup();
@@ -585,14 +660,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             edtUserName.setText(Config.IGAP_LINK_PREFIX + viewModel.linkUsername);
         }
 
-        edtUserName.setTextColor(getContext().getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(getContext().getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setTextColor(Theme.getColor(Theme.key_black));
+        edtUserName.setHintTextColor(Theme.getColor(Theme.key_light_gray));
         edtUserName.setPadding(0, 8, 0, 8);
         edtUserName.setSingleLine(true);
         inputUserName.addView(edtUserName);
         inputUserName.addView(viewUserName, viewParams);
 
-        viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
+        viewUserName.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             edtUserName.setBackground(getContext().getResources().getDrawable(android.R.color.transparent));
         }
@@ -608,7 +683,15 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         layoutUserName.addView(progressBar);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(getContext()).title(R.string.st_username).positiveText(R.string.save).customView(layoutUserName, true).widgetColor(new Theme().getAccentColor(getContext())).negativeText(R.string.B_cancel).build();
+                new MaterialDialog.Builder(getContext()).backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .title(R.string.st_username).positiveText(R.string.save)
+                        .customView(layoutUserName, true)
+                        .widgetColor(Theme.getColor(Theme.key_theme_color))
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .titleColor(Theme.getColor(Theme.key_title_text))
+                        .contentColor(Theme.getColor(Theme.key_default_text))
+                        .negativeText(R.string.B_cancel).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -755,9 +838,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         edtUserName.setOnFocusChangeListener((view, b) -> {
             if (b) {
-                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
+                viewUserName.setBackgroundColor(Theme.getColor(Theme.key_theme_color));
             } else {
-                viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
+                viewUserName.setBackgroundColor(Theme.getColor(Theme.key_light_gray));
             }
         });
 
@@ -769,7 +852,15 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(title).customView(R.layout.dialog_remind_time, wrapInScrollView)
+                .positiveText(R.string.B_ok).autoDismiss(false)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .titleColor(Theme.getColor(Theme.key_title_text))
+                .contentColor(Theme.getColor(Theme.key_default_text))
+                .canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
@@ -777,8 +868,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         }).show();
 
         View v = dialog.getCustomView();
-
+        v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         final TextView remindTime = v.findViewById(R.id.remindTime);
+        remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textReason = v.findViewById(R.id.textReason);
+        textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+        final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+        textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

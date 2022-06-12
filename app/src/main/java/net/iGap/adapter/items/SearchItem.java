@@ -12,6 +12,7 @@ package net.iGap.adapter.items;
 
 import android.annotation.SuppressLint;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import net.iGap.fragments.SearchFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.proto.ProtoGlobal;
@@ -31,6 +33,7 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 import static net.iGap.fragments.SearchFragment.SearchType.contact;
+import static net.iGap.fragments.SearchFragment.SearchType.header;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     public SearchFragment.StructSearch item;
@@ -62,15 +65,17 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         setAvatar(holder);
-        if (item.isVerified){
+        if (item.isVerified) {
             holder.txtIconVerified.setText(R.string.icon_blue_badge);
-            holder.txtIconVerified.setTextColor(holder.itemView.getContext().getColor(R.color.verify_color));
-        }else{
+            holder.txtIconVerified.setTextColor(holder.itemView.getContext().getColor(R.color.verify));
+            holder.txtIconVerified.setVisibility(View.VISIBLE);
+
+        } else {
             holder.txtIconVerified.setVisibility(View.GONE);
         }
         holder.name.setText(item.name);
         if (item.comment.isEmpty()) {
-            holder.lastSeen.setText(item.userName);
+            holder.lastSeen.setText("@"+item.userName);
         } else {
             holder.lastSeen.setText(item.comment);
         }
@@ -95,6 +100,23 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.icon_channel));
+        }
+
+        switch (item.type) {
+            case contact:
+            case message:
+                holder.participantsCount.setVisibility(View.GONE);
+                break;
+            case room:
+            case GROUP:
+            case CHANNEL:
+                if (item.participantsCount>0){
+                    holder.participantsCount.setText(
+                            HelperCalander.isLanguagePersian||HelperCalander.isLanguageArabic? HelperCalander.convertToUnicodeFarsiNumber(G.context.getString(R.string.member) + " " + item.participantsCount):G.context.getString(R.string.member) + " " + item.participantsCount);
+                    holder.participantsCount.setVisibility(View.VISIBLE);
+                }
+
+                break;
         }
     }
 
@@ -126,16 +148,30 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected TextView txtIconVerified;
         protected TextView lastSeen;
         protected TextView txtTime;
+        protected TextView participantsCount;
+        protected View line;
+        protected LinearLayout mainContainer;
 
         public ViewHolder(View view) {
             super(view);
 
+            mainContainer = view.findViewById(R.id.mainContainer);
+            mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             avatar = view.findViewById(R.id.sfsl_imv_contact_avatar);
             name = view.findViewById(R.id.sfsl_txt_contact_name);
+            name.setTextColor(Theme.getColor(Theme.key_default_text));
             lastSeen = view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            lastSeen.setTextColor(Theme.getColor(Theme.key_default_text));
             txtIcon = view.findViewById(R.id.sfsl_txt_icon);
+            txtIcon.setTextColor(Theme.getColor(Theme.key_icon));
             txtIconVerified = view.findViewById(R.id.sfsl_txt_verified_icon);
             txtTime = view.findViewById(R.id.sfsl_txt_time);
+            txtTime.setTextColor(Theme.getColor(Theme.key_default_text));
+            participantsCount = view.findViewById(R.id.sfsl_txt_ParticipantsCount);
+            line = view.findViewById(R.id.line);
+            participantsCount.setTextColor(Theme.getColor(Theme.key_dark_gray));
+//            txtIcon.setTextColor(Theme.getColor(Theme.key_default_text));
+            line.setBackgroundColor(Theme.getColor(Theme.key_line));
         }
     }
 }

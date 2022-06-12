@@ -43,6 +43,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -50,7 +51,6 @@ import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.PreCachingLayoutManager;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
@@ -181,6 +181,18 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        LinearLayout rootShowMember = view.findViewById(R.id.rootShowMember);
+        rootShowMember.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        LinearLayout fcm_layout_toolbar = view.findViewById(R.id.fcm_layout_toolbar);
+        fcm_layout_toolbar.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        LinearLayout add_container = view.findViewById(R.id.add_container);
+        add_container.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        LinearLayout show_member = view.findViewById(R.id.show_member);
+        show_member.setBackgroundColor(Theme.getColor(Theme.key_window_background));
 
         if (getArguments() != null) {
 
@@ -413,7 +425,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         layoutToolbar.addView(mHelperToolbar.getView());
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
-
+        mBtnAdd.setTextColor(Theme.getColor(Theme.key_title_text));
         realmRoom = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("id", mRoomID).findFirst();
         });
@@ -505,6 +517,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         });
 
         mRecyclerView = view.findViewById(R.id.fcm_recycler_view_show_member);
+        mRecyclerView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -513,6 +526,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         mRecyclerView.setLayoutManager(preCachingLayoutManager);
 
         progressBar = view.findViewById(R.id.fcg_prgWaiting);
+        progressBar.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         AppUtils.setProgresColler(progressBar);
 
 
@@ -884,10 +898,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
                 image = itemView.findViewById(R.id.cigp_imv_contact_avatar);
                 title = itemView.findViewById(R.id.cigp_txt_contact_name);
+                title.setTextColor(Theme.getColor(Theme.key_title_text));
                 subtitle = itemView.findViewById(R.id.cigp_txt_contact_lastseen);
+                subtitle.setTextColor(Theme.getColor(Theme.key_subtitle_text));
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
                 btnMenu = itemView.findViewById(R.id.cigp_moreButton);
-
+                btnMenu.setTextColor(Theme.getColor(Theme.key_icon));
                 title.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
                 subtitle.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
 
@@ -906,25 +922,25 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             TextCell removeView = null;
             LinearLayout dialogRootView = new LinearLayout(getContext());
             dialogRootView.setOrientation(LinearLayout.VERTICAL);
-            dialogRootView.setBackgroundColor(Theme.getInstance().getRootColor(dialogRootView.getContext()));
+            dialogRootView.setBackgroundColor(Theme.getColor(Theme.key_popup_background));
 
             if (!contactInfo.isOwner() && realmRoomAccess.isCanAddNewAdmin()) {
                 adminRights = new TextCell(dialogRootView.getContext(), true);
-                adminRights.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+                adminRights.setTextColor(Theme.getColor(Theme.key_default_text));
                 adminRights.setValue(contactInfo.isAdmin() ? getResources().getString(R.string.edit_admin_rights) : getResources().getString(R.string.set_admin));
                 dialogRootView.addView(adminRights, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
             if (!contactInfo.isAdmin() && roomType == GROUP) {
                 permission = new TextCell(dialogRootView.getContext(), true);
-                permission.setTextColor(Theme.getInstance().getTitleTextColor(dialogRootView.getContext()));
+                permission.setTextColor(Theme.getColor(Theme.key_default_text));
                 permission.setValue(getResources().getString(R.string.edit_rights));
                 dialogRootView.addView(permission, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }
 
             if (!contactInfo.isOwner() && realmRoomAccess.isCanBanMember()) {
                 removeView = new TextCell(dialogRootView.getContext(), false);
-                removeView.setTextColor(dialogRootView.getContext().getResources().getColor(R.color.red));
+                removeView.setTextColor(Theme.getColor(Theme.key_red));
                 removeView.setValue(getResources().getString(R.string.remove_user));
                 dialogRootView.addView(removeView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 52));
             }

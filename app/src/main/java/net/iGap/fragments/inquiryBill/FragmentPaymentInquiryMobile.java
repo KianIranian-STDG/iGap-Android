@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -16,6 +18,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 public class FragmentPaymentInquiryMobile extends BaseFragment {
@@ -42,7 +45,12 @@ public class FragmentPaymentInquiryMobile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        AppCompatEditText phoneNumberEditText = view.findViewById(R.id.phoneNumberEditText);
+        phoneNumberEditText.setHintTextColor(Theme.getColor(Theme.key_title_text));
+        phoneNumberEditText.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.mobileNumberIcon.setTextColor(Theme.getColor(Theme.key_icon));
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())

@@ -18,8 +18,7 @@
         <net.iGap.module.CircleImageView
             android:id="@+id/iv_itemContactChat_profileImage"
             android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
-            app:srcCompat="?attr/iGapAvatarBackground" />
+            android:layout_height="@dimen/dp52"/>
         <net.iGap.module.customView.CheckBox
             android:id="@+id/iv_itemContactChat_checkBox"
             android:layout_width="@dimen/dp20"
@@ -41,7 +40,6 @@
         android:fontFamily="@font/main_font"
         android:singleLine="true"
         android:text="user name"
-        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +53,6 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="09xxxxx"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_itemContactChat_userName"
@@ -69,7 +66,6 @@
         android:layout_marginEnd="@dimen/dp24"
         android:layout_marginRight="@dimen/dp24"
         android:text="@string/Remove"
-        android:textColor="@color/red"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"

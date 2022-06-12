@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainContainer"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
@@ -31,7 +32,7 @@
 
             <TextView
                 android:id="@+id/sfsl_txt_icon"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/dp8"
@@ -48,18 +49,16 @@
                 android:singleLine="true"
                 android:text="Dominika Faniz"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/largeTextSize" />
 
             <TextView
                 android:id="@+id/sfsl_txt_verified_icon"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp2"
-                android:textColor="@color/verify_color"
                 android:textSize="@dimen/largeTextSize" />
 
         </LinearLayout>
@@ -85,8 +84,18 @@
                     android:singleLine="true"
                     android:text="@string/last_seen_recently"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                    android:textColor="?iGapSubtitleTextColor"
-                    android:textSize="@dimen/standardTextSize" />
+                    android:textSize="@dimen/smallTextSize" />
+                <TextView
+                    android:id="@+id/sfsl_txt_ParticipantsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:textSize="@dimen/smallTextSize" />
+
 
             </LinearLayout>
 
@@ -98,7 +107,6 @@
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:text="10:52"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp12"
                 android:visibility="invisible" />
 
@@ -106,9 +114,9 @@
 
 
         <View
+            android:id="@+id/line"
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="?iGapDividerLine" />
+            android:layout_height="1px"/>
 
     </LinearLayout>
 

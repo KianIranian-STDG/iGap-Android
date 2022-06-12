@@ -11,6 +11,7 @@
 package net.iGap.observers.interfaces;
 
 import android.view.View;
+import android.widget.ImageView;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.structs.MessageObject;
@@ -36,7 +37,7 @@ public interface IMessageItem {
 
     void onItemShowingMessageId(MessageObject messageInfo);
 
-    void onVoiceListenedStatus(int roomType, long roomId, long messageId,long documentId, int roomMessageStatus);
+    void onVoiceListenedStatus(int roomType, long roomId, long messageId, long documentId, int roomMessageStatus);
 
     void onPlayMusic(String messageId);
 
@@ -50,4 +51,5 @@ public interface IMessageItem {
 
     void onVoteClick(MessageObject messageObject, int reactionValue);
 
+    void onTextToVoiceConvertClick(MessageObject message, View progressBar, ImageView imageView);
 }

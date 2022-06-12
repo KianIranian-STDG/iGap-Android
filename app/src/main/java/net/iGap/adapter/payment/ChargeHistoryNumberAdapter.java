@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 
 import java.text.DecimalFormat;
@@ -47,12 +48,16 @@ public class ChargeHistoryNumberAdapter extends RecyclerView.Adapter<ChargeHisto
     class ContactNumberViewHolder extends RecyclerView.ViewHolder {
         private TextView amount;
         private TextView phoneNumber;
+        private View line;
 
         ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
             phoneNumber = itemView.findViewById(R.id.number_contact);
+            phoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
             amount = itemView.findViewById(R.id.amount_contact);
-
+            amount.setTextColor(Theme.getColor(Theme.key_default_text));
+            line = itemView.findViewById(R.id.line);
+            line.setBackgroundColor(Theme.getColor(Theme.key_default_text));
             itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
                     onItemClickListener.onItemClicked(getAdapterPosition());

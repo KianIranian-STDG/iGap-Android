@@ -10,14 +10,14 @@
 
 package net.iGap.request;
 
-import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.proto.ProtoGeoUpdatePosition;
 
 public class RequestGeoUpdatePosition {
 
     public void updatePosition(double latitude, double longitude) {
 
-        if (!FragmentiGapMap.mapRegistrationStatus) {
+        if (!NearbyFragment.mapRegistrationStatus) {
             return;
         }
 

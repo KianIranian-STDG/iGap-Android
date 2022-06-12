@@ -10,8 +10,8 @@
 
 package net.iGap.realm;
 
+import net.iGap.messenger.ui.fragments.NearbyFragment;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.fragments.FragmentiGapMap;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -26,7 +26,7 @@ public class RealmGeoGetConfiguration extends RealmObject {
                 realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
             } else {
                 if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(mapCache)) {
-                    FragmentiGapMap.deleteMapFileCash();
+                    NearbyFragment.deleteMapFileCash();
                 }
             }
             realmGeoGetConfiguration.setMapCache(mapCache);

@@ -23,19 +23,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards" />
+            android:src="@color/key_light_gray" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type4_tick0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/icon_sent"
-            style="@style/myIconToolbarStyle"
-            android:textColor="@color/white"
+            style="@style/baseFontIcon"
+            android:textColor="@android:color/white"
             android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
@@ -58,19 +57,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards" />
+            android:src="@color/key_light_gray" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type4_tick1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/icon_sent"
-            style="@style/myIconToolbarStyle"
-            android:textColor="@color/white"
+            style="@style/baseFontIcon"
+            android:textColor="@android:color/white"
             android:visibility="gone" />
     </androidx.cardview.widget.CardView>
 

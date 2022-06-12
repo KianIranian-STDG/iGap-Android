@@ -11,8 +11,10 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
+import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
+import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
@@ -21,7 +23,10 @@ import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmChannelExtra;
+import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
+import net.iGap.realm.RealmGroupRoom;
+import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmOfflineListen;
@@ -53,9 +58,11 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED;
 import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.SEEN;
 
@@ -232,6 +239,31 @@ public class MessageDataStorage extends BaseController {
                 database.where(RealmClientCondition.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
                 database.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
 
+                database.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    public void removeRoomOwner(long roomId) {
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteRoomFromStorage: " + roomId);
+            try {
+                database.beginTransaction();
+
+                RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                if (realmRoom != null) {
+                    if (realmRoom.getType() == CHANNEL) {
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        realmChannelRoom.setRole(ChannelChatRole.MEMBER);
+                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        realmGroupRoom.setRole(GroupChatRole.MEMBER);
+                    }
+                }
                 database.commitTransaction();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -2642,4 +2674,72 @@ public class MessageDataStorage extends BaseController {
     public interface DatabaseDelegate {
         void run(Object... object);
     }
+
+    public void putTextConvertPath(final long roomId, final long messageId, String path) {
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        storageQueue.postRunnable(() -> {
+            try {
+                database.beginTransaction();
+                RealmRoomMessage realmRoomMessage = database.where(RealmRoomMessage.class).equalTo("roomId", roomId).equalTo("messageId", messageId)
+                        .equalTo("deleted", false)
+                        .findFirst();
+
+                if (realmRoomMessage != null)
+                    realmRoomMessage.setTextToVoicePath(path);
+
+                database.commitTransaction();
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+                countDownLatch.countDown();
+            }
+        });
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void putAiToken(String token) {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        storageQueue.postRunnable(() -> {
+            try {
+                database.beginTransaction();
+                RealmUserInfo realmUserInfo = database.where(RealmUserInfo.class).findFirst();
+
+                if (realmUserInfo != null)
+                    realmUserInfo.setAiToken(token);
+
+                database.commitTransaction();
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+                countDownLatch.countDown();
+            }
+        });
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMatrixToken(String token) {
+        storageQueue.postRunnable(() -> {
+            try {
+                database.beginTransaction();
+                RealmUserInfo realmUserInfo = database.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setMetrixToken(token);
+                }
+                RealmUserInfo.sendPushNotificationToServer();
+                database.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
 }

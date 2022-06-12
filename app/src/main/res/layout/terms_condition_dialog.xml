@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/dp8"
-            android:textColor="?attr/iGapSubtitleTextColor"
             android:padding="8dp" />
     </androidx.core.widget.NestedScrollView>
 

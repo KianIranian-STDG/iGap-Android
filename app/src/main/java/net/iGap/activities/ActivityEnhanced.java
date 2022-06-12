@@ -16,10 +16,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -31,13 +29,12 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
-import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 
@@ -46,7 +43,6 @@ import java.io.IOException;
 
 import io.realm.Realm;
 
-import static com.caspian.otpsdk.context.ApplicationContext.b;
 import static net.iGap.G.updateResources;
 
 
@@ -84,29 +80,16 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         ActivityCountInApp++;
-        /*Log.wtf("ActivityEnhanced","onCreate start");
-        Log.wtf("ActivityEnhanced","setThemeSetting start");*/
-        setThemeSetting();
-        /*Log.wtf("ActivityEnhanced","setThemeSetting end");
-        Log.wtf("ActivityEnhanced","super.onCreate start");*/
         super.onCreate(savedInstanceState);
-        /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISRealmOK) {
             if (ActivityCountInApp == 1 || Realm.getLocalInstanceCount(AccountManager.getInstance().getCurrentUser().getRealmConfiguration()) == 0) {
                 DbManager.getInstance().openUiRealm();
             }
-            /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
-            /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
-
-            /*Log.wtf("ActivityEnhanced","screenStateFilter start");*/
             IntentFilter screenStateFilter = new IntentFilter();
             screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
             screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
             registerReceiver(myBroadcast, screenStateFilter);
-            /*Log.wtf("ActivityEnhanced","screenStateFilter end");*/
-
-            /*Log.wtf("ActivityEnhanced","lock start");*/
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
             boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
@@ -124,36 +107,15 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                     HelperLog.getInstance().setErrorLog(e);
                 }
             }
-            /*Log.wtf("ActivityEnhanced","lock end");*/
-
-            /*Log.wtf("ActivityEnhanced","status bar start");*/
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                StatusBarUtil.setColor(this, Theme.getInstance().getPrimaryDarkColor(this), 50);
-            }
-            /*Log.wtf("ActivityEnhanced","status bar start");*/
-
-            /*makeDirectoriesIfNotExist();*/
-
-            /*boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
-            if (!checkedEnableDataShams) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-            } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-            }*/
-
             int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
             }
         }
-
-        /*Log.wtf("ActivityEnhanced","onCreate end");*/
         updateResources(getBaseContext());
-
-    }
-
-    private void setThemeSetting() {
-        this.setTheme(new Theme().getTheme(this));
+        G.currentActivity = this;
+        Configuration config = getResources().getConfiguration();
+        Theme.setThemeAccordingToConfiguration(config);
     }
 
     @Override

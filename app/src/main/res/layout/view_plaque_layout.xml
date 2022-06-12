@@ -32,7 +32,7 @@
         android:minWidth="@dimen/dp44"
         android:padding="@dimen/dp4"
         android:singleLine="true"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/dp20"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
             android:gravity="center"
             android:hint="الف"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/dp18"
             android:textStyle="bold" />
 
@@ -83,7 +83,7 @@
         android:minWidth="@dimen/dp52"
         android:padding="@dimen/dp4"
         android:singleLine="true"
-        android:textColor="@color/black"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/dp20"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -96,7 +96,7 @@
         android:id="@+id/pv_splitter"
         android:layout_width="@dimen/dp1"
         android:layout_height="0dp"
-        android:background="@color/black"
+        android:background="@android:color/black"
         android:layout_marginTop="@dimen/dp6"
         android:layout_marginBottom="@dimen/dp6"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -127,7 +127,7 @@
             android:layout_weight="0.3"
             android:gravity="center|bottom"
             android:text="ایران"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/standardTextSize" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -140,7 +140,7 @@
             android:inputType="number"
             android:maxLength="2"
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 

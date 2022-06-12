@@ -16,8 +16,8 @@ import com.bumptech.glide.Glide;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsList;
-import net.iGap.module.Theme;
 
 import java.util.ArrayList;
 
@@ -185,19 +185,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         private void setColor() {
-            if (G.themeColor == Theme.DARK) {
+            if (Theme.isDark() || Theme.isNight()) {
                 changeToDark();
                 return;
             }
-            source.setTextColor(G.context.getResources().getColor(R.color.news_red));
+            source.setTextColor(Theme.getColor(Theme.key_red));
             title.setTextColor(Color.BLACK);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_light_gray));
         }
 
         private void changeToDark() {
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
+            container.setCardBackgroundColor(Theme.getColor(Theme.key_gray));
         }
 
     }

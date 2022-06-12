@@ -25,7 +25,7 @@ public class Config {
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;
-    public static final int REALM_SCHEMA_VERSION = 56;
+    public static final int REALM_SCHEMA_VERSION = 61;
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
     public static final int MAX_TEXT_ATTACHMENT_LENGTH = 1024;
     public static final int MAX_TEXT_LENGTH = 4096;

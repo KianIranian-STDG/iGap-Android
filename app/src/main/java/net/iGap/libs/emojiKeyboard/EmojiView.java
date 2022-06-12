@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,7 +39,7 @@ import net.iGap.libs.emojiKeyboard.adapter.ViewPagerAdapter;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.emojiKeyboard.sticker.StickerGroupAdapter;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.repository.StickerRepository;
 
 import java.util.ArrayList;
@@ -121,10 +122,12 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             }
 
             emojiContainer = new FrameLayout(getContext());
+            emojiContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
 
             emojiGridAdapter = new EmojiGridAdapter();
 
             emojiGridView = new RecyclerView(getContext());
+            emojiGridView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             emojiGridView.setAdapter(emojiGridAdapter);
             emojiGridView.setLayoutManager(emojiLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
             emojiGridView.setClipToPadding(false);
@@ -141,9 +144,9 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             });
 
             emojiTopView = new ScrollTabView(getContext());
+            emojiTopView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             emojiTopView.setIndicatorHeight(LayoutCreator.dp(1.5f));
-            emojiTopView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
-            emojiTopView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+            emojiTopView.setIndicatorColor(Theme.getColor(Theme.key_theme_color));
             emojiTopView.setShouldExpand(true);
             emojiTopView.setListener(page -> {
 
@@ -266,8 +269,8 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             stickerTabView = new ScrollTabView(getContext());
             stickerTabView.setIndicatorHeight(LayoutCreator.dp(2.5f));
-            stickerTabView.setIndicatorColor(Theme.getInstance().getAccentColor(getContext()));
-            stickerTabView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+            stickerTabView.setIndicatorColor(Theme.getColor(Theme.key_theme_color));
+            stickerTabView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             stickerTabView.setListener(page -> {
 
                 stickerGridView.stopScroll();
@@ -281,10 +284,10 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
             addStickerIv = new AppCompatImageView(getContext());
             addStickerIv.setImageDrawable(stickerTabDrawable[1]);
-            addStickerIv.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+            addStickerIv.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             addStickerIv.setScaleType(ImageView.ScaleType.CENTER);
             addStickerIv.setOnClickListener(v -> listener.onAddStickerClicked());
-            addStickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
+            addStickerIv.setColorFilter(Theme.getColor(Theme.key_title_text));
 
             stickerContainer.addView(stickerGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
             stickerContainer.addView(stickerTabView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 40, Gravity.TOP, 0, 0, 40, 0));
@@ -303,16 +306,16 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             stickerIv = new AppCompatImageView(getContext());
             stickerIv.setImageResource(R.drawable.ic_sticker);
             stickerIv.setScaleType(ImageView.ScaleType.CENTER);
-            stickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
+            stickerIv.setColorFilter(Theme.getColor(Theme.key_title_text));
 
             emojiIv = new AppCompatImageView(getContext());
             emojiIv.setImageResource(R.drawable.ic_emoji);
             emojiIv.setScaleType(ImageView.ScaleType.CENTER);
-            emojiIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
+            emojiIv.setColorFilter(Theme.getColor(Theme.key_title_text));
 
             settingIv = new AppCompatImageView(getContext());
             settingIv.setScaleType(ImageView.ScaleType.CENTER);
-            settingIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
+            settingIv.setColorFilter(Theme.getColor(Theme.key_title_text));
 
             settingIv.setOnClickListener(v -> {
                 if (currentPage == EMOJI)
@@ -333,7 +336,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             bottomContainer.addView(settingIv, LayoutCreator.createFrame(30, 30, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
             bottomContainer.setOnClickListener(v -> {
             });
-            bottomContainer.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+            bottomContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
             bottomContainer.addView(bottomViewShadow, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.TOP));
 
             addView(bottomContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 42, Gravity.BOTTOM));
@@ -344,7 +347,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         } else if (hasEmoji) {
 
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(Theme.getInstance().getDividerColor(getContext()));
+            paint.setColor(Theme.getColor(Theme.key_white));
 
             bottomContainer = new FrameLayout(getContext()) {
                 @Override
@@ -357,7 +360,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
             settingIv = new AppCompatImageView(getContext());
             settingIv.setScaleType(ImageView.ScaleType.CENTER);
             settingIv.setImageResource(R.drawable.ic_backspace);
-            settingIv.setColorFilter(Theme.getInstance().getTitleTextColor(getContext()));
+            settingIv.setColorFilter(Theme.getColor(Theme.key_title_text));
 
             bottomContainer.setOnClickListener(v -> listener.onBackSpace());
 
@@ -378,7 +381,7 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        setBackgroundColor(Theme.getColor(Theme.key_window_background));
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
     }
 
@@ -535,13 +538,13 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void viewPagerItemChanged(int position) {
         if (hasEmoji && hasSticker)
             if (position == EMOJI) {
-                stickerIv.setColorFilter(Theme.getInstance().getSubTitleColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
-                emojiIv.setColorFilter(Theme.getInstance().getTitleTextColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getColor(Theme.key_subtitle_text), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getColor(Theme.key_title_text), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_backspace);
                 checkEmojiTabY(null, 0);
             } else if (position == STICKER) {
-                emojiIv.setColorFilter(Theme.getInstance().getSubTitleColor(emojiIv.getContext()), PorterDuff.Mode.SRC_IN);
-                stickerIv.setColorFilter(Theme.getInstance().getTitleTextColor(stickerIv.getContext()), PorterDuff.Mode.SRC_IN);
+                emojiIv.setColorFilter(Theme.getColor(Theme.key_subtitle_text), PorterDuff.Mode.SRC_IN);
+                stickerIv.setColorFilter(Theme.getColor(Theme.key_title_text), PorterDuff.Mode.SRC_IN);
                 settingIv.setImageResource(R.drawable.ic_settings);
                 checkStickersTabY(null, 0);
             }
@@ -581,16 +584,16 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
     private void checkStickerEmptyView(int groupSize) {
         if (groupSize == 0 && hasStickerPermission) {
             emptyIv = new AppCompatImageView(getContext());
-            emptyIv.setImageDrawable(getContext().getResources().getDrawable(R.drawable.empty_chat));
+            emptyIv.setImageResource(R.drawable.empty_chat);
             emptyIv.setOnClickListener(v -> listener.onAddStickerClicked());
             stickerContainer.addView(emptyIv, LayoutCreator.createFrame(120, 120, Gravity.CENTER, 0, 0, 0, 50));
 
             emptyTv = new AppCompatTextView(getContext());
-            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextColor(Theme.getColor(Theme.key_title_text));
             emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
             emptyTv.setLines(1);
-            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextColor(Theme.getColor(Theme.key_title_text));
             emptyTv.setMaxLines(1);
             emptyTv.setSingleLine(true);
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);
@@ -616,11 +619,11 @@ public class EmojiView extends FrameLayout implements ViewPager.OnPageChangeList
         hasStickerPermission = canSendSticker;
         if (!canSendSticker) {
             emptyTv = new AppCompatTextView(getContext());
-            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextColor(Theme.getColor(Theme.key_title_text));
             emptyTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             emptyTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
             emptyTv.setLines(1);
-            emptyTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            emptyTv.setTextColor(Theme.getColor(Theme.key_title_text));
             emptyTv.setMaxLines(1);
             emptyTv.setSingleLine(true);
             emptyTv.setEllipsize(TextUtils.TruncateAt.END);

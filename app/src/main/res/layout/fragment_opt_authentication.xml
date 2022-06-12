@@ -22,7 +22,6 @@
         android:layout_marginRight="@dimen/dp20"
         android:gravity="center"
         android:text="@string/destroy_description"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp15" />
 
     <TextView
@@ -35,7 +34,6 @@
         android:layout_marginRight="@dimen/dp20"
         android:gravity="center"
         android:text="9121111111"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp16" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -45,7 +43,6 @@
 
         <net.iGap.module.EditTextAdjustPan
             android:id="@+id/smsCodeEditText"
-            style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -59,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/pu_edt_nikeName"
-            android:background="@color/border_editText"
+            android:background="@color/key_gray"
             android:scaleY=".5" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +68,6 @@
         android:layout_marginRight="@dimen/dp20"
         android:gravity="center"
         android:text="@string/iGap_autofill_Destruction_Code"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp15" />
 
     <RelativeLayout
@@ -92,7 +88,6 @@
             android:layout_toStartOf="@+id/stda_txt_text"
             android:layout_toLeftOf="@+id/stda_txt_text"
             android:text="01:00"
-            android:textColor="@color/toolbar_background"
             android:textSize="@dimen/dp15" />
 
         <TextView
@@ -102,7 +97,6 @@
             android:layout_centerInParent="true"
             android:padding="@dimen/dp12"
             android:text="@string/please_wait"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15" />
     </RelativeLayout>
 

@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@color/gray100"
+        android:background="@color/key_light_gray"
         android:layout_height="match_parent">
 
         <TextView
@@ -20,7 +20,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="parent"

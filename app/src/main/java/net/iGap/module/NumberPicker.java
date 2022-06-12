@@ -34,6 +34,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 
 import java.util.Locale;
 
@@ -101,6 +103,7 @@ public class NumberPicker extends LinearLayout {
     private boolean mDecrementVirtualButtonPressed;
     private PressedStateHelper mPressedStateHelper;
     private int mLastHandledDownDpadKeyCode = -1;
+    private boolean drawDividers = true;
 
     public NumberPicker(Context context) {
         super(context);
@@ -114,6 +117,12 @@ public class NumberPicker extends LinearLayout {
 
     public NumberPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    public NumberPicker(Context context, int textSize) {
+        super(context);
+        mTextSize = LayoutCreator.dp(textSize);
         init();
     }
 
@@ -146,7 +155,7 @@ public class NumberPicker extends LinearLayout {
     private void init() {
         mSolidColor = 0;
         mSelectionDivider = new Paint();
-        mSelectionDivider.setColor(G.context.getResources().getColor(R.color.green));
+        mSelectionDivider.setColor(Theme.getColor(Theme.key_theme_color));
 
         mSelectionDividerHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDER_HEIGHT, getResources().getDisplayMetrics());
         mSelectionDividersDistance = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, UNSCALED_DEFAULT_SELECTION_DIVIDERS_DISTANCE, getResources().getDisplayMetrics());
@@ -174,7 +183,7 @@ public class NumberPicker extends LinearLayout {
         mInputText = new AppCompatTextView(getContext());
         mInputText.setGravity(Gravity.CENTER);
         mInputText.setSingleLine(true);
-        mInputText.setTextColor(G.context.getResources().getColor(R.color.black90));
+        mInputText.setTextColor(Theme.getColor(Theme.key_black));
         mInputText.setBackgroundResource(0);
         mInputText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addView(mInputText, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -673,19 +682,21 @@ public class NumberPicker extends LinearLayout {
             // item. Otherwise, if the user starts editing the text via the
             // IME he may see a dimmed version of the old value intermixed
             // with the new one.
-            if (i != SELECTOR_MIDDLE_ITEM_INDEX || mInputText.getVisibility() != VISIBLE) {
+            if (scrollSelectorValue != null && (i != SELECTOR_MIDDLE_ITEM_INDEX || mInputText.getVisibility() != VISIBLE)) {
                 canvas.drawText(scrollSelectorValue, x, y, mSelectorWheelPaint);
             }
             y += mSelectorElementHeight;
         }
 
-        int topOfTopDivider = mTopSelectionDividerTop;
-        int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
-        canvas.drawRect(0, topOfTopDivider, getRight(), bottomOfTopDivider, mSelectionDivider);
+        if (drawDividers) {
+            int topOfTopDivider = mTopSelectionDividerTop;
+            int bottomOfTopDivider = topOfTopDivider + mSelectionDividerHeight;
+            canvas.drawRect(0, topOfTopDivider, getRight(), bottomOfTopDivider, mSelectionDivider);
 
-        int bottomOfBottomDivider = mBottomSelectionDividerBottom;
-        int topOfBottomDivider = bottomOfBottomDivider - mSelectionDividerHeight;
-        canvas.drawRect(0, topOfBottomDivider, getRight(), bottomOfBottomDivider, mSelectionDivider);
+            int bottomOfBottomDivider = mBottomSelectionDividerBottom;
+            int topOfBottomDivider = bottomOfBottomDivider - mSelectionDividerHeight;
+            canvas.drawRect(0, topOfBottomDivider, getRight(), bottomOfBottomDivider, mSelectionDivider);
+        }
     }
 
     private int makeMeasureSpec(int measureSpec, int maxSize) {
@@ -1058,5 +1069,10 @@ public class NumberPicker extends LinearLayout {
             changeValueByOne(mIncrement);
             postDelayed(this, mLongPressUpdateInterval);
         }
+    }
+
+    public void setDrawDividers(boolean drawDividers) {
+        this.drawDividers = drawDividers;
+        invalidate();
     }
 }

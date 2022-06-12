@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,7 @@ import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.SHP_SETTING;
@@ -74,6 +77,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.setFragmentNotificationAndSoundViewModel(viewModel);
+
+        TextView tv_vibration_message = view.findViewById(R.id.tv_vibration_message);
+        tv_vibration_message.setTextColor(Theme.getColor(Theme.key_title_text));
 
         notificationAndSoundToolbar = new Toolbar(getContext());
         notificationAndSoundToolbar.setBackIcon(new BackDrawable(false));
@@ -122,9 +128,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
         gradientDrawable.setColor(viewModel.ledColorMessage);
         viewModel.showMessageLedDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true)
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).backgroundColor(Theme.getColor(Theme.key_popup_background)).customView(R.layout.popup_colorpicker, true)
                         .title(R.string.st_led_color).titleGravity(GravityEnum.START)
                         .positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .onNegative((dialog1, which) -> dialog1.dismiss()).build();
                 View view = dialog.getCustomView();
                 ColorPicker picker = view.findViewById(R.id.picker);
@@ -148,9 +156,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
         gradientDrawableGroup.setColor(viewModel.ledColorGroup);
         viewModel.showGroupLedDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_colorpicker, true)
+                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).backgroundColor(Theme.getColor(Theme.key_popup_background)).customView(R.layout.popup_colorpicker, true)
                         .title(R.string.st_led_color).titleGravity(GravityEnum.START)
                         .positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .onNegative((dialog1, which) -> dialog1.dismiss()).build();
                 View view = dialog.getCustomView();
                 ColorPicker picker = view.findViewById(R.id.picker);
@@ -177,7 +187,13 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel.showMessageVibrationDialog.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
                 int dialogVibrateMessage = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
-                new MaterialDialog.Builder(getContext()).title(R.string.st_vibrate).titleGravity(GravityEnum.START).items(R.array.vibrate).alwaysCallSingleChoiceCallback()
+                new MaterialDialog.Builder(getContext()).title(R.string.st_vibrate)
+                        .titleGravity(GravityEnum.START)
+                        .items(R.array.vibrate)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(dialogVibrateMessage, (dialog, view, which, text) -> {
                             viewModel.setMessageVibrateTime(which, true);
                             return true;
@@ -223,7 +239,13 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel.showMessagePopupNotification.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
                 int settingPopupCondition = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-                new MaterialDialog.Builder(getContext()).title(R.string.st_popupNotification).titleGravity(GravityEnum.START).items(R.array.popup_Notification).alwaysCallSingleChoiceCallback()
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.st_popupNotification)
+                        .titleGravity(GravityEnum.START).items(R.array.popup_Notification)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(settingPopupCondition, (dialog, itemView, which, text) -> {
                             viewModel.saveSettingPopupConditionMessage(which);
                             return true;
@@ -237,7 +259,13 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel.showGroupPopupNotification.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
                 int PopupCondition = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
-                new MaterialDialog.Builder(getContext()).title(R.string.st_popupNotification).titleGravity(GravityEnum.START).items(R.array.popup_Notification).alwaysCallSingleChoiceCallback()
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.st_popupNotification).titleGravity(GravityEnum.START)
+                        .items(R.array.popup_Notification)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(PopupCondition, (dialog, itemView, which, text) -> {
                             viewModel.saveSettingPopupConditionGroup(which);
                             return true;
@@ -254,7 +282,13 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel.showMessageSound.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
                 int messageDialogSoundMessage = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
-                new MaterialDialog.Builder(getContext()).title(R.string.Ringtone).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback()
+                new MaterialDialog.Builder(getContext()).title(R.string.Ringtone)
+                        .titleGravity(GravityEnum.START)
+                        .items(R.array.sound_message)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(messageDialogSoundMessage, (dialog, view, which, text) -> {
                             viewModel.getSoundMessagePosition(which, true);
                             return true;
@@ -279,7 +313,14 @@ public class FragmentNotificationAndSound extends BaseFragment {
         viewModel.showGroupSound.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null & isShow) {
                 int getGroupSoundSelected = viewModel.getSharedPreferences().getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
-                new MaterialDialog.Builder(getContext()).title(R.string.Ringtone).titleGravity(GravityEnum.START).items(R.array.sound_message).alwaysCallSingleChoiceCallback()
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.Ringtone)
+                        .titleGravity(GravityEnum.START)
+                        .items(R.array.sound_message)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .alwaysCallSingleChoiceCallback()
                         .itemsCallbackSingleChoice(getGroupSoundSelected, (dialog, view, which, text) -> {
                             viewModel.getSoundGroupPosition(which, true);
                             return true;

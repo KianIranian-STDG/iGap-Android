@@ -37,7 +37,6 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isRussian = new ObservableInt(View.GONE);
     private ObservableInt isKurdi = new ObservableInt(View.GONE);
     private ObservableInt isAzeri = new ObservableInt(View.GONE);
-    private ObservableInt isPashto = new ObservableInt(View.GONE);
     private SingleLiveEvent<String> refreshActivityForChangeLanguage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
 
@@ -69,9 +68,6 @@ public class FragmentLanguageViewModel extends ViewModel {
                     break;
                 case "آذری":
                     isAzeri.set(View.VISIBLE);
-                    break;
-                case "پشتو":
-                    isPashto.set(View.VISIBLE);
                     break;
             }
         }
@@ -108,8 +104,6 @@ public class FragmentLanguageViewModel extends ViewModel {
     public ObservableInt getIsAzeri() {
         return isAzeri;
     }
-
-    public ObservableInt getIsPashto() { return isPashto; }
 
     public SingleLiveEvent<String> getRefreshActivityForChangeLanguage() {
         return refreshActivityForChangeLanguage;
@@ -281,32 +275,13 @@ public class FragmentLanguageViewModel extends ViewModel {
             goBack.setValue(true);
         }
     }
-    public void onClickPashto() {
-        if (!G.selectedLanguage.equals("ps")) {
-            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "پشتو").apply();
-            G.selectedLanguage = "ps";
-            HelperCalander.isPersianUnicode = true;
-            HelperCalander.isLanguagePersian = true;
-            HelperCalander.isLanguageArabic = false;
-            G.isAppRtl = true;
-            FragmentLanguage.languageChanged = true;
-            refreshActivityForChangeLanguage.setValue("ps");
-            if (MusicPlayer.updateName != null) {
-                MusicPlayer.updateName.rename();
-            }
-            updateLocalDateTime();
-        } else {
-            goBack.setValue(true);
-        }
-    }
+
     private void updateLocalDateTime() {
 
         switch (G.selectedLanguage) {
             case "fa":
             case "iw": //azeri
             case "ur"://kurdi
-            case "ps"://pashto
                 sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi
                 break;
             case "ar":

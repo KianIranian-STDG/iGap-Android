@@ -10,11 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperTracker;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
@@ -62,42 +64,59 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title, billID, billPayID, billPrice, billTime, billPayID2,
-                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle/*, failTxt, failIcon*/;
+                billPayTitle, billPayTitle2, billTimeTitle, billPriceTitle, billPhone, billPhoneTitle,billIDTitle/*, failTxt, failIcon*/;
         private ProgressBar progressPID, progressP, progressT;
         private Button pay, showDetail, retry;
         private TextView delete, edit;
         private CircleImageView logo;
         private DecimalFormat df;
+        private View billImageBack;
 //        private View failBg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.billTitle);
+            title.setTextColor(Theme.getColor(Theme.key_title_text));
             billID = itemView.findViewById(R.id.billID);
+            billID.setTextColor(Theme.getColor(Theme.key_title_text));
             billPayID = itemView.findViewById(R.id.billPayID);
+            billPayID.setTextColor(Theme.getColor(Theme.key_title_text));
             billPrice = itemView.findViewById(R.id.billPrice);
+            billPrice.setTextColor(Theme.getColor(Theme.key_title_text));
             billTime = itemView.findViewById(R.id.billTime);
+            billTime.setTextColor(Theme.getColor(Theme.key_title_text));
             pay = itemView.findViewById(R.id.Pay);
             showDetail = itemView.findViewById(R.id.detail);
             progressPID = itemView.findViewById(R.id.ProgressVPay);
             progressP = itemView.findViewById(R.id.ProgressVPrice);
             progressT = itemView.findViewById(R.id.ProgressVTime);
             delete = itemView.findViewById(R.id.billDelete);
+            delete.setTextColor(Theme.getColor(Theme.key_red));
             edit = itemView.findViewById(R.id.billEdit);
             logo = itemView.findViewById(R.id.billImage);
             billPayID2 = itemView.findViewById(R.id.billPayID2);
+            billPayID2.setTextColor(Theme.getColor(Theme.key_title_text));
             billPayTitle = itemView.findViewById(R.id.billPayIDTitle);
+            billPayTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             billPayTitle2 = itemView.findViewById(R.id.billPayIDTitle2);
+            billPayTitle2.setTextColor(Theme.getColor(Theme.key_title_text));
             billTimeTitle = itemView.findViewById(R.id.billTimeTitle);
+            billTimeTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             billPriceTitle = itemView.findViewById(R.id.billPriceTitle);
+            billPriceTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             billPhone = itemView.findViewById(R.id.billPhone);
+            billPhone.setTextColor(Theme.getColor(Theme.key_title_text));
             billPhoneTitle = itemView.findViewById(R.id.billPhoneTitle);
-
+            billPhoneTitle.setTextColor(Theme.getColor(Theme.key_title_text));
+            billIDTitle = itemView.findViewById(R.id.billIDTitle);
+            billIDTitle.setTextColor(Theme.getColor(Theme.key_title_text));
             /*failIcon = itemView.findViewById(R.id.loadAgainIcon);
             failTxt = itemView.findViewById(R.id.loadAgain);
             failBg = itemView.findViewById(R.id.loadBackground);*/
             retry = itemView.findViewById(R.id.reloadBtn);
+            billImageBack = itemView.findViewById(R.id.billImageBack);
+            billImageBack.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.bill_round_drawable), context, Theme.getColor(Theme.key_theme_color)));
 
             df = new DecimalFormat(",###");
         }

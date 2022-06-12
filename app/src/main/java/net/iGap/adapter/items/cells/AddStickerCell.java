@@ -17,7 +17,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.ProgressButton;
 import net.iGap.module.customView.StickerView;
@@ -40,7 +40,7 @@ public class AddStickerCell extends FrameLayout implements EventManager.EventDel
         addView(groupAvatarIv, LayoutCreator.createFrame(52, 52, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 16, 0, 16, 0));
 
         groupNameTv = new TextView(getContext());
-        groupNameTv.setTextColor(new Theme().getTitleTextColor(getContext()));
+        groupNameTv.setTextColor(Theme.getColor(Theme.key_title_text));
         groupNameTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         groupNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         groupNameTv.setLines(1);
@@ -51,7 +51,7 @@ public class AddStickerCell extends FrameLayout implements EventManager.EventDel
         addView(groupNameTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isRtl ? Gravity.RIGHT : Gravity.LEFT, isRtl ? 120 : 78, 8, isRtl ? 78 : 120, 0));
 
         groupStickerCountTv = new TextView(getContext());
-        groupStickerCountTv.setTextColor(new Theme().getTitleTextColor(getContext()));
+        groupStickerCountTv.setTextColor(Theme.getColor(Theme.key_title_text));
         groupStickerCountTv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         groupStickerCountTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         groupStickerCountTv.setLines(1);
@@ -79,7 +79,7 @@ public class AddStickerCell extends FrameLayout implements EventManager.EventDel
     @SuppressLint("DrawAllocation")
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(new Theme().getDividerColor(getContext()));
+        paint.setColor(Theme.getColor(Theme.key_white));
         canvas.drawLine(isRtl ? 0 : LayoutCreator.dpToPx(62), getHeight() - 1, isRtl ? getWidth() - LayoutCreator.dpToPx(62) : getWidth() - getPaddingRight(), getHeight() - 1, paint);
     }
 

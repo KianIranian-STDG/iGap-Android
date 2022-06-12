@@ -23,9 +23,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 
-import net.iGap.G;
 import net.iGap.R;
-
+import net.iGap.messenger.theme.Theme;
 
 /**
  * set color for status bar
@@ -45,10 +44,10 @@ public class StatusBarUtil {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
-            activity.getWindow().setNavigationBarColor(G.themeColor == Theme.DARK ? Theme.getInstance().getPrimaryDarkColor(activity) : Color.WHITE);
+            activity.getWindow().setNavigationBarColor(Theme.isDark() || Theme.isNight() ? Theme.getColor(Theme.key_dark_theme_color): Color.WHITE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 View decor = activity.getWindow().getDecorView();
-                if (G.themeColor != Theme.DARK) {
+                if (!(Theme.isDark() || Theme.isNight())) {
                     decor.setSystemUiVisibility(decor.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 } else {
                     decor.setSystemUiVisibility(0);

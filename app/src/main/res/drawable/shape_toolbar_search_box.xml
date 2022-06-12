@@ -5,7 +5,7 @@
 
         <shape android:shape="rectangle">
 
-            <solid android:color="@color/toolbar_search_box_bg" />
+            <solid android:color="@color/key_light_gray" />
             <corners android:radius="20dp" />
 
         </shape>

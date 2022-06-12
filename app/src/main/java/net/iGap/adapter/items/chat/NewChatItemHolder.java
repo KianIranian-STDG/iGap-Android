@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,8 +26,8 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.FontIconTextView;
-import net.iGap.module.Theme;
 
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER_VERTICAL;
@@ -54,17 +55,19 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout viewContainer;
     private LinearLayout voteUpContainer;
     private LinearLayout voteDownContainer;
-
+    private AppCompatImageView messageTTSOption;
+    private ProgressBar progressBar;
     private AppCompatImageView channelForwardIv;
 
     public NewChatItemHolder(@NonNull View itemView) {
         super(itemView);
         context = itemView.getContext();
 
-        int otherColor = new Theme().getReceivedMessageOtherTextColor(itemView.getContext());
+        int otherColor = Theme.getColor(Theme.key_chat_item_holder);
         ConstraintSet set = new ConstraintSet();
         itemContainer = new LinearLayout(itemView.getContext());
-
+        messageTTSOption = new AppCompatImageView(itemView.getContext());
+        progressBar = new ProgressBar(itemView.getContext());
         channelForwardIv = new AppCompatImageView(itemView.getContext());
 
         voteContainer = new LinearLayout(itemView.getContext());
@@ -161,8 +164,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTextSize(voteDownIv, R.dimen.standardTextSize);
 
 
-
-        /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
         set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
         set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 
@@ -381,5 +382,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public ImageView getChannelForwardIv() {
         return channelForwardIv;
+    }
+
+    public ImageView getMessageTTSOption() {
+        return messageTTSOption;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 }

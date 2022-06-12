@@ -13,13 +13,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayChargeBinding;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
 
@@ -58,6 +58,9 @@ public class FragmentCPayCharge extends BaseAPIViewFrag<FragmentCPayChargeViewMo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
+        binding.lblCredit.setTextColor(Theme.getColor(Theme.key_subtitle_text));
+        binding.txtCredit.setTextColor(Theme.getColor(Theme.key_title_text));
+        binding.edtAmount.setTextColor(Theme.getColor(Theme.key_title_text));
 
         if (getArguments() != null)
             plaqueText = getArguments().getString(HelperCPay.PLAQUE);
@@ -70,7 +73,7 @@ public class FragmentCPayCharge extends BaseAPIViewFrag<FragmentCPayChargeViewMo
         viewModel.setPlaque(plaqueText);
         viewModel.getRequestAmountFromServer();
 
-        binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(), getContext(), R.attr.iGapCardViewColor));
+        binding.plaqueBg.setBackground(Theme.tintDrawable(binding.plaqueBg.getBackground(), getContext(), Theme.getColor(Theme.key_window_background)));
         initPlaque();
         setupSpinner();
         initCallback();
@@ -81,6 +84,7 @@ public class FragmentCPayCharge extends BaseAPIViewFrag<FragmentCPayChargeViewMo
 
         viewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
+            binding.edtAmount.setHintTextColor(Theme.getColor(Theme.key_theme_color));
             binding.edtAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         });
 

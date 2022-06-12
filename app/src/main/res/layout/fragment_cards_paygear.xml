@@ -22,7 +22,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:text="@string/icon_QR_code"
-            style="@style/myIconTextViewStyle" />
+            style="@style/baseFontIcon" />
 
         <TextView
             android:id="@+id/balance_title"
@@ -44,7 +44,6 @@
             android:layout_marginEnd="2dp"
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_refresh_pec"
-            android:tint="@color/green"
             android:padding="8dp" />
 
         <ImageView

@@ -20,7 +20,6 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?iGapToolbarBackground"
             android:layoutDirection="ltr"
             app:elevation="0dp">
 
@@ -43,7 +42,7 @@
 
                     <TextView
                         android:id="@+id/toolbar_back"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:layout_alignParentStart="true"
@@ -51,7 +50,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:text="@string/icon_back" />
+                        android:text="@string/icon_back"
+                        android:textColor="@color/white"/>
 
                     <Space
                         android:id="@+id/toolbar_avatar_collapsed_target"
@@ -77,13 +77,13 @@
                         android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/toolbar_more"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:layout_alignParentEnd="true"
@@ -91,17 +91,19 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
-                        android:text="@string/icon_other_vertical_dots" />
+                        android:text="@string/icon_other_vertical_dots"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/toolbar_edit"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
                         android:layout_centerVertical="true"
                         android:layout_toStartOf="@id/toolbar_more"
                         android:layout_toLeftOf="@id/toolbar_more"
                         android:text="@string/icon_new_conversation"
+                        android:textColor="@color/white"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -137,7 +139,7 @@
                             android:layout_gravity="left"
                             android:gravity="left|center_horizontal"
                             android:singleLine="true"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="@dimen/largeTextSize" />
 
                         <TextView
@@ -147,7 +149,7 @@
                             android:layout_gravity="left"
                             android:layout_marginTop="@dimen/dp6"
                             android:singleLine="true"
-                            android:textColor="@color/white"
+                            android:textColor="@android:color/white"
                             android:textSize="@dimen/standardTextSize" />
 
                     </LinearLayout>
@@ -159,6 +161,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layoutDirection="locale"
@@ -175,7 +178,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -188,7 +190,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
-                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/divider1"
@@ -202,7 +203,6 @@
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="4dp"
                     android:text="@{viewModel.inviteLink}"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -218,7 +218,6 @@
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@{viewModel.inviteLinkTitle}"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@+id/inviteLink"
@@ -240,7 +239,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
-                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/divider1"
@@ -257,7 +255,6 @@
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
                     android:text="@string/mute_notification"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -273,7 +270,6 @@
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
                     android:text="@string/notificaion_and_sound"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -294,7 +290,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
-                    android:background="?iGapDividerLine"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationAndSound"
@@ -308,7 +303,6 @@
                     android:layout_marginBottom="@dimen/dp8"
                     android:paddingTop="@dimen/dp8"
                     android:text="@string/chi_shared_Media"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
@@ -323,7 +317,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -336,7 +329,6 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
@@ -351,7 +343,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -379,7 +370,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
                     android:padding="8dp"
                     android:text="@string/shared_audio"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
@@ -407,7 +397,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
                     android:padding="8dp"
                     android:text="@string/shared_voice"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
@@ -435,7 +424,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
                     android:padding="8dp"
                     android:text="@string/shared_gif"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/gifCount"
@@ -463,7 +451,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
                     android:padding="8dp"
                     android:text="@string/shared_files"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/filesCount"
@@ -491,7 +478,6 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(7)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"
@@ -516,7 +502,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -532,7 +517,6 @@
                     android:onClick="@{()->viewModel.addNewMember()}"
                     android:padding="8dp"
                     android:text="@string/add_new_member"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
                     app:layout_constraintStart_toStartOf="@id/notificationTitle"
@@ -548,7 +532,6 @@
                     android:text="@string/show_member"
                     android:layout_marginStart="@dimen/dp18"
                     android:layout_marginEnd="@dimen/dp18"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -562,7 +545,6 @@
                     android:padding="@dimen/dp8"
                     android:text="@string/change_group_rights"
                     android:visibility="gone"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/showMemberList"
                     app:layout_constraintStart_toStartOf="@id/showMemberList"
@@ -573,7 +555,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showLeaveGroup}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -588,7 +569,6 @@
                     android:onClick="@{()->viewModel.onLeaveGroupClick()}"
                     android:padding="@dimen/dp8"
                     android:text="@string/Delete_and_leave_Group"
-                    android:textColor="@color/red"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLeaveGroup}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"

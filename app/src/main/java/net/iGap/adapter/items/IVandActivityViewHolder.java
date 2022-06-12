@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 
@@ -49,13 +50,13 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
 
         if (item.getScore() > 0) {
             image.setText(R.string.icon_upload);
-            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.green));
+            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.dayGreenTheme));
         } else if (item.getScore() < 0) {
             image.setText(R.string.icon_download);
-            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.red));
+            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.dayRedTheme));
         } else {
             image.setText(R.string.icon_delete_minus);
-            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.gray));
+            image.setTextColor(Theme.getColor(Theme.key_gray));
         }
     }
 }

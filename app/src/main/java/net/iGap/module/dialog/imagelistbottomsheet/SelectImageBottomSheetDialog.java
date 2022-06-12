@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import net.iGap.databinding.FragmentBottomSheetSelectImageBinding;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.dialog.BaseBottomSheet;
@@ -88,7 +90,7 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bottom_sheet_select_image, container, false);
-
+        binding.bottomSheetList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         BottomSheetListAdapter bottomSheetListAdapter = new BottomSheetListAdapter(itemList, range, position -> {
             dismiss();
             bottomSheetItemClickCallback.onClick(position);
@@ -96,7 +98,7 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
         binding.bottomSheetList.setAdapter(bottomSheetListAdapter);
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         initAttach();
-
+        binding.lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
         return binding.getRoot();
     }
 
@@ -301,7 +303,7 @@ public class SelectImageBottomSheetDialog extends BaseBottomSheet {
             }
 
             try {
-                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         FragmentEditImage.itemGalleryList = getAllShownImagesPath(getActivity());

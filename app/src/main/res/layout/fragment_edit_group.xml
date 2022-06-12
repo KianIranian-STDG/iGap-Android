@@ -12,6 +12,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContainer"
         style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -71,8 +72,6 @@
                     android:imeOptions="flagNoExtractUi"
                     android:maxLines="1"
                     android:text="@={viewModel.groupName}"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textColorHint="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toStartOf="@+id/emojiButton"
                     app:layout_constraintStart_toEndOf="@id/groupAvatar"
@@ -80,7 +79,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/emojiButton"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginEnd="@dimen/dp16"
@@ -89,6 +88,7 @@
                     android:onClick="@{()->viewModel.onEmojiClickListener()}"
                     android:text="@string/icon_emoji_smile"
                     android:textSize="@dimen/standardIconSize"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
                     app:layout_constraintEnd_toEndOf="parent" />
 
@@ -96,7 +96,6 @@
                     android:id="@+id/line"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:background="?iGapDividerLine"
                     app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
@@ -110,8 +109,6 @@
                     android:hint="@string/group_description"
                     android:maxLines="8"
                     android:text="@={viewModel.groupDescription}"
-                    android:textColor="?iGapSubtitleTextColor"
-                    android:textColorHint="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
@@ -130,7 +127,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider"
@@ -143,7 +139,6 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/chat_history_for_new_member_title"
-                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2"
@@ -156,7 +151,6 @@
                     android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.chatHistoryForNewMemberStatus}"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
@@ -166,7 +160,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
@@ -180,7 +173,6 @@
                     android:onClick="@{()->viewModel.onPermissionClick()}"
                     android:padding="8dp"
                     android:text="@string/permissions_title"
-                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toStartOf="@id/permissionItems"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
@@ -192,7 +184,6 @@
                     android:onClick="@{()->viewModel.onPermissionClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.permissionCount}"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/permission"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/permission"
@@ -206,7 +197,6 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@string/admins_title"
-                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/permission" />
@@ -218,7 +208,6 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.administratorsCount}"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/administrators"
@@ -232,7 +221,6 @@
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
-                    android:textColor="?iGapTitleTextColor"
                     android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
@@ -245,7 +233,6 @@
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.moderatorsCount}"
-                    android:textColor="?attr/colorPrimary"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
@@ -260,7 +247,6 @@
                     android:onClick="@{()->viewModel.onMemberClick()}"
                     android:padding="8dp"
                     android:text="@string/members"
-                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toStartOf="@id/membersCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
@@ -272,7 +258,6 @@
                     android:onClick="@{()->viewModel.onMemberClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.membersCount}"
-                    android:textColor="?iGapSubtitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/members"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/members"
@@ -283,7 +268,6 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
-                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/members"
@@ -297,7 +281,6 @@
                     android:onClick="@{()->viewModel.leaveGroupOnClick()}"
                     android:padding="8dp"
                     android:text="@string/Delete_and_leave_Group"
-                    android:textColor="@color/red"
                     app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line4" />

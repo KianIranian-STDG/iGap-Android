@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,8 +43,8 @@ import net.iGap.adapter.items.SearchItamIGap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.IClientSearchUserName;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
@@ -91,7 +92,6 @@ public class FragmentIgapSearch extends BaseFragment {
         //view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
-        imvNothingFound.setImageResource(R.drawable.find1);
 
         txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
 
@@ -108,7 +108,7 @@ public class FragmentIgapSearch extends BaseFragment {
         }, 150);
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
-        loadingProgressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(getContext()), PorterDuff.Mode.SRC_IN);
+        loadingProgressBar.getIndeterminateDrawable().setColorFilter(Theme.getColor(Theme.key_theme_color), PorterDuff.Mode.SRC_IN);
 
 //        edtSearch = view.findViewById(R.id.sfl_edt_search);
 

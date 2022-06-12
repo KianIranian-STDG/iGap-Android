@@ -6,6 +6,7 @@
     <!-- Contact Item -->
     <item name="name" type="id" />
     <item name="number" type="id" />
+    <item name="messageForwardContainer" type="id" />
 
     <!-- Video Item -->
     <item name="songArtist" type="id" />
@@ -14,7 +15,7 @@
     <item name="image_View_id" type="id"/>
     <item name="add_container" type="id"/>
     <item name="messageSenderAvatar" type="id" />
-    <item name="messageForwardContainer" type="id" />
+    <item name="messageOptionContainer" type="id" />
     <item name="messageSenderName" type="id" />
 
     <item name="textstickerView" type="id"/>

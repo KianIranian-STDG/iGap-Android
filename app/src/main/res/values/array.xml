@@ -79,6 +79,12 @@
         <item>@string/year_1</item>
     </string-array>
 
+    <string-array name="date_type">
+        <item>@string/miladi</item>
+        <item>@string/shamsi</item>
+        <item>@string/ghamari</item>
+    </string-array>
+
     <string-array name="privacy_setting_array">
         <item>@string/everybody</item>
         <item>@string/my_contacts</item>
@@ -135,6 +141,11 @@
         <item></item>
         <item></item>
         <item></item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>@string/female</item>
+        <item>@string/male</item>
     </string-array>
 
     <string name="bluetooth">bluetooth</string>

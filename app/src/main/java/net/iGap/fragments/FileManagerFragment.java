@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,6 +23,7 @@ import net.iGap.databinding.FileManagerFragmentBinding;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.IPickFile;
@@ -66,6 +71,13 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView btnSend = view.findViewById(R.id.btnSend);
+        AppCompatEditText edtMessage = view.findViewById(R.id.edtMessage);
+        edtMessage.setTextColor(Theme.getColor(Theme.key_title_text));
+        edtMessage.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+        edtMessage.setBackground(Theme.tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root), context,Theme.getColor(Theme.key_window_background)));
+        btnSend.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_floating_button), context, Theme.getColor(Theme.key_theme_color)));
+        binding.lytSearch.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background), context, Theme.getColor(Theme.key_theme_color)));
         setupToolbar();
         getDataFromArguments();
         setupListeners();
@@ -226,12 +238,12 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
     private void showSortDialog() {
         if (getContext() == null) return;
 
-        List<Integer> items = new ArrayList<>();
-        items.add(R.string.default_theme_title);
-        items.add(R.string.name);
-        items.add(R.string.date);
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.default_theme_title));
+        items.add(getString(R.string.name));
+        items.add(getString(R.string.date));
 
-        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             switch (position) {
                 case 0:
                     if (isSortByDate == null) return;

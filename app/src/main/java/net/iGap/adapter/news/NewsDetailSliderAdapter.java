@@ -10,6 +10,7 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsImage;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class NewsDetailSliderAdapter extends SliderViewAdapter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_detail_slide_item, null);
+        inflate.getRootView().setBackgroundColor(Theme.getColor(Theme.key_red));
         return new SliderVH(inflate);
     }
 

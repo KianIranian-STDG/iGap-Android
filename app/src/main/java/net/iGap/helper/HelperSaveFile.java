@@ -42,7 +42,7 @@ public class HelperSaveFile {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         saveFileToDownLoadFolder(filePath, fileName, folderType);
@@ -227,7 +227,7 @@ public class HelperSaveFile {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermission(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         saveToMusicFolder(path, name);

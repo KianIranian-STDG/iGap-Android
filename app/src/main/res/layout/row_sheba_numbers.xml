@@ -9,7 +9,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp10"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/largeTextSize"
         android:paddingLeft="@dimen/dp4"
         android:paddingRight="@dimen/dp4"
@@ -43,7 +42,7 @@
         android:layout_height="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="?iGapDividerLine"
+        android:background="@color/key_light_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32" />

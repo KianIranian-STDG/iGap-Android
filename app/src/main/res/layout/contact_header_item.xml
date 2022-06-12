@@ -9,5 +9,4 @@
     android:fontFamily="@font/main_font_bold"
     android:gravity="left"
     android:minWidth="@dimen/dp26"
-    android:textColor="?attr/iGapTitleTextColor"
     android:textSize="@dimen/dp20" />

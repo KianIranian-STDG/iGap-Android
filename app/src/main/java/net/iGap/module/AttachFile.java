@@ -43,12 +43,11 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FileManagerFragment;
-import net.iGap.fragments.NewFragmentMap;
+import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -56,6 +55,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.IPickFile;
@@ -255,9 +255,7 @@ public class AttachFile {
                 case image:
                     destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
                     break;
-                default:
-                    destinationPath = G.context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-                    break;
+
             }
 
             destinationPath += File.separator + name;
@@ -445,7 +443,7 @@ public class AttachFile {
         //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
         //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
 
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -485,7 +483,7 @@ public class AttachFile {
      */
     public void requestOpenGalleryForVideoMultipleSelect(final Fragment fragment) throws IOException {
 
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent();
@@ -524,7 +522,7 @@ public class AttachFile {
      */
     public void requestOpenGalleryForImageSingleSelect(final Fragment fragment) throws IOException {
 
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -573,12 +571,20 @@ public class AttachFile {
             @Override
             public void Allow() {
 
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                videoPath = G.DIR_VIDEOS + File.separator + "VID_" + timeStamp + ".mp4";
+
+                File videoFile = null;
+                try {
+                    videoFile = createVideoFile();
+                    videoPath = videoFile.getAbsolutePath();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    ex.printStackTrace();
+                    return;
+                }
 
                 Uri outputUri;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(videoPath));
+                    outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", videoFile);
                 } else {
                     outputUri = Uri.fromFile(new File(videoPath));
                 }
@@ -623,7 +629,7 @@ public class AttachFile {
         //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -668,7 +674,7 @@ public class AttachFile {
 //                showDeniedPermissionMessage(G.context.getString(R.string.permission_storage));
 //            }
 //        } else {
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
 
@@ -701,7 +707,7 @@ public class AttachFile {
 
     public void requestOpenDocumentFolder(final IPickFile listener) throws IOException {
 
-        HelperPermission.getStoragePermission(context, new OnGetPermission() {
+        HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 //Intent intent = new Intent(context, ActivityExplorer.class);
@@ -771,19 +777,15 @@ public class AttachFile {
     /**
      * get position
      *
-     * @param complete
-     * @param fragment
      * @throws IOException
      */
 
-    public void requestGetPosition(OnComplete complete, final Fragment fragment) throws IOException {
-
-        this.complete = complete;
+    public void requestGetPosition() throws IOException {
 
         HelperPermission.getLocationPermission(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                getPosition(fragment);
+                getPosition();
             }
 
             @Override
@@ -793,49 +795,22 @@ public class AttachFile {
         });
     }
 
-    private void getPosition(Fragment fragment) {
+    private void getPosition() {
         try {
+            FragmentMap fragment = FragmentMap.newInstance();
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showSettingsAlert(fragment);
             } else {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                new HelperFragment(G.fragmentActivity.getSupportFragmentManager(), NewFragmentMap.newInstance()).setReplace(false).load();
+                new HelperFragment(G.fragmentActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Location getLastBestLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener((com.google.android.gms.tasks.OnSuccessListener<? super Location>) location -> {
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null) {
-                        locationGPS = location;
-                    }
-                });
-        Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        long GPSLocationTime = 0;
-        if (null != locationGPS) {
-            GPSLocationTime = locationGPS.getTime();
-        }
-
-        long NetLocationTime = 0;
-
-        if (null != locationNet) {
-            NetLocationTime = locationNet.getTime();
-        }
-
-        if (0 < GPSLocationTime - NetLocationTime) {
-            return locationGPS;
-        } else {
-            return locationNet;
-        }
-    }
 
     void showSettingsAlert(final Fragment fragment) {
 
@@ -851,12 +826,7 @@ public class AttachFile {
 
     private void turnOnGps(Fragment fragment) {
 
-        if (fragment != null) {
-            fragment.startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
-        } else {
-            ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
-        }
-
+        ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
 
         isInAttach = true;
     }
@@ -975,6 +945,32 @@ public class AttachFile {
         }
         File image = File.createTempFile(imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
+                storageDir      /* directory */);
+
+        // Save a file: path for use with ACTION_VIEW intents
+        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public File createVideoFile() throws IOException {
+        // Create an image file name
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis() + random.nextInt(1000) + 1);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
+        String imageFileName = "VID_" + timeStamp + "_";
+
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+
+        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).exists()) {
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getPath()).mkdirs();
+        }
+
+        if (!storageDir.exists()) {
+            storageDir.mkdir();
+        }
+        File image = File.createTempFile(imageFileName,  /* prefix */
+                ".mp4",         /* suffix */
                 storageDir      /* directory */);
 
         // Save a file: path for use with ACTION_VIEW intents

@@ -27,14 +27,13 @@
 
                 <TextView
                     android:id="@+id/smslf_imv_icon_file"
-                    style="@style/myIconTextViewStyle"
+                    style="@style/baseFontIcon"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="@dimen/dp52"
                     android:layout_gravity="center"
                     android:background="@drawable/background_multi_select_light"
                     android:gravity="center"
-                    android:text="@string/icon_single_file"
-                    android:textColor="@color/shared_media_music_list_icon_color" />
+                    android:text="@string/icon_single_file"/>
 
                 <net.iGap.module.RadiusImageView
                     android:id="@+id/smslf_imv_image_file"
@@ -71,7 +70,6 @@
                     android:gravity="start"
                     android:singleLine="true"
                     android:text="file name"
-                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
                 <LinearLayout
@@ -91,7 +89,6 @@
                         android:maxWidth="@dimen/dp300"
                         android:singleLine="true"
                         android:text="file info"
-                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/smallTextSize" />
 
 
@@ -103,7 +100,6 @@
                         android:gravity="end"
                         android:singleLine="true"
                         android:text="3mb"
-                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
 
@@ -112,7 +108,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/gray"
+                    android:background="@color/key_gray"
                     android:visibility="gone" />
 
             </LinearLayout>

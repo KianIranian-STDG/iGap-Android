@@ -137,6 +137,8 @@ public class UserLoginResponse extends MessageHandler {
             RealmUserInfo.sendPushNotificationToServer();
         }
 
+        RealmUserInfo.sendMetrixTokenToServer();
+
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             contactCount = realm.where(RealmContacts.class).findAll().size();

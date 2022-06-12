@@ -3,6 +3,7 @@ package net.iGap.story.viewPager;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -62,6 +63,7 @@ import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
@@ -69,7 +71,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -207,6 +208,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
 
+    @SuppressLint("WrongConstant")
     @Override
     public View createView(Context context) {
         fragmentView = new FrameLayout(context);
@@ -301,7 +303,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         topLinearRootView.addView(chatIconTv, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 4, 0, 0, 0));
 
         verifyIconTv = new FontIconTextView(getContext());
-        verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
+        verifyIconTv.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
         verifyIconTv.setText(R.string.icon_blue_badge);
         verifyIconTv.setVisibility(View.GONE);
         setTextSize(verifyIconTv, R.dimen.standardTextSize);
@@ -360,11 +362,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         GradientDrawable layer1 = new GradientDrawable();
         layer1.setShape(GradientDrawable.RECTANGLE);
         layer1.setCornerRadii(new float[]{LayoutCreator.dp(8), LayoutCreator.dp(8), 0, 0, 0, 0, LayoutCreator.dp(8), LayoutCreator.dp(8)});
-        layer1.setColor(Theme.getInstance().getToolbarBackgroundColor(context));
+        layer1.setColor(Theme.getColor(Theme.key_toolbar_background));
 
         GradientDrawable layer2 = new GradientDrawable();
         layer2.setShape(GradientDrawable.RECTANGLE);
-        layer2.setColor(Theme.getInstance().getReplyContentBackground(context));
+        layer2.setColor(Theme.getColor(Theme.key_white));
 
         InsetDrawable insetDrawable = new InsetDrawable(layer2, LayoutCreator.dp(8), 0, 0, 0);
         LayerDrawable drawable = new LayerDrawable(new Drawable[]{layer1, insetDrawable});
@@ -376,7 +378,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         replyContainer = new FrameLayout(context);
         replyContainer.setVisibility(View.GONE);
         replyContainer.setContentDescription("replyContainer");
-        replyContainer.setBackground(Theme.getInstance().tintDrawable(context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light), context, R.attr.iGapSendMessageBubbleColor));
+        replyContainer.setBackground(Theme.tintDrawable(context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light), context, Theme.getColor(Theme.key_window_background)));
         replyContainer.setPadding(15, 15, 15, 15);
         replyAndKeyboardContainer.addView(replyContainer, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 15, 0, 15, 10));
 
@@ -386,6 +388,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         replyContentContainer = new LinearLayout(context);
         replyContentContainer.setContentDescription("replyContentContainer");
         replyContentContainer.setBackground(drawable);
+        replyContentContainer.setBackground(Theme.tintDrawable(context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light), context, Theme.getColor(Theme.key_window_background)));
         replyContentContainer.setOrientation(LinearLayout.VERTICAL);
         mainContentContainer.addView(replyContentContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 50, Gravity.LEFT, 10, 5, 45, 5));
 
@@ -398,7 +401,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         replyTo.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
         replyTo.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         replyTo.setEllipsize(TextUtils.TruncateAt.END);
-        replyTo.setTextColor(Theme.getInstance().getSendReplayUserColor(context));
+        replyTo.setTextColor(Theme.getColor(Theme.key_dark_theme_color));
         replyContentContainer.addView(replyTo, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 8, 0, 0, 0));
 
         replyCaption = new TextView(context);
@@ -407,7 +410,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         replyCaption.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         replyCaption.setEllipsize(TextUtils.TruncateAt.END);
         replyCaption.setSingleLine(true);
-        replyCaption.setTextColor(Theme.getInstance().getSubTitleColor(context));
+        replyCaption.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         replyContentContainer.addView(replyCaption, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 8, 0, 8, 0));
 
         sendReplyContainer = new FrameLayout(context);
@@ -420,15 +423,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         emojiIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         emojiIcon.setText(R.string.icon_emoji_smile);
         emojiIcon.setGravity(Gravity.CENTER);
-        emojiIcon.setTextColor(Theme.getInstance().getSubTitleColor(context));
+        emojiIcon.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         sendReplyContainer.addView(emojiIcon, LayoutCreator.createFrame(50, 50, Gravity.LEFT, 5, 0, 5, 0));
 
         replyEditText = new EventEditText(context);
         replyEditText.setBackground(null);
         replyEditText.setContentDescription("replyEditText");
         replyEditText.setListener(this::chatMotionEvent);
-        replyEditText.setHintTextColor(Theme.getInstance().getSubTitleColor(context));
-        replyEditText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        replyEditText.setTextColor(Theme.getColor(Theme.key_default_text));
+        replyEditText.setHintTextColor(Theme.getColor(Theme.key_subtitle_text));
         sendReplyContainer.addView(replyEditText, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.LEFT, 50, 0, 55, 0));
 
         sendIcon = new TextView(context);
@@ -437,7 +440,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         sendIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         sendIcon.setText(R.string.icon_send);
         sendIcon.setGravity(Gravity.CENTER);
-        sendIcon.setTextColor(Theme.getInstance().getSubTitleColor(context));
+        sendIcon.setTextColor(Theme.getColor(Theme.key_theme_color));
         sendReplyContainer.addView(sendIcon, LayoutCreator.createFrame(50, 50, Gravity.RIGHT, 5, 0, 5, 0));
 
         keyboardContainer = new FrameLayout(context);
@@ -878,7 +881,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 //                rootLayout.addView(suggestedLayout, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, 6, 8, 6, keyboardViewVisible ? LayoutCreator.pxToDp(keyboardHeight) + 60 : 60));
             }
 
-            suggestedRecyclerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), getContext(), R.attr.iGapEditTxtColor));
+            suggestedRecyclerView.setBackground(Theme.tintDrawable(getResources().getDrawable(R.drawable.shape_suggested_sticker), getContext(), Theme.getColor(Theme.key_title_text)));
 
             disposable = stickerRepository
                     .getStickerByEmoji(lastChar)
@@ -1437,18 +1440,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     @Override
-    public void onClick(View view, int position) {
-
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
-    }
-
-    @Override
     public void onCancel() {
         resumeCurrentStory();
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+
     }
 
     public interface PageViewOperator {
@@ -1458,7 +1456,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
 
-    private class ListAdapter extends RecyclerListView.ItemAdapter {
+    private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
 
         public void addRow() {
@@ -1475,7 +1473,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View cellView;
             cellView = new StoryCell(context);
-            return new RecyclerListView.ItemViewHolder(cellView, StoryDisplayFragment.this);
+            return new RecyclerListView.Holder(cellView);
         }
 
         @Override
@@ -1495,9 +1493,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             return rowSize;
         }
 
-
         @Override
-        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+        public boolean isEnabled(RecyclerView.ViewHolder holder) {
+            int viewType = holder.getItemViewType();
             return viewType != 2;
         }
     }

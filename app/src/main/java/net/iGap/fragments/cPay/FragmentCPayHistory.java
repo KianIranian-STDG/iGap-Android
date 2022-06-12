@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import net.iGap.adapter.cPay.AdapterCPayHistory;
 import net.iGap.databinding.FragmentCpayHistoryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayHistoryViewModel;
 
@@ -46,6 +48,8 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppCompatTextView fch_txt_noItem = view.findViewById(R.id.fch_txt_noItem);
+        fch_txt_noItem.setTextColor(Theme.getColor(Theme.key_title_text));
         initToolbar();
         initRecyclerView();
         setupListeners();

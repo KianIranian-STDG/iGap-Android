@@ -79,7 +79,6 @@
                     android:id="@+id/scoreView"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/score_background_drawable"
                     app:layout_constraintBottom_toBottomOf="@id/rankView"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -117,7 +116,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/rank"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/rankView"
                     app:layout_constraintRight_toRightOf="@id/rankView"
@@ -129,7 +127,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/score"
-                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/scoreView"
                     app:layout_constraintRight_toRightOf="@id/scoreView"
@@ -147,7 +144,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanBarcodeButton"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"
@@ -159,7 +156,7 @@
                     app:layout_constraintWidth_percent=".7" />
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/howToGetPointsButton"
-                    style="@style/iGapButton"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp10"

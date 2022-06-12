@@ -10,6 +10,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -19,8 +20,7 @@
             android:layout_width="@dimen/dp100"
             android:layout_height="4dp"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:background="?attr/iGapBottomSheetHeaderLine" />
+            android:layout_marginTop="8dp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
@@ -31,7 +31,6 @@
             android:layout_marginEnd="@dimen/dp10"
             android:padding="@dimen/dp8"
             android:singleLine="true"
-            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="gone" />
         <ProgressBar
@@ -45,8 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_marginBottom="@dimen/dp8"/>
     </LinearLayout>
 
 </layout>

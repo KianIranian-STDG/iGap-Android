@@ -11,6 +11,7 @@ import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AppUtils;
 
 public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener {
@@ -27,6 +28,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     }
 
     private void init() {
+        setBackgroundColor(Theme.getColor(Theme.key_background_footer));
         setMinimumHeight(Utils.dpToPx(50));
         setOrientation(HORIZONTAL);
     }

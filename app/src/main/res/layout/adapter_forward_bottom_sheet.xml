@@ -13,7 +13,7 @@
         android:padding="@dimen/dp2"
         app:civ_border_width="@dimen/dp2"
         app:civ_border_padding="@dimen/dp1"
-        app:civ_border_color="@color/transparent"
+        app:civ_border_color="@android:color/transparent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,6 @@
         android:gravity="center"
         android:lines="2"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,6 @@
         app:layout_constraintBottom_toBottomOf="@id/imageView_forward_bottomSheet"
         app:layout_constraintRight_toRightOf="@id/imageView_forward_bottomSheet"
         app:lineColor="#fff"
-        app:lineWidth="1.2dp"
-        app:unCheckColor="?attr/colorPrimary" />
+        app:lineWidth="1.2dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -84,7 +84,7 @@ public class FragmentDarkThemeViewModel extends ViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
+        editor.putString(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK_GREEN_THEME);
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
         editor.apply();
 

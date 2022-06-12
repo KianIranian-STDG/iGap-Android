@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -61,7 +62,9 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
             rootView = view.findViewById(R.id.liContactItem);
             title = view.findViewById(R.id.title);
+            title.setTextColor(Theme.getColor(Theme.key_title_text));
             subtitle = view.findViewById(R.id.subtitle);
+            subtitle.setTextColor(Theme.getColor(Theme.key_title_text));
             line = view.findViewById(R.id.topLine);
 
         }

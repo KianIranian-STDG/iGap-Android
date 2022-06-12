@@ -26,6 +26,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -366,6 +367,9 @@ public class FileUtils {
                         break;
                     case "audio":
                         contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                        break;
+                    default:
+                        Toast.makeText(context, R.string.permission_to_this_section_temporarily_denied, Toast.LENGTH_LONG).show();
                         break;
                 }
 

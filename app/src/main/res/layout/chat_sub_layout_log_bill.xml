@@ -17,19 +17,18 @@
         android:id="@+id/ll_bill"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?rootBackgroundColor"
         android:orientation="vertical">
 
         <net.iGap.module.CustomTextViewMedium
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/pink"
+            android:background="@color/dayPinkTheme"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:text="@string/bill_payment"
             android:paddingBottom="@dimen/dp6"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/dp15" />
 
         <LinearLayout
@@ -40,12 +39,12 @@
             android:orientation="vertical">
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/amount"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -54,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -71,15 +69,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/billType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/bill_type"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -88,7 +86,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -105,15 +102,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/billId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/bill_id"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -122,7 +119,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -139,15 +135,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/payId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/pay_id"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -156,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -173,15 +168,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/cardNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -190,7 +185,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -207,15 +201,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/orderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/mpl_transaction_order_id"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -224,7 +218,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -242,15 +235,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/terminalNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/terminal_No"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -259,7 +252,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -276,15 +268,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/referenceNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/rrn"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -293,7 +285,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -310,15 +301,15 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="?iGapDividerLine" />
+                android:background="@color/key_light_gray" />
 
             <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/traceNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/trace_number"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <net.iGap.module.CustomTextViewMedium
@@ -327,7 +318,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -336,11 +326,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/pink"
+            android:background="@color/dayPinkTheme"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/dp15" />
 
     </LinearLayout>

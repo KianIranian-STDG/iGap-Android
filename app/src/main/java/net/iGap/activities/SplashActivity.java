@@ -1,15 +1,21 @@
 package net.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.firebase1.NotificationCenter;
+import net.iGap.R;
 import net.iGap.helper.FileLog;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
@@ -18,11 +24,9 @@ import ir.metrix.Metrix;
 
 public class SplashActivity extends ActivityEnhanced {
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (Config.FILE_LOG_ENABLE) {
             FileLog.i("Splash activity on create");
         }
@@ -76,7 +80,12 @@ public class SplashActivity extends ActivityEnhanced {
                 finish();
             }
         }
+    }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
     }
 
     @Override

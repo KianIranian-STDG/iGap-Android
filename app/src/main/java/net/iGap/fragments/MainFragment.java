@@ -65,7 +65,8 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.components.MusicAndCallInfoStrip;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
@@ -78,7 +79,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -100,7 +100,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -119,7 +118,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ProgressBar loadingProgress;
     private LinearLayout emptyView;
     private FrameLayout floatActionLayout;
-    private FragmentMediaContainer mediaContainer;
+    private MusicAndCallInfoStrip mediaContainer;
 
     private RoomListAdapter roomListAdapter;
     private boolean inMultiSelectMode;
@@ -177,7 +176,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     public View createView(Context context) {
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+            StatusBarUtil.setColor(getActivity(), Theme.getColor(Theme.key_dark_theme_color), 50);
         }
 
         fragmentView = new FrameLayout(context);
@@ -263,7 +262,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
         TextView emptyTextView = new TextView(context);
         emptyTextView.setText(getResources().getString(R.string.empty_room));
-        emptyTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        emptyTextView.setTextColor(Theme.getColor(Theme.key_title_text));
         emptyTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         emptyTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         emptyTextView.setSingleLine();
@@ -271,7 +270,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         emptyView.addView(emptyTextView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 8));
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         floatActionLayout.setAlpha(.9f);
         floatActionLayout.setOnClickListener(v -> onFloatActionClick());
@@ -282,13 +281,13 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
 
-        mediaContainer = new FragmentMediaContainer(context, this);
+        mediaContainer = new MusicAndCallInfoStrip(context, this);
         mediaContainer.setListener(i -> {
             switch (i) {
-                case FragmentMediaContainer.CALL_TAG:
+                case MusicAndCallInfoStrip.CALL_TAG:
                     getActivity().startActivity(new Intent(getContext(), CallActivity.class));
                     break;
-                case FragmentMediaContainer.MEDIA_TAG:
+                case MusicAndCallInfoStrip.MEDIA_TAG:
                     if (!MusicPlayer.isVoice) {
                         Intent intent = new Intent(context, ActivityMain.class);
                         intent.putExtra(ActivityMain.openMediaPlayer, true);
@@ -296,12 +295,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                         getActivity().startActivity(intent);
                     }
                     break;
-                case FragmentMediaContainer.PLAY_TAG:
+                case MusicAndCallInfoStrip.PLAY_TAG:
                     break;
             }
         });
         layout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 39, Gravity.TOP | Gravity.LEFT, 0, -40, 0, 0));
-
+        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         return fragmentView;
     }
 
@@ -481,7 +480,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     toolbar.showActionToolbar();
                     BackDrawable backDrawable = new BackDrawable(true);
                     backDrawable.setRotation(1, true);
-                    backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+                    backDrawable.setRotatedColor(Theme.getColor(Theme.key_white));
                     toolbar.setBackIcon(backDrawable);
 
                     AnimatorSet animatorSet = new AnimatorSet();
@@ -540,14 +539,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.icon_mark_as_read, getResources().getString(R.string.mark_as_unread));
         readAllItem = moreItem.addSubItem(readAllTag, R.string.icon_mark_all_read, getResources().getString(R.string.read_all));
 
-        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_delete, 52);
+        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_Delete, 52);
         muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.icon_mute, 52);
         pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.icon_pin_to_top, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icons));
 
         multiSelectCounter = new NumberTextView(toolbarItems.getContext());
         multiSelectCounter.setTextSize(18);
         multiSelectCounter.setTypeface(ResourcesCompat.getFont(toolbarItems.getContext(), R.font.main_font_bold));
-        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTextColor(Theme.getColor(Theme.key_white));
         multiSelectCounter.setTag(selectCounter);
         toolbarItems.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
@@ -792,7 +791,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 iconView.setIcon(R.string.icon_speaker);
             else
                 iconView.setIcon(R.string.icon_mute);
-            iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
+            iconView.setIconColor(Theme.getColor(Theme.key_theme_color));
             frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
             TextView textView = new TextView(context);
@@ -802,7 +801,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             else
                 textView.setText(R.string.muted);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            textView.setTextColor(Theme.getColor(Theme.key_title_text));
             frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
             Animation fadeIn = new AlphaAnimation(0, 1);
@@ -1040,7 +1039,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                             new MaterialDialog.Builder(getActivity())
                                     .cancelable(false)
                                     .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                                    .titleColor(new Theme().getAccentColor(getActivity()))
+                                    .titleColor(Theme.getColor(Theme.key_theme_color))
                                     .content(R.string.deprecated)
                                     .contentGravity(GravityEnum.CENTER)
                                     .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
@@ -1067,14 +1066,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 getActivity().runOnUiThread(() -> {
                     if (getActivity().hasWindowFocus()) {
                         new MaterialDialog.Builder(getActivity())
-                                .title(R.string.igap_update)
-                                .titleColor(new Theme().getAccentColor(getActivity()))
+                                .title(R.string.iGapUpdate)
+                                .titleColor(Theme.getColor(Theme.key_theme_color))
                                 .titleGravity(GravityEnum.CENTER)
                                 .buttonsGravity(GravityEnum.CENTER)
                                 .content(R.string.new_version_avilable)
                                 .contentGravity(GravityEnum.CENTER)
                                 .negativeText(R.string.ignore)
-                                .negativeColor(new Theme().getAccentColor(getActivity()))
+                                .negativeColor(Theme.getColor(Theme.key_theme_color))
                                 .onNegative((dialog, which) -> dialog.dismiss())
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
@@ -1150,7 +1149,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
-        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_title_text));
 
         int leftMargin = 20;
         int rightMargin = 20;
@@ -1179,7 +1178,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         }
         confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         confirmTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-        confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        confirmTextView.setTextColor(Theme.getColor(Theme.key_title_text));
         frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 70, 20, 8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
@@ -1224,7 +1223,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             titleTextView.setText(String.format(Locale.US, "%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_title_text));
         if (selectedRoomCount == 1) {
             frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 20 : 70, 20, isAppRtl ? 70 : 20, 20));
         } else {
@@ -1241,7 +1240,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             confirmTextView.setText(R.string.do_you_want_clear_history_this);
         }
         confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        confirmTextView.setTextColor(Theme.getColor(Theme.key_title_text));
         frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 70, 20, 8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);

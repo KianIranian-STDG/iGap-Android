@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <solid android:color="@color/circleIndicatorSelected" />
+    <solid android:color="#5EBC45" />
 
     <size
         android:width="@dimen/dp28"

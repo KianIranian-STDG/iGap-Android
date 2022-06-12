@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.messenger.theme.Theme;
 
 public class Type2ViewHolder extends BaseViewHolder {
     private ImageView img0, img1;
@@ -19,7 +20,9 @@ public class Type2ViewHolder extends BaseViewHolder {
         img0 = itemView.findViewById(R.id.type2_img0);
         img1 = itemView.findViewById(R.id.type2_img1);
         card0 = itemView.findViewById(R.id.type2_card0);
+        card0.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
         card1 = itemView.findViewById(R.id.type2_card1);
+        card1.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
     }
 
     @Override

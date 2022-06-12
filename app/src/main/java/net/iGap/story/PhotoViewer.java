@@ -81,6 +81,7 @@ import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
 import net.iGap.libs.photoEdit.SaveSettings;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -253,7 +254,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             }
         };
         rootView.setListener(this);
-        rootView.setBackgroundColor(context.getResources().getColor(R.color.black_register));
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_black));
         rootView.setClickable(true);
 
 
@@ -266,7 +267,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LTR);
             ViewCompat.setLayoutDirection(rootView, ViewCompat.LAYOUT_DIRECTION_LTR);
         }
-        toolbar.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
+        toolbar.setBackgroundColor(Theme.getColor(Theme.key_black));
 
 
         viewPager = new CustomViewPager(context);
@@ -274,7 +275,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         cancelCropLayout = new LinearLayout(context);
         cancelCropLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cancelCropLayout.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack2));
+        cancelCropLayout.setBackgroundColor(Theme.getColor(Theme.key_dark_gray));
 
 
         rippleView = new RippleView(context);
@@ -284,52 +285,52 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         rippleView.setRipplePadding(5);
         cancelCropLayout.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
 
-        designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         designTextView.setText(context.getString(R.string.icon_close));
-        designTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        designTextView.setTextColor(Theme.getColor(Theme.key_white));
         designTextView.setGravity(Gravity.CENTER);
         rippleView.addView(designTextView, LayoutCreator.createRelative(48, LayoutCreator.MATCH_PARENT));
 
         emptyView = new View(context);
         cancelCropLayout.addView(emptyView, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
 
-        revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         revertTextView.setText(context.getString(R.string.icon_forward));
-        revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        revertTextView.setTextColor(Theme.getColor(Theme.key_white));
         revertTextView.setGravity(Gravity.CENTER);
         revertTextView.setVisibility(View.GONE);
         cancelCropLayout.addView(revertTextView, LayoutCreator.createLinear(52, 52));
 
-        cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         cropTextView.setGravity(Gravity.CENTER);
         cropTextView.setText(context.getString(R.string.icon_crop_picture));
-        cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        cropTextView.setTextColor(Theme.getColor(Theme.key_white));
         cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT));
 
-        editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         editTextView.setGravity(Gravity.CENTER);
         editTextView.setText(getString(R.string.icon_edit_picture));
-        editTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        editTextView.setTextColor(Theme.getColor(Theme.key_white));
         cancelCropLayout.addView(editTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
 
-        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         emoji.setGravity(Gravity.CENTER);
         emoji.setText(getString(R.string.icon_emoji_smile));
-        emoji.setTextColor(context.getResources().getColor(R.color.white));
+        emoji.setTextColor(Theme.getColor(Theme.key_white));
         emoji.setTextSize(26);
         cancelCropLayout.addView(emoji, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
-        addTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        addTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         addTextView.setGravity(Gravity.CENTER);
         addTextView.setBackground(context.getResources().getDrawable(R.drawable.ic_cam_text));
-        addTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        addTextView.setTextColor(Theme.getColor(Theme.key_white));
         cancelCropLayout.addView(addTextView, LayoutCreator.createLinear(30, 30, 0, 0, 8, 0));
 
-        paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         paintTextView.setGravity(Gravity.CENTER);
         paintTextView.setText(getString(R.string.icon_edit));
-        paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        paintTextView.setTextColor(Theme.getColor(Theme.key_white));
         cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, 52, 0, 0, 8, 0));
 
         rootView.addView(cancelCropLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
@@ -340,7 +341,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         LinearLayout bottomRecyclerViewContainer = new LinearLayout(context);
         bottomRecyclerViewContainer.setOrientation(LinearLayout.VERTICAL);
-        bottomRecyclerViewContainer.setBackground(context.getResources().getDrawable(R.drawable.background_transparent));
+        bottomRecyclerViewContainer.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.background_transparent), getContext(), Theme.getColor(Theme.key_theme_color)));
         bottomRootView.addView(bottomRecyclerViewContainer, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 7));
 
         previewRecycler = new RecyclerView(context);
@@ -349,7 +350,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
-        bottomLayoutPanel.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
+        bottomLayoutPanel.setBackgroundColor(Theme.getColor(Theme.key_black));
         bottomRootView.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
         layoutCaption = new LinearLayout(context);
@@ -358,11 +359,11 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         layoutCaption.setPadding(4, 0, 4, 0);
         bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 60, Gravity.CENTER));
 
-        keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         keyboardEmoji.setGravity(Gravity.CENTER);
         keyboardEmoji.setPadding(8, 0, 8, 8);
         keyboardEmoji.setText(context.getString(R.string.icon_emoji_smile));
-        keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
+        keyboardEmoji.setTextColor(Theme.getColor(Theme.key_white));
         keyboardEmoji.setTextSize(26);
         layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER, 0, 0, 0, 0));
 
@@ -372,17 +373,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         captionEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         captionEditText.setMaxLines(4);
         captionEditText.setPadding(10, 0, 10, 8);
-        captionEditText.setTextColor(context.getResources().getColor(R.color.white));
-        captionEditText.setHintTextColor(context.getResources().getColor(R.color.light_gray));
+        captionEditText.setTextColor(Theme.getColor(Theme.key_white));
+        captionEditText.setHintTextColor(Theme.getColor(Theme.key_light_gray));
         captionEditText.setTextSize(14);
         captionEditText.setBackground(null);
         layoutCaption.addView(captionEditText, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER));
 
-        iconOkTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        iconOkTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         iconOkTextView.setGravity(Gravity.BOTTOM);
         iconOkTextView.setPadding(8, 0, 8, 8);
         iconOkTextView.setText(context.getString(R.string.icon_check_ok));
-        iconOkTextView.setTextColor(context.getResources().getColor(R.color.white));
+        iconOkTextView.setTextColor(Theme.getColor(Theme.key_white));
         iconOkTextView.setTextSize(26);
         iconOkTextView.setVisibility(View.GONE);
         layoutCaption.addView(iconOkTextView, LayoutCreator.createLinear(52, 52, Gravity.BOTTOM));
@@ -400,10 +401,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         progressBar.setVisibility(View.GONE);
         layoutCaption.addView(progressBar, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
-        sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         sendTextView.setGravity(Gravity.CENTER);
         sendTextView.setText(context.getString(R.string.icon_send));
-        sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        sendTextView.setTextColor(Theme.getColor(Theme.key_white));
         sendTextView.setVisibility(View.GONE);
 
         rootView.addView(bottomRootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
@@ -437,7 +438,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         modes.put(viewHolderPostion, StoryModes.NONE);
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
 
                     @Override
                     public void Allow() throws IOException {
@@ -1321,8 +1322,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         Uri uri = Uri.parse(newPath);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             UCrop.Options options = new UCrop.Options();
-            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
-            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setStatusBarColor(Theme.getColor(Theme.key_black));
+            options.setToolbarColor(Theme.getColor(Theme.key_black));
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
@@ -1343,8 +1344,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     .setShowCropOverlay(true)
                     .setAspectRatio(1, 1)
                     .setFixAspectRatio(false)
-                    .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                    .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
+                    .setBorderCornerColor(Theme.getColor(Theme.key_white))
+                    .setBackgroundColor(Theme.getColor(Theme.key_dark_gray))
                     .setScaleType(CropImageView.ScaleType.FIT_CENTER)
                     .start(G.fragmentActivity, PhotoViewer.this);
         }

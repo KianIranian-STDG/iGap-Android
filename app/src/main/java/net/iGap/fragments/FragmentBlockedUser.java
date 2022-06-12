@@ -31,6 +31,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.CircleImageView;
@@ -161,9 +162,12 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             if (!viewHolder.isOpenDialog) {
                 viewHolder.isOpenDialog = true;
                 MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity)
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
                         .content(R.string.un_block_user)
                         .positiveText(R.string.B_ok)
                         .neutralText(getString(R.string.view_profile))
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
                         .onPositive((dialog12, which) -> {
                             new RequestUserContactsUnblock().userContactsUnblock(id);
 

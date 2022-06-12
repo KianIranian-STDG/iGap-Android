@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import net.iGap.databinding.FragmentTwoStepVerificationBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.TwoStepVerificationViewModel;
 
@@ -95,7 +97,13 @@ public class TwoStepVerificationFragment extends BaseFragment {
 
         viewModel.showDialogWaitTime.observe(getViewLifecycleOwner(), time -> {
             if (getActivity() != null && time != null) {
-                MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+                MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.error_check_password)
+                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                        .customView(R.layout.dialog_remind_time, true)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
@@ -103,8 +111,13 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 }).show();
 
                 View v = dialogWait.getCustomView();
-
+                v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
                 TextView remindTime = v.findViewById(R.id.remindTime);
+                remindTime.setTextColor(Theme.getColor(Theme.key_title_text));
+                final TextView textReason = v.findViewById(R.id.textReason);
+                textReason.setTextColor(Theme.getColor(Theme.key_title_text));
+                final TextView textRemindTime = v.findViewById(R.id.textRemindTime);
+                textRemindTime.setTextColor(Theme.getColor(Theme.key_title_text));
                 CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -125,7 +138,12 @@ public class TwoStepVerificationFragment extends BaseFragment {
 
         viewModel.showDialogForgotPassword.observe(getViewLifecycleOwner(), listResId -> {
             if (getActivity() != null && listResId != null) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.set_recovery_dialog_title).items(listResId).itemsCallback((dialog, view1, which, text) -> {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.set_recovery_dialog_title)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
+                        .items(listResId).itemsCallback((dialog, view1, which, text) -> {
                     viewModel.selectedRecoveryType(text.equals(getString(R.string.recovery_by_email_dialog)));
                 }).show();
             }

@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.observers.interfaces.OnUserContactsUnBlock;
 import net.iGap.proto.ProtoUserContactsUnblock;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;

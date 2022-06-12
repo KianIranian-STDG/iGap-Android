@@ -5,7 +5,7 @@
             <item android:top="20dp">
                 <shape android:shape="rectangle">
                     <corners android:radius="8dp" />
-                    <solid android:color="@color/green" />
+                    <solid android:color="#5EBC45" />
                     <size android:width="8dp" android:height="28dp" />
                     <padding android:top="20dp" />
                 </shape>
@@ -17,7 +17,7 @@
             <item android:top="20dp">
                 <shape android:shape="rectangle">
                     <corners android:radius="8dp" />
-                    <solid android:color="@color/bottomSheetHeaderLine" />
+                    <solid android:color="@color/key_light_gray" />
                     <size android:width="8dp" android:height="28dp" />
                     <padding android:top="20dp" />
                 </shape>

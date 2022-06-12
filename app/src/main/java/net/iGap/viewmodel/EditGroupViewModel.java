@@ -61,7 +61,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public MutableLiveData<Boolean> initEmoji = new MutableLiveData<>();
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> closePageImediatly = new MutableLiveData<>();
+    public MutableLiveData<Boolean> closePageImmediately = new MutableLiveData<>();
 
     public MutableLiveData<Long> onGroupAvatarUpdated = new MutableLiveData<>();
     private MutableLiveData<Integer> showUploadProgressLiveData = new MutableLiveData<>();
@@ -254,7 +254,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         role = realmGroupRoom.getRole();
         if (role.toString().equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString()) ||
                 role.toString().equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-            closePageImediatly.setValue(true);
+            closePageImmediately.setValue(true);
         }
     }
 

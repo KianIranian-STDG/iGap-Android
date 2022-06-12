@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.igasht.IGashtLocationItem;
 
 import java.util.List;
@@ -94,8 +95,11 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
 
             itemImageView = itemView.findViewById(R.id.itemImage);
             itemTitleTextView = itemView.findViewById(R.id.item_title);
+            itemTitleTextView.setTextColor(Theme.getColor(Theme.key_title_text));
             itemAddressTextView = itemView.findViewById(R.id.itemAddress);
+            itemAddressTextView.setTextColor(Theme.getColor(Theme.key_title_text));
             itemLocationTextView = itemView.findViewById(R.id.itemLocation);
+            itemLocationTextView.setTextColor(Theme.getColor(Theme.key_title_text));
             buyTicketButton = itemView.findViewById(R.id.buyTicketButton);
         }
     }
@@ -108,7 +112,9 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
         public ViewHolderProvinceInfo(@NonNull View itemView) {
             super(itemView);
             provinceName = itemView.findViewById(R.id.provinceName);
+            provinceName.setTextColor(Theme.getColor(Theme.key_title_text));
             locationItemCount = itemView.findViewById(R.id.locationCount);
+            locationItemCount.setTextColor(Theme.getColor(Theme.key_title_text));
         }
     }
 

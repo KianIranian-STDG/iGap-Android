@@ -1,10 +1,7 @@
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,14 +29,12 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import java.io.IOException;
 
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
 
 public class FragmentProfile extends BaseFragment {
@@ -206,7 +201,7 @@ public class FragmentProfile extends BaseFragment {
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
+                        .titleColor(Theme.getColor(Theme.key_default_text))
                         .content(R.string.updated_version_title)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
@@ -218,7 +213,7 @@ public class FragmentProfile extends BaseFragment {
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
+                        .titleColor(Theme.getColor(Theme.key_default_text))
                         .content(body)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {

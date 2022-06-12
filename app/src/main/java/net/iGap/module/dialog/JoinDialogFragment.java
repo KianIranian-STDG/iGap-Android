@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -15,6 +16,7 @@ import net.iGap.activities.ActivityEnhanced;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.CircleImageView;
 import net.iGap.proto.ProtoGlobal;
 
@@ -44,11 +46,17 @@ public class JoinDialogFragment extends BaseBottomSheet {
     private void setupView(View view) {
         CircleImageView ivAvatar = view.findViewById(R.id.ivAvatar);
         TextView tvName = view.findViewById(R.id.tvName);
+        tvName.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setTextColor(Theme.getColor(Theme.key_title_text));
         TextView tvMemberCount = view.findViewById(R.id.tvMemberCount);
+        tvMemberCount.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         TextView btnCancel = view.findViewById(R.id.btnCancel);
+        btnCancel.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         TextView btnJoin = view.findViewById(R.id.btnJoin);
-
+        btnJoin.setTextColor(Theme.getColor(Theme.key_icon));
+        View lineViewTop = view.findViewById(R.id.lineViewTop);
+        lineViewTop.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.bottom_sheet_dialog_line), getContext(), Theme.getColor(Theme.key_theme_color)));
         String title = getString(R.string.do_you_want_to_join_to_this);
         String memberNumber = "";
 

@@ -13,7 +13,7 @@
                 android:height="@dimen/public_check_box_size" />
 
             <stroke
-                android:color="@color/gray_6c"
+                android:color="@color/key_gray"
                 android:width="@dimen/dp1" />
 
             <corners android:radius="@dimen/dp4" />

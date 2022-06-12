@@ -27,7 +27,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.repository.StickerRepository;
 
@@ -90,7 +90,8 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
 
 
         tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));
+        tabLayout.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        tabLayout.setSelectedTabIndicatorColor(Theme.getColor(Theme.key_theme_color));
         viewPager = view.findViewById(R.id.pager);
 
         adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager());
@@ -98,6 +99,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        getTypes();
         getCategories();
 
     }
@@ -140,6 +142,11 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
                 });
     }
 
+    private void getTypes() {
+        emptyRecycle.setVisibility(View.GONE);
+        pBar.setVisibility(View.VISIBLE);
+    }
+
     private void updateFontTabLayout() {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             if (tabLayout.getTabAt(i) == null) {
@@ -150,7 +157,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
             tv.setText(tabLayout.getTabAt(i).getText());
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(ResourcesCompat.getFont(tv.getContext(), R.font.main_font));
-            tv.setTextColor(new Theme().getTitleTextColor(tv.getContext()));
+            tv.setTextColor(Theme.getColor(Theme.key_title_text));
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }

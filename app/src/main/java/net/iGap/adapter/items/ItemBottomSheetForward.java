@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -55,17 +56,17 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
 
         if (!structBottomSheetForward.isChecked()) {
             viewHolder.checkBoxSelect.setChecked(false);
-            viewHolder.imgSrc.setBorderColor(ContextCompat.getColor(viewHolder.imgSrc.getContext(), R.color.transparent));
+            viewHolder.imgSrc.setBorderColor(Color.TRANSPARENT);
         } else {
             viewHolder.checkBoxSelect.setChecked(true);
-            viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
+            viewHolder.imgSrc.setBorderColor(Theme.getColor(Theme.key_theme_color));
         }
 
         viewHolder.txtName.setText(EmojiManager.getInstance().replaceEmoji(structBottomSheetForward.getDisplayName(), viewHolder.txtName.getPaint().getFontMetricsInt()));
 
         viewHolder.checkBoxSelect.setChecked(structBottomSheetForward.isChecked());
 
-        viewHolder.checkBoxSelect.setUnCheckColor(ContextCompat.getColor(viewHolder.checkBoxSelect.getContext(), R.color.transparent));
+        viewHolder.checkBoxSelect.setUnCheckColor(Color.TRANSPARENT);
 
         viewHolder.checkBoxSelect.setOnClickListener(v -> OnClick(viewHolder));
 
@@ -77,11 +78,11 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
         if (structBottomSheetForward.isChecked()) {
             structBottomSheetForward.setChecked(false);
             viewHolder.checkBoxSelect.setChecked(false);
-            viewHolder.imgSrc.setBorderColor(ContextCompat.getColor(viewHolder.imgSrc.getContext(), R.color.transparent));
+            viewHolder.imgSrc.setBorderColor(Color.TRANSPARENT);
         } else {
             structBottomSheetForward.setChecked(true);
             viewHolder.checkBoxSelect.setChecked(true);
-            viewHolder.imgSrc.setBorderColor(new Theme().getAccentColor(viewHolder.imgSrc.getContext()));
+            viewHolder.imgSrc.setBorderColor(Theme.getColor(Theme.key_theme_color));
         }
         FragmentChat.onForwardBottomSheet.path(structBottomSheetForward);
     }
@@ -99,7 +100,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
 
         if (AccountManager.getInstance().getCurrentUser().getId() == mInfo.getPeer_id()) {
             avatarHandler.removeImageViewFromHandler(imageView);
-            imageView.setImageResource(R.drawable.ic_cloud_space_blue);
+            imageView.setImageResource(R.drawable.cloud);
         } else {
             avatarHandler.getAvatar(new ParamWithAvatarType(imageView, idForGetAvatar).avatarSize(R.dimen.dp52).avatarType(avatarType));
         }
@@ -133,8 +134,10 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
         public ViewHolder(View view) {
             super(view);
             txtName = view.findViewById(R.id.txtTitle_forward_bottomSheet);
+            txtName.setTextColor(Theme.getColor(Theme.key_default_text));
             imgSrc = view.findViewById(R.id.imageView_forward_bottomSheet);
             checkBoxSelect = view.findViewById(R.id.checkBox_forward_bottomSheet);
+            checkBoxSelect.setUnCheckColor(Theme.getColor(Theme.key_theme_color));
         }
     }
 

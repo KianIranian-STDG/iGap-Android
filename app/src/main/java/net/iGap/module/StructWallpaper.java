@@ -1,20 +1,20 @@
 package net.iGap.module;
 
-import net.iGap.fragments.FragmentChatBackground;
+import net.iGap.messenger.ui.fragments.ChatBackgroundFragment;
 import net.iGap.realm.RealmWallpaperProto;
 
 public class StructWallpaper {
 
-    private FragmentChatBackground.WallpaperType wallpaperType;
+    private ChatBackgroundFragment.WallpaperType wallpaperType;
     private String path;
     private RealmWallpaperProto protoWallpaper;
 
 
-    public FragmentChatBackground.WallpaperType getWallpaperType() {
+    public ChatBackgroundFragment.WallpaperType getWallpaperType() {
         return wallpaperType;
     }
 
-    public void setWallpaperType(FragmentChatBackground.WallpaperType wallpaperType) {
+    public void setWallpaperType(ChatBackgroundFragment.WallpaperType wallpaperType) {
         this.wallpaperType = wallpaperType;
     }
 

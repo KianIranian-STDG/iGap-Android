@@ -18,7 +18,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardBackgroundColor="?attr/iGapCardViewColor"
             app:cardCornerRadius="@dimen/discovery_radius"
             app:cardPreventCornerOverlap="false">
 
@@ -37,7 +36,6 @@
             android:layout_marginTop="@dimen/discovery_margin_top_nested"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardBackgroundColor="?attr/iGapCardViewColor"
             app:cardCornerRadius="@dimen/discovery_radius"
             app:cardPreventCornerOverlap="false">
 
@@ -58,7 +56,6 @@
         android:layout_margin="@dimen/discovery_margin"
         android:layout_weight="6"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="?attr/iGapCardViewColor"
         app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false">
 

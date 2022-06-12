@@ -35,7 +35,7 @@ public class AppConfig {
             FileLog.i("loadConfig");
 
             SharedPreferences preferences = G.context.getSharedPreferences("app_config", Context.MODE_PRIVATE);
-            servicesBaseUrl = preferences.getString("services_base_url", "https://gate.igap.net");
+            servicesBaseUrl = preferences.getString("services_base_url", "http://gate.igap.net");
             fileGateway = preferences.getInt("file_gateway", 0);
             defaultTab = preferences.getInt("default_tab", BottomNavigationFragment.CHAT_FRAGMENT);
             defaultTimeout = preferences.getLong("time_out", 10);
@@ -53,7 +53,7 @@ public class AppConfig {
                 SharedPreferences preferences = G.context.getSharedPreferences("app_config", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("services_base_url", servicesBaseUrl);
-                editor.putInt("file_gateway", 0);
+                editor.putInt("file_gateway", fileGateway);
                 editor.putInt("default_tab", defaultTab);
                 editor.putLong("time_out", defaultTimeout);
                 editor.putLong("max_file_size", maxFileSize);

@@ -28,10 +28,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.request.RequestSignalingRate;
 
 public class FragmentRatingBar extends BaseFragment {
@@ -83,7 +83,12 @@ public class FragmentRatingBar extends BaseFragment {
     }
 
     private void openDialogForRating() {
-        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Call_Quality).customView(R.layout.dialog_rating_call, true).theme(Theme.LIGHT).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity)
+                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                .title(R.string.Call_Quality).customView(R.layout.dialog_rating_call, true)
+                .negativeColor(Theme.getColor(Theme.key_button_background))
+                .positiveColor(Theme.getColor(Theme.key_button_background))
+                .positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 sendRateToServer();

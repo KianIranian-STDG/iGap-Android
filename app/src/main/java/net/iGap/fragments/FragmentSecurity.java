@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItem;
@@ -94,6 +96,9 @@ public class FragmentSecurity extends BaseFragment {
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.set_recovery_dialog_title)
                         .items(listRes)
+                        .negativeColor(Theme.getColor(Theme.key_button_background))
+                        .positiveColor(Theme.getColor(Theme.key_button_background))
+                        .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallback((dialog, view1, which, text) -> fragmentSecurityViewModel.forgetPassword(text.equals(getString(R.string.recovery_by_email_dialog))))
                         .show();
             }

@@ -1,12 +1,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">;
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <solid android:color="?iGapDividerLine" />
+            <solid android:color="@color/key_light_gray" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/transparent" />
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
 </selector>

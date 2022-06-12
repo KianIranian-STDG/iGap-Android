@@ -146,42 +146,44 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public void getFoldersSubItems(String folder, FolderResultCallback callback) {
         boolean isLogDir = folder.endsWith("/logs") && Config.FILE_LOG_ENABLE;
-        File file = new File(folder);
-        if (file.isDirectory()) {
-            String[] items = file.list();
-            if (items != null) {
-                new Thread(() -> {
-                    for (int i = 0; i < items.length; i++) {
-                        String item = items[i];
-                        //ignore hidden and temp files
-                        if (item.startsWith(".")) continue;
-                        if (item.endsWith(".tmp")) continue;
-                        if (isLogDir && i == items.length - 1) {
-                            continue;
-                        }
-                        String address = folder + "/" + item;
-                        File subFile = new File(address);
 
-                        addItemToList(
-                                0,
-                                item,
-                                subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
-                                address,
-                                subFile.isDirectory() ? R.string.folder : 0,
-                                subFile.isDirectory() ? null : getFileDescription(subFile),
-                                subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
-                                true
-                        );
+        new Thread(() -> {
+
+            File file = new File(folder);
+            if (file.isDirectory()) {
+                String[] items = file.list();
+                for (int i = 0; i < items.length; i++) {
+                    String item = items[i];
+
+                    //ignore hidden and temp files
+                    if (item.startsWith(".")) continue;
+                    if (item.endsWith(".tmp")) continue;
+                    if (isLogDir && i == items.length - 1) {
+                        continue;
                     }
-                    Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
-                    checkListHasSelectedBefore();
-                    callback.onResult(mItems);
-                }).start();
+
+                    String address = folder + "/" + item;
+                    File subFile = new File(address);
+
+                    addItemToList(
+                            0,
+                            item,
+                            subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
+                            address,
+                            subFile.isDirectory() ? R.string.Filters : 0,
+                            subFile.isDirectory() ? null : getFileDescription(subFile),
+                            subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
+                            true
+                    );
+                }
+
+                Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
+                checkListHasSelectedBefore();
+                callback.onResult(mItems);
             }
-            else{
-                callback.onResult(null);
-            }
-        }
+
+        }).start();
+
     }
 
     public void sortList(Boolean isDate) {
@@ -261,7 +263,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
             item.image = R.drawable.ic_fm_folder;
             item.backColor = R.drawable.shape_file_manager_folder_bg;
             item.isFolderOrFile = false;
-            item.description = R.string.folder;
+            item.description = R.string.Filters;
             result.add(item);
         }
         return result;
@@ -277,7 +279,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
             item.image = R.drawable.ic_fm_folder;
             item.backColor = R.drawable.shape_file_manager_folder_bg;
             item.isFolderOrFile = false;
-            item.description = R.string.folder;
+            item.description = R.string.Filters;
             result.add(item);
         }
         return result;

@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -50,18 +51,14 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
-import net.iGap.module.dialog.ChatAttachmentPopup;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.observers.interfaces.OnRotateImage;
-import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,18 +116,18 @@ public class StoryGalleryFragment extends BaseFragment {
         toolbarView = new FrameLayout(context);
 
 
-        toolbarView.setBackgroundResource(new Theme().getToolbarDrawableSharpe(getContext()));
+        toolbarView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.shape_toolbar_background_rect), context, Theme.getColor(Theme.key_theme_color)));
 
-        backIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        backIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         backIcon.setText(getString(R.string.icon_back));
-        backIcon.setTextColor(context.getResources().getColor(R.color.white));
+        backIcon.setTextColor(Theme.getColor(Theme.key_white));
         backIcon.setTextSize(22);
         backIcon.setGravity(Gravity.CENTER);
         toolbarView.addView(backIcon, LayoutCreator.createFrame(40, 40, Gravity.LEFT | Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 
-        sendIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        sendIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.baseFontIcon));
         sendIcon.setText(getString(R.string.icon_send));
-        sendIcon.setTextColor(context.getResources().getColor(R.color.white));
+        sendIcon.setTextColor(Theme.getColor(Theme.key_white));
         sendIcon.setTextSize(22);
         sendIcon.setVisibility(View.GONE);
         sendIcon.setGravity(Gravity.CENTER);
@@ -140,7 +137,7 @@ public class StoryGalleryFragment extends BaseFragment {
         toolbarTitle.setText(getString(R.string.gallery));
         toolbarTitle.setTypeface(tfMain);
         toolbarTitle.setTextSize(22);
-        toolbarTitle.setTextColor(getResources().getColor(R.color.whit_background));
+        toolbarTitle.setTextColor(Theme.getColor(Theme.key_white));
         toolbarView.addView(toolbarTitle, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
 
         rootView.addView(toolbarView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 60, Gravity.CENTER | Gravity.TOP));
@@ -529,6 +526,7 @@ public class StoryGalleryFragment extends BaseFragment {
                 caption = itemView.findViewById(R.id.caption);
                 check = itemView.findViewById(R.id.check);
                 play = itemView.findViewById(R.id.play);
+                play.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.background_progress), getContext(), Theme.getColor(Theme.key_theme_color)));
             }
 
         }

@@ -24,6 +24,7 @@ import net.iGap.R;
 import net.iGap.adapter.AdapterListContact;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.Contacts;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.accountManager.AccountManager;
@@ -72,6 +73,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         toolbarLayout = rootView.findViewById(R.id.ll_localContact_toolbar);
         loadingPb = rootView.findViewById(R.id.pb_localContact);
         txtNoItem = rootView.findViewById(R.id.txt_no_item);
+        txtNoItem.setTextColor(Theme.getColor(Theme.key_title_text));
         toolbarInit();
 
         //calculate these for recycler pagination
@@ -176,7 +178,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 .setLeftIcon(R.string.icon_back)
                 .setRightIcons(R.string.icon_share)
                 .setSearchBoxShown(true)
-                .setDefaultTitle(getString(R.string.Invite_Friends))
+                .setDefaultTitle(getString(R.string.InviteFriends))
                 .setLogoShown(true);
         mHelperToolbar.setListener(this);
 

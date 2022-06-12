@@ -1,5 +1,7 @@
 package net.iGap.module.upload;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import net.iGap.helper.upload.OnUploadListener;
@@ -9,7 +11,7 @@ import net.iGap.structs.MessageObject;
 
 import java.io.File;
 
-public class UploadObject {
+public class UploadObject implements Parcelable {
     public String key;
     public String fileToken;
     public String mimeType;
@@ -34,6 +36,34 @@ public class UploadObject {
     private UploadObject() {
 
     }
+
+    protected UploadObject(Parcel in) {
+        key = in.readString();
+        fileToken = in.readString();
+        mimeType = in.readString();
+        fileName = in.readString();
+        type = in.readString();
+        caption = in.readString();
+        messageId = in.readLong();
+        fileSize = in.readLong();
+        offset = in.readLong();
+        selector = in.readInt();
+        progress = in.readInt();
+        path = in.readString();
+        auth = in.createByteArray();
+    }
+
+    public static final Creator<UploadObject> CREATOR = new Creator<UploadObject>() {
+        @Override
+        public UploadObject createFromParcel(Parcel in) {
+            return new UploadObject(in);
+        }
+
+        @Override
+        public UploadObject[] newArray(int size) {
+            return new UploadObject[size];
+        }
+    };
 
     public static UploadObject createForMessage(MessageObject messageObject, ProtoGlobal.Room.Type roomType) {
         UploadObject object = new UploadObject();
@@ -138,5 +168,27 @@ public class UploadObject {
                 ", roomType=" + roomType +
                 ", onUploadListener=" + onUploadListener +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(key);
+        dest.writeString(fileToken);
+        dest.writeString(mimeType);
+        dest.writeString(fileName);
+        dest.writeString(type);
+        dest.writeString(caption);
+        dest.writeLong(messageId);
+        dest.writeLong(fileSize);
+        dest.writeLong(offset);
+        dest.writeInt(selector);
+        dest.writeInt(progress);
+        dest.writeString(path);
+        dest.writeByteArray(auth);
     }
 }

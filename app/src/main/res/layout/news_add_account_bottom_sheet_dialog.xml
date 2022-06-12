@@ -20,7 +20,6 @@
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/iGapBottomSheetHeaderLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +36,6 @@
             android:textSize="@dimen/largeTextSize"
             android:visibility="visible"
             android:text="@string/news_add_comment_title"
-            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lineViewTop" />
@@ -50,7 +48,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp16"
             android:hint="@string/news_add_comment_author"
-            android:textColorHint="?attr/iGapHintTextColor"
             app:errorText="@{bottomSheetViewModel.authorError}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -67,7 +64,6 @@
                 android:maxLines="1"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:text="@={bottomSheetViewModel.author}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +76,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp16"
             android:hint="@string/news_add_comment_email"
-            android:textColorHint="?attr/iGapHintTextColor"
             app:errorText="@{bottomSheetViewModel.emailError}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -97,7 +92,6 @@
                 android:maxLines="1"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:text="@={bottomSheetViewModel.email}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -111,7 +105,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginRight="@dimen/dp16"
             android:hint="@string/news_add_comment_comment"
-            android:textColorHint="?attr/iGapHintTextColor"
             app:errorText="@{bottomSheetViewModel.commentError}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -123,13 +116,12 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/dp24"
                 android:paddingLeft="@dimen/dp24"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:text="@={bottomSheetViewModel.comment}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/iGapButton"
+            style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"

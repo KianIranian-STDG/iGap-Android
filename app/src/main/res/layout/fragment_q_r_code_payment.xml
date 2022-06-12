@@ -13,7 +13,6 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/iGapWalletDarkerBackground"
         android:fillViewport="true"
         tools:context=".fragments.qrCodePayment.fragments.QRCodePaymentFragment">
 
@@ -32,14 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="320dp"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="?attr/iGapWalletLighterBackground"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true"
                 app:layout_constraintTop_toBottomOf="@id/toolbar_container" />
 
             <TextView
                 android:id="@+id/acceptor_image"
-                style="@style/myIconTextViewStyleGray"
+                style="@style/baseFontIcon"
                 android:layout_width="@dimen/dp100"
                 android:layout_height="@dimen/dp100"
                 android:layout_marginTop="@dimen/dp24"
@@ -58,7 +56,6 @@
                 android:layout_marginTop="28dp"
                 android:elevation="2dp"
                 android:text="@string/acceptor_name"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +82,6 @@
                 android:layout_marginTop="24dp"
                 android:elevation="@dimen/dp2"
                 android:text="@string/acceptor_code"
-                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/please_enter_desired_amount"
-                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +123,6 @@
                 android:hint="@string/amount_in_rial"
                 android:inputType="numberDecimal"
                 android:maxLength="11"
-                android:textColor="?attr/iGapTitleTextColor"
-                android:textColorHint="?attr/iGapHintTextColor"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +141,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirm_button"
-                style="@style/iGapButton"
+                style="@style/BaseIGapButtonStyle"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"

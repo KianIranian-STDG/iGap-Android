@@ -74,7 +74,7 @@
         android:id="@+id/story_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
+        android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -107,7 +107,7 @@
             android:layout_gravity="center|bottom"
             android:padding="10dp"
             android:text="Story"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
     </FrameLayout>

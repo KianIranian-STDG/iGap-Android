@@ -12,6 +12,7 @@ import net.iGap.api.IgashtApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;
 import net.iGap.api.StickerApi;
+import net.iGap.api.ai.AiApi;
 
 import java.util.Collections;
 
@@ -36,6 +37,27 @@ public class RetrofitFactory {
         }
 
         builder.addInterceptor(new IgapRetrofitInterceptor());
+
+        if (BuildConfig.DEBUG) {
+            httpClient = builder.build();
+        } else {
+            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(TlsVersion.TLS_1_2)
+                    .build();
+            httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
+        }
+        return httpClient;
+    }
+
+    public OkHttpClient getHttpClientForMobileBank() {
+        OkHttpClient httpClient;
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(httpLoggingInterceptor);
+        }
 
         if (BuildConfig.DEBUG) {
             httpClient = builder.build();
@@ -149,12 +171,23 @@ public class RetrofitFactory {
                 .create(StickerApi.class);
     }
 
-    public PecQRApi getPecQrRetrofit(){
+    public PecQRApi getPecQrRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.PEC_QR_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getHttpClient())
                 .build()
                 .create(PecQRApi.class);
+    }
+
+    public AiApi getAiApi() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.AI_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(new OkHttpClient.Builder().addInterceptor(interceptor).build())
+                .build()
+                .create(AiApi.class);
     }
 }

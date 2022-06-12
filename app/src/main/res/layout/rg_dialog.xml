@@ -4,7 +4,6 @@
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/iGapCardToCardBackground"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -31,7 +30,6 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@string/rg_Select_Country"
-            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold" />
 
@@ -41,7 +39,7 @@
         android:id="@+id/rg_borderButton"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/iGapDividerLine"
+        android:background="@color/key_light_gray"
         android:visibility="visible" />
 
     <ListView
@@ -50,18 +48,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:choiceMode="singleChoice"
-        android:divider="?attr/iGapDividerLine"
+        android:divider="@color/key_light_gray"
         android:fadeScrollbars="false"
         android:layoutDirection="rtl"
         android:padding="@dimen/dp8"
         android:scrollbarSize="@dimen/dp4"
-        android:scrollbarThumbVertical="?attr/colorPrimary"
         android:scrollbars="none" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/iGapDividerLine" />
+        android:background="@color/key_light_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,7 +78,6 @@
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/B_cancel"
-            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold" />
 

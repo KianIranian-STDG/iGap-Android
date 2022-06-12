@@ -165,10 +165,10 @@ public class PlaqueView extends ConstraintLayout {
 
         } else {
 
-            p1.setBackgroundResource(R.color.transparent);
-            p2.setBackgroundResource(R.color.transparent);
-            pCity.setBackgroundResource(R.color.transparent);
-            pAlphabet.setBackgroundResource(R.color.transparent);
+            p1.setBackgroundColor(Color.TRANSPARENT);
+            p2.setBackgroundColor(Color.TRANSPARENT);
+            pCity.setBackgroundColor(Color.TRANSPARENT);
+            pAlphabet.setBackgroundColor(Color.TRANSPARENT);
 
             p1.setEnabled(false);
             p2.setEnabled(false);

@@ -1,6 +1,7 @@
 package net.iGap.fragments.news;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,9 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -32,6 +36,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsDetailPageBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.news.NewsComment;
 import net.iGap.model.news.NewsDetail;
 import net.iGap.model.news.NewsList;
@@ -70,7 +75,22 @@ public class NewsDetailFrag extends BaseAPIViewFrag<NewsDetailVM> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        View title_back = view.findViewById(R.id.title_back);
+        title_back.setBackgroundColor(Theme.getColor(Theme.key_red));
+        MaterialButton share_newsBTN = view.findViewById(R.id.share_newsBTN);
+        share_newsBTN.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
+        share_newsBTN.setTextColor(Theme.getColor(Theme.key_white));
+        AppCompatTextView share_news = view.findViewById(R.id.share_news);
+        share_news.setTextColor(Theme.getColor(Theme.key_red));
+        AppCompatTextView comments_title = view.findViewById(R.id.comments_title);
+        comments_title.setTextColor(Theme.getColor(Theme.key_red));
+        MaterialButton write_comment = view.findViewById(R.id.write_comment);
+        write_comment.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_red)));
+        write_comment.setTextColor(Theme.getColor(Theme.key_white));
+        AppCompatTextView relatedNews_title = view.findViewById(R.id.relatedNews_title);
+        relatedNews_title.setTextColor(Theme.getColor(Theme.key_red));
+        SliderView banner_slider = view.findViewById(R.id.banner_slider);
+        banner_slider.setIndicatorSelectedColor(Theme.getColor(Theme.key_theme_color));
         Bundle arg = getArguments();
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()

@@ -16,7 +16,6 @@ import net.iGap.fragments.emoji.apiModels.IssueDataModel;
 import net.iGap.fragments.emoji.apiModels.RsaDataModel;
 import net.iGap.fragments.emoji.apiModels.SliderDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
-import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
@@ -185,18 +184,6 @@ public class StickerRepository {
         return stickerApi.getFavoriteSticker()
                 .subscribeOn(Schedulers.newThread())
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
-    }
-
-    private Single<UserGiftStickersDataModel> getMyGiftStickerBuyApiService(String status, int skip, int limit) {
-        return stickerApi.getUserGiftSticker(status, skip, limit).subscribeOn(Schedulers.newThread());
-    }
-
-//    private Single<UserGiftStickersDataModel> getMyActivatedGiftStickerApiService() {
-//        return stickerApi.getMyActivatedGiftSticker().subscribeOn(Schedulers.newThread());
-//    }
-
-    private Single<UserGiftStickersDataModel> getMyActivatedGiftStickerApiService(int skip, int limit) {
-        return stickerApi.getMyActivatedGiftSticker(skip, limit).subscribeOn(Schedulers.newThread());
     }
 
     private Single<StickerCategoryGroupDataModel> getGiftableStickersApi() {

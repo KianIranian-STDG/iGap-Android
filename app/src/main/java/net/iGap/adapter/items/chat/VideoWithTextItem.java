@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 
@@ -28,6 +27,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperRadius;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
@@ -89,7 +89,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         if (fileType == LocalFileType.THUMBNAIL) {
 //            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
             Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
- //           ImageLoadingServiceInjector.inject().loadImage(holder.image, suitablePath(localPath));
+            //           ImageLoadingServiceInjector.inject().loadImage(holder.image, suitablePath(localPath));
         } else {
             AppUtils.setProgresColor(holder.progress.progressBar);
             holder.progress.setVisibility(View.VISIBLE);
@@ -130,7 +130,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setSingleLine(true);
             duration.setPadding(i_Dp(R.dimen.dp4), dpToPx(1), i_Dp(R.dimen.dp4), dpToPx(1));
             duration.setAllCaps(TRUE);
-            duration.setTextColor(ContextCompat.getColor(view.getContext(), R.color.gray10));
+            duration.setTextColor(Theme.getColor(Theme.key_white));
             setTextSize(duration, R.dimen.verySmallTextSize);
             setTypeFace(duration);
             FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -147,7 +147,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             more.setGravity(Gravity.CENTER);
             more.setText(R.string.icon_other_horizontal_dots);
             setTextSize(more, R.dimen.largeTextSize);
-            more.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+            more.setTextColor(Theme.getColor(Theme.key_white));
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_50.gravity = Gravity.RIGHT | Gravity.TOP;

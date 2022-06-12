@@ -13,14 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -28,6 +29,8 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.customView.TextBadge;
+
+import org.jetbrains.annotations.NotNull;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 
@@ -51,21 +54,25 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
-    private boolean isDarkTheme = G.themeColor == Theme.DARK;
+    private boolean isDarkTheme = Theme.isDark()||Theme.isNight();
+    private Context context;
 
 
     public TabItem(Context context) {
         super(context);
+        this.context = context;
         init(null);
     }
 
     public TabItem(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         init(attrs);
     }
 
     public TabItem(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         init(attrs);
     }
 
@@ -75,7 +82,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         if (haveAvatarImage) {
             if (imageView == null) {
                 imageView = new CircleImageView(getContext());
-                imageView.setBackgroundResource(new Theme().getUserProfileTabSelector(getContext()));
+                imageView.setBackground(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.profile_stroke_drawable), context, Theme.getColor(Theme.key_footer_theme_icon)));
                 imageView.setPadding((int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2));
                 if (avatarHandler == null) {
                     avatarHandler = new AvatarHandler();
@@ -86,7 +93,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         } else {
             if (imageView == null)
                 imageView = new AppCompatImageView(getContext());
-
         }
 
         if (textView == null)
@@ -100,10 +106,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 new int[]{-android.R.attr.state_selected}, // none
         };
 
-        int[] colors = new int[]{
-                new Theme().getAccentColor(textView.getContext()),
-                new Theme().getSubTitleColor(textView.getContext())
-        };
+        int[] colors = new int[]{Theme.getColor(Theme.key_footer_theme_icon),Theme.getColor(Theme.key_footer_gray_icon)};
 
         ColorStateList myList = new ColorStateList(states, colors);
         textView.setTextColor(myList);
@@ -113,6 +116,14 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         addView(textView);
 
         setOnClickListener(this);
+    }
+
+    private int getDrawableAttr(@NotNull Context context, int attrResId) {
+        TypedValue typedValue = new TypedValue();
+        TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});
+        int drawableResId = a.getResourceId(0, 0);
+        a.recycle();
+        return drawableResId;
     }
 
     @Override
@@ -175,7 +186,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
-
     }
 
     private void parseAttr(AttributeSet attributeSet) {
@@ -241,18 +251,17 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         /*textView.setSelected(isActive);*/
         /*imageView.setSelected(isActive);*/
         if (!haveAvatarImage) {
-            ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), new Theme().getTheme(getContext()));
             if (isDarkTheme) {
                 if (active) {
-                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), darkSelectedIcon, wrapper.getTheme()));
+                    imageView.setImageDrawable( Theme.tintDrawable(ContextCompat.getDrawable(getContext(), darkSelectedIcon), getContext(), Theme.getColor(Theme.key_footer_theme_icon)));
                 } else {
-                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), darkUnSelectedIcon, wrapper.getTheme()));
+                    imageView.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), darkUnSelectedIcon), getContext(), Theme.getColor(Theme.key_footer_gray_icon)));
                 }
             } else {
                 if (active) {
-                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), selectedIcon, wrapper.getTheme()));
+                    imageView.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), selectedIcon), getContext(), Theme.getColor(Theme.key_footer_theme_icon)));
                 } else {
-                    imageView.setImageDrawable(VectorDrawableCompat.create(getResources(), unSelectedIcon, wrapper.getTheme()));
+                    imageView.setImageDrawable(Theme.tintDrawable(ContextCompat.getDrawable(getContext(), unSelectedIcon), getContext(), Theme.getColor(Theme.key_footer_gray_icon)));
                 }
             }
         }
@@ -289,7 +298,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     public void updateBadge(int unreadTotal, boolean isNeedText) {
         if (badgeView != null) {
-            badgeView.setBadgeColor(getContext().getResources().getColor(R.color.red));
+            badgeView.setBadgeColor(Theme.getColor(Theme.key_light_red));
             badgeView.setText(getUnreadCount(unreadTotal));
             badgeView.getTextView().setTextSize(9);
             badgeView.getTextView().setSingleLine(true);

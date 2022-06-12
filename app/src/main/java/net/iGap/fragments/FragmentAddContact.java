@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -34,8 +35,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -56,6 +59,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.observers.interfaces.OnUserContactEdit;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -142,7 +146,14 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             pageMode = ContactMode.valueOf(bundle.getString(CONTACT_MODE, ContactMode.ADD.name()));
             String contactName = bundle.getString(NAME, "");
             binding.acEdtFirstName.setText(contactName);
-
+            binding.acEdtFirstName.setTextColor(Theme.getColor(Theme.key_title_text));
+            binding.acEdtFirstName.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+            binding.acEdtLastName.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+            binding.acEdtLastName.setTextColor(Theme.getColor(Theme.key_title_text));
+            binding.acTxtCodeCountry.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+            binding.acTxtCodeCountry.setTextColor(Theme.getColor(Theme.key_title_text));
+            binding.acEdtPhoneNumber.setHintTextColor(Theme.getColor(Theme.key_theme_color));
+            binding.acEdtPhoneNumber.setTextColor(Theme.getColor(Theme.key_title_text));
             if (pageMode == ContactMode.EDIT) {
                 mContactId = bundle.getLong(CONTACT_ID, 0);
                 mContactName = bundle.getString(CONTACT_NAME, "");
@@ -155,6 +166,21 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             }
         }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        binding.acLayoutParent.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+
+        binding.acEdtFirstName.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.acEdtFirstName.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ColorStateList colorStateList = ColorStateList.valueOf(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(binding.acEdtFirstName, colorStateList);
+        binding.acEdtLastName.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.acEdtLastName.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(binding.acEdtLastName, colorStateList);
+        binding.acTxtCodeCountry.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.acTxtCodeCountry.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(binding.acTxtCodeCountry, colorStateList);
+        binding.acEdtPhoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
+        binding.acEdtPhoneNumber.setHintTextColor(Theme.getColor(Theme.key_default_text));
+        ViewCompat.setBackgroundTintList(binding.acEdtPhoneNumber, colorStateList);
         initComponent();
     }
 
@@ -243,6 +269,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
         binding.acEdtPhoneNumber.setOnFocusChangeListener((v, hasFocus) -> {
             binding.phoneNumberError.setText(R.string.empty_error_message);
+            binding.phoneNumberError.setTextColor(Theme.getColor(Theme.key_red));
             if (binding.acEdtPhoneNumber.getText().toString().startsWith("0")) {
                 binding.phoneNumberError.setText(R.string.Toast_First_0);
                 binding.acEdtPhoneNumber.setText("");
@@ -297,6 +324,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             dialog.getWindow().setLayout(setWidth, setHeight);
             final TextView txtTitle = dialog.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialog.findViewById(R.id.rg_edtSearch_toolbar);
+            txtTitle.setTextColor(Theme.getColor(Theme.key_icon));
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);
@@ -375,7 +403,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
                     return false;
                 }
             });
-
             dialog.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialog.dismiss());
 
             if (!(getActivity()).isFinishing()) {

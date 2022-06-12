@@ -31,8 +31,8 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.Theme;
 import net.iGap.module.customView.CallRippleView;
 import net.iGap.module.customView.TextImageView;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
@@ -246,7 +246,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         callTypeTextView = new TextView(this);
         callTypeTextView.setText(isVideoCall() ? R.string.video_calls : R.string.voice_calls);
         callTypeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        callTypeTextView.setTextColor(getResources().getColor(R.color.white));
+        callTypeTextView.setTextColor(Theme.getColor(Theme.key_white));
         callTypeTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
         callTypeTextView.setLines(1);
         callTypeTextView.setMaxLines(1);
@@ -257,7 +257,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         statusTextView = new AppCompatTextView(this);
         statusTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        statusTextView.setTextColor(getResources().getColor(R.color.white));
+        statusTextView.setTextColor(Theme.getColor(Theme.key_white));
         statusTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font_bold));
         statusTextView.setLines(1);
         statusTextView.setMaxLines(1);
@@ -277,7 +277,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         durationTextView = new AppCompatTextView(this);
         durationTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        durationTextView.setTextColor(getResources().getColor(R.color.white));
+        durationTextView.setTextColor(Theme.getColor(Theme.key_white));
         durationTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
         durationTextView.setLines(1);
         durationTextView.setMaxLines(1);
@@ -287,7 +287,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         rootView.addView(durationTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 16, 72, 16, 0));
 
         nameTextView = new TextView(this);
-        nameTextView.setTextColor(getResources().getColor(R.color.white));
+        nameTextView.setTextColor(Theme.getColor(Theme.key_white));
         nameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 40);
         nameTextView.setTypeface(ResourcesCompat.getFont(this, R.font.main_font));
         nameTextView.setLines(1);
@@ -325,7 +325,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
             TextView declineText = new AppCompatTextView(this);
             declineText.setText(R.string.send_text);
-            declineText.setTextColor(Theme.getInstance().getDividerColor(this));
+            declineText.setTextColor(Theme.getColor(Theme.key_white));
             declineText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             quickDeclineView.addView(declineText, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 8));
 
@@ -362,7 +362,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         if (isVideoCall()) {
             cameraView = new TextImageView(this);
             cameraView.setText(R.string.camera);
-            cameraView.setTextColor(getResources().getColor(R.color.white));
+            cameraView.setTextColor(Theme.getColor(Theme.key_white));
             cameraView.setOnClickListener(v -> toggleCamera());
             cameraView.setImageResource(R.drawable.ic_call_camera);
             row1.addView(cameraView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
@@ -370,25 +370,25 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         holdView = new TextImageView(this);
         holdView.setText(R.string.hold);
-        holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        holdView.setViewColor(CallManager.getInstance().isCallInHold() ? Theme.getColor(Theme.key_dark_theme_color) : Theme.getColor(Theme.key_white));
         holdView.setOnClickListener(v -> holdCall());
         holdView.setImageResource(R.drawable.ic_call_hold);
-        holdView.setViewColor(CallManager.getInstance().isCallAlive() ? CallManager.getInstance().isCallInHold() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white) : getResources().getColor(R.color.gray_9d));
+        holdView.setViewColor(CallManager.getInstance().isCallAlive() ? CallManager.getInstance().isCallInHold() ? Theme.getColor(Theme.key_dark_theme_color) : Theme.getColor(Theme.key_white) : Theme.getColor(Theme.key_gray));
         row1.addView(holdView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
         if (CallManager.getInstance().isCallAlive()) {
             if (CallManager.getInstance().isCallInHold()) {
-                holdView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+                holdView.setViewColor(Theme.getColor(Theme.key_dark_theme_color));
             } else {
-                holdView.setViewColor(getResources().getColor(R.color.white));
+                holdView.setViewColor(Theme.getColor(Theme.key_white));
             }
         } else {
-            holdView.setViewColor(getResources().getColor(R.color.gray_4c));
+            holdView.setViewColor(Theme.getColor(Theme.key_light_gray));
         }
 
         directView = new TextImageView(this);
         directView.setText(R.string.message);
-        directView.setTextColor(getResources().getColor(R.color.white));
+        directView.setTextColor(Theme.getColor(Theme.key_white));
         directView.setOnClickListener(v -> toggleCamera());
         directView.setImageResource(R.drawable.ic_call_chat);
         directView.setOnClickListener(v -> goToChat());
@@ -404,21 +404,21 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         if (!CallManager.getInstance().isMicEnable()) {
             toggleMic();
         }
-        micView.setViewColor(CallManager.getInstance().isMicEnable() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
+        micView.setViewColor(CallManager.getInstance().isMicEnable() ? Theme.getColor(Theme.key_white) : Theme.getColor(Theme.key_dark_theme_color));
         micView.setOnClickListener(v -> toggleMic());
         row2.addView(micView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
         speakerView = new TextImageView(this);
         speakerView.setImageResource(R.drawable.ic_call_speaker);
         speakerView.setText(R.string.speacker);
-        speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        speakerView.setViewColor(isSpeakerEnable() ? Theme.getColor(Theme.key_dark_theme_color) : Theme.getColor(Theme.key_white));
         speakerView.setOnClickListener(v -> toggleSpeaker());
         row2.addView(speakerView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
         bluetoothView = new TextImageView(this);
         bluetoothView.setImageResource(R.drawable.ic_call_bluetooth);
         bluetoothView.setText(R.string.bluetooth);
-        bluetoothView.setViewColor(CallManager.getInstance().getActiveAudioDevice() == CallAudioManager.AudioDevice.BLUETOOTH ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        bluetoothView.setViewColor(CallManager.getInstance().getActiveAudioDevice() == CallAudioManager.AudioDevice.BLUETOOTH ? Theme.getColor(Theme.key_dark_theme_color) : Theme.getColor(Theme.key_white));
         bluetoothView.setOnClickListener(v -> bluetoothClick());
         row2.addView(bluetoothView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
@@ -500,10 +500,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void checkForBluetoothAvailability(Set<CallAudioManager.AudioDevice> availableDevices) {
         if (bluetoothView != null && availableDevices.contains(CallAudioManager.AudioDevice.BLUETOOTH)) {
             bluetoothView.setEnabled(true);
-            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
-            speakerView.setViewColor(getResources().getColor(R.color.white));
+            bluetoothView.setViewColor(Theme.getColor(Theme.key_dark_theme_color));
+            speakerView.setViewColor(Theme.getColor(Theme.key_white));
         } else {
-            bluetoothView.setViewColor(getResources().getColor(R.color.kuknos_gray));
+            bluetoothView.setViewColor(Theme.getColor(Theme.key_gray));
             bluetoothView.setEnabled(false);
         }
     }
@@ -522,13 +522,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         if (CallManager.getInstance().getActiveAudioDevice() == CallAudioManager.AudioDevice.BLUETOOTH) {
             if (CallService.getInstance() != null)
                 CallService.getInstance().setAudioDevice(CallAudioManager.AudioDevice.SPEAKER_PHONE);
-            bluetoothView.setViewColor(getResources().getColor(R.color.white));
-            speakerView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+            bluetoothView.setViewColor(Theme.getColor(Theme.key_white));
+            speakerView.setViewColor(Theme.getColor(Theme.key_dark_theme_color));
         } else {
             if (CallService.getInstance() != null)
                 CallService.getInstance().setAudioDevice(CallAudioManager.AudioDevice.BLUETOOTH);
-            bluetoothView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
-            speakerView.setViewColor(getResources().getColor(R.color.white));
+            bluetoothView.setViewColor(Theme.getColor(Theme.key_dark_theme_color));
+            speakerView.setViewColor(Theme.getColor(Theme.key_white));
         }
         if (CallService.getInstance() != null)
             CallManager.getInstance().setActiveAudioDevice(CallService.getInstance().getActiveAudioDevice());
@@ -548,14 +548,14 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void toggleMic() {
         CallManager.getInstance().toggleMic();
-        micView.setViewColor(CallManager.getInstance().isMicEnable() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
+        micView.setViewColor(CallManager.getInstance().isMicEnable() ? Theme.getColor(Theme.key_white) : Theme.getColor(Theme.key_dark_theme_color));
     }
 
     private void toggleSpeaker() {
         if (CallService.getInstance() == null)
             return;
         CallService.getInstance().toggleSpeaker();
-        speakerView.setViewColor(isSpeakerEnable() ? Theme.getInstance().getPrimaryDarkColor(this) : getResources().getColor(R.color.white));
+        speakerView.setViewColor(isSpeakerEnable() ? Theme.getColor(Theme.key_dark_theme_color) : Theme.getColor(Theme.key_white));
     }
 
     private void notAnswered() {
@@ -630,12 +630,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
                 if (CallManager.getInstance().isCallAlive()) {
                     if (CallManager.getInstance().isCallInHold()) {
-                        holdView.setViewColor(Theme.getInstance().getPrimaryDarkColor(this));
+                        holdView.setViewColor(Theme.getColor(Theme.key_dark_theme_color));
                     } else {
-                        holdView.setViewColor(getResources().getColor(R.color.white));
+                        holdView.setViewColor(Theme.getColor(Theme.key_white));
                     }
                 } else {
-                    holdView.setViewColor(getResources().getColor(R.color.gray_9d));
+                    holdView.setViewColor(Theme.getColor(Theme.key_light_gray));
                 }
 
                 if (callHold && !iHoldCall && caller != null) {
@@ -660,7 +660,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 if (!isVideoCall() && CallService.getInstance() != null && isSpeakerEnable())
                     toggleSpeaker();
 
-                holdView.setViewColor(getResources().getColor(R.color.white));
+                holdView.setViewColor(Theme.getColor(Theme.key_white));
 
             } else if (state == CallState.RINGING) {
                 statusTextView.setText(getResources().getString(R.string.ringing));

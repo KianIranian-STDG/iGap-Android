@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:clickable="true"
-    android:background="@color/rg_text_dark_verify">
+    android:id="@+id/mainContainer">
 
     <View
         android:id="@+id/lytToolbar"
@@ -22,7 +22,7 @@
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:text="@string/icon_close"
-        style="@style/myIconToolbarStyle"
+        style="@style/baseFontIcon"
         android:rotation="180"
         app:layout_constraintLeft_toLeftOf="@id/lytToolbar"
         app:layout_constraintTop_toTopOf="@id/lytToolbar"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/dsgn_on_photo_title"
-        android:textColor="@color/whit_background"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         android:visibility="visible"
@@ -51,7 +51,7 @@
         android:gravity="center"
         android:text="@string/icon_sent"
         android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/whit_background"
+        android:textColor="@android:color/white"
         app:layout_constraintRight_toRightOf="@id/lytToolbar"
         app:layout_constraintTop_toTopOf="@id/lytToolbar"
         app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
@@ -105,7 +105,7 @@
 
     <net.iGap.libs.ColorSeekBar
         app:thumbBorderColor="@android:color/white"
-        android:outlineAmbientShadowColor="@color/white"
+        android:outlineAmbientShadowColor="@android:color/white"
         android:id="@+id/color_seek_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

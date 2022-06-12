@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.messenger.theme.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +43,16 @@ class MplTransactionInfoAdapter extends RecyclerView.Adapter<MplTransactionInfoA
     public class MplTransactionInfoViewHolder extends RecyclerView.ViewHolder {
         private TextView dataTv;
         private TextView titleTv;
+        private View line;
 
         public MplTransactionInfoViewHolder(@NonNull View itemView) {
             super(itemView);
             dataTv = itemView.findViewById(R.id.tv_itemMplTransActionInfo_data);
+            dataTv.setTextColor(Theme.getColor(Theme.key_default_text));
             titleTv = itemView.findViewById(R.id.tv_itemMplTransActionInfo_title);
+            titleTv.setTextColor(Theme.getColor(Theme.key_default_text));
+            line = itemView.findViewById(R.id.line);
+            line.setBackgroundColor(Theme.getColor(Theme.key_default_text));
         }
 
         public void bindTransaction(MplTransactionInfoFragment.MilTransActionStruct data) {

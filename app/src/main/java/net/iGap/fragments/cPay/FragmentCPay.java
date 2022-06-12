@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayViewModel;
 
@@ -53,7 +55,10 @@ public class FragmentCPay extends BaseAPIViewFrag<FragmentCPayViewModel> impleme
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        AppCompatTextView txt_no_car = view.findViewById(R.id.txt_no_car);
+        txt_no_car.setTextColor(Theme.getColor(Theme.key_title_text));
+        AppCompatTextView lbl_plaques = view.findViewById(R.id.lbl_plaques);
+        lbl_plaques.setTextColor(Theme.getColor(Theme.key_subtitle_text));
         initToolbar();
         initCallBacks();
 

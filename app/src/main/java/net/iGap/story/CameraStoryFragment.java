@@ -39,10 +39,10 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.Theme;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.eventbus.EventManager;
@@ -99,7 +99,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
     public View createView(Context context) {
         fragmentView = new LinearLayout(context);
         rootView = (LinearLayout) fragmentView;
-        rootView.setBackgroundColor(Theme.getInstance().getRootColor(context));
+        rootView.setBackgroundColor(Theme.getColor(Theme.key_white));
         rootView.setOrientation(LinearLayout.VERTICAL);
 
 
@@ -375,7 +375,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
 
                         @Override
                         public void Allow() throws IOException {
-                            HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                            HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
                                 @Override
                                 public void Allow() throws IOException {
                                     if (checkCameraHardware(getContext())) {
@@ -409,7 +409,7 @@ public class CameraStoryFragment extends BaseFragment implements EventManager.Ev
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), CameraStoryFragment.this).popBackStack();
+                new HelperFragment(requireActivity().getSupportFragmentManager(), CameraStoryFragment.this).popBackStack();
             }
         });
 

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -22,12 +23,12 @@ import net.iGap.databinding.FragmentElecBillListBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
 import net.iGap.model.bill.ServiceDebit;
-import net.iGap.module.Theme;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoMplGetBillToken;
@@ -72,7 +73,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        binding.errorView.setTextColor(Theme.getColor(Theme.key_title_text));
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.icon_back)
@@ -86,17 +87,18 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        List<Integer> items = new ArrayList<>();
-                        items.add(R.string.elecBill_cell_deleteAccount);
-                        new TopSheetDialog(getContext()).setListDataWithResourceId(items, -1, position -> {
+                        List<String> items = new ArrayList<>();
+                        items.add(getString(R.string.elecBill_cell_deleteAccount));
+                        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
                             if (position == 0) {
                                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
                                         .title(R.string.elecBill_deleteAccount_title)
                                         .content(R.string.elecBill_deleteAccount_desc)
                                         .positiveText(R.string.elecBill_deleteAccount_pos)
                                         .negativeText(R.string.elecBill_deleteAccount_neg)
-                                        .positiveColor(getContext().getResources().getColor(R.color.red))
-                                        .widgetColor(new Theme().getAccentColor(getContext()))
+                                        .positiveColor(Theme.getColor(Theme.key_red))
+                                        .widgetColor(Theme.getColor(Theme.key_theme_color))
                                         .onPositive((dialog1, which) -> viewModel.deleteAccount())
                                         .build();
                                 dialog.show();
@@ -181,12 +183,13 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     break;
                 case DELETE:
                     final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                            .backgroundColor(Theme.getColor(Theme.key_popup_background))
                             .title(R.string.elecBill_deleteBill_title)
                             .content(R.string.elecBill_deleteBill_desc)
                             .positiveText(R.string.elecBill_deleteBill_pos)
                             .negativeText(R.string.elecBill_deleteBill_neg)
-                            .positiveColor(getContext().getResources().getColor(R.color.red))
-                            .widgetColor(new Theme().getAccentColor(getContext()))
+                            .positiveColor(Theme.getColor(Theme.key_red))
+                            .widgetColor(Theme.getColor(Theme.key_theme_color))
                             .onPositive((dialog1, which) -> {
                                 viewModel.deleteItem(item);
                                 Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
@@ -216,6 +219,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     viewModel.reloadData(item);
             }
         });
+        binding.billRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.billRecycler.setAdapter(adapter);
     }
 

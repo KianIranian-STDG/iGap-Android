@@ -16,14 +16,13 @@
         android:paddingTop="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
         android:text="Images"
-        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp20"
         android:textStyle="bold"
         android:visibility="gone" />
 
     <View
         android:id="@+id/smslt_time_shared_splitter"
-        android:background="?iGapDividerLine"
+        android:background="@color/key_light_gray"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp1"
         android:layout_marginLeft="@dimen/dp4"
@@ -41,6 +40,5 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp10"
         android:text="New Text"
-        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp16" />
 </LinearLayout>

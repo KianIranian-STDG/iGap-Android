@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.button.MaterialButton
-        style="@style/iGapButton"
+        style="@style/BaseIGapButtonStyle"
         android:id="@+id/btn1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -20,7 +20,6 @@
         android:layout_marginBottom="@dimen/dp1"
         android:textSize="@dimen/dp16"
         android:text="..."
-        app:backgroundTint="@color/news_red"
         app:cornerRadius="3dp"
         app:cardUseCompatPadding="true"/>
 

@@ -1,5 +1,8 @@
 package net.iGap.fragments.payment;
 
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +18,12 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +49,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.paymentPackage.Config;
@@ -52,7 +61,6 @@ import net.iGap.model.paymentPackage.PackageChargeType;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -114,21 +122,41 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         return LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_internet, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainContainer = view.findViewById(R.id.mainContainer);
+        mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             phoneNumber = bundle.getString("phoneNumber", "");
             peerId = bundle.getLong("peerId", 0);
         }
+        AppCompatImageView iv_contact = view.findViewById(R.id.iv_contact);
+        iv_contact.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_contact_new),context,Theme.getColor(Theme.key_icon)));
+        AppCompatImageView iv_history = view.findViewById(R.id.iv_history);
+        iv_history.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_recent),context,Theme.getColor(Theme.key_icon)));
+        AppCompatTextView tv_contact =view.findViewById(R.id.tv_contact);
+        tv_contact.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView tv_history =view.findViewById(R.id.tv_history);
+        tv_history.setTextColor(Theme.getColor(Theme.key_default_text));
+        AppCompatTextView operator_selection = view.findViewById(R.id.operator_selection);
+        operator_selection.setTextColor(Theme.getColor(Theme.key_default_text));
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
+        frameContact.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.shape_payment_charge),getContext(),Theme.getColor(Theme.key_window_background)));
+        frameHistory.setBackground(Theme.tintDrawable(getContext().getDrawable(R.drawable.shape_payment_charge),getContext(),Theme.getColor(Theme.key_window_background)));
         editTextNumber = view.findViewById(R.id.phoneNumber);
+        editTextNumber.setTextColor(Theme.getColor(Theme.key_default_text));
+        editTextNumber.setHintTextColor(Theme.getColor(Theme.key_default_text));
         goNextButton = view.findViewById(R.id.btn_nextpage);
+        goNextButton.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)));
+        goNextButton.setTextColor(Theme.getColor(Theme.key_button_text));
         radioGroup = view.findViewById(R.id.rdGroup);
         progressBar = view.findViewById(R.id.loadingView);
         removeButton = view.findViewById(R.id.btnRemoveSearch);
+        removeButton.setTextColor(Theme.getColor(Theme.key_icon));
         lstOperator = view.findViewById(R.id.lstOperator);
         scrollView = view.findViewById(R.id.scroll_payment);
         avatar = view.findViewById(R.id.avatar);
@@ -143,11 +171,8 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
             }
         });
         lstOperator.setLayoutManager(new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false));
-        if (G.themeColor == Theme.DARK) {
-            frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-            frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
-        }
-
+        AppCompatTextView textView2 = view.findViewById(R.id.textView2);
+        textView2.setTextColor(Theme.getColor(Theme.key_default_text));
         String userToken = TokenContainer.getInstance().getToken();
         paymentRepository = PaymentRepository.getInstance();
         progressBar.setVisibility(View.VISIBLE);
@@ -166,6 +191,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         paymentRepository = null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initForm() {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
@@ -204,6 +230,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         detectOperatorByNumber(editTextNumber.getText().toString());
         chargeApi = new RetrofitFactory().getChargeRetrofit();
         editTextNumber.addTextChangedListener(editTextNumberWatcher());
+        editTextNumber.requestFocus();
         removeButton.setOnClickListener(removeNumberClicked());
         frameContact.setOnClickListener(v -> onContactNumberButtonClick());
         frameHistory.setOnClickListener(v -> onHistoryNumberButtonClick());
@@ -266,7 +293,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         }
     }
 
-    private TextWatcher editTextNumberWatcher() {
+    private TextWatcher editTextNumberWatcher () {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -295,7 +322,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         };
     }
 
-    private View.OnClickListener removeNumberClicked() {
+    private View.OnClickListener removeNumberClicked () {
         return v -> {
             avatar.setVisibility(View.GONE);
             if (editTextNumber.getText().length() > 0) {
@@ -307,7 +334,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         };
     }
 
-    private boolean isNumberFromIran(String phoneNumber) {
+    private boolean isNumberFromIran (String phoneNumber){
         boolean isValid = false;
         String phonePreNumber;
         if (phoneNumber.trim().charAt(0) == '0') {
@@ -328,7 +355,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         return isValid;
     }
 
-    private void changeSimType() {
+    private void changeSimType () {
         RadioButton radioButton = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
         String tag = radioButton.getTag().toString();
         for (int i = 0; i < packageChargeTypes.size(); i++) {
@@ -337,7 +364,8 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         }
     }
 
-    private void changeOperator(Operator operator) {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void changeOperator (Operator operator){
         if (currentOperator == operator)
             return;
         radioGroup.removeAllViewsInLayout();
@@ -346,8 +374,14 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         operatorAdapter.setCheckedRadioButton(currentOperator.getKey());
         for (PackageChargeType packageChargeType : packageChargeTypes) {
             RadioButton radioButton = new RadioButton(getContext());
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][]{new int[]{-android.R.attr.state_enabled},new int[]{android.R.attr.state_enabled}},
+                    new int[]{Theme.getColor(Theme.key_icon),Theme.getColor(Theme.key_theme_color)}
+            );
+            radioButton.setButtonTintList(colorStateList);
+            radioButton.invalidate();
             radioButton.setId(index++);
-            radioButton.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+            radioButton.setTextColor(Theme.getColor(Theme.key_title_text));
             radioButton.setTag(packageChargeType.getKey());
             radioButton.setText(packageChargeType.getTitle());
             radioButton.setTypeface(ResourcesCompat.getFont(requireContext(), R.font.main_font));
@@ -355,14 +389,14 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         }
     }
 
-    private void showError(String errorMessage) {
+    private void showError (String errorMessage){
         if (errorMessage != null) {
             hideKeyboard();
             HelperError.showSnackMessage(errorMessage, false);
         }
     }
 
-    private void onContactNumberButtonClick() {
+    private void onContactNumberButtonClick () {
         progressBar.setVisibility(View.VISIBLE);
         frameContact.setEnabled(false);
         closeKeyboard(editTextNumber);
@@ -381,11 +415,15 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                             HelperError.showSnackMessage(getActivity().getString(R.string.no_number_found), false);
                         } else {
                             adapterContact.setContactNumbers(contactNumbers);
-                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
+                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                    .customView(R.layout.popup_paymet_contact, false)
+                                    .negativeColor(Theme.getColor(Theme.key_button_background))
+                                    .positiveColor(Theme.getColor(Theme.key_button_background)).build();
                             View contactDialogView = dialog.getCustomView();
                             if (contactDialogView != null) {
                                 RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
                                 EditText editText = contactDialogView.findViewById(R.id.etSearch);
+                                editText.setHintTextColor(Theme.getColor(Theme.key_default_text));
                                 setDialogBackground(contactRecyclerView);
                                 setDialogBackground(editText);
                                 contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
@@ -431,7 +469,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         }
     }
 
-    private void onContactClicked(ChargeContactNumberAdapter adapterContact) {
+    private void onContactClicked (ChargeContactNumberAdapter adapterContact){
         if (clickedPosition == -1) {
             return;
         }
@@ -440,7 +478,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         detectOperatorByNumber(editTextNumber.getText().toString());
     }
 
-    private void setPhoneNumberEditText(String phone) {
+    private void setPhoneNumberEditText (String phone){
         phone = phone.replace("+", "");
         if (phone.contains("+") && !phone.contains("+98")) {
             showError(getActivity().getString(R.string.phone_number_is_not_valid));
@@ -455,11 +493,11 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                 .replace("-", ""));
     }
 
-    private void onHistoryNumberButtonClick() {
+    private void onHistoryNumberButtonClick () {
         frameHistory.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         closeKeyboard(editTextNumber);
-        chargeApi.getFavoriteInternetPackage().enqueue(new Callback<GetFavoriteNumber>() {
+        chargeApi.getFavoriteInternetPackage().clone().enqueue(new Callback<GetFavoriteNumber>() {
             @Override
             public void onResponse(@NotNull Call<GetFavoriteNumber> call, @NotNull Response<GetFavoriteNumber> response) {
                 frameHistory.setEnabled(true);
@@ -470,7 +508,11 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                         HelperError.showSnackMessage(getActivity().getString(R.string.no_history_found), false);
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_history, false).build();
+                        MaterialDialog dialog = new MaterialDialog.Builder(getContext())
+                                .backgroundColor(Theme.getColor(Theme.key_popup_background))
+                                .customView(R.layout.popup_paymet_history, false)
+                                .negativeColor(Theme.getColor(Theme.key_button_background))
+                                .positiveColor(Theme.getColor(Theme.key_button_background)).build();
                         View historyDialogView = dialog.getCustomView();
                         if (historyDialogView != null) {
                             InternetHistoryPackageAdapter adapterHistory = new InternetHistoryPackageAdapter(numbers);
@@ -483,7 +525,11 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
                             rvHistory.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                             rvHistory.setAdapter(adapterHistory);
                             setDialogBackground(rvHistory);
-                            historyDialogView.findViewById(R.id.iv_close2).setOnClickListener(v12 -> dialog.dismiss());
+                            AppCompatTextView iv_close2 = historyDialogView.findViewById(R.id.iv_close2);
+                            iv_close2.setTextColor(Theme.getColor(Theme.key_default_text));
+                            iv_close2.setOnClickListener(v12 -> dialog.dismiss());
+                            AppCompatTextView txt_choose2 = historyDialogView.findViewById(R.id.txt_choose2);
+                            txt_choose2.setTextColor(Theme.getColor(Theme.key_default_text));
                         }
                         dialog.show();
                     }
@@ -502,7 +548,7 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         });
     }
 
-    private void onHistoryItemClicked(InternetHistoryPackageAdapter adapterHistory) {
+    private void onHistoryItemClicked (InternetHistoryPackageAdapter adapterHistory){
         if (selectedHistoryPosition == -1) {
             return;
         }
@@ -511,8 +557,8 @@ public class InternetFragment extends BaseFragment implements HandShakeCallback 
         detectOperatorByNumber(editTextNumber.getText().toString());
     }
 
-    public void setDialogBackground(View view) {
-        if (G.themeColor == Theme.DARK) {
+    public void setDialogBackground (View view){
+        if (Theme.isDark() || Theme.isNight()) {
             view.setBackground(getActivity().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }

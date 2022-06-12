@@ -13,7 +13,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -87,7 +89,7 @@ public class StoryPagerFragment extends Fragment implements CameraStoryFragment.
                 viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), this.isForRoom, this.roomId, this.listMode, this.roomTitle, StoryPagerFragment.this::onGalleryIconClicked, StoryPagerFragment.this));
             } else {
                 try {
-                    HelperPermission.getStoragePermission(getContext(), new OnGetPermission() {
+                    HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
                         @Override
                         public void Allow() {
 

@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
+import net.iGap.messenger.theme.Theme;
 
 @SuppressLint("ViewConstructor")
 public class KeyboardView extends FrameLayout {
@@ -99,7 +99,7 @@ public class KeyboardView extends FrameLayout {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        setBackgroundColor(Theme.getColor(Theme.key_white));
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY));
     }
 

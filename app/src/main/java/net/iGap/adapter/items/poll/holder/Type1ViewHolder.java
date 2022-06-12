@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
+import net.iGap.messenger.theme.Theme;
 
 public class Type1ViewHolder extends BaseViewHolder {
     private ImageView img0;
@@ -20,6 +21,7 @@ public class Type1ViewHolder extends BaseViewHolder {
         img0 = itemView.findViewById(R.id.type1_img0);
         card0 = itemView.findViewById(R.id.type1_card0);
         tick0 = itemView.findViewById(R.id.type1_tick0);
+        tick0.setBackgroundColor(Theme.getColor(Theme.key_window_background));
     }
 
     @Override
