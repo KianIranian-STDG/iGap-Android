@@ -72,6 +72,7 @@ public class EventManager {
     public static final int CHANNEL_UPDATE_VOTE = eventId++;
     public static final int CHANNEL_UPDATE_SIGNATURE = eventId++;
     public static final int ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE = eventId++;
+    public static final int ON_SEARCHING_MEMBER_COMPLETE = eventId++;
 
     public static final int NEXT_VOICE = eventId++;
 

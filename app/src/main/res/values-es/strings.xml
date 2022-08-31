@@ -2181,4 +2181,6 @@
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
     <string name="Enable">On</string>
+    <string name="user_not_found">usuario no encontrado</string>
+    <string name="location_status">Location Status</string>
 </resources>

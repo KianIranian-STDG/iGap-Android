@@ -25,8 +25,9 @@ import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.proto.ProtoClientPinRoom;
-import net.iGap.proto.ProtoClientSearch;
 import net.iGap.proto.ProtoClientRoomChangeOwner;
+import net.iGap.proto.ProtoClientRoomMemberSearch;
+import net.iGap.proto.ProtoClientSearch;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupClearMessage;
@@ -2314,8 +2315,6 @@ public class IG_RPC {
     }
 
 
-
-
     public static class Res_Change_Room_Owner extends AbstractObject {
         public static int actionId = 30626;
         public net.iGap.proto.ProtoGlobal.RoomAccess roomAccess;
@@ -2403,7 +2402,6 @@ public class IG_RPC {
         public String verifyCode;
 
         @Override
-
         public int getActionId() {
             return actionId;
         }
@@ -2503,6 +2501,68 @@ public class IG_RPC {
 
             infoList = response.getInfoList();
             resId = response.getResponse().getId();
+        }
+    }
+
+    public static class Room_Member_Search extends AbstractObject {
+        public static final int actionId = 628;
+
+        public String nameForSearch;
+        public long roomId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoClientRoomMemberSearch.ClientRoomMemberSearch.Builder builder =
+                    ProtoClientRoomMemberSearch.ClientRoomMemberSearch.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setQuery(nameForSearch);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return super.deserializeResponse(constructor, message);
+        }
+
+    }
+
+    public static class Res_Room_Member_Search extends AbstractObject {
+
+        public static final int actionId = 30628;
+        public List<ProtoClientRoomMemberSearch.ClientRoomMemberSearchResponse.Info> infoList;
+
+
+        @Override
+        public int getActionId() {
+            return super.getActionId();
+        }
+
+        public Res_Room_Member_Search deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+            Res_Room_Member_Search resObject = new Res_Room_Member_Search();
+            try {
+                resObject.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resObject;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoClientRoomMemberSearch.ClientRoomMemberSearchResponse response =
+                    ProtoClientRoomMemberSearch.ClientRoomMemberSearchResponse.parseFrom(message);
+
+            resId = response.getResponse().getId();
+            infoList = response.getInfosList();
         }
     }
 

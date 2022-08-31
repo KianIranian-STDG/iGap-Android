@@ -96,10 +96,10 @@ public class HelperUrl {
 
     private static final String IGAP_LINK_PATTERN = "((?:https?://(?:u\\.i|profile\\.i|i)|(?:u\\.i|profile\\.i|i))+?gap.net\\/[^\\s]*)";
     private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap://discovery/[^\\s]*)|(?:(?:https?://(?:u\\.i|i)|(?:u\\.i|i))+?gap.net\\/d:[^\\s]*))";
-    private static final String WEB_LINK = "((?:(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))|(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+(?:[\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(?::[0-9]{1,5})?(?:\\/.*)?|^(?:(?:http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])))";
+    private static final String WEB_LINK = "((?:(?:(?:http|ftp|https):\\/\\/)?(?:[\\w_-]+(?:(?:\\.[\\w_-]+)+))+(?:[\\w.,\\u0600-\\u06FF\\u2000-\\u200F\\(\\)!@?^=%&:\\/~+#-\\.]*[\\w@?^=%&\\/~+#-])|(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(?:2(?:5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])))";
     private static final String BOT_LINK = "((?:\\B\\/\\w+))";
     private static final String IGAP_RESOLVE = "(igap://resolve\\?[^\\s]*)";
-    private static final String IGAP_DIGIT_LINK = "((?:\\d{3,5}[-]?\\d{3}[-]?\\d{4}|\\d{2}[-]?\\d{3}[-]?\\d{4}|\\d{1}[-]?\\d{3}[-]?\\d{6}|\\d{1}[-]?\\d{3}[-]?\\d{2}[-]?\\d{2}[-]?\\d{2}|\\*{1}?\\d{2,5})\\b)";
+    private static final String IGAP_DIGIT_LINK = "((?:\\d{3,5}[-]?\\d{3}[-]?\\d{8}|\\d{3,5}[-]?\\d{3}[-]?\\d{4}|\\d{2}[-]?\\d{3}[-]?\\d{6}|\\d{3}[-]?\\d{3}[-]?\\d{2}[-]?\\d{2}[-]?\\d{2}|\\*{1}?\\d{2,5})\\b)";
     private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_.]+\\b)";
     private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
 

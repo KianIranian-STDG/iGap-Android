@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -30,6 +31,7 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -55,7 +57,6 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.IPickFile;
@@ -64,9 +65,13 @@ import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -286,6 +291,37 @@ public class AttachFile {
         String filename = path.substring(path.lastIndexOf("/") + 1);
 
         return filename;
+    }
+
+    public static String getFileName(Uri uri) {
+        if (uri == null) {
+            return "";
+        }
+        try {
+            String result = null;
+            if (uri.getScheme().equals("content")) {
+                try (Cursor cursor = G.context.getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+                    if (cursor.moveToFirst()) {
+                        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+            if (result == null) {
+                result = uri.getPath();
+                if (result != null) {
+                    int cut = result.lastIndexOf('/');
+                    if (cut != -1) {
+                        result = result.substring(cut + 1);
+                    }
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return "";
     }
 
     //*************************************************************************************************************
@@ -1007,5 +1043,84 @@ public class AttachFile {
             intent1.setType("image/*");
             ((Activity) context).startActivityForResult(Intent.createChooser(intent1, "Select Picture"), request_code_image_from_gallery_single_select);
         }
+    }
+
+    @SuppressLint("DiscouragedPrivateApi")
+    public static String copyFileToCache(Uri uri, String ext, long sizeLimit) {
+        InputStream inputStream = null;
+        FileOutputStream output = null;
+        int totalLen = 0;
+        File f = null;
+        try {
+            String name = AttachFile.getFileName(uri);
+            if (name == null || name.length() == 0) {
+                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            }
+            f = new File(G.context.getExternalCacheDir(), "sharing/");
+            f.mkdirs();
+//            if (AndroidUtilities.isInternalUri(Uri.fromFile(f))) {
+//                return null;
+//            }
+            int count = 0;
+            do {
+                f = new File(G.context.getExternalCacheDir(), "sharing/");
+                if (count == 0) {
+                    f = new File(f, name);
+                } else {
+                    int lastDotIndex = name.lastIndexOf(".");
+                    if (lastDotIndex > 0) {
+                        f = new File(f, name.substring(0, lastDotIndex) + " (" + count + ")" + name.substring(lastDotIndex));
+                    } else {
+                        f = new File(f, name + " (" + count + ")");
+                    }
+                }
+                count++;
+            } while (f.exists());
+            inputStream = G.context.getContentResolver().openInputStream(uri);
+            if (inputStream instanceof FileInputStream) {
+                FileInputStream fileInputStream = (FileInputStream) inputStream;
+                try {
+                    Method getInt = FileDescriptor.class.getDeclaredMethod("getInt$");
+                    int fdint = (Integer) getInt.invoke(fileInputStream.getFD());
+//                    if (AndroidUtilities.isInternalUri(fdint)) {
+//                        return null;
+//                    }
+                } catch (Throwable e) {
+                    FileLog.e(e);
+                }
+            }
+            output = new FileOutputStream(f);
+            byte[] buffer = new byte[1024 * 20];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, len);
+                totalLen += len;
+                if (sizeLimit > 0 && totalLen > sizeLimit) {
+                    return null;
+                }
+            }
+            return f.getAbsolutePath();
+        } catch (Exception e) {
+            FileLog.e(e);
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e2) {
+                FileLog.e(e2);
+            }
+            try {
+                if (output != null) {
+                    output.close();
+                }
+            } catch (Exception e2) {
+                FileLog.e(e2);
+            }
+            if (sizeLimit > 0 && totalLen > sizeLimit) {
+                f.delete();
+            }
+        }
+        return null;
     }
 }

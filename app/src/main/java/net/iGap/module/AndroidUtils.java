@@ -447,7 +447,7 @@ public final class AndroidUtils {
         if (sourceFile.exists()) {
             AlertDialog progressDialog = null;
             final boolean[] finished = new boolean[1];
-            if (context != null && type != 0) {
+            if (context != null && type != 0 && !G.currentActivity.isDestroyed()) {
                 try {
                     final AlertDialog dialog = new AlertDialog(G.currentActivity, 2);
                     dialog.setMessage(context.getString(R.string.Loading));

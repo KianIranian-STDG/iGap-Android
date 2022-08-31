@@ -147,7 +147,6 @@ public class HttpUploader implements IUpload, UploadHttpRequest.UploadDelegate {
         if (request == null) {
             return false;
         } else {
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_CANCEL, request.fileObject.messageId);
             request.cancelUpload();
             return true;
         }

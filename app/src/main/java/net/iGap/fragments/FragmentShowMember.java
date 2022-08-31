@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -23,9 +24,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -56,6 +59,8 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelGetMemberList;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGroupGetMemberList;
@@ -63,6 +68,7 @@ import net.iGap.observers.interfaces.OnGroupKickMember;
 import net.iGap.observers.interfaces.OnSelectedList;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelGetMemberList;
+import net.iGap.proto.ProtoClientRoomMemberSearch;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
@@ -84,6 +90,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
@@ -92,8 +100,7 @@ import io.realm.RealmResults;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
-
+public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember, EventManager.EventDelegate {
 
     public enum ShowMemberMode {
         NONE,
@@ -120,6 +127,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private MemberAdapter mAdapter;
     private String mMainRole = "";
     private ProgressBar progressBar;
+    private ProgressBar searchingProgressBar;
+    private TextView userNotFound;
+    private ImageView iconUserNotFound;
+    private View whiteView;
     private Long userID = 0l;
     private String role;
     private String selectedRole = ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString();
@@ -141,6 +152,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private RealmRoom realmRoom;
     private RealmRoomAccess realmRoomAccess;
+
+    private Timer mTimerSearch;
+    private TimerTask mTimerTaskSearch;
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         return newInstance2(null, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, false);
@@ -169,6 +183,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         fragmentShowMember.setArguments(bundle);
         fragmentShowMember.fragment = frg;
         return fragmentShowMember;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_SEARCHING_MEMBER_COMPLETE, this));
     }
 
     @Nullable
@@ -302,13 +322,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     G.handler.post(() -> {
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
+                            whiteView.setVisibility(View.GONE);
+                            searchingProgressBar.setVisibility(View.GONE);
                         }
                     });
                     isOne = true;
-                    if (isFirstFill) {
-                        fillAdapter();
-                        isFirstFill = false;
-                    }
+//                    if (isFirstFill) {
+                    fillAdapter();
+//                        isFirstFill = false;
+//                    }
                 }
             }
 
@@ -317,6 +339,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
+                    whiteView.setVisibility(View.GONE);
+                    searchingProgressBar.setVisibility(View.GONE);
                     HelperError.showSnackMessage(G.currentActivity.getString(R.string.AccessBan), false);
                 });
             }
@@ -326,6 +350,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
+                    whiteView.setVisibility(View.GONE);
+                    searchingProgressBar.setVisibility(View.GONE);
                     HelperError.showSnackMessage(G.currentActivity.getString(R.string.time_out), false);
                 });
             }
@@ -345,13 +371,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     G.handler.post(() -> {
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
+                            whiteView.setVisibility(View.GONE);
+                            searchingProgressBar.setVisibility(View.GONE);
                         }
                     });
                     isOne = true;
-                    if (isFirstFill) {
-                        fillAdapter();
-                        isFirstFill = false;
-                    }
+//                    if (isFirstFill) {
+                    fillAdapter();
+                    isFirstFill = false;
+//                    }
                 }
             }
 
@@ -360,6 +388,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null) {
                         progressBar.setVisibility(View.GONE);
+                        whiteView.setVisibility(View.GONE);
+                        searchingProgressBar.setVisibility(View.GONE);
                         HelperError.showSnackMessage(requireActivity().getString(R.string.AccessBan), false);
 
                     }
@@ -371,6 +401,8 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 G.handler.post(() -> {
                     if (progressBar != null)
                         progressBar.setVisibility(View.GONE);
+                    whiteView.setVisibility(View.GONE);
+                    searchingProgressBar.setVisibility(View.GONE);
                     HelperError.showSnackMessage(requireActivity().getString(R.string.time_out), false);
                 });
             }
@@ -506,13 +538,34 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             }
 
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmMember.filterMember(realm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
-                });
-                mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
-                mRecyclerView.setAdapter(mAdapter);
+
+                /**Here wa get member list for name searched from server.
+                 * Then, we update realm data base and finally emit an event for inform fragment that data base
+                 * is ready for search query. then, we search desire member name in data base in fragment onReceivedEvent call back.*/
+                userNotFound.setVisibility(View.GONE);
+                iconUserNotFound.setVisibility(View.GONE);
+
+                if (s != null && s.length() != 0) {
+
+                    startOrReStartSearchTimer(s.toString());
+
+                } else if (s.length() == 0) {
+                    cancelSearchTimer();
+                    offset = 0;
+                    limit = 30;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.VISIBLE);
+                            }
+                            new AsyncMember().execute();
+                        }
+                    }, 100);
+                }
             }
         });
 
@@ -528,6 +581,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         progressBar = view.findViewById(R.id.fcg_prgWaiting);
         progressBar.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         AppUtils.setProgresColler(progressBar);
+        whiteView = view.findViewById(R.id.searching_white_view);
+        whiteView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
+        searchingProgressBar = view.findViewById(R.id.inner_fcg_prgWaiting);
+        userNotFound = view.findViewById(R.id.user_not_found_textView);
+        iconUserNotFound = view.findViewById(R.id.user_not_found_icon_imageView);
 
 
         //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
@@ -737,6 +795,94 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         //        mAdapter.remove(mAdapter.getPosition(memberId));
         //    }
         //});
+    }
+
+    private void startOrReStartSearchTimer(String name) {
+
+        cancelSearchTimer();
+
+        mTimerTaskSearch = new TimerTask() {
+            @Override
+            public void run() {
+
+                G.handler.post(() -> {
+
+                    whiteView.setVisibility(View.VISIBLE);
+                    searchingProgressBar.setVisibility(View.VISIBLE);
+
+                    IG_RPC.Room_Member_Search roomMemberSearchRequest = new IG_RPC.Room_Member_Search();
+                    roomMemberSearchRequest.nameForSearch = name;
+                    roomMemberSearchRequest.roomId = mRoomID;
+
+                    getRequestManager().sendRequest(roomMemberSearchRequest, (response, error) -> {
+                        IG_RPC.Error inputError = (IG_RPC.Error) error;
+
+                        if (inputError == null && response != null) {
+                            IG_RPC.Res_Room_Member_Search resRoomMemberSearch = (IG_RPC.Res_Room_Member_Search) response;
+                            List<ProtoClientRoomMemberSearch.ClientRoomMemberSearchResponse.Info> userInfoList = resRoomMemberSearch.infoList;
+
+                            if (userInfoList.isEmpty()) {
+                                G.runOnUiThread(() -> {
+                                    searchingProgressBar.setVisibility(View.GONE);
+                                    userNotFound.setVisibility(View.VISIBLE);
+                                    iconUserNotFound.setVisibility(View.VISIBLE);
+                                });
+                            } else {
+                                DbManager.getInstance().doRealmTransaction(realm -> {
+                                    RealmMember.deleteAllMembers(realm, mRoomID, "ALL");
+                                    for (int i = 0; i < userInfoList.size(); i++) {
+                                        RealmMember.addMember(realm, mRoomID, userInfoList.get(i).getUser().getId(), String.valueOf(userInfoList.get(i).getRole()));
+                                        RealmRegisteredInfo.putOrUpdate(realm, userInfoList.get(i).getUser());
+                                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_SEARCHING_MEMBER_COMPLETE, name));
+                                    }
+                                });
+
+                            }
+                            //672 -> forbidden
+                        } else if (inputError.major == 672) {
+                            G.runOnUiThread(() -> {
+                                searchingProgressBar.setVisibility(View.GONE);
+                                Toast.makeText(requireActivity(), "There is no access", Toast.LENGTH_LONG);
+                            });
+                        } else if (inputError != null) {
+                            G.runOnUiThread(() -> {
+                                searchingProgressBar.setVisibility(View.GONE);
+                                Toast.makeText(requireActivity(), R.string.server_do_not_response, Toast.LENGTH_LONG);
+                            });
+                        }
+                    });
+                });
+            }
+        };
+
+        mTimerSearch = new Timer();
+        mTimerSearch.schedule(mTimerTaskSearch, 700);
+    }
+
+    private void cancelSearchTimer() {
+
+        if (mTimerSearch != null) {
+            mTimerTaskSearch.cancel();
+            mTimerSearch.cancel();
+            mTimerTaskSearch = null;
+            mTimerSearch = null;
+        }
+
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.ON_SEARCHING_MEMBER_COMPLETE) {
+            RealmResults<RealmMember> searchMember = DbManager.getInstance().doRealmTask(realm -> {
+                RealmResults<RealmMember> realmMembers = RealmMember.findAllForSpecifiedRoom(realm, mRoomID);
+                return realmMembers;
+            });
+            whiteView.setVisibility(View.GONE);
+            searchingProgressBar.setVisibility(View.GONE);
+
+            mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     class AsyncMember extends AsyncTask {

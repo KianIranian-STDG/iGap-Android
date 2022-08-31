@@ -98,14 +98,20 @@ public class ChatBackgroundViewModel extends ViewModel {
             @Override
             public void onClick(int type, int position) {
                 if (type == AdapterChatBackground.WALLPAPER_IMAGE) {
-                    String bigImagePath;
+                    String bigImagePath = "";
                     if (wList.get(position).getWallpaperType() == ChatBackgroundFragment.WallpaperType.proto) {
-                        RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
-                        bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                        if (wList != null)
+                            if (wList.get(position) != null)
+                                if (wList.get(position).getProtoWallpaper() != null) {
+                                    RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
+                                    bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                                }
                     } else {
                         bigImagePath = wList.get(position).getPath();
                     }
                     loadSelectedImage.setValue(new WallpaperImage(bigImagePath, true));
+
+
                     savePath = bigImagePath;
                     isSolidColor = false;
                 } else {

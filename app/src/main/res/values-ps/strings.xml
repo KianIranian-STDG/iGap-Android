@@ -2189,7 +2189,6 @@
     <string name="convert_text_message">تبدیل پیام متنی به صوت</string>
     <string name="convert_error">این پیام قابل تحلیل نمی باشد</string>
     <string name="convert_text_to_voice" >تبدیل به صوت</string>
-    <string name="Enable">فعال</string>
     <string name="PrivacySettings">"امنیت و حریم خصوصی"</string>
     <string name="ActiveSessions">"نشست های فعال"</string>
     <string name="InviteFriends">دعوت کردن دوستان</string>
@@ -2296,6 +2295,7 @@
     <string name="block_desc">کاربران مسدود شده نمی توانند با شما تماس بگیرند و آخرین بازدید شما را نخواهند دید.</string>
     <string name="Unblock">رفع انسداد</string>
     <string name="blocked_users">%d کاربران مسدود شده</string>
+    <string name="Enable">فعال</string>
     <string name="block_users">مخاطبین مسدود شده</string>
     <string name="NoResult">هیچ نتیجه ای موجود نمی باشد.</string>
     <string name="EnabledPasswordText">شما تأیید صحت دو مرحله ای را فعال کرده اید.  \n برای وارد شدن به حساب آی گپ خود به گذرواژه ای که در اینجا تنظیم کرده اید نیاز خواهید داشت.</string>
@@ -2375,4 +2375,5 @@
     <string name="search_global">سراسری</string>
     <string name="powered_by_aipaa">قدرت گرفته از آیپا</string>
     <string name="Powered_by_aipa">خواندن متن پیام</string>
+    <string name="location_status">Location Status</string>
 </resources>

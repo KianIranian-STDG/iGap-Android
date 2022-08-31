@@ -270,9 +270,9 @@ public class TextCheckCell extends FrameLayout {
         info.setContentDescription(checkBox.isChecked() ? getContext().getString(R.string.NotificationsOn) : getContext().getString(R.string.NotificationsOff));
     }
 
-    public void setTextColor(int color) {
-        textView.setTextColor(color);
-        valueTextView.setTextColor(Theme.getColor(Theme.key_title_text));
+    public void setTextColor(int titleColor,int descriptionColor) {
+        textView.setTextColor(titleColor);
+        valueTextView.setTextColor(descriptionColor);
         checkBox.setColors(Theme.key_line, Theme.key_theme_color, Theme.key_window_background, Theme.key_window_background);
         invalidate();
     }

@@ -783,7 +783,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
             final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
-            if (itemGalleryList.size() > 0 && itemGalleryList.get(position).path != null) {
+            if (itemGalleryList.size() > 0 && itemGalleryList.get(position).path != null && textImageList != null) {
                 new Thread(() -> {
                     String oldPath = itemGalleryList.get(position).path;
                     String finalPath = attachFile.saveGalleryPicToLocal(oldPath);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +113,7 @@ public class ChatSettingFragment extends BaseFragment implements NotificationCen
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         soundInChat = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1);
         appBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-        compress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1);
+        compress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 0);
         crop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1);
         defaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
         trim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);

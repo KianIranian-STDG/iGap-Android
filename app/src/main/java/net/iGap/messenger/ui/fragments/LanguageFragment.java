@@ -48,6 +48,7 @@ public class LanguageFragment extends BaseFragment {
         languages.add(new Language("English", "en", "English", 0, false, false, false));
         languages.add(new Language("العربی", "ar", "Arabic", 2, true, false, true));
         languages.add(new Language("Français", "fr", "French", 0, false, false, false));
+        languages.add(new Language("Español", "es", "Español", 0, false, false, false));
         languages.add(new Language("русский", "ru", "Russian", 0, false, false, false));
         languages.add(new Language("کوردی", "ur", "Kurdi", 1, true, true, false));
         languages.add(new Language("آذری", "iw", "Azari", 1, true, true, false));

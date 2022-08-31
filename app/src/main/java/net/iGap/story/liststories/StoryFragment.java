@@ -131,6 +131,11 @@ public class StoryFragment extends BaseMainFragments implements StoryCell.Delete
 
     }
 
+    @Override
+    public void onStoryLongClick(StoryCell storyCell) {
+
+    }
+
 
     @Override
     public void onDestroy() {
@@ -195,21 +200,6 @@ public class StoryFragment extends BaseMainFragments implements StoryCell.Delete
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
-        recyclerListView.setOnItemClickListener((view, position, x, y) ->{
-            StoryCell storyCell = (StoryCell) view;
-            if (position == addStoryRow) {
-                if (storyCell.getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment(false)).setReplace(false).load();
-                } else if (storyCell.getStatus() == StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, storyCell.getRoomId() != 0, false)).setReplace(false).load();
-                }
-
-            } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
-                StoryViewFragment storyViewFragment;
-                storyViewFragment = new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), false, storyCell.getRoomId() != 0, true);
-                new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
-            }
-        });
         swipeRefreshLayout.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 0, 0, 0, 0));
 
         progressBar = new ProgressBar(context);
@@ -222,7 +212,7 @@ public class StoryFragment extends BaseMainFragments implements StoryCell.Delete
 
 
         customStatusActionLayout = new FrameLayout(context);
-        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_theme_color));
         customStatusActionLayout.setBackground(customStatusDrawable);
         IconView customStatusAddButton = new IconView(context);
         customStatusAddButton.setIcon(R.string.icon_edit);
@@ -233,7 +223,7 @@ public class StoryFragment extends BaseMainFragments implements StoryCell.Delete
 
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_camera);
@@ -603,8 +593,8 @@ public class StoryFragment extends BaseMainFragments implements StoryCell.Delete
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            int viewType = holder.getItemViewType();
             if (getActivity() != null && isAdded()) {
+                int viewType = holder.getItemViewType();
                 switch (viewType) {
                     case 0:
                     case 1:

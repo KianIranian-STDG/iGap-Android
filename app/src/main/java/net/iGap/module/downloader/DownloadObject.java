@@ -230,31 +230,31 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
             return null;
         }
 
-        DownloadObject struct = new DownloadObject();
-        struct.selector = LARGE_THUMBNAIL_VALUE;
-        struct.key = createKey(String.valueOf(attachment.id), struct.selector);
-        struct.mainCacheId = attachment.cacheId;
-        struct.fileToken = attachment.token;
-        struct.fileName = attachment.name;
-        struct.fileSize = (attachment.largeThumbnail != null) ? attachment.largeThumbnail.size : 0;
-        struct.mimeType = struct.extractMime(struct.fileName);
-        struct.publicUrl = struct.getPublicUrl(attachment.url);
-        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+        DownloadObject downloadObject = new DownloadObject();
+        downloadObject.selector = LARGE_THUMBNAIL_VALUE;
+        downloadObject.key = createKey(String.valueOf(attachment.id), downloadObject.selector);
+        downloadObject.mainCacheId = attachment.cacheId;
+        downloadObject.fileToken = attachment.token;
+        downloadObject.fileName = attachment.name;
+        downloadObject.fileSize = (attachment.largeThumbnail != null) ? attachment.largeThumbnail.size : 0;
+        downloadObject.mimeType = downloadObject.extractMime(downloadObject.fileName);
+        downloadObject.publicUrl = downloadObject.getPublicUrl(attachment.url);
+        downloadObject.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
 
         String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "users", true);
-        struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
-        struct.tempFile = new File(G.context.getCacheDir() + "/" + struct.key);
-        struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+        downloadObject.destFile = new File(filePath + "/" + downloadObject.mainCacheId + "_" + downloadObject.mimeType);
+        downloadObject.tempFile = new File(G.context.getCacheDir() + "/" + downloadObject.key);
+        downloadObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
-        if (struct.tempFile.exists()) {
-            struct.offset = struct.tempFile.length();
+        if (downloadObject.tempFile.exists()) {
+            downloadObject.offset = downloadObject.tempFile.length();
 
-            if (struct.offset > 0 && struct.fileSize > 0) {
-                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            if (downloadObject.offset > 0 && downloadObject.fileSize > 0) {
+                downloadObject.progress = (int) ((downloadObject.offset * 100) / downloadObject.fileSize);
             }
         }
 
-        return struct;
+        return downloadObject;
     }
 
     public static DownloadObject createForStory(AttachmentObject attachment, long storyId, boolean big) {

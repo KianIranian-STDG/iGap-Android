@@ -96,7 +96,7 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterBinding.mainFrame.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         CardView rg_btn_choseCountry = view.findViewById(R.id.rg_btn_choseCountry);
         rg_btn_choseCountry.setCardBackgroundColor(Theme.getColor(Theme.key_window_background));
-        fragmentRegisterBinding.conditionCheckBox.setLinkTextColor(Theme.getColor(Theme.key_link_text));
+//        fragmentRegisterBinding.conditionCheckBox.setLinkTextColor(Theme.getColor(Theme.key_link_text));
         fragmentRegisterBinding.phoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
         fragmentRegisterBinding.phoneNumber.setHintTextColor(Theme.getColor(Theme.key_default_text));
         ColorStateList colorStateList = ColorStateList.valueOf(Theme.getColor(Theme.key_default_text));
@@ -108,8 +108,8 @@ public class FragmentRegister extends BaseFragment {
         fragmentRegisterBinding.t1.setTextColor(Theme.getColor(Theme.key_default_text));
         fragmentRegisterBinding.phoneNumber.setTextColor(Theme.getColor(Theme.key_default_text));
         fragmentRegisterBinding.countyCode.setTextColor(Theme.getColor(Theme.key_default_text));
-        fragmentRegisterBinding.conditionCheckBox.setTextColor(Theme.getColor(Theme.key_default_text));
-        fragmentRegisterBinding.conditionText.setTextColor(Theme.getColor(Theme.key_default_text));
+//        fragmentRegisterBinding.conditionCheckBox.setTextColor(Theme.getColor(Theme.key_default_text));
+//        fragmentRegisterBinding.conditionText.setTextColor(Theme.getColor(Theme.key_default_text));
         fragmentRegisterBinding.retryView.setTextColor(Theme.getColor(Theme.key_subtitle_text));
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_ENTRY_PHONE);

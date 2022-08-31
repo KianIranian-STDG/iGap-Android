@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.messenger.theme.Theme;
 import net.iGap.module.MaterialDesignTextView;
 import net.igap.video.trim.K4LVideoTrimmer;
@@ -151,6 +152,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
             Intent data = new Intent();
             data.setData(uri);
             setResult(Activity.RESULT_OK, data);
+            HelperSaveFile.saveFileToDownLoadFolder(uri.getPath(), file.getName(), HelperSaveFile.FolderType.video);
             finish();
         }
 
@@ -168,7 +170,6 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
-        Log.e("nazariii", "onError: " + message);
         G.handler.post(this::onBackPressed);
     }
 

@@ -64,6 +64,7 @@ import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
@@ -71,9 +72,11 @@ import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+//import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.messenger.ui.fragments.NearbyFragment.mapUrls;
 import static net.iGap.helper.HelperPermission.showDeniedPermissionMessage;
@@ -172,6 +175,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
+//                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
                 break;
             case PARSLAND:
                 break;

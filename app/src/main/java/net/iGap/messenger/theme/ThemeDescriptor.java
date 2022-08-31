@@ -251,7 +251,7 @@ public class ThemeDescriptor {
                     ((SimpleTextView) view).setTextColor(Theme.getColor(currentKey));
                     ((SimpleTextView) view).setLinkTextColor(Theme.getColor(currentKey));
                 } else if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setTextColor(Theme.getColor(currentKey));
+                    ((TextCheckCell) view).setTextColor(Theme.getColor(Theme.key_title_text),Theme.getColor(currentKey));
                 } else if (view instanceof TextDetailCell) {
                     ((TextDetailCell) view).setTextColor(Theme.getColor(currentKey));
                 } else if (view instanceof TextDetailSettingsCell) {

@@ -26,13 +26,13 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
 
@@ -344,11 +344,14 @@ public class FileUtils {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
-                return getDataColumn(context, contentUri, null, null);
-
+                try {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                    return getDataColumn(context, contentUri, null, null);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                    return null;
+                }
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
@@ -367,9 +370,6 @@ public class FileUtils {
                         break;
                     case "audio":
                         contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                        break;
-                    default:
-                        Toast.makeText(context, R.string.permission_to_this_section_temporarily_denied, Toast.LENGTH_LONG).show();
                         break;
                 }
 

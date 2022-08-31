@@ -126,25 +126,25 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                         .positiveColor(Theme.getColor(Theme.key_button_background))
                         .choiceWidgetColor(ColorStateList.valueOf(Theme.getColor(Theme.key_button_background)))
                         .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        AttachFile attachFile = new AttachFile(getActivity());
-                        if (text.toString().equals(getString(R.string.from_camera))) {
-                            try {
-                                attachFile.requestTakePicture(FragmentChatBackground.this);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                AttachFile attachFile = new AttachFile(getActivity());
+                                if (text.toString().equals(getString(R.string.from_camera))) {
+                                    try {
+                                        attachFile.requestTakePicture(FragmentChatBackground.this);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        attachFile.requestOpenGalleryForImageSingleSelect(FragmentChatBackground.this);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                dialog.dismiss();
                             }
-                        } else {
-                            try {
-                                attachFile.requestOpenGalleryForImageSingleSelect(FragmentChatBackground.this);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        dialog.dismiss();
-                    }
-                }).show();
+                        }).show();
             }
         });
 

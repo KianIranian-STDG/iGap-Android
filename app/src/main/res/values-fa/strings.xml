@@ -661,7 +661,7 @@
     <string name="group_title_set_username">تخصیص نام کاربری</string>
     <string name="permission_storage">محل ذخیره سازی را بدهید</string>
     <string name="clean_up_chat_rooms">پاک سازی کلی</string>
-    <string name="clean_up">پاک سازی</string>
+    <string name="clean_up">بازسازی پیام‌ها</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا از حذف کلیۀ اطلاعات چت ها از پایگاه دادۀ داخلی اطمینان دارید؟</string>
     <string name="pm">ب ظ</string>
     <string name="am">ق ظ</string>
@@ -2493,5 +2493,7 @@
     <string name="search_global">سراسری</string>
     <string name="powered_by_aipaa">قدرت گرفته از آیپا</string>
     <string name="Powered_by_aipa">خواندن متن پیام</string>
+    <string name="user_not_found">کاربری یافت نشد</string>
+    <string name="location_status">وضعیت مکانی</string>
 
 </resources>

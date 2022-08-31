@@ -2301,4 +2301,5 @@
     <string name="ai_error">به دلیل خطای سروری پیام به صورت صوت ارسال شد</string>
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
+    <string name="location_status">Location Status</string>
 </resources>

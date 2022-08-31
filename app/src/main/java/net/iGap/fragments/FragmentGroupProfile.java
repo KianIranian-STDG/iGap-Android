@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,12 +27,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -156,7 +153,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         super.onViewCreated(view, savedInstanceState);
         CollapsingToolbarLayout toolbar_layout_collapse = view.findViewById(R.id.toolbar_layout_collapse);
         toolbar_layout_collapse.setBackgroundColor(Theme.getColor(Theme.key_toolbar_background));
-        NestedScrollView mainContainer= view.findViewById(R.id.mainContainer);
+        NestedScrollView mainContainer = view.findViewById(R.id.mainContainer);
         mainContainer.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         binding.description.setTextColor(Theme.getColor(Theme.key_title_text));
         binding.divider.setBackgroundColor(Theme.getColor(Theme.key_line));
@@ -246,11 +243,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                                 .titleColor(Theme.getColor(Theme.key_title_text))
                                 .contentColor(Theme.getColor(Theme.key_default_text))
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                getMessageController().clearHistoryMessage(viewModel.roomId);
-                            }
-                        }).negativeText(R.string.no).show();
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        getMessageController().clearHistoryMessage(viewModel.roomId);
+                                    }
+                                }).negativeText(R.string.no).show();
                     } else if (menuList.get(position).equals(getString(R.string.group_title_convert_to_public)) || menuList.get(position).equals(getString(R.string.group_title_convert_to_private))) {
                         viewModel.convertMenuClick();
                     }
@@ -427,7 +424,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        if (viewModel.role.equals(GroupChatRole.OWNER)) {
+        if (viewModel.role != null && viewModel.role.equals(GroupChatRole.OWNER)) {
             binding.editGroupPermission.setVisibility(View.VISIBLE);
             binding.editGroupPermission.setOnClickListener(v -> {
                 openChatEditRightsFragment(viewModel.getRealmRoom());
@@ -861,11 +858,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 .titleColor(Theme.getColor(Theme.key_title_text))
                 .contentColor(Theme.getColor(Theme.key_default_text))
                 .canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-            }
-        }).show();
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                }).show();
 
         View v = dialog.getCustomView();
         v.setBackgroundColor(Theme.getColor(Theme.key_window_background));
@@ -934,7 +931,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if(id == EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE && (long)args[0] == roomId) {
+        if (id == EventManager.ON_SUBSCRIBER_OR_MEMBER_COUNT_CHANGE && (long) args[0] == roomId) {
             viewModel.setMemberCount(roomId);
         }
     }

@@ -148,9 +148,9 @@ public class ChargeFragment extends BaseFragment {
         AppCompatImageView iv_contact = view.findViewById(R.id.iv_contact);
         AppCompatTextView textView2 = view.findViewById(R.id.textView2);
         textView2.setTextColor(Theme.getColor(Theme.key_default_text));
-        iv_contact.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_contact_new),context,Theme.getColor(Theme.key_icon)));
+        iv_contact.setBackgroundDrawable(Theme.tintDrawable(requireContext().getDrawable( R.drawable.ic_contact_new),requireContext(),Theme.getColor(Theme.key_icon)));
         AppCompatImageView iv_history = view.findViewById(R.id.iv_history);
-        iv_history.setBackgroundDrawable(Theme.tintDrawable(ContextCompat.getDrawable(context, R.drawable.ic_recent),context,Theme.getColor(Theme.key_icon)));
+        iv_history.setBackgroundDrawable(Theme.tintDrawable(requireContext().getDrawable( R.drawable.ic_recent),requireContext(),Theme.getColor(Theme.key_icon)));
         AppCompatTextView tv_contact =view.findViewById(R.id.tv_contact);
         tv_contact.setTextColor(Theme.getColor(Theme.key_default_text));
         AppCompatTextView tv_history =view.findViewById(R.id.tv_history);
@@ -769,7 +769,7 @@ public class ChargeFragment extends BaseFragment {
                     @Override
                     public void onSuccess(MciPurchaseResponse mciPurchaseResponse) {
                         progressBar.setVisibility(View.GONE);
-                        if (getActivity() != null && mciPurchaseResponse.getToken() != null) {
+                        if (getActivity() != null && mciPurchaseResponse.getToken() != null && isAdded()) {
                             new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_charge), mciPurchaseResponse.getToken(), result -> {
                                 if (result.isSuccess())
                                     saveChargeNumberInHistory(chargeType, rechargeableNumber, price, operator);

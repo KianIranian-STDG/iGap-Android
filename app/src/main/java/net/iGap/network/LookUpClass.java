@@ -82,6 +82,7 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Change_Phone_Number.actionId, IG_RPC.Res_Change_Phone_Number.class);
         classes.put(IG_RPC.Res_Verify_New_Phone_Number.actionId, IG_RPC.Res_Verify_New_Phone_Number.class);
         classes.put(IG_RPC.Res_client_search.actionId, IG_RPC.Res_client_search.class);
+        classes.put(IG_RPC.Res_Room_Member_Search.actionId, IG_RPC.Res_Room_Member_Search.class);
 
     }
 

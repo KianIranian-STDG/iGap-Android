@@ -286,7 +286,7 @@ public class ThemesHorizontalListCell extends RecyclerListView {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (drawDivider) {
+        if (drawDivider && Theme.dividerPaint != null) {
             canvas.drawLine(G.isAppRtl ? 0 : LayoutCreator.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (G.isAppRtl  ? LayoutCreator.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }

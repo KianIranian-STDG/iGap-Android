@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.module.AttachFile;
 import net.iGap.module.StartupActions;
 
 import java.io.File;
@@ -184,11 +185,17 @@ public class HelperGetDataFromOtherApp {
             if (fileAddressUri.getScheme() != null && fileAddressUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (_path == null) {
                     _path = getPathN(fileAddressUri, type, intent.getType());
+                    if(_path == null){
+                        _path = AttachFile.copyFileToCache(fileAddressUri, "file", -1);
+                    }
                 } else {
                     try {
                         FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(_path));
                     } catch (IllegalArgumentException e) {
                         _path = getPathN(fileAddressUri, type, intent.getType());
+                        if(_path == null){
+                            _path = AttachFile.copyFileToCache(fileAddressUri, "file", -1);
+                        }
                     }
                 }
             }
@@ -228,11 +235,17 @@ public class HelperGetDataFromOtherApp {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && _Uri.getScheme() != null && _Uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                     if (_path == null) {
                         _path = getPathN(_Uri, type, intent.getType());
+                        if(_path == null){
+                            _path = AttachFile.copyFileToCache(_Uri, "file", -1);
+                        }
                     } else {
                         try {
                             FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(_path));
                         } catch (IllegalArgumentException e) {
                             _path = getPathN(_Uri, type, intent.getType());
+                            if(_path == null){
+                                _path = AttachFile.copyFileToCache(_Uri, "file", -1);
+                            }
                         }
                     }
                 }

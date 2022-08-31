@@ -93,6 +93,7 @@ public class RealmRoomMessage extends RealmObject {
     public byte[] Logs;
     private int storyStatus;
     private String textToVoicePath;
+    private String messageBeforeEdited;
 
     /**
      * if has forward return that otherwise return enter value
@@ -1306,5 +1307,13 @@ public class RealmRoomMessage extends RealmObject {
 
     public String getTextToVoicePath() {
         return textToVoicePath;
+    }
+
+    public String getMessageBeforeEdited() {
+        return messageBeforeEdited;
+    }
+
+    public void setMessageBeforeEdited(String messageBeforeEdited) {
+        this.messageBeforeEdited = messageBeforeEdited;
     }
 }

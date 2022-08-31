@@ -33,6 +33,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder = (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
+
         RealmMember.convertProtoMemberListToRealmMember(builder, identity);
     }
 

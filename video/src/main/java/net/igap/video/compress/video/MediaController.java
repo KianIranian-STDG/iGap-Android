@@ -2,22 +2,28 @@ package net.igap.video.compress.video;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SuppressLint("NewApi")
 public class MediaController {
@@ -766,6 +772,154 @@ public class MediaController {
         in.close();
         out.close();
     }
+
+    public static String copyFileToCache(Context context, Uri uri, String ext) {
+        return copyFileToCache(context, uri, ext, -1);
+    }
+
+    @SuppressLint("DiscouragedPrivateApi")
+    public static String copyFileToCache(Context context, Uri uri, String ext, long sizeLimit) {
+        InputStream inputStream = null;
+        FileOutputStream output = null;
+        int totalLen = 0;
+        File f = null;
+        try {
+//            String name = AttachFile.getFileName(uri.getPath());
+//            if (name == null || name.length() == 0) {
+//                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//            }
+            @SuppressLint("SimpleDateFormat") String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+//            f = AndroidUtilities.getSharingDirectory();
+//            f.mkdirs();
+//            if (AndroidUtilities.isInternalUri(Uri.fromFile(f))) {
+//                return null;
+//            }
+            int count = 0;
+            do {
+                f = getSharingDirectory(context);
+                if (count == 0) {
+                    f = new File(f, name);
+                } else {
+                    int lastDotIndex = name.lastIndexOf(".");
+                    if (lastDotIndex > 0) {
+                        f = new File(f, name.substring(0, lastDotIndex) + " (" + count + ")" + name.substring(lastDotIndex));
+                    } else {
+                        f = new File(f, name + " (" + count + ")");
+                    }
+                }
+                count++;
+            } while (f.exists());
+            inputStream = context.getContentResolver().openInputStream(uri);
+            if (inputStream instanceof FileInputStream) {
+                FileInputStream fileInputStream = (FileInputStream) inputStream;
+                try {
+                    Method getInt = FileDescriptor.class.getDeclaredMethod("getInt$");
+                    int fdint = (Integer) getInt.invoke(fileInputStream.getFD());
+//                    if (AndroidUtilities.isInternalUri(fdint)) {
+//                        return null;
+//                    }
+                } catch (Throwable e) {
+//                    FileLog.e(e);
+                }
+            }
+            output = new FileOutputStream(f);
+            byte[] buffer = new byte[1024 * 20];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, len);
+                totalLen += len;
+                if (sizeLimit > 0 && totalLen > sizeLimit) {
+                    return null;
+                }
+            }
+            return f.getAbsolutePath();
+        } catch (Exception e) {
+//            FileLog.e(e);
+            Log.i("sdf", "copyFileToCache: ");
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e2) {
+//                FileLog.e(e2);
+            }
+            try {
+                if (output != null) {
+                    output.close();
+                }
+            } catch (Exception e2) {
+//                FileLog.e(e2);
+            }
+            if (sizeLimit > 0 && totalLen > sizeLimit) {
+                f.delete();
+            }
+        }
+        return null;
+    }
+
+    public static File getSharingDirectory(Context context) {
+        return new File(getDirectory(context), "sharing/");
+    }
+
+    public static File getDirectory(Context context) {
+        File dir = context.getExternalCacheDir();
+//        if (dir == null && type != FileLoader.MEDIA_DIR_CACHE) {
+//            dir = mediaDirs.get(FileLoader.MEDIA_DIR_CACHE);
+//        }
+        try {
+            if (dir != null && !dir.isDirectory()) {
+                dir.mkdirs();
+            }
+        } catch (Exception e) {
+            //don't promt
+        }
+        return dir;
+    }
+
+//    public static File getCacheDir(Context context) {
+//        String state = null;
+//        try {
+//            state = Environment.getExternalStorageState();
+//        } catch (Exception e) {
+////            FileLog.e(e);
+//        }
+//        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
+//            try {
+//                File file;
+//                if (Build.VERSION.SDK_INT >= 19) {
+//                    File[] dirs = context.getExternalCacheDirs();
+//                    file = dirs[0];
+//                    if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+//                        for (int a = 0; a < dirs.length; a++) {
+//                            if (dirs[a] != null && dirs[a].getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+//                                file = dirs[a];
+//                                break;
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    file = ApplicationLoader.applicationContext.getExternalCacheDir();
+//                }
+//                if (file != null) {
+//                    return file;
+//                }
+//            } catch (Exception e) {
+//                FileLog.e(e);
+//            }
+//        }
+//        try {
+//            File file = ApplicationLoader.applicationContext.getCacheDir();
+//            if (file != null) {
+//                return file;
+//            }
+//        } catch (Exception e) {
+//            FileLog.e(e);
+//        }
+//        return new File("");
+//    }
+
 
     public interface OnPercentCompress {
         void onProgress(int percent);

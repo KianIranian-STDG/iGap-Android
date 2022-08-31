@@ -17,10 +17,12 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationChannelCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.gson.Gson;
 
@@ -63,7 +65,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.realm.Realm;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -106,7 +107,7 @@ public class UploadService extends Service implements EventManager.EventDelegate
     private LinkedBlockingQueue<ServiceUploadObject> mUploadQueue = new LinkedBlockingQueue();
     private UploadObject mUploadObject;
     private UploadHttpRequest.UploadDelegate mUploadCallback;
-    private Notification.Builder mNotificationBuilder;
+    private NotificationCompat.Builder mNotificationBuilder;
     private NotificationManager mNotificationManager;
     private long mUserId;
     private long mPeerId;
@@ -127,7 +128,8 @@ public class UploadService extends Service implements EventManager.EventDelegate
     private boolean anyFileIsUploading = false;
     private int mUserSelectedAccount;
     private DispatchQueue mServiceThreadQueue = new DispatchQueue("serviceThreadQueue");
-    private AtomicBoolean cancelDownload = new AtomicBoolean(false);
+    private Thread singleWorkerThread;
+    private AtomicBoolean cancelUpload = new AtomicBoolean(false);
 
     @Override
     public void onCreate() {
@@ -136,6 +138,7 @@ public class UploadService extends Service implements EventManager.EventDelegate
 //        userToken = TokenContainer.getInstance().getToken();
         client = OkHttpClientInstance.getInstance();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.KEY_IS_UPLOAD_SERVICE_RUN, true).apply();
         EventManager.getInstance(mUserSelectedAccount).addObserver(EventManager.ON_UPLOAD_CANCEL, this);
         EventManager.getInstance(mUserSelectedAccount).addObserver(EventManager.CONNECTION_STATE_CHANGED, this);
     }
@@ -151,7 +154,6 @@ public class UploadService extends Service implements EventManager.EventDelegate
      * Received data makes an new service upload object and stores in service upload queue.
      * Service upload objects are Peeked one after another and are handled
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.KEY_IS_UPLOAD_SERVICE_RUN, true).apply();
@@ -176,12 +178,17 @@ public class UploadService extends Service implements EventManager.EventDelegate
             setNewUploadObject();
             getServiceNotificationBuilder();
             startForeground(ONGOING_NOTIFICATION_ID, mNotificationBuilder.build());
-            mServiceThreadQueue.postRunnable(this::startUploadProcess);
-        } else {
-            stopSelf();
+            singleWorkerThread = new Thread(this::startUploadProcess);
+            singleWorkerThread.start();
         }
 
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.KEY_IS_UPLOAD_SERVICE_RUN, false).apply();
     }
 
     public void setUploadServiceCallback(UploadHttpRequest.UploadDelegate uploadCallback) {
@@ -189,10 +196,9 @@ public class UploadService extends Service implements EventManager.EventDelegate
     }
 
     @SuppressLint({"WrongConstant", "ResourceType"})
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void getServiceNotificationBuilder() {
         PendingIntent pendingIntent = getNotificationPendingIntent();
-        mNotificationBuilder = new Notification.Builder(this, createNotificationChannelAndGetChannelId())
+        mNotificationBuilder = new NotificationCompat.Builder(this, createNotificationChannelAndGetChannelId())
                 .setContentText(getString(R.string.igap_is_uploading_file))
                 .setSmallIcon(R.mipmap.icon)
                 .setContentIntent(pendingIntent);
@@ -209,15 +215,21 @@ public class UploadService extends Service implements EventManager.EventDelegate
         return PendingIntent.getActivity(this, UPLOAD_SERVICE_INTENT_REQUEST_CODE, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private String createNotificationChannelAndGetChannelId() {
-        NotificationChannel notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID, UPLOAD_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_LOW);
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(notificationChannel);
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            NotificationChannelCompat notificationChannelCompat = new NotificationChannelCompat.Builder(UPLOAD_NOTIFICATION_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW).build();
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(G.context);
+            notificationManager.createNotificationChannel(notificationChannelCompat);
+        } else {
+            NotificationChannel notificationChannel = new NotificationChannel(UPLOAD_NOTIFICATION_CHANNEL_ID, UPLOAD_NOTIFICATION_NAME, NotificationManager.IMPORTANCE_LOW);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
         return UPLOAD_NOTIFICATION_CHANNEL_ID;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void startUploadProcess() {
         md5Key = AndroidUtils.MD5(mUploadObject.fileName);
         String token = null;
@@ -245,7 +257,6 @@ public class UploadService extends Service implements EventManager.EventDelegate
      * Therefore, we send the request to send the file to the server again with the associated token to the server.
      */
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initFile(String token) {
         String url = FILE + "init";
 
@@ -310,6 +321,7 @@ public class UploadService extends Service implements EventManager.EventDelegate
                             if (mUploadCallback != null) {
                                 mUploadCallback.onUploadFail(mUploadObject, new Exception("resumeRetryCount max limited"));
                             }
+                            mSharedPreferences.edit().remove("user_id_" + md5Key + mUserId).remove("offset_" + md5Key + mUserId).remove("token_" + md5Key + mUserId).remove("progress_" + md5Key + mUserId).apply();
                             modifyNotification(getString(R.string.upload_failed), 0, 0, false, Color.RED);
                             handleUploadQueue(mUploadObject.messageId);
                         }
@@ -372,10 +384,11 @@ public class UploadService extends Service implements EventManager.EventDelegate
 
                     startOrResume();
                 } else if (res.body() != null) {
-                    if (res.code() == 451) {
+                    if (res.code() == 451 || res.code() == 413) {
                         if (mUploadCallback != null) {
                             mUploadCallback.onUploadFail(mUploadObject, new Exception("451 error for -> " + req.toString()));
                         }
+                        mSharedPreferences.edit().remove("user_id_" + md5Key + mUserId).remove("offset_" + md5Key + mUserId).remove("token_" + md5Key + mUserId).remove("progress_" + md5Key + mUserId).apply();
                         modifyNotification(getString(R.string.upload_failed), 0, 0, false, Color.RED);
                         handleUploadQueue(mUploadObject.messageId);
                     }
@@ -390,8 +403,11 @@ public class UploadService extends Service implements EventManager.EventDelegate
                     EventManager.getInstance(mUserSelectedAccount).postEvent(EventManager.ON_UPLOAD_ERROR_IN_SERVICE, e, true, mUploadObject);
                 }
             });
-            modifyNotification(getString(R.string.upload_failed), 0, 0, false, Color.RED);
-            handleUploadQueue(mUploadObject.messageId);
+            mSharedPreferences.edit().remove("user_id_" + md5Key + mUserId).remove("offset_" + md5Key + mUserId).remove("token_" + md5Key + mUserId).remove("progress_" + md5Key + mUserId).apply();
+            isResume = false;
+            startUploadProcess();
+//            modifyNotification(getString(R.string.upload_failed), 0, 0, false, Color.RED);
+//            handleUploadQueue(mUploadObject.messageId);
 
         } catch (JSONException e) {
 
@@ -417,7 +433,6 @@ public class UploadService extends Service implements EventManager.EventDelegate
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void startOrResume() {
         if (mUploadObject.fileToken == null) {
             FileLog.i(TAG, "startOrResume: " + mUploadObject.key);
@@ -448,7 +463,7 @@ public class UploadService extends Service implements EventManager.EventDelegate
                 RequestBody requestBody = new UploadRequestBody(null, mUploadObject.offset, inputStream, new UploadRequestBody.IOnProgressListener() {
                     @Override
                     public void onProgress(long totalByte) {
-                        if (cancelDownload.get() && isUploading) {
+                        if (cancelUpload.get() && isUploading) {
                             isUploading = false;
 
                             G.runOnUiThread(() -> EventManager.getInstance(mUserSelectedAccount).postEvent(EventManager.ON_UPLOAD_ERROR_IN_SERVICE, new Exception("Upload Canceled"), false, mUploadObject));
@@ -597,36 +612,67 @@ public class UploadService extends Service implements EventManager.EventDelegate
      * This method is called when one upload process is doned or failed and checks if another object
      * exist for upload, start process from beginning again with it.
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleUploadQueue(long messageId) {
 //        if (!shouldResumeLastUpload) {
         anyFileIsUploading = false;
-        stopForeground(true);
-        client.dispatcher().executorService().shutdown();
         if (requestCall != null) {
             requestCall.cancel();
+            requestCall = null;
         }
-        if (isInternetConnected()) {
-            for (ServiceUploadObject serviceUploadObject : mUploadQueue) {
-                if (serviceUploadObject.uploadObject.messageId == messageId) {
-                    mUploadQueue.remove(serviceUploadObject);
-                }
+        client.dispatcher().executorService().shutdown();
+        for (ServiceUploadObject serviceUploadObject : mUploadQueue) {
+            if (serviceUploadObject.uploadObject.messageId == messageId) {
+                mUploadQueue.remove(serviceUploadObject);
             }
-            if (!mUploadQueue.isEmpty()) {
-                anyFileIsUploading = true;
-                mCurrentUploadNumber++;
-                setNewUploadObject();
-                getServiceNotificationBuilder();
-                startForeground(ONGOING_NOTIFICATION_ID, mNotificationBuilder.build());
-                mServiceThreadQueue.postRunnable(this::startUploadProcess);
+        }
+//        if (singleWorkerThread != null) {
+//            singleWorkerThread.interrupt();
+////            Thread.currentThread().interrupt();
+//        }
+        client = OkHttpClientInstance.getInstance();
+        singleWorkerThread = new Thread(() -> {
+            if (isInternetConnected()) {
 
+                if (!mUploadQueue.isEmpty()) {
+                    anyFileIsUploading = true;
+                    mCurrentUploadNumber++;
+                    setNewUploadObject();
+                    getServiceNotificationBuilder();
+                    startForeground(ONGOING_NOTIFICATION_ID, mNotificationBuilder.build());
+                    startUploadProcess();
+
+                } else {
+                    stopService();
+                }
             } else {
-                mCurrentUploadNumber = 1;
-                mUploadQueueSize = 0;
-                G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.KEY_IS_UPLOAD_SERVICE_RUN, false).apply();
-                stopSelf();
+                stopService();
             }
-        }
+        });
+        singleWorkerThread.start();
+//        mServiceThreadQueue.postRunnable(() -> {
+//            client = OkHttpClientInstance.getInstance();
+//            if (isInternetConnected()) {
+//                for (ServiceUploadObject serviceUploadObject : mUploadQueue) {
+//                    if (serviceUploadObject.uploadObject.messageId == messageId) {
+//                        mUploadQueue.remove(serviceUploadObject);
+//                    }
+//                }
+//                if (!mUploadQueue.isEmpty()) {
+//                    anyFileIsUploading = true;
+//                    mCurrentUploadNumber++;
+//                    setNewUploadObject();
+//                    getServiceNotificationBuilder();
+//                    startForeground(ONGOING_NOTIFICATION_ID, mNotificationBuilder.build());
+//                    startUploadProcess();
+//
+//                } else {
+//                    stopService();
+//                }
+//            } else {
+//                stopService();
+//            }
+//        });
+
         /**Related on connecting and disconnecting internet handling*/
 //        }
 //        else {
@@ -642,7 +688,7 @@ public class UploadService extends Service implements EventManager.EventDelegate
      * set relevant fields.
      */
     private void setNewUploadObject() {
-        ServiceUploadObject serviceUploadObject = mUploadQueue.peek();
+        ServiceUploadObject serviceUploadObject = mUploadQueue.poll();
         mUploadObject = serviceUploadObject.uploadObject;
         mUserId = serviceUploadObject.userId;
         mPeerId = serviceUploadObject.peerId;
@@ -652,11 +698,8 @@ public class UploadService extends Service implements EventManager.EventDelegate
     }
 
     private String getPeerName(long peerId) {
-        RealmRegisteredInfo currentPeerInfo = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<RealmRegisteredInfo>() {
-            @Override
-            public RealmRegisteredInfo doTask(Realm realm) {
-                return realm.where(RealmRegisteredInfo.class).equalTo("id", peerId).findFirst();
-            }
+        RealmRegisteredInfo currentPeerInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRegisteredInfo.class).equalTo("id", peerId).findFirst();
         });
         if (currentPeerInfo != null) {
             return currentPeerInfo.getDisplayName();
@@ -727,14 +770,27 @@ public class UploadService extends Service implements EventManager.EventDelegate
         modifyNotification("Check internet connection", 100, 0, true, Color.RED);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void stopService() {
+        if (client != null) {
+            client.dispatcher().executorService().shutdown();
+        }
+        if (requestCall != null) {
+            requestCall.cancel();
+        }
+        mCurrentUploadNumber = 1;
+        mUploadQueueSize = 0;
+        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).edit().putBoolean(SHP_SETTING.KEY_IS_UPLOAD_SERVICE_RUN, false).apply();
+        stopForeground(true);
+        stopSelf();
+    }
+
     @Override
     public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.ON_UPLOAD_CANCEL) {
             mUploadQueueSize--;
             long canceledMessageId = (long) args[0];
-//            /** long -1 means that user change his account and service should be stop to prevent crash*/
+            /** long -1 means that user change his account and service should be stop to prevent crash*/
 //            if (canceledMessageId == -1) {
 //                if(mUploadObject != null) {
 //                    G.runOnUiThread(() -> EventManager.getInstance(mUserSelectedAccount).postEvent(EventManager.ON_UPLOAD_ERROR_IN_SERVICE, new IOException(), false, mUploadObject));
@@ -765,23 +821,23 @@ public class UploadService extends Service implements EventManager.EventDelegate
 //                stopSelf();
 //            } else {
 
-            if (isMyServiceRunning(UploadService.class)) {
-                if (mUploadObject != null) {
-                    if (canceledMessageId == mUploadObject.messageId) {
-                        modifyNotification(getString(R.string.upload_canceled), 0, 0, false, Color.RED);
-                        handleUploadQueue(canceledMessageId);
-
-                    } else {
-                        for (ServiceUploadObject serviceUploadObject : mUploadQueue) {
-                            if (serviceUploadObject.uploadObject.messageId == canceledMessageId) {
-                                mUploadQueue.remove(serviceUploadObject);
-                            }
+//            if (isMyServiceRunning(UploadService.class)) {
+            if (mUploadObject != null) {
+                if (canceledMessageId == mUploadObject.messageId) {
+                    mCurrentUploadNumber--;
+                    modifyNotification(getString(R.string.upload_canceled), 0, 0, false, Color.RED);
+                    handleUploadQueue(canceledMessageId);
+                } else {
+                    for (ServiceUploadObject serviceUploadObject : mUploadQueue) {
+                        if (serviceUploadObject.uploadObject.messageId == canceledMessageId) {
+                            mUploadQueue.remove(serviceUploadObject);
                         }
                     }
-                } else {
-                    stopSelf();
                 }
+            } else {
+//                stopService();
             }
+//            }
 //            }
         }
         /**Related on connect and disconnect internet handling*/

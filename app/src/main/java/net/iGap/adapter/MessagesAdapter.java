@@ -45,6 +45,8 @@ import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.disposables.CompositeDisposable;
 

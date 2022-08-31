@@ -14,10 +14,6 @@ public class SolidWallpaperCell extends CardView {
         setUseCompatPadding(true);
     }
 
-    public void setCardBackgroundColor(int color) {
-        setCardBackgroundColor(color);
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(80), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dp(100), MeasureSpec.EXACTLY));

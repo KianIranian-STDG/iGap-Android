@@ -269,10 +269,10 @@ public class StoryGalleryFragment extends BaseFragment {
             adapterGalleryPhoto.setMultiSelectState(!adapterGalleryPhoto.getMultiSelectState());
             return;
         }
-
-
         onRVScrolled.changeItem();
-        adapterGalleryPhoto.setMultiSelectState(false);
+        if (adapterGalleryPhoto != null) {
+            adapterGalleryPhoto.setMultiSelectState(false);
+        }
 
     }
 

@@ -1000,10 +1000,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 57) {
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
 
-
-            if (realmRoomMessageSchema != null) {
+            if (realmRoomMessageSchema != null)
                 realmRoomMessageSchema.addField("textToVoicePath", String.class);
-            }
 
             oldVersion++;
         }
@@ -1034,6 +1032,15 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmUserInfo != null) {
                 realmUserInfo.addField("aiToken", String.class);
             }
+            oldVersion++;
+        }
+
+        if (oldVersion == 61) {
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+
+            if (realmRoomMessageSchema != null)
+                realmRoomMessageSchema.addField("messageBeforeEdited", String.class);
+
             oldVersion++;
         }
 

@@ -675,7 +675,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
 
         if ((messageType == IMAGE_TEXT || messageType == TEXT || messageType == VIDEO_TEXT || messageType == FILE_TEXT || messageType == GIF_TEXT || messageType == AUDIO_TEXT) && isConvertTextMessage) {
-            mHolder.getMessageTTSOption().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.icon_video_play, context.getTheme()));
+            mHolder.getMessageTTSOption().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.play_button, context.getTheme()));
             mHolder.getMessageTTSOption().setColorFilter(Color.GRAY);
             mHolder.getMessageTTSOption().setOnClickListener(v -> {
                 messageClickListener.onTextToVoiceConvertClick(messageObject, mHolder.getProgressBar(), mHolder.getMessageTTSOption());

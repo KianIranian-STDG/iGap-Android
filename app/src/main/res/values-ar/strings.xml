@@ -2834,4 +2834,6 @@
     <string name="ai_error">تم إرسال الرسالة صوتيًا بسبب خطأ في الخادم</string>
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
+    <string name="user_not_found">المستخدم ليس موجود</string>
+    <string name="location_status">Location Status</string>
 </resources>

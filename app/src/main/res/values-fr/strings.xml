@@ -2053,4 +2053,6 @@
     <string name="ai_error">Le message a été envoyé par la voix en raison d\'une erreur de serveur</string>
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
+    <string name="user_not_found">utilisateur non trouvé</string>
+    <string name="location_status">Location Status</string>
 </resources>

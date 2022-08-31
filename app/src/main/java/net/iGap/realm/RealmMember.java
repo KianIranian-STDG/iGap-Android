@@ -112,6 +112,27 @@ public class RealmMember extends RealmObject {
         });
     }
 
+    public static void addMember(Realm realm, final long roomId, final long userId, final String role) {
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+            if (realmRoom != null) {
+                RealmList<RealmMember> members = new RealmList<>();
+                if (realmRoom.getType() == GROUP) {
+                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                    if (realmGroupRoom != null) {
+                        members = realmGroupRoom.getMembers();
+                    }
+                } else {
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    if (realmChannelRoom != null) {
+                        members = realmChannelRoom.getMembers();
+                    }
+                }
+                members.add(RealmMember.put(realm, userId, role));
+            }
+    }
+
     public static void updateMemberRole(final long roomId, final long memberId, final String role) {
         //TODO [Saeed Mozaffari] [2017-10-24 6:05 PM] - Can Write Better Code?
         DbManager.getInstance().doRealmTransaction(realm -> {
@@ -358,6 +379,30 @@ public class RealmMember extends RealmObject {
                 }
 
                 query = query.equalTo("peerId", userId);
+                searchMember = query.findAll();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return searchMember;
+
+    }
+
+    public static RealmResults<RealmMember> findAllForSpecifiedRoom(Realm realm, long roomId) {
+
+        RealmResults<RealmMember> searchMember = emptyResult(realm);
+
+        try {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+            if (realmRoom != null) {
+                RealmQuery<RealmMember> query;
+                if (realmRoom.getType() == GROUP) {
+                    query = realmRoom.getGroupRoom().getMembers().where();
+                } else {
+                    query = realmRoom.getChannelRoom().getMembers().where();
+                }
+
                 searchMember = query.findAll();
             }
         } catch (Exception e) {

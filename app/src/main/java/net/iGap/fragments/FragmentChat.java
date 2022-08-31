@@ -4828,6 +4828,7 @@ public class FragmentChat extends BaseFragment
     public void onUploadOrCompressCancel(View view, final MessageObject messageObject, int pos) {// TODO: 12/28/20 MESSAGE_REFACTOR
         HelperSetAction.sendCancel(messageObject.id);
 
+        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_CANCEL, messageObject.id);
         if (Uploader.getInstance().cancelCompressingAndUploading(messageObject.id + "")) {
 
             getMessageController().cancelUploadFile(mRoomId, messageObject);
@@ -5896,11 +5897,11 @@ public class FragmentChat extends BaseFragment
             filepath = messageObject.getAttachment().filePath != null ? messageObject.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.getAttachment().cacheId, messageObject.getAttachment().name, messageType);
         }
         if (new File(filepath).exists()) {
-            if (messageType == VIDEO_VALUE) {
+            if (messageType == VIDEO_VALUE || messageType == VIDEO_TEXT_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video);
             } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif);
-            } else if (messageType == IMAGE_VALUE) {
+            } else if (messageType == IMAGE_VALUE || messageType == IMAGE_TEXT_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image);
             }
         } else {
@@ -8210,6 +8211,8 @@ public class FragmentChat extends BaseFragment
         String path = getFilePathFromUri(Uri.parse(filePath));
         if (path != null) {
             filePath = path;
+        } else {
+            filePath = AttachFile.copyFileToCache(Uri.parse(filePath), "file", -1);
         }
 
         if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect && filePath.toLowerCase().endsWith(".gif")) {
@@ -9953,17 +9956,23 @@ public class FragmentChat extends BaseFragment
         } else if (id == EventManager.ON_FILE_PICKED_FROM_INTENT) {
             Intent inputIntent = (Intent) args[0];
             if (inputIntent != null) {
-                if (inputIntent.getData().toString().contains("media") && !inputIntent.getData().toString().contains("document%")) {
+                if(inputIntent.getData() != null) {
                     sendMessage(request_code_pic_file, inputIntent.getData().toString());
-                } else {
-                    Toast.makeText(context, R.string.permission_to_this_section_temporarily_denied, Toast.LENGTH_LONG).show();
+                } else if(inputIntent.getClipData() != null){
+                    for(int i = 0; i < inputIntent.getClipData().getItemCount(); i++){
+                        sendMessage(request_code_pic_file, inputIntent.getClipData().getItemAt(i).getUri().toString());
+                    }
                 }
+            }
+
 //            if (caption != null) edtChat.setText(caption);
 //            for (String path : selectedPathList) {
 //                sendMessage(request_code_pic_file, path);
 //                edtChat.setText("");
 //            }
-            }
+
+
+//           }
             edtChat.setText("");
         }
     }
@@ -10285,7 +10294,8 @@ public class FragmentChat extends BaseFragment
     }
 
     public void requestAiTextToVoice(String aiToken, MessageObject messageObject, View progressBar, ImageView imageView) {
-        if (messageObject.getTextConvertToVoice() != null) {
+
+        if (messageObject.getMessageBeforeEdited() != null && messageObject.message.equals(messageObject.getMessageBeforeEdited()) && messageObject.getTextConvertToVoice() != null) {
             MusicPlayer.startPlayer(getResources().getString(R.string.Powered_by_aipa), messageObject.getTextConvertToVoice(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, String.valueOf(messageObject.id));
         } else {
             if (progressBar != null) {
@@ -10317,14 +10327,15 @@ public class FragmentChat extends BaseFragment
                         e.printStackTrace();
                     }
                     messageObject.setTextConvertToVoice(file.getPath());
+                    messageObject.setMessageBeforeEdited(message);
                     getMessageDataStorage().putTextConvertPath(mRoomId, messageObject.id, file.getPath());
                     if (getContext() != null)
                         MusicPlayer.startPlayer(getResources().getString(R.string.Powered_by_aipa),
-                            file.getPath(),
-                            FragmentChat.titleStatic,
-                            FragmentChat.mRoomIdStatic,
-                            true,
-                            String.valueOf(messageObject.id));
+                                file.getPath(),
+                                FragmentChat.titleStatic,
+                                FragmentChat.mRoomIdStatic,
+                                true,
+                                String.valueOf(messageObject.id));
 
                 }
 

@@ -205,7 +205,7 @@ public class CallManager {
         intent.putExtra(CallService.CALL_TYPE, callType.toString());
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= 26) {
                 G.context.startForegroundService(intent);
             } else {
                 G.context.startService(intent);
@@ -600,7 +600,7 @@ public class CallManager {
 
 
     private static boolean isDeviceCompatibleWithConnectionServiceAPI() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT < 26)
             return false;
         // some non-Google devices don't implement the ConnectionService API correctly so, sadly,
         // we'll have to whitelist only a handful of known-compatible devices for now

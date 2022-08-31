@@ -2,9 +2,11 @@ package net.iGap.story.liststories;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -170,51 +172,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements StoryCell
         recyclerListView.setClipToPadding(false);
         recyclerListView.setVisibility(View.GONE);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
-        recyclerListView.setOnItemLongClickListener((itemView, position) -> {
-            StoryCell storyCell = (StoryCell) itemView;
-            if ((storyCell.getSendStatus() == MessageObject.STATUS_FAILED ||
-                    storyCell.getSendStatus() == MessageObject.STATUS_SENT) && (!storyCell.isRoom() || listMode == 1)) {
-                MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                        .backgroundColor(Theme.getColor(Theme.key_popup_background))
-                        .title(getResources().getString(R.string.delete_status_update))
-                        .negativeColor(Theme.getColor(Theme.key_button_background))
-                        .positiveColor(Theme.getColor(Theme.key_button_background))
-                        .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                        .positiveText(R.string.ok)
-                        .onNegative((dialog1, which) -> dialog1.dismiss()).show();
-
-                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-                    progressBar.setVisibility(View.VISIBLE);
-                    recyclerListView.setVisibility(View.GONE);
-
-                    if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED) {
-                        getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
-                    } else {
-                        AbstractObject req = null;
-                        IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
-                        story_delete.storyId = storyCell.getStoryId();
-                        req = story_delete;
-                        getRequestManager().sendRequest(req, (response, error) -> {
-                            if (error == null) {
-                                IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-                                getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
-                            } else {
-
-                            }
-                        });
-                    }
-
-
-                    dialog.dismiss();
-
-                });
-            }
-            return true;
-        });
-        recyclerListView.setOnItemClickListener((view, position, x, y) -> {
-            StoryCell storyCell = (StoryCell) view;
-            new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, !storyCell.isRoom(), storyCell.isRoom(), false, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex(), 0)).setReplace(false).load();
-        });
 
         rootView.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
 
@@ -227,7 +184,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements StoryCell
         rootView.addView(actionButtonsRootView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 
         customStatusActionLayout = new FrameLayout(context);
-        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
+        Drawable customStatusDrawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_theme_color));
         customStatusActionLayout.setBackground(customStatusDrawable);
         IconView customStatusAddButton = new IconView(context);
         customStatusAddButton.setIcon(R.string.icon_edit);
@@ -237,7 +194,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements StoryCell
 
 
         floatActionLayout = new FrameLayout(context);
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background),Theme.getColor(Theme.key_theme_color));
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getColor(Theme.key_toolbar_background), Theme.getColor(Theme.key_theme_color));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
         addButton.setIcon(R.string.icon_camera);
@@ -510,6 +467,50 @@ public class MyStatusStoryListFragment extends BaseFragment implements StoryCell
     @Override
     public void onStoryClick(StoryCell storyCell) {
         new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), storyCell.getRoomId(), true, (!storyCell.isRoom() && listMode == 0) || (storyCell.isRoom() && listMode == 1), storyCell.isRoom(), false, storyCell.getStoryId() != 0 ? storyCell.getStoryId() : storyCell.getStoryIndex(), 0)).setReplace(false).load();
+    }
+
+    @Override
+    public void onStoryLongClick(StoryCell storyCell) {
+
+        if ((storyCell.getSendStatus() == MessageObject.STATUS_FAILED ||
+                storyCell.getSendStatus() == MessageObject.STATUS_SENT) && (!storyCell.isRoom() || listMode == 1)) {
+            storyCell.setLongClicked(true);
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
+                    .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                    .positiveText(R.string.ok)
+                    .onNegative((dialog1, which) -> {
+                        dialog1.dismiss();
+                        storyCell.setLongClicked(false);
+                    }).show();
+            dialog.setOnDismissListener(dialogInterface -> {
+                storyCell.setLongClicked(false);
+            });
+            dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                recyclerListView.setVisibility(View.GONE);
+                storyCell.setLongClicked(false);
+                if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED) {
+                    getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
+                } else {
+                    AbstractObject req = null;
+                    IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
+                    story_delete.storyId = storyCell.getStoryId();
+                    req = story_delete;
+                    getRequestManager().sendRequest(req, (response, error) -> {
+                        if (error == null) {
+                            IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
+                            getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
+                        } else {
+
+                        }
+                    });
+                }
+
+
+                dialog.dismiss();
+
+            });
+        }
     }
 
     @Override

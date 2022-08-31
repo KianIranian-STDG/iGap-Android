@@ -1,12 +1,10 @@
 package net.iGap.story;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,8 +21,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.G;
@@ -38,10 +33,8 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.messenger.theme.Theme;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.RecyclerListView;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
@@ -55,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ViewUserDialogFragment extends BottomSheetDialogFragment implements RecyclerListView.OnItemClickListener, EventManager.EventDelegate, ToolbarListener {
+public class ViewUserDialogFragment extends BottomSheetDialogFragment implements RecyclerListView.OnItemClickListener, EventManager.EventDelegate, ToolbarListener, StoryCell.DeleteStory {
 
     private int rowSize = 0;
     private int userRow = 0;
@@ -355,6 +348,21 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
 
     }
 
+    @Override
+    public void deleteStory(StoryCell storyCell, long storyId, long roomId, boolean isRoom) {
+
+    }
+
+    @Override
+    public void onStoryClick(StoryCell storyCell) {
+
+    }
+
+    @Override
+    public void onStoryLongClick(StoryCell storyCell) {
+
+    }
+
     public interface ViewUserDialogState {
         void onCancel();
     }
@@ -394,6 +402,7 @@ public class ViewUserDialogFragment extends BottomSheetDialogFragment implements
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             StoryCell storyCell = (StoryCell) holder.itemView;
+            storyCell.setDeleteStory(ViewUserDialogFragment.this);
             storyCell.initView(context, (position + 1) != userIdList.size(), StoryCell.CircleStatus.CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null, 0);
             storyCell.setStatus(StoryCell.CircleStatus.CIRCLE_IMAGE);
             if (position < displayNameList.size()) {

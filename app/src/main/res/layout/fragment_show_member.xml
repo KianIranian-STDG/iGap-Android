@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootShowMember"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
@@ -12,6 +13,51 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height_root_with_search"
         android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searching_white_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".5"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/inner_fcg_prgWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="@dimen/dp20"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/user_not_found_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp12"
+            android:text="@string/user_not_found"
+            android:textColor="@color/md_red_A700"
+            android:textSize="@dimen/dp14"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/user_not_found_icon_imageView"
+            android:layout_width="@dimen/dp200"
+            android:layout_height="250dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/find1"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_not_found_textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <LinearLayout
         android:id="@+id/add_container"
@@ -45,10 +91,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/show_member"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/show_member">
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fcm_recycler_view_show_member"

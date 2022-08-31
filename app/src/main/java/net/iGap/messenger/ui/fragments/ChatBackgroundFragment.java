@@ -446,7 +446,7 @@ public class ChatBackgroundFragment extends BaseFragment {
                 }
             } else if (viewType == SOLID_COLOR) {
                 SolidWallpaperCell solidWallpaperCell = (SolidWallpaperCell) holder.itemView;
-                solidWallpaperCell.setCardBackgroundColor(Color.parseColor(solidColorList.get(position - 1)));
+                solidWallpaperCell.setCardBackgroundColor(Color.parseColor(solidColorList.get(position)));
             }
         }
 

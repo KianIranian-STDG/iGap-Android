@@ -35,7 +35,7 @@ public class AppConfig {
             FileLog.i("loadConfig");
 
             SharedPreferences preferences = G.context.getSharedPreferences("app_config", Context.MODE_PRIVATE);
-            servicesBaseUrl = preferences.getString("services_base_url", "http://gate.igap.net");
+            servicesBaseUrl = preferences.getString("services_base_url", "https://gate.igap.net");
             fileGateway = preferences.getInt("file_gateway", 0);
             defaultTab = preferences.getInt("default_tab", BottomNavigationFragment.CHAT_FRAGMENT);
             defaultTimeout = preferences.getLong("time_out", 10);

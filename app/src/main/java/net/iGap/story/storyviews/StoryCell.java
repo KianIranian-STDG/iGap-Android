@@ -96,8 +96,16 @@ public class StoryCell extends FrameLayout {
     private String userColorId = "#4aca69";
     private FontIconTextView verifyIconTv;
     private FontIconTextView channelIconTv;
-
+    private boolean isLongClicked = false;
     private static boolean isCreatedView = false;
+
+    public boolean isLongClicked() {
+        return isLongClicked;
+    }
+
+    public void setLongClicked(boolean longClicked) {
+        isLongClicked = longClicked;
+    }
 
     public String getFileToken() {
         return fileToken;
@@ -180,10 +188,11 @@ public class StoryCell extends FrameLayout {
     }
 
     public void setData(StoryObject storyObject, boolean isRoom, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
+        this.isFromMyStatus = true;
         initView(context, needDivider, status, imageLoadingStatus, iconClicked, storyObject.createdAt);
         this.userId = storyObject.userId;
         this.roomId = storyObject.roomId;
-        this.isFromMyStatus = true;
+
 
         String name = HelperImageBackColor.getFirstAlphabetName(storyObject.displayName != null ? storyObject.displayName : "");
 
@@ -531,12 +540,27 @@ public class StoryCell extends FrameLayout {
         iconsRootView.addView(uploadIcon, LayoutCreator.createLinear(72, 72, Gravity.CENTER_VERTICAL));
         iconsRootView.addView(deleteIcon, LayoutCreator.createLinear(72, 72, Gravity.CENTER_VERTICAL));
 
+        setOnClickListener(v -> {
+            deleteStory.onStoryClick(this);
+        });
+
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
-            setOnClickListener(v -> {
-                deleteStory.onStoryClick(this);
-            });
             circleImageLoading.setOnClickListener(v -> {
                 deleteStory.onStoryClick(this);
+            });
+        }
+        if (isFromMyStatus) {
+            setOnLongClickListener(view1 -> {
+                if (!isLongClicked) {
+                    deleteStory.onStoryLongClick(StoryCell.this);
+                    return false;
+                }
+                return true;
+            });
+
+            circleImageLoading.setOnLongClickListener(view1 -> {
+                deleteStory.onStoryLongClick(StoryCell.this);
+                return true;
             });
         }
     }
@@ -708,5 +732,7 @@ public class StoryCell extends FrameLayout {
         void deleteStory(StoryCell storyCell, long storyId, long roomId, boolean isRoom);
 
         void onStoryClick(StoryCell storyCell);
+
+        void onStoryLongClick(StoryCell storyCell);
     }
 }

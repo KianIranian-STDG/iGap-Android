@@ -200,11 +200,12 @@ public class UploadHttpRequest implements EventManager.EventDelegate {
 
                     startOrResume();
                 } else if (res.body() != null) {
-                    if (res.code() == 451) {
+                    if (res.code() == 451 || res.code() == 413) {
                         if (delegate != null) {
                             delegate.onUploadFail(fileObject, new Exception("451 error for -> " + req.toString()));
                         }
                     }
+                    preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
                     String resString = res.body().string();
                     FileLog.i(TAG, req.toString() + " res -> " + resString);
                 }

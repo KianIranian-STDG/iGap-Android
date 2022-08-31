@@ -8,7 +8,6 @@ import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGlobal.RoomMessage;
-import net.iGap.proto.ProtoGlobal.RoomMessageType;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.story.StoryObject;
@@ -78,6 +77,7 @@ public class MessageObject {
     private HashMap<Integer, String> stringMap = new HashMap<>();
     public int storyStatus;
     private String textConvertToVoice;
+    private String messageBeforeEdited;
 
     private MessageObject() {
 
@@ -218,6 +218,7 @@ public class MessageObject {
         messageObject.createTime = roomMessage.getCreateTime();
         messageObject.documentId = roomMessage.getDocumentId();
         messageObject.setTextConvertToVoice(roomMessage.getTextToVoicePath());
+        messageObject.setMessageBeforeEdited(roomMessage.getMessageBeforeEdited());
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
@@ -430,5 +431,13 @@ public class MessageObject {
 
     public void setTextConvertToVoice(String textConvertToVoice) {
         this.textConvertToVoice = textConvertToVoice;
+    }
+
+    public String getMessageBeforeEdited() {
+        return messageBeforeEdited;
+    }
+
+    public void setMessageBeforeEdited(String messageBeforeEdited) {
+        this.messageBeforeEdited = messageBeforeEdited;
     }
 }

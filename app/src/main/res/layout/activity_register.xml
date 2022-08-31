@@ -114,7 +114,7 @@
                 android:textAlignment="gravity"
                 android:textSize="@dimen/dp14"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
-                app:layout_constraintBottom_toTopOf="@id/conditionCheckBox"
+                app:layout_constraintBottom_toTopOf="@id/registerButton"
                 app:layout_constraintLeft_toRightOf="@id/countyCode"
                 app:layout_constraintRight_toRightOf="@id/rg_btn_choseCountry"
                 app:layout_constraintTop_toBottomOf="@id/rg_btn_choseCountry"
@@ -137,7 +137,7 @@
                 app:layout_constraintLeft_toLeftOf="@id/rg_btn_choseCountry"
                 app:layout_constraintRight_toLeftOf="@id/phoneNumber"
                 app:layout_constraintTop_toTopOf="@id/phoneNumber" />
-
+<!--
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/conditionCheckBox"
                 android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/conditionCheckBox"
                 app:layout_constraintStart_toEndOf="@id/conditionCheckBox"
-                app:layout_constraintTop_toTopOf="@id/conditionCheckBox" />
+                app:layout_constraintTop_toTopOf="@id/conditionCheckBox" />-->
 
             <ProgressBar
                 android:id="@+id/loading"
@@ -195,7 +195,7 @@
                 app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/conditionCheckBox"
+                app:layout_constraintTop_toBottomOf="@id/phoneNumber"
                 app:layout_constraintWidth_percent=".7" />
 
             <com.google.android.material.button.MaterialButton

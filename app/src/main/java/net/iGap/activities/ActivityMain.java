@@ -136,7 +136,6 @@ import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.story.CameraStoryFragment;
 import net.iGap.viewmodel.UserScoreViewModel;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -324,10 +323,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         isOpenChatBeforeShare = true;
         checkIntent(intent);
         Uri data = intent.getData();
-        if (data!=null) {
+        if (data != null) {
             String[] strings = data.toString().split("/");
             String path = strings[strings.length - 1];
-            if ((intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null)||path.toLowerCase().startsWith("d:")) {
+            if ((intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) || path.toLowerCase().startsWith("d:")) {
                 handleDeepLink(intent);
             }
         }
@@ -344,8 +343,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void handleDeepLink(String uri) {
         String[] strings = uri.split("/");
-        if (strings[strings.length-1].toLowerCase().startsWith("d:"))
-            uri = "discovery/"+uri;
+        if (strings[strings.length - 1].toLowerCase().startsWith("d:"))
+            uri = "discovery/" + uri;
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
 
         if (bottomNavigationFragment != null)
@@ -368,7 +367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (intent.getAction() != null && intent.getAction().equalsIgnoreCase("uploadService")) {
-            if(intent.getLongExtra("userId", 0) == AccountManager.getInstance().getCurrentUser().getId()){
+            if (intent.getLongExtra("userId", 0) == AccountManager.getInstance().getCurrentUser().getId()) {
                 GoToChatActivity goToChatActivity = new GoToChatActivity(intent.getLongExtra("roomId", 0));
                 goToChatActivity.setPeerID(intent.getLongExtra("peerId", 0));
                 goToChatActivity.startActivity(ActivityMain.this);
@@ -516,7 +515,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
 
-
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -558,7 +556,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeShare = false;
-
 
 
             initComponent();
@@ -1466,23 +1463,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
 //                        List fragmentList = getSupportFragmentManager().getFragments();
-                        boolean handled = false;
-                        try {
-                            // because some of our fragments are NOT extended from BaseFragment
-                            if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
-                                SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
-                                if (searchFragment != null && searchFragment.isVisible()) {
-                                    searchFragment.onSearchCollapsed();
-                                }
+                    boolean handled = false;
+                    try {
+                        // because some of our fragments are NOT extended from BaseFragment
+                        if (getSupportFragmentManager().findFragmentById(R.id.chatContainer) instanceof SearchFragment) {
+                            SearchFragment searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.chatContainer);
+                            if (searchFragment != null && searchFragment.isVisible()) {
+                                searchFragment.onSearchCollapsed();
                             }
-                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
-                            handled = ((BaseFragment) frag).onBackPressed();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                        if (!handled) {
-                            super.onBackPressed();
-                        }
+                        Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+                        handled = ((BaseFragment) frag).onBackPressed();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (!handled) {
+                        super.onBackPressed();
+                    }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
@@ -1571,7 +1568,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
 
             Uri data = intent.getData();
-            if (data!=null) {
+            if (data != null) {
                 String[] strings = data.toString().split("/");
                 String path = strings[strings.length - 1];
                 path = path.toLowerCase();
@@ -2091,7 +2088,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             // Clear all notification
             NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             nMgr.cancelAll();
-        }catch (IllegalStateException ignored){
+        } catch (IllegalStateException ignored) {
             FileLog.e(ignored);
             // There's no way to avoid getting this if saveInstanceState has already been called.
         }

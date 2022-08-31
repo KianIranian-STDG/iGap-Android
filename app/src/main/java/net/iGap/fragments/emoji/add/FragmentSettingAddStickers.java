@@ -8,14 +8,19 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -28,11 +33,13 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.messenger.theme.Theme;
+import net.iGap.messenger.ui.toolBar.AlertDialog;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.repository.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

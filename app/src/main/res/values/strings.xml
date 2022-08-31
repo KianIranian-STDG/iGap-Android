@@ -673,7 +673,7 @@ Want to get it?</string>
 
     <string name="channel_public_hint_revoke">Channel Public Link</string>
     <string name="clean_up_chat_rooms">Clean Up All</string>
-    <string name="clean_up">Clean Up</string>
+    <string name="clean_up">Rebuild Messages</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">Are you sure you want to clean up all data in local chat rooms?</string>
     <string name="pm">PM</string>
     <string name="am">AM</string>
@@ -2985,4 +2985,6 @@ Want to get it?</string>
     <string name="ai_error">The message was sent by voice due to a server error</string>
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
+    <string name="user_not_found">User not found</string>
+    <string name="location_status">Location Status</string>
 </resources>

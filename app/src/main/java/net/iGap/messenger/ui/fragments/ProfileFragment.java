@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.text.BidiFormatter;
 import android.text.TextUtils;
 import android.util.LayoutDirection;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -466,11 +465,15 @@ public class ProfileFragment extends BaseFragment implements FragmentEditImage.O
         realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmUserInfo.class).findFirst();
         });
-        setUserAvatar.setValue(realmUserInfo.getUserId());
-        for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
-            if (AccountManager.getInstance().getUserAccountList().get(i).isAssigned() &&
-                    AccountManager.getInstance().getCurrentUser().getId() != AccountManager.getInstance().getUserAccountList().get(i).getId()) {
-                accountUsers.add(AccountManager.getInstance().getUserAccountList().get(i));
+        if (realmUserInfo != null) {
+            setUserAvatar.setValue(realmUserInfo.getUserId());
+        }
+        if (AccountManager.getInstance().getUserAccountList() != null) {
+            for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
+                if (AccountManager.getInstance().getUserAccountList().get(i).isAssigned() &&
+                        AccountManager.getInstance().getCurrentUser().getId() != AccountManager.getInstance().getUserAccountList().get(i).getId()) {
+                    accountUsers.add(AccountManager.getInstance().getUserAccountList().get(i));
+                }
             }
         }
         super.onAttach(context);
@@ -987,20 +990,24 @@ public class ProfileFragment extends BaseFragment implements FragmentEditImage.O
     }
 
     private void onScrollChanged() {
-        View child = listView.getChildAt(0);
-        RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findContainingViewHolder(child);
-        int firstViewTop = child.getTop();
-        int scrolledTop = 0;
-        if (firstViewTop >= 0 && holder != null && holder.getAdapterPosition() == 0) {
-            scrolledTop = firstViewTop;
-        }
-        if (expandHeight != scrolledTop) {
-            expandHeight = scrolledTop;
-            topView.invalidate();
-            changeListView();
-        }
-        if (firstViewTop > 255) {
-            topView.invalidateForce();
+        if (listView != null) {
+            View child = listView.getChildAt(0);
+            if (child != null) {
+                RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findContainingViewHolder(child);
+                int firstViewTop = child.getTop();
+                int scrolledTop = 0;
+                if (firstViewTop >= 0 && holder != null && holder.getAdapterPosition() == 0) {
+                    scrolledTop = firstViewTop;
+                }
+                if (expandHeight != scrolledTop) {
+                    expandHeight = scrolledTop;
+                    topView.invalidate();
+                    changeListView();
+                }
+                if (firstViewTop > 255) {
+                    topView.invalidateForce();
+                }
+            }
         }
     }
 
@@ -1163,7 +1170,10 @@ public class ProfileFragment extends BaseFragment implements FragmentEditImage.O
             G.runOnUiThread(() -> {
                 if (temporaryAccountCellContainer != null && CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL || CallManager.getInstance().getCurrentSate() == CallState.REJECT) {
                     new AccountHelper().changeAccount(temporaryAccountCellContainer.getUserId());
-                    ((ActivityMain) getActivity()).updateUiForChangeAccount();
+                    if (((ActivityMain) getActivity()) != null) {
+                        ((ActivityMain) getActivity()).updateUiForChangeAccount();
+                    }
+
                 }
             });
 

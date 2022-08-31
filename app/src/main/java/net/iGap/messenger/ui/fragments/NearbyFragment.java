@@ -23,15 +23,23 @@ import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.TypedValue;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,6 +48,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.FragmentMapUsers;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
@@ -47,14 +56,18 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.theme.Theme;
 import net.iGap.messenger.ui.cell.TextCheckCell;
+import net.iGap.messenger.ui.components.EditTextBoldCursor;
 import net.iGap.messenger.ui.components.FloatingMenuButton;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.OnGeoCommentResponse;
 import net.iGap.observers.interfaces.OnGeoGetComment;
 import net.iGap.observers.interfaces.OnGetNearbyCoordinate;
@@ -70,6 +83,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoRegister;
+import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,10 +93,7 @@ import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
-//import org.osmdroid.tileprovider.MapTile;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-//import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
@@ -111,7 +122,10 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
 
     private MapView mapView;
     private FloatingMenuButton floatingMenuButton;
+    private EditTextBoldCursor status;
     private TextCheckCell toggleGps;
+    private final static int more_button = 1;
+    private View moreButton;
 
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
@@ -141,6 +155,7 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
     private double lastLongitude;
     private String url;
     private ItemizedOverlay<OverlayItem> latestLocation;
+    private TopSheetDialog dialog;
 
     public static void deleteMapFileCash() {
         try {
@@ -331,27 +346,53 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
         return dstBitmap;
     }
 
- /*   private void setTile(final boolean state) {
-        mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-            @Override
-            public String getTileURLString(MapTile aTile) {
-                if (state)
-                    return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                else
-                    return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-            }
-        });
-    }*/
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint({"ResourceAsColor", "ClickableViewAccessibility"})
     @Override
     public View createView(Context context) {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        fragmentView = new LinearLayout(context);
+        LinearLayout linearLayout = (LinearLayout) fragmentView;
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        fragmentView.setOnTouchListener((v, event) -> true);
+        status = new EditTextBoldCursor(context);
+        status.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        status.setHintTextColor(Theme.getColor(Theme.key_subtitle_text));
+        status.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        status.setTextColor(Theme.getColor(Theme.key_title_text));
+        status.setBackground(Theme.createEditTextDrawable(context, false));
+        status.setMaxLines(1);
+        status.setLines(1);
+        status.setPadding(0, 0, 0, 0);
+        status.setSingleLine(true);
+        status.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+        status.setInputType( InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE);
+        status.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        status.setHint(context.getString(R.string.hint_gps));
+        status.setCursorColor(Theme.getColor(Theme.key_default_text));
+        status.setCursorSize(LayoutCreator.dp(20));
+        status.setCursorWidth(1.5f);
+        status.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                new RequestGeoUpdateComment().updateComment(status.getText().toString());
+            }
+        });
+        linearLayout.addView(status, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 36, 20, 5, 20, 0));
         toggleGps = new TextCheckCell(context);
         toggleGps.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         boolean gpsStatus = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false);
-        toggleGps.setTextAndValueAndCheck(context.getString(R.string.hint_gps), context.getString(R.string.turn_on_gps_explain), gpsStatus ? 1 : 0, true, true);
+        toggleGps.setTextAndValueAndCheck(getString(R.string.location_status), context.getString(R.string.turn_on_gps_explain), gpsStatus ? 1 : 0, true, true);
+        toggleGps.setTextColor(Theme.getColor(Theme.key_title_text),Theme.getColor(Theme.key_default_text));
         toggleGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -362,7 +403,10 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
                 }
             }
         });
+        linearLayout.addView(toggleGps, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 36, 0, 0, 0, 0));
+        FrameLayout frameLayout = new FrameLayout(context);
         mapView = new MapView(context);
+        frameLayout.addView(mapView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 0, 0, 0, 0));
         floatingMenuButton = new FloatingMenuButton(context, new FloatingMenuButton.FloatingMenuButtonListener() {
             @Override
             public void location() {
@@ -413,30 +457,8 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
                 }
             }
         });
-        ViewGroup container = new ViewGroup(context) {
-            @Override
-            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                int width = MeasureSpec.getSize(widthMeasureSpec);
-                int height = MeasureSpec.getSize(heightMeasureSpec);
-                toggleGps.measure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-                floatingMenuButton.measure(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT);
-                setMeasuredDimension(width, height);
-            }
-
-            @Override
-            protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                int width = r - l;
-                int height = b - t;
-                toggleGps.layout(0, 0, width, toggleGps.getMeasuredHeight());
-                mapView.layout(0, toggleGps.getMeasuredHeight(), width, height);
-                floatingMenuButton.layout(0, toggleGps.getMeasuredHeight(), width, height);
-            }
-        };
-        container.setOnTouchListener((v, event) -> true);
-        container.addView(toggleGps);
-        container.addView(mapView);
-        container.addView(floatingMenuButton);
-        fragmentView = container;
+        frameLayout.addView(floatingMenuButton, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 0, 0, 0, 0));
+        linearLayout.addView(frameLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 0, 0, 0, 0));
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_window_background));
         return fragmentView;
     }
@@ -505,6 +527,9 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
         toolbar = new Toolbar(context);
         toolbar.setTitle(context.getString(R.string.iGapNearBy));
         toolbar.setBackIcon(R.drawable.ic_ab_back);
+        ToolbarItems toolbarItems = toolbar.createToolbarItems();
+        moreButton = toolbarItems.addItem(more_button, R.string.icon_other_vertical_dots, Color.WHITE);
+        moreButton.setContentDescription(context.getString(R.string.Done));
         toolbar.setListener(id -> {
             if (id == -1) {
                 if (!isBackPress) {
@@ -516,6 +541,73 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
                     floatingMenuButton.closeFABMenu();
                 }
                 finish();
+            } else if (id == more_button) {
+                if (getActivity() != null) {
+                    List<String> items = new ArrayList<>();
+                    items.add(getString(R.string.list_user_map));
+                    items.add(getString(R.string.nearby));
+                    if (getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getBoolean(SHP_SETTING.REGISTER_STATUS, false)) {
+                        items.add(getString(R.string.map_registration));
+                    } else {
+                        items.add(getString(R.string.map_registration_enable));
+                    }
+
+                    dialog = new TopSheetDialog(getActivity()).setListData(items, -1, new BottomSheetItemClickCallback() {
+                        @Override
+                        public void onClick(int position) {
+                            if (items.get(position).equals(getString(R.string.list_user_map))) {
+                                page = pageUserList;
+                                try {
+                                    if (getActivity() != null) {
+                                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentMapUsers.newInstance()).setReplace(false).load();
+                                    }
+                                } catch (Exception e) {
+                                    e.getStackTrace();
+                                }
+                            } else if (items.get(position).equals(getString(R.string.nearby))) {
+                                if (location != null && !isSendRequestGeoCoordinate) {
+                                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                    isSendRequestGeoCoordinate = true;
+                                }
+                            } else if (items.get(position).equals(getString(R.string.map_registration))) {
+                                new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        new RequestGeoRegister().register(false);
+
+                                    }
+                                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    }
+                                }).show();
+                            } else if (items.get(position).equals(getString(R.string.map_registration_enable))) {
+                                if (!isGpsOn) {
+                                    try {
+                                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    } catch (ActivityNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            if (getRequestManager().isUserLogin()) {
+                                                new RequestGeoRegister().register(true);
+                                            } else {
+                                                toggleGps.setChecked(false);
+                                                showSnackBar(getString(R.string.please_check_your_connenction));
+                                            }
+                                        }
+                                    }).negativeText(R.string.no).onNegative((dialog, which) -> toggleGps.setChecked(false)).show();
+                                }
+                            }
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
         return toolbar;
@@ -560,29 +652,32 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
                 url = URL_MAP;
             }
             changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).getBoolean("state", false);
-      /*      mapView.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
-                @Override
-                public String getTileURLString(MapTile aTile) {
-                    if (!changeState)
-                        return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                    else
-                        return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
-                }
-            });*/
             DbManager.getInstance().doRealmTransaction(realm -> {
                 realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
             });
             G.onGeoCommentResponse = new OnGeoCommentResponse() {
                 @Override
                 public void commentResponse() {
+                    G.handler.post(() -> {
+                        status.setEnabled(true);
+                    });
                 }
 
                 @Override
                 public void errorCommentResponse() {
+                    G.handler.post(() -> {
+                        status.setEnabled(true);
+                    });
                 }
 
                 @Override
                 public void timeOutCommentResponse() {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            status.setEnabled(true);
+                        }
+                    });
                 }
             };
             if (mineStaticLocation != null) {
@@ -623,8 +718,6 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
         eastLimitation = bound[3];
         southLimitation = bound[0];
         westLimitation = bound[1];
-        /*BoundingBoxE6 bBox = new BoundingBoxE6(bound[2] + extraBounding, bound[3] + extraBounding, bound[0] - extraBounding, bound[1] - extraBounding);
-        mapView.setScrollableAreaLimit(bBox);*/
     }
 
     private double[] getBoundingBox(final double pLatitude, final double pLongitude, final int pDistanceInMeters) {
@@ -923,6 +1016,14 @@ public class NearbyFragment extends BaseFragment implements OnLocationChanged, O
 
     @Override
     public void onGetComment(final long userIdR, final String comment) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (AccountManager.getInstance().getCurrentUser().getId() == userIdR && comment.length() > 0) {
+                    status.setText(comment);
+                }
+            }
+        });
     }
 
     @Override

@@ -113,7 +113,7 @@ public class HelperPermission {
 
         int permissionReadStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionWriteStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permissionManageStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+//        int permissionManageStorage = ContextCompat.checkSelfPermission(context, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
 
         if (permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
             needPermission = new ArrayList<>();
@@ -126,6 +126,13 @@ public class HelperPermission {
             }
             needPermission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+//
+//        if (permissionManageStorage != PackageManager.PERMISSION_GRANTED) {
+//            if (needPermission == null) {
+//                needPermission = new ArrayList<>();
+//            }
+//            needPermission.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+//        }
 
         if (needPermission != null) {
             String[] mStringArray = new String[needPermission.size()];

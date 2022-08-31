@@ -3,6 +3,7 @@ package net.iGap.messageprogress;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.widget.AppCompatDrawableManager;
 

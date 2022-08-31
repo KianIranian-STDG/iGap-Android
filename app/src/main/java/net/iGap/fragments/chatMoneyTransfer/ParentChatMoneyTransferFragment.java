@@ -21,6 +21,7 @@ import net.iGap.fragments.payment.InternetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.messenger.theme.Theme;
 import net.iGap.module.dialog.BaseBottomSheet;
+import net.iGap.proto.ProtoWalletPaymentInit;
 
 
 public class ParentChatMoneyTransferFragment extends BaseBottomSheet {

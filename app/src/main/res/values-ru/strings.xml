@@ -1798,4 +1798,6 @@
     <string name="ai_error">Сообщение было отправлено голосом из-за ошибки сервера</string>
     <string name="powered_by_aipaa">Powered by AIPAA</string>
     <string name="Powered_by_aipa">"Reading message "</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="location_status">Location Status</string>
 </resources>
